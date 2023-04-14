@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>@yield('title')</title>
+
+        
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+   
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <!-- Fonte do Google -->
+        <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
+        <!-- CSS Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        
+        
+
+
+
+        <!-- CSS da aplicação -->
+
+        <link rel="stylesheet" href="/css/styles.css">
+        <script src="/js/scripts.js"></script>
+        <link href="/css/headers.css" rel="stylesheet">
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/headers/">
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="/css/sidebars.css" rel="stylesheet">
+        <script src="/js/sidebars.js"></script>
+
+                
+            
+    </head>
+    <body class="antialiased">
+        <!-- HEADER MODELO BOOTSTRAP-->
+        <header class="p-3 mb-3 border-bottom">
+                <div class="container">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                    <img src="/img/1.png" alt="Paranacidade" width="100" height="72">
+                    </a>
+
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <p class="tituloSistema justify-content-center mb-md-0">Sistema de Controle de Viagens</p></li>
+                    </ul>
+
+                    <div class="navbarMenu">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                            @guest
+                            <li class="nav-item">
+                            <a class="nav-link" href="/login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" href="/register">Registre-se</a>
+                            </li>
+                            @endguest
+                        </ul>
+                    </div>
+
+                    <div class="dropdown text-end">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="/img/user.png" alt="mdo" width="42" height="42" class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu text-small">
+
+                            @auth
+                                <li><a class="dropdown-item" href="/dashboard">Minhas AVs</a></li>
+                                <li><a class="dropdown-item" href="#">Configurações</a></li>
+                                <li><a class="dropdown-item" href="#">Meu perfil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                
+                                <li>
+                                    <form action="/logout" method="POST">
+                                        @csrf
+                                        <a class="dropdown-item" href="/logout" 
+                                        onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                                        Sair
+                                        </a>
+                                    </form>
+                                </li>
+                            @endauth
+                            
+                        </ul>
+                    </div>
+                            
+                </div>
+                </div>
+
+                <div class="espacoAntesFooter"></div>
+
+                <!-- NAVBAR COM OPÇÕES -->
+                <nav class="navbar navbar-expand-lg bg-light rounded" aria-label="Eleventh navbar example">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarsExample09">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                <a class="btn btn-success rounded-pill px-3" type="button" href="/events/create" >Criar nova AV!</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="/">Início</a>
+                                </li>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="/events/avs">Autorizações de viagem</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="#">Prestação de contas</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="#">Relatórios gerenciais</a>
+                                </li>
+                            </ul>
+                            <form role="search" method="GET">
+                                <input name="search" class="form-control" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+                
+        </header>    
+        
+        <main>
+            <div class="container-fluid">
+                <div class="row">
+                    @if(session('msg'))
+                        <p class="msg"> {{ session('msg') }} </p>    
+                    @endif
+                    @yield('content')
+                </div>
+            </div>
+        </main>
+
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <link rel="stylesheet" href="/css/styles.css">
+
+        <div class="espacoAntesFooter"></div>
+
+        <footer>
+        <address class="adr">
+            <p><span class="street-address">Palácio das Araucárias </p>
+            <p> Rua Jacy Loureiro de Campos, 180 - 2º andar - Centro Cívico</span> - <span class="postal-code">80530-140</span> - <span class="locality">Curitiba</span> - <abbr class="region" title="Paraná">PR</abbr></p>
+            
+            <p>Horário de Atendimento: das 8h30 às 12h e das 13h30 às 18h.</p>
+
+            <p><span class="tel">(41) 3350-3300 <a href="https://goo.gl/maps/bBwaZedpjBJ2" target="_blank" class="map">Localização</a></span></p>
+            </address>
+        </footer>
+        <script src="{‌{ asset('js/app.js') }}" type="text/javascript"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    </body>
+
+</html>
