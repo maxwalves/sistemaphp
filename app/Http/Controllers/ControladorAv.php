@@ -5,138 +5,131 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Av;
 use App\Models\Objetivo;
+use DateTime;
 
 class ControladorAv extends Controller
 {
-    public function indexView(){
-        $avs = Av::all();
-        $objetivos = Objetivo::all();
-        return view('avs', compact(['avs', 'objetivos']));
-    }
-
     public function index()
     {
-        $avs = Av::all();
-        //$cats = Categoria::all();
-        //return view('produtos', compact(['prods', 'cats']));
-        return $avs->toJson();
+        $user = auth()->user();
+        $avs = $user->avs;
+
+        $search = request('search');
+
+        if ($search) {
+            $avs = $avs::where([
+                ['title', 'like', '%'.$search. '%']
+            ])->get();
+        }
+
+        return view('welcome', ['avs' => $avs, 'search' => $search]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function avs()
+    {
+        $user = auth()->user();
+        $avs = $user->avs;
+        return view('avs.avs', ['avs' => $avs]);
+    }
+
     public function create()
     {
-        //Verificar se está sendo utilizado
-        //Lista os objetivos para carregar na View de AV
         $objetivos = Objetivo::all();
-        return view('novaav', compact('objetivos'));
+        return view('avs.create', ['objetivos' => $objetivos]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $av = new Av();
-        $av->dataCriacao = $request->input('dataCriacao');
-        $av->prioridade = $request->input('prioridade');
-        $av->banco = $request->input('banco');
-        $av->agencia = $request->input('agencia');
-        $av->conta = $request->input('conta');
-        $av->pix = $request->input('pix');
-        $av->comentario = $request->input('comentario');
-        $av->status = $request->input('status');
-        $av->valorExtra = $request->input('valorExtra');
-        $av->justificativaValorExtra = $request->input('justificativaValorExtra');
-        $av->conta = $request->input('isVeiculoProprio');
-        $av->conta = $request->input('isVeiculoEmpresa');
-        $av->conta = $request->input('contatos');
-        $av->conta = $request->input('atividades');
-        $av->conta = $request->input('conclusoes');
 
-        $av->user_id  = $request->input('user_id');
-        $av->objetivo_id  = $request->input('objetivo_id');
+        $av->objetivo_id = $request->objetivo_id;
+        $av->prioridade = $request->prioridade;
+        $av->dataCriacao = new DateTime();
+        $av->banco = $request->banco;
+        $av->agencia = $request->agencia;
+        $av->conta = $request->conta;
+        $av->pix = $request->pix;
+        $av->comentario = $request->comentario;
+        $av->status = "Aguardando envio para o Gestor";
 
+        $user = auth()->user();
+        $av->user_id = $user->id;
+    
         $av->save();
-        return json_encode($av);
-        //return redirect('produtos');
+
+        return redirect('/')->with('msg', 'AV criada com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        $av = Av::find($id);
-        if(isset($av)) {
-            return json_encode($av);
-        }
-        else {
-            return response('Av não encontrada', 404);
-        }
+        $av = Av::findOrFail($id);
+
+        //$avOwner = Av::where('id', $av->user_id)->first()->toArray();
+
+        return view('avs.show', ['av' => $av]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function dashboard()
     {
-        $objetivos = Objetivo::all();
-        $av = Av::find($id);
-        if(isset($prod)) {
-            return view('editarav', compact(['av', 'objetivos']));
+        $search = request('search');
+
+        if ($search) {
+            $avs = Av::where([
+                ['title', 'like', '%'.$search. '%']
+            ])->get();
+        } else {
+            $avs = Av::all();
         }
-        else {
-            abort(404);
-        }
+
+        $user = auth()->user();
+        $avs = $user->avs;
+
+        return view('avs.dashboard', ['avs' => $avs], ['search' => $search]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $av = Av::find($id);
-        if(isset($av)) {
-            $av->dataCriacao = $request->input('dataCriacao');
-            $av->prioridade = $request->input('prioridade');
-            $av->banco = $request->input('banco');
-            $av->agencia = $request->input('agencia');
-            $av->conta = $request->input('conta');
-            $av->pix = $request->input('pix');
-            $av->comentario = $request->input('comentario');
-            $av->status = $request->input('status');
-            $av->valorExtra = $request->input('valorExtra');
-            $av->justificativaValorExtra = $request->input('justificativaValorExtra');
-            $av->conta = $request->input('isVeiculoProprio');
-            $av->conta = $request->input('isVeiculoEmpresa');
-            $av->conta = $request->input('contatos');
-            $av->conta = $request->input('atividades');
-            $av->conta = $request->input('conclusoes');
-
-            $av->user_id  = $request->input('user_id');
-            $av->objetivo_id  = $request->input('objetivo_id');
-
-            $av->save();
-            return json_encode($av);
-        }
-        else {
-            return response('Av não encontrada', 404);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $av = Av::find($id);
-        if(isset($av)) {
-            $av->delete();
-            return response('OK', 200);
-        }
-        return response('Av não encontrada', 404);
+        $av = Av::findOrFail($id)->delete();
+
+        return redirect('/dashboard')->with('msg', 'av excluído com sucesso!');
     }
-    
+
+    public function edit($id)
+    {
+        $objetivos = Objetivo::all();
+
+        $user = auth()->user();
+
+        $av = Av::findOrFail($id);
+
+        if($user->id != $av->user->id) {
+            return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
+        }
+
+        return view('avs.edit', ['av' => $av, 'objetivos' => $objetivos]);
+    }
+
+    public function update(Request $request)
+    {
+        $data = $request->all();
+
+        //Image upload
+        if($request->hasFile('image') && $request->file('image')->isValid())
+        {
+            $requestImage = $request->image;
+
+            $extension = $requestImage->extension();
+
+            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
+            
+            $requestImage->move(public_path('img/avs'), $imageName);
+
+            $data['image'] = $imageName;
+
+        }
+
+        Av::findOrFail($request->id)->update($data);
+
+        return redirect('/dashboard')->with('msg', 'av editado com sucesso!');
+    }
 }

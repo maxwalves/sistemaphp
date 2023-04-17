@@ -103,14 +103,14 @@
                         <div class="collapse navbar-collapse" id="navbarsExample09">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                <a class="btn btn-success rounded-pill px-3" type="button" href="/events/create" >Criar nova AV!</a>
+                                <a class="btn btn-success rounded-pill px-3" type="button" href="/avs/create" >Criar nova AV!</a>
                                 </li>
                                 <li class="nav-item">
                                 <a class="nav-link" href="/">Início</a>
                                 </li>
                                 </li>
                                 <li class="nav-item">
-                                <a class="nav-link" href="/events/avs">Autorizações de viagem</a>
+                                <a class="nav-link" href="/avs/avs">Autorizações de viagem</a>
                                 </li>
                                 <li class="nav-item">
                                 <a class="nav-link" href="#">Prestação de contas</a>
@@ -160,6 +160,10 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
+        <script src="{‌{ asset('js/app.js') }}" type="text/javascript"></script>
+        @hasSection ('javascript')
+            @yield('javascript')
+        @endif
     </body>
 
 </html>

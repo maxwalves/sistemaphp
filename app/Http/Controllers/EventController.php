@@ -6,23 +6,24 @@ use Illuminate\Http\Request;
 
 use App\Models\Event;
 use App\Models\User;
+use App\Models\Objetivo;
 
 class EventController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
-        $events = $user->events;
+        $avs = $user->avs;
 
         $search = request('search');
 
         if ($search) {
-            $events = $events::where([
+            $avs = $avs::where([
                 ['title', 'like', '%'.$search. '%']
             ])->get();
         }
 
-        return view('welcome', ['events' => $events, 'search' => $search]);
+        return view('welcome', ['avs' => $avs, 'search' => $search]);
     }
 
     public function avs()
@@ -34,7 +35,8 @@ class EventController extends Controller
 
     public function create()
     {
-        return view('events.create');
+        $objetivos = Objetivo::all();
+        return view('events.create', ['objetivos' => $objetivos]);
     }
 
     public function store(Request $request)
@@ -145,7 +147,7 @@ class EventController extends Controller
     {
         $user = auth()->user();
 
-        $user->eventsAsParticipant()->attach($id);
+        //$user->eventsAsParticipant()->attach($id);
 
         $event = Event::findOrFail($id);
 

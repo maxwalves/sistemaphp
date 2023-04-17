@@ -99,11 +99,11 @@ header{
     border-color: #C28008;
 }
 
-#events-container {
+#avs-container {
     padding-left: 50px;
 }
 
-#events-container .subtitle{
+#avs-container .subtitle{
     color: #757575;
     margin-bottom: 30px;
     padding-bottom: 30px;
@@ -114,7 +114,7 @@ header{
     padding-bottom: 50px;
 }
 
-#events-container .card {
+#avs-container .card {
     flex: 1 1 24%;
     max-width: 25%;
     border-radius: 10px;
@@ -122,7 +122,7 @@ header{
     margin: .5%;
 }
 
-#events-container img{
+#avs-container img{
     max-height: 150px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -170,23 +170,23 @@ footer p{
 }
 
 
-/* Event create page */
-#event-create-container {
+/* av create page */
+#av-create-container {
     padding: 30px;
 }
-#event-create-container label {
+#av-create-container label {
     font-weight: bold;
 }
-#event-create-container input,
-#event-create-container select,
-#event-create-container textarea {
+#av-create-container input,
+#av-create-container select,
+#av-create-container textarea {
     font-size: 12px;
 }
 .form-group{
     padding-bottom: 10px;
 }
 
-/* Event page */
+/* av page */
 
 #image-container,
 #info-container {
@@ -220,7 +220,7 @@ footer p{
     margin-right: 5px;
 }
 
-#info-container #event-submit {
+#info-container #av-submit {
     margin: 20px 0;
 }
 
@@ -247,11 +247,11 @@ footer p{
     margin-top: 30px;
 }
 
-.dashboard-events-container th {
+.dashboard-avs-container th {
     width: 25%;
 }
 
-.dashboard-events-container form {
+.dashboard-avs-container form {
     display: inline-block;
 }
 

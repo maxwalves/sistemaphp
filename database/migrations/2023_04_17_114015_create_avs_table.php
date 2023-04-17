@@ -1,0 +1,51 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('avs', function (Blueprint $table) {
+            $table->increments('id');
+            $table->dateTime('dataCriacao');
+            $table->string('prioridade')->nullable();
+            $table->integer('banco')->nullable();
+            $table->integer('agencia')->nullable();
+            $table->integer('conta')->nullable();
+            $table->string('pix')->nullable();
+            $table->string('comentario')->nullable();
+            $table->string('status');
+            $table->integer('valorExtra')->nullable();
+            $table->string('justificativaValorExtra')->nullable();
+            $table->boolean('isVeiculoProprio')->nullable();
+            $table->boolean('isVeiculoEmpresa')->nullable();
+            $table->string('contatos')->nullable();
+            $table->string('atividades')->nullable();
+            $table->string('conclusoes')->nullable();
+
+            //Referencia a tabela ID
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
+
+            //Referencia a tabela objetivos
+            $table->integer('objetivo_id')->unsigned()->nullable();
+            $table->foreign('objetivo_id')->references('id')->on('objetivos');
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('avs');
+    }
+};

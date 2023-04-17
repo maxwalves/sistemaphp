@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ControladorAv;
+use App\Http\Controllers\ControladorProduto;
+use App\Http\Controllers\ControladorCategoria;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,23 +17,22 @@ use App\Http\Controllers\ControladorAv;
 */
 use App\Http\Controllers\EventController;
 
-Route::get('/', [EventController::class, 'index'])->middleware('auth');
-Route::get('/events/avs', [EventController::class, 'avs'])->middleware('auth');
-Route::get('/events/create', [EventController::class, 'create'])->middleware('auth');
-Route::get('/events/{id}', [EventController::class, 'show']);
+Route::get('/', [ControladorAv::class, 'index'])->middleware('auth');
+Route::get('/avs/avs', [ControladorAv::class, 'avs'])->middleware('auth');
+Route::get('/avs/create', [ControladorAv::class, 'create'])->middleware('auth');
+Route::get('/avs/{id}', [ControladorAv::class, 'show']);
 
-Route::post('/events', [EventController::class,'store']);
-Route::delete('/events/{id}', [EventController::class, 'destroy'])->middleware('auth');
-Route::get('/events/edit/{id}', [EventController::class, 'edit'])->middleware('auth');
-Route::put('/events/update/{id}', [EventController::class, 'update'])->middleware('auth');
+Route::post('/avs', [ControladorAv::class,'store']);
+Route::delete('/avs/{id}', [ControladorAv::class, 'destroy'])->middleware('auth');
+Route::get('/avs/edit/{id}', [ControladorAv::class, 'edit'])->middleware('auth');
+Route::put('/avs/update/{id}', [ControladorAv::class, 'update'])->middleware('auth');
 
 Route::get('/contact', function () {
     return view('contact');
 });
 
-Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware('auth');
+Route::get('/dashboard', [ControladorAv::class, 'dashboard'])->middleware('auth');
 
-Route::post('/events/join/{id}', [EventController::class, 'joinEvent'])->middleware('auth');
+Route::post('/avs/join/{id}', [EventController::class, 'joinEvent'])->middleware('auth');
 
-Route::get('/avs',[ControladorAv::class, 'indexView']);
 

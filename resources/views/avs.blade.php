@@ -27,14 +27,14 @@
             
             <div class="card-footer">
                 <a class="btn btn-sm btn-primary" 
-                role="button" onClick="$('#dlgAvs').modal('show')">Nova AV</a>
+                role="button" onClick="novaAv()">Nova AV</a>
             </div>
         </div>
     </div>
 
     {{-- Implementação da DIALOG ------------------------------------------------------- --}}
-    <div class="modal modal-sheet position-static bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="dlgAvs">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" tabindex="-1" role="dialog" id="dlgAvs" >
+        <div class="modal-dialog" role="document" >
             <div class="modal-content">
 
                 {{-- Formulário ------------------------------------------------------- --}}
@@ -50,11 +50,28 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="prioridade" class="control-label">Prioridade</label>
+                            <label for="objetivos" class="control-label">Qual é o Objetivo da viagem</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" 
-                                id="prioridade" placeholder="Prioridade">
+                                <select class="form-control" id="objetivos">
+
+                                </select>
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prioridade" class="control-label">Qual é a Prioridade da sua viagem? (selecione)</label>
+                            <div class="input-group">
+                                <select class="form-control" id="prioridade">
+                                    <option value="Alta"> Alta</option>
+                                    <option value="Média"> Média</option>
+                                    <option value="Baixa"> Baixa</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dataCriacao">Data da viagem:</label>
+                            <input type="date" name="dataCriacao" id="dataCriacao" class="form-control">
                         </div>
                         
                         <div class="form-group">
@@ -101,17 +118,6 @@
                             {{-- Aqui iria o Status, mas isso será preenchido automaticamente no Back End--}}
                         </div>
 
-                        <div class="form-group">
-                            <label for="objetivos" class="control-label">Objetivo da viagem</label>
-                            <div class="input-group">
-                                <select class="form-control" id="objetivos">
-
-                                </select>
-                            </div>
-                        </div>
-
-
-
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Salvar</button>
@@ -148,7 +154,7 @@
             $('#pix').val('');
             $('#comentarios').val('');
 
-            $('#dlgAvs').modal('show')
+            $('#dlgAvs').modal('show');
         }
         
         function carregarObjetivos(){
@@ -156,7 +162,7 @@
             $.getJSON('api/objetivos', function(data){
                 
                 for(i=0; i<data.length; i++){
-                    opcao = '<option value="' + data[i].nome + '</option>';
+                    opcao = '<option value="' + data[i].id + '">' + data[i].nomeObjetivo + '</option>';
                     $('#objetivos').append(opcao);
                 }
             });
@@ -165,7 +171,7 @@
         function montarLinha(av){
             var linha = "<tr>" +
                     "<td>" + av.id + "</td>" +
-                    "<td>" + av.dataCriacao + "</td>" +
+                    "<td>" + date('d/m/Y', strtotime(av.dataCriacao)) + "</td>" +
                     "<td>" + av.prioridade + "</td>" +
                     "<td>" + av.status + "</td>" +
                     "<td>" +
@@ -187,7 +193,7 @@
                 $('#pix').val(data.pix);
                 $('#comentarios').val(data.comentarios);
                 $('#objetivos').val(data.objetivo_id);
-                $('#dlgAvs').modal('show')
+                $('#dlgAvs').modal('show');
             });
         }
         //Acionamento do botão remover ------------------------
@@ -234,7 +240,7 @@
                 pix: $('#pix').val(),
                 comentarios: $('#comentarios').val(),
                 status: "Em preenchimento pelo usuário",
-                categoria_id: $('#objetivos').val()
+                objetivo_id: $('#objetivos').val()
             };
 
             $.post("/api/avs", av, function(data){
@@ -287,8 +293,8 @@
 
         }
 
-        $("#formAv").submit(function(event){
-            event.preventDefault();
+        $("#formAv").submit(function(av){
+            av.preventDefault();
 
             //Verifica se está criando um novo ou editando
             if($("#id").val() != ''){

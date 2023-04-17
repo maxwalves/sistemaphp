@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ControladorAv;
+use App\Http\Controllers\ControladorObjetivoViagem;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/objetivos',[ControladorObjetivoViagem::class, 'indexJson']);
 
-Route::resource('/avs', ControladorAvs::class);
+Route::resource('/avs', ControladorAv::class);
