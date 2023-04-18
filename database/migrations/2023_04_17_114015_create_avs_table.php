@@ -29,7 +29,17 @@ return new class extends Migration
             $table->string('atividades')->nullable();
             $table->string('conclusoes')->nullable();
 
-            //Referencia a tabela ID
+            //Veículo Próprio--------------------------------------------------
+            $table->boolean('isVeiculoProprioAutorizado')->nullable();
+            $table->dateTime('dataAutorizacaoVeiculoProprio')->nullable();
+            $table->string('assinaturaDiretoriaExecutiva')->nullable();
+            $table->integer('usuarioDiretoriaExecutiva')->nullable(); // Vai referenciar o usuário da Diretoria Executiva
+            //Referencia a tabela Veículo Próprio
+            $table->integer('veiculoProprio_id')->unsigned()->nullable();
+            $table->foreign('veiculoProprio_id')->references('id')->on('veiculo_proprios');
+            //------------------------------------------------------------------
+
+            //Referencia a tabela de Usuário
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
 

@@ -31,11 +31,16 @@ class Av extends Model
         'contatos',
         'atividades',
         'conclusoes',
+        'isVeiculoProprioAutorizado',
+        'dataAutorizacaoVeiculoProprio',
+        'assinaturaDiretoriaExecutiva',
+        'usuarioDiretoriaExecutiva',
+        'veiculoProprio_id',
         'user_id',
         'objetivo_id',
     ];
 
-    protected $dates = ['dataCriacao'];
+    protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio'];
     
     //Retorna o usuário relacionado a AV
     public function user()

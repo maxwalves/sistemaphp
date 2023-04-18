@@ -69,6 +69,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Av');
     }
 
+    public function veiculosProprios()
+    {
+        return $this->hasMany('App\Models\VeiculoProprio');
+    }
+
     public function eventsAsParticipant()
     {
         return $this->belongsToMany('App\Models\Event');

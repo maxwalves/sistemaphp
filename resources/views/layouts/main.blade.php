@@ -68,7 +68,7 @@
                         <ul class="dropdown-menu text-small">
 
                             @auth
-                                <li><a class="dropdown-item" href="/dashboard">Minhas AVs</a></li>
+                                <li><a class="dropdown-item" href="/veiculosProprios/veiculosProprios">Meus veículos</a></li>
                                 <li><a class="dropdown-item" href="#">Configurações</a></li>
                                 <li><a class="dropdown-item" href="#">Meu perfil</a></li>
                                 <li><hr class="dropdown-divider"></li>
@@ -143,8 +143,9 @@
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <link rel="stylesheet" href="/css/styles.css">
 
-        <div class="espacoAntesFooter"></div>
-
+        <div class="espacoAntesFooter">
+        </div>
+        <br><br>
         <footer>
         <address class="adr">
             <p><span class="street-address">Palácio das Araucárias </p>
