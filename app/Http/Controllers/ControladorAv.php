@@ -62,13 +62,17 @@ class ControladorAv extends Controller
        
         $av = new Av();
 
-        if ($request->isSelecionado) //Se existir outro objetivo, remove a necessidade de validação de objetivo
+        if ($request->isSelecionado==1) //Se existir outro objetivo, remove a necessidade de validação de objetivo
         {
-            $av->objetivo_id = $request->objetivo_id;
+            $av->objetivo_id = null;
             unset($regras['objetivo_id']); //Retira a regra de validação de objetivo
 
             $regras += ['outroObjetivo' => 'required']; //Adiciona a validação de outro objetivo
         }
+        else{
+            $av->objetivo_id = $request->objetivo_id;
+        }
+        echo "Teste aqui" . $request->isSelecionado;
 
         $request->validate($regras, $mensagens);
         
@@ -167,17 +171,46 @@ class ControladorAv extends Controller
 
     public function update(Request $request)
     {
+
+        $regras = [
+            'objetivo_id' => 'required',
+            'outroObjetivo' => 'required',
+            'prioridade' => 'required',
+            'isVeiculoProprio' => 'required',
+            'isVeiculoEmpresa' => 'required',
+        ];
+
+        if($request->get('isVeiculoProprio')=="1"){ // Se for veículo próprio, adiciona validação de campo
+            $request->request->set('isVeiculoEmpresa', null);
+            unset($regras['isVeiculoEmpresa']);
+        }
+        else if($request->get('isVeiculoEmpresa')=="1"){
+            $request->request->set('isVeiculoProprio', null);
+            unset($regras['isVeiculoProprio']);
+        }
+
+        $mensagens = [
+            'required' => 'Este campo não pode estar em branco',
+        ];
         
-        if ($request->isSelecionado) //Se existir outro objetivo, remove a necessidade de validação de objetivo
+        if ($request->get('isSelecionado')=="1") //Se existir outro objetivo, remove a necessidade de validação de objetivo
         {
-            $request->objetivo_id->input('null');
+            $request->request->set('objetivo_id', null);
+            unset($regras['objetivo_id']); //Retira a regra de validação de objetivo
+        }
+        else{
+            $request->request->set('outroObjetivo', null);
+            unset($regras['outroObjetivo']); //Retira a regra de validação de outro objetivo
         }
         
+        
+        
+        $request->validate($regras, $mensagens);
 
         $data = $request->all();
 
         Av::findOrFail($request->id)->update($data);
 
-        return redirect('/avs/avs')->with('msg', 'av editado com sucesso!');
+        return redirect('/avs/avs')->with('msg', 'av editado com sucesso!' . 'Valor obj: ' . $request->objetivo_id . 'Selecionado: ' . $request->isSelecionado);
     }
 }

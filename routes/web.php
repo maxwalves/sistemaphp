@@ -7,6 +7,7 @@ use App\Http\Controllers\ControladorCategoria;
 use App\Http\Controllers\ControladorVeiculoProprio;
 use App\Http\Controllers\ControladorObjetivoViagem;
 use App\Http\Controllers\ControladorVeiculoParanacidade;
+use App\Http\Controllers\ControladorRota;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,3 +70,12 @@ Route::delete('/veiculosParanacidade/{id}', [ControladorVeiculoParanacidade::cla
 Route::get('/veiculosParanacidade/edit/{id}', [ControladorVeiculoParanacidade::class, 'edit'])->middleware('auth');
 Route::put('/veiculosParanacidade/update/{id}', [ControladorVeiculoParanacidade::class, 'update'])->middleware('auth');
 Route::post('/veiculosParanacidade', [ControladorVeiculoParanacidade::class,'store'])->middleware('auth');
+
+// ROTAS PARA ROTAS
+Route::get('/rotas/rotas', [ControladorRota::class, 'rotas'])->middleware('auth');
+Route::get('/rotas/create', [ControladorRota::class, 'create'])->middleware('auth');
+Route::get('/rotas/{id}', [ControladorRota::class, 'show'])->middleware('auth');
+Route::delete('/rotas/{id}', [ControladorRota::class, 'destroy'])->middleware('auth');
+Route::get('/rotas/edit/{id}', [ControladorRota::class, 'edit'])->middleware('auth');
+Route::put('/rotas/update/{id}', [ControladorRota::class, 'update'])->middleware('auth');
+Route::post('/rotas', [ControladorRota::class,'store'])->middleware('auth');

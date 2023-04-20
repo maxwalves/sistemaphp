@@ -34,6 +34,7 @@ return new class extends Migration
             $table->dateTime('dataAutorizacaoVeiculoProprio')->nullable();
             $table->string('assinaturaDiretoriaExecutiva')->nullable();
             $table->integer('usuarioDiretoriaExecutiva')->nullable(); // Vai referenciar o usuário da Diretoria Executiva
+            
             //Referencia a tabela Veículo Próprio
             $table->integer('veiculoProprio_id')->unsigned()->nullable();
             $table->foreign('veiculoProprio_id')->references('id')->on('veiculo_proprios');

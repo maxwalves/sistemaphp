@@ -54,4 +54,9 @@ class Av extends Model
     {
         return $this->belongsTo('App\Models\ObjetivoViagem');
     }
+
+    public function rotas()
+    {
+        return $this->hasMany('App\Models\Rota');
+    }
 }

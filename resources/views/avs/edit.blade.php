@@ -75,7 +75,7 @@
                 <label for="isVeiculoProprio" class="control-label">Você vai utilizar veículo próprio? (selecione)</label>
                 <br>
                     <select class="custom-select {{ $errors->has('isVeiculoProprio') ? 'is-invalid' :''}}" 
-                        id="isVeiculoProprio" name="isVeiculoProprio" onChange="desativarCampo()" required>
+                        id="isVeiculoProprio" name="isVeiculoProprio" onChange="ativaCampo()" required>
                         <option value="0" name="0" {{ $av->isVeiculoProprio == "0" ? "selected='selected'" : ""}}> Não</option>
                         <option value="1" name="1" {{ $av->isVeiculoProprio == "1" ? "selected='selected'" : ""}}> Sim</option>
                     </select>
@@ -87,7 +87,7 @@
                     @endif
             </div>
 
-            <div class="form-group" id="selecaoVeiculo" hidden="true">
+            <div class="form-group" id="selecaoVeiculo">
                 <label for="veiculoProprio_id" class="control-label" required>Selecione o veículo?</label>
                 <br>
                     <select class="custom-select {{ $errors->has('veiculoProprio_id') ? 'is-invalid' :''}}" 
@@ -108,13 +108,14 @@
                     @endif
             </div>
 
-            <div class="form-group">
+
+            <div class="form-group" id="temVeiculoEmpresa">
                 <label for="isVeiculoEmpresa" class="control-label" required>Você vai utilizar veículo do Paranacidade? (selecione)</label>
                 <br>
                     <select class="custom-select {{ $errors->has('isVeiculoEmpresa') ? 'is-invalid' :''}}" 
                         id="isVeiculoEmpresa" name="isVeiculoEmpresa">
-                        <option value="0" name="0" {{ $av->isVeiculoEmpresa == "1" ? "selected='selected'" : ""}}> Não</option>
-                        <option value="1" name="1" {{ $av->isVeiculoEmpresa == "0" ? "selected='selected'" : ""}}> Sim</option>
+                        <option value="0" name="0" {{ $av->isVeiculoEmpresa == "0" ? "selected='selected'" : ""}}> Não</option>
+                        <option value="1" name="1" {{ $av->isVeiculoEmpresa == "1" ? "selected='selected'" : ""}}> Sim</option>
                     </select>
 
                     @if ($errors->has('isVeiculoEmpresa'))
@@ -170,19 +171,15 @@
 @section('javascript')
     <script type="text/javascript">
 
-            function desativarCampo(){
-            var isVeiculoProprio = document.getElementById("isVeiculoProprio")
-            var selecaoVeiculo = document.getElementById("selecaoVeiculo")
 
-            if(isVeiculoProprio.value=="1") {//Se for veículo próprio
-                document.getElementById("veiculoEmpresa").hidden = true;
+        function ativaCampo(){
+            if(document.getElementById("isVeiculoProprio").value == "1"){
                 document.getElementById("selecaoVeiculo").hidden = false;
-                document.getElementById("veiculoProprio_id").value = "";
-                
-            } else if(isVeiculoProprio.value=="0"){
-                document.getElementById("veiculoEmpresa").hidden = false;
+                document.getElementById("temVeiculoEmpresa").hidden = true;
+                document.getElementById("isVeiculoEmpresa").value = 0;
+            }else if(document.getElementById("isVeiculoProprio").value == "0"){//Se o campo de outro objetivo tiver algo, faz o contrário
                 document.getElementById("selecaoVeiculo").hidden = true;
-                document.getElementById("isVeiculoEmpresa").value="0";
+                document.getElementById("temVeiculoEmpresa").hidden = false;
             }
         }
 
@@ -193,7 +190,7 @@
                 document.getElementById("outroObjetivo").hidden = false;
                 document.getElementById("nomeObjetivo").hidden = true;
                 document.getElementById("outroObjetivo").value = "";
-                document.getElementById("nomeObjetivo").value = "";
+                document.getElementById("nomeObjetivo").name = null;
                 document.getElementById("isSelecionado").value = "1";
             } else if(seletor.checked == false){
                 document.getElementById("outroObjetivo").hidden = true;
@@ -214,9 +211,19 @@
             }
         });
         
-                //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
+                //Assim que a tela carrega, aciona automaticamente essas funções ------------------------
         $(function(){
         //Se o campo de outro objetivo for vazio, ativa o campo de seleção de objetivo e desabilita o de outro objetivo
+            
+            if(document.getElementById("isVeiculoProprio").value == "1"){
+                document.getElementById("selecaoVeiculo").hidden = false;
+                document.getElementById("temVeiculoEmpresa").hidden = true;
+            }else{//Se o campo de outro objetivo tiver algo, faz o contrário
+                document.getElementById("selecaoVeiculo").hidden = true;
+            }
+
+
+
             if(document.getElementById("outroObjetivo").value == ""){
                 ativarCampoObjetivoInicial();
             }else{//Se o campo de outro objetivo tiver algo, faz o contrário

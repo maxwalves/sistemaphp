@@ -204,6 +204,7 @@
                 document.getElementById("outroObjetivoCampo").hidden = false;
                 document.getElementById("nomeObjetivo").hidden = true;
                 document.getElementById("outroObjetivo").value = "";
+                document.getElementById("nomeObjetivo").value = null;
                 document.getElementById("isSelecionado").value = "1";
             } else if(seletor.checked == false){
                 document.getElementById("outroObjetivoCampo").hidden = true;
