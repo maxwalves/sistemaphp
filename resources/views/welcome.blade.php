@@ -12,7 +12,7 @@
     @endif
     
     <div id="cards-container" class="row">
-        @for($i = 0; $i < count($avs); $i++)
+        @for($i = count($avs)-1; $i >=0; $i--)<!-- Mostra de trás pra frente -->
             <div class= "card col-md-3" >
                 
                 <div class="card-body">
@@ -25,7 +25,7 @@
                 </div> 
             </div>
             <!-- Verifica se existem mais de 4 AV e mostra apenas 4 -->
-            @if($i==3)
+            @if($i==(count($avs)-4))
             @break
             @endif
         @endfor

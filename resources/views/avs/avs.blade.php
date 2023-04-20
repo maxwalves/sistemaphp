@@ -4,11 +4,11 @@
 @section('content')
 
 <div class="col-md-10 offset-md-1 dashboard-title-container">
-    <h1>Minhas autorizações de viagens</h1>
+    <h4>Minhas autorizações de viagens</h4>
 </div>
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
     @if(count($avs) > 0 )
-    <table class="table table-hover table-sm table-responsive">
+    <table id="minhaTabela">
         <thead>
             <tr>
                 <th>Número</th>
@@ -27,11 +27,13 @@
                 <td> {{$av->status}} </td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/edit/{{ $av->id }}" class="btn btn-info btn-sm edit-btn"> <ion-icon name="create-outline"></ion-icon> Editar</a> 
+                        <a href="/avs/edit/{{ $av->id }}" class="btn btn-info btn-sm edit-btn"
+                            style="width: 80px">  Editar</a> 
                         <form action="/avs/{{ $av->id }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm delete-btn"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
+                            <button type="submit" class="btn btn-danger btn-sm delete-btn"
+                            style="width: 80px" > Deletar</button>
                         </form>
                     </div>
                 </td>
@@ -45,4 +47,23 @@
     
 </div>
 
+@endsection
+
+@section('javascript')
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            $('#minhaTabela').DataTable({
+                    scrollY: 400,
+                    "language": {
+                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                        "zeroRecords": "Nada encontrado",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum registro disponível",
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                    }
+                });
+        });
+
+    </script>
 @endsection

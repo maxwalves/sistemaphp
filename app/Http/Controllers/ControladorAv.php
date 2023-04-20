@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Av;
 use App\Models\Objetivo;
 use App\Models\VeiculoProprio;
+use App\Models\VeiculoParanacidade;
 use DateTime;
 
 class ControladorAv extends Controller
@@ -39,28 +40,54 @@ class ControladorAv extends Controller
         $veiculosProprios = $user->veiculosProprios;
 
         $objetivos = Objetivo::all();
-        return view('avs.create', ['objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios]);
+        $veiculosParanacidade = VeiculoParanacidade::all(); // Fazer filtro para apresentar somentes os ativos
+        return view('avs.create', ['objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'veiculosParanacidade' => $veiculosParanacidade]);
     }
 
     public function store(Request $request)
     {
-
         $regras = [
             'objetivo_id' => 'required',
             'prioridade' => 'required',
             'isVeiculoProprio' => 'required',
         ];
+
+        if($request->isVeiculoProprio=="1"){ // Se for veículo próprio, adiciona validação de campo
+            $regras += ['veiculoProprio_id' => 'required'];
+        }
+
         $mensagens = [
             'required' => 'Este campo não pode estar em branco',
         ];
-        $request->validate($regras, $mensagens);
-
+       
         $av = new Av();
 
-        $av->objetivo_id = $request->objetivo_id;
+        if ($request->isSelecionado) //Se existir outro objetivo, remove a necessidade de validação de objetivo
+        {
+            $av->objetivo_id = $request->objetivo_id;
+            unset($regras['objetivo_id']); //Retira a regra de validação de objetivo
+
+            $regras += ['outroObjetivo' => 'required']; //Adiciona a validação de outro objetivo
+        }
+
+        $request->validate($regras, $mensagens);
+        
         $av->prioridade = $request->prioridade;
-        $av->isVeiculoProprio = $request->isVeiculoProprio;
-        $av->isVeiculoEmpresa = $request->isVeiculoEmpresa;
+
+        //Validação para salvar no banco de dados, ou é veículo próprio ou da empresa, ou nenhum
+        if($request->isVeiculoProprio==1){
+            $av->isVeiculoProprio = 1;
+            $av->isVeiculoEmpresa = 0;
+            $av->veiculoProprio_id = $request->veiculoProprio_id;
+        }else if($request->isVeiculoEmpresa==1){
+            $av->isVeiculoProprio = 0;
+            $av->isVeiculoEmpresa = 1;
+            $av->veiculoParanacidade_id = $request->veiculoParanacidade_id;
+        } else if($request->isVeiculoProprio==0 && $request->isVeiculoEmpresa==0){
+            $av->isVeiculoProprio = 0;
+            $av->isVeiculoEmpresa = 0;
+        }//-----------------------------------------------------------------
+        
         $av->dataCriacao = new DateTime();
         $av->banco = $request->banco;
         $av->agencia = $request->agencia;
@@ -68,7 +95,7 @@ class ControladorAv extends Controller
         $av->pix = $request->pix;
         $av->comentario = $request->comentario;
         $av->status = "Aguardando envio para o Gestor";
-        $av->veiculoProprio_id = $request->veiculoProprio_id;
+        $av->outroObjetivo = $request->outroObjetivo;
 
         $user = auth()->user();
         $av->user_id = $user->id;
@@ -140,22 +167,14 @@ class ControladorAv extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->all();
-
-        //Image upload
-        if($request->hasFile('image') && $request->file('image')->isValid())
+        
+        if ($request->isSelecionado) //Se existir outro objetivo, remove a necessidade de validação de objetivo
         {
-            $requestImage = $request->image;
-
-            $extension = $requestImage->extension();
-
-            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
-            
-            $requestImage->move(public_path('img/avs'), $imageName);
-
-            $data['image'] = $imageName;
-
+            $request->objetivo_id->input('null');
         }
+        
+
+        $data = $request->all();
 
         Av::findOrFail($request->id)->update($data);
 

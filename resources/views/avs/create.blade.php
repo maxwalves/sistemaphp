@@ -9,7 +9,7 @@
             @csrf
 
 
-            <div class="form-group">
+            <div class="form-group" id="nomeObjetivo">
                 <label for="objetivo_id" class="control-label" required>Qual é o Objetivo da viagem? (selecione)</label>
                 <br>
                     <select class="custom-select {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
@@ -30,10 +30,33 @@
                     @endif
             </div>
 
+            <div class="form-group " id="outroObjetivoCampo">
+                <label for="outro" class="control-label">Digite outro objetivo: </label>
+                <div class="input-group">
+                    <input type="text" class="form-control {{ $errors->has('outroObjetivo') ? 'is-invalid' :''}}" 
+                    name="outroObjetivo"
+                    id="outroObjetivo" placeholder="Outro">
+                </div>
+
+                @if ($errors->has('outroObjetivo'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('outroObjetivo') }}
+                    </div>
+                @endif
+            </div>
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" 
+                style="height: 20px; width: 40px" onChange="desativarCampoObjetivo()">
+                <label class="form-check-label" for="flexSwitchCheckDefault" style="padding-left: 10px">Não achei o objetivo que desejo na lista!</label>
+            </div>
+            <input type="boolean" id="isSelecionado" name="isSelecionado" value="0" hidden="true">
+            <br>
+            <br>
             <div class="form-group">
                 <label for="prioridade" class="control-label" required>Qual é a Prioridade da sua viagem? (selecione)</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
+                    <select class="custom-select {{ $errors->has('prioridade') ? 'is-invalid' :''}}" 
                         id="prioridade" name="prioridade">
                         <option value="" name=""> Selecione</option>
                         <option value="Alta" name="Alta"> Alta</option>
@@ -41,9 +64,9 @@
                         <option value="Baixa" name="Baixa"> Baixa</option>
                     </select>
 
-                    @if ($errors->has('objetivo_id'))
+                    @if ($errors->has('prioridade'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('objetivo_id') }}
+                        {{ $errors->first('prioridade') }}
                     </div>
                     @endif
             </div>
@@ -51,16 +74,15 @@
             <div class="form-group">
                 <label for="isVeiculoProprio" class="control-label">Você vai utilizar veículo próprio? (selecione)</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
+                    <select class="custom-select {{ $errors->has('isVeiculoProprio') ? 'is-invalid' :''}}" 
                         id="isVeiculoProprio" name="isVeiculoProprio" onChange="desativarCampo()" required>
-                        <option value="" name=""> Selecione</option>
-                        <option value="1" name="1" > Sim</option>
                         <option value="0" name="0"> Não</option>
+                        <option value="1" name="1" > Sim</option>
                     </select>
 
-                    @if ($errors->has('objetivo_id'))
+                    @if ($errors->has('isVeiculoProprio'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('objetivo_id') }}
+                        {{ $errors->first('isVeiculoProprio') }}
                     </div>
                     @endif
             </div>
@@ -84,7 +106,7 @@
 
                     @if ($errors->has('veiculoProprio_id'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('objetivo_id') }}
+                        {{ $errors->first('veiculoProprio_id') }}
                     </div>
                     @endif
             </div>
@@ -93,21 +115,23 @@
 
 
 
-            <div class="form-group">
+            <div class="form-group" id="veiculoEmpresa">
                 <label for="isVeiculoEmpresa" class="control-label" required>Você vai utilizar veículo do Paranacidade? (selecione)</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
-                        id="isVeiculoEmpresa" name="isVeiculoEmpresa">
+                    <select class="custom-select {{ $errors->has('isVeiculoEmpresa') ? 'is-invalid' :''}}" 
+                        id="isVeiculoEmpresa" name="isVeiculoEmpresa" onChange="mostrarCampoVeiculoParanacidade()">
                         <option value="0" name="0"> Não</option>
                         <option value="1" name="1"> Sim</option>
                     </select>
 
-                    @if ($errors->has('objetivo_id'))
+                    @if ($errors->has('isVeiculoEmpresa'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('objetivo_id') }}
+                        {{ $errors->first('isVeiculoEmpresa') }}
                     </div>
                     @endif
             </div>
+
+            
             
             <div class="form-group">
                 <label for="banco" class="control-label">Banco</label>
@@ -161,14 +185,34 @@
             var isVeiculoProprio = document.getElementById("isVeiculoProprio")
             var selecaoVeiculo = document.getElementById("selecaoVeiculo")
 
-            if(isVeiculoProprio.value=="1") {
-                document.getElementById("isVeiculoEmpresa").hidden = true;
+            if(isVeiculoProprio.value=="1") {//Se for veículo próprio
+                document.getElementById("veiculoEmpresa").hidden = true;
                 document.getElementById("selecaoVeiculo").hidden = false;
+                document.getElementById("veiculoProprio_id").value = "";
+                
             } else if(isVeiculoProprio.value=="0"){
-                document.getElementById("isVeiculoEmpresa").hidden = false;
+                document.getElementById("veiculoEmpresa").hidden = false;
                 document.getElementById("selecaoVeiculo").hidden = true;
+                document.getElementById("isVeiculoEmpresa").value="0";
             }
         }
+
+        function desativarCampoObjetivo(){
+            var seletor = document.getElementById("flexSwitchCheckDefault")
+
+            if(seletor.checked == true) {
+                document.getElementById("outroObjetivoCampo").hidden = false;
+                document.getElementById("nomeObjetivo").hidden = true;
+                document.getElementById("outroObjetivo").value = "";
+                document.getElementById("isSelecionado").value = "1";
+            } else if(seletor.checked == false){
+                document.getElementById("outroObjetivoCampo").hidden = true;
+                document.getElementById("nomeObjetivo").hidden = false;
+                document.getElementById("isSelecionado").value = "0";
+            }
+        }
+
+
 
         $.ajaxSetup({
             headers: {
@@ -178,7 +222,7 @@
         
                 //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
         $(function(){
-        
+            document.getElementById("outroObjetivoCampo").hidden = true;
         })
     </script>
 @endsection

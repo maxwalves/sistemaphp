@@ -15,7 +15,9 @@
         <!-- CSS Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         
-        
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+  
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
 
 
 
@@ -69,6 +71,8 @@
 
                             @auth
                                 <li><a class="dropdown-item" href="/veiculosProprios/veiculosProprios">Meus veículos</a></li>
+                                <li><a class="dropdown-item" href="/veiculosParanacidade/veiculosParanacidade">Veículos Paranacidade</a></li>
+                                <li><a class="dropdown-item" href="/objetivos/objetivos">Objetivos de viagem</a></li>
                                 <li><a class="dropdown-item" href="#">Configurações</a></li>
                                 <li><a class="dropdown-item" href="#">Meu perfil</a></li>
                                 <li><hr class="dropdown-divider"></li>
@@ -160,6 +164,9 @@
         <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 
         <script src="{‌{ asset('js/app.js') }}" type="text/javascript"></script>
         @hasSection ('javascript')

@@ -38,6 +38,8 @@ class Av extends Model
         'veiculoProprio_id',
         'user_id',
         'objetivo_id',
+        'outroObjetivo',
+        'veiculoParanacidade_id'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio'];

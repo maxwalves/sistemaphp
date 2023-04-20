@@ -5,6 +5,8 @@ use App\Http\Controllers\ControladorAv;
 use App\Http\Controllers\ControladorProduto;
 use App\Http\Controllers\ControladorCategoria;
 use App\Http\Controllers\ControladorVeiculoProprio;
+use App\Http\Controllers\ControladorObjetivoViagem;
+use App\Http\Controllers\ControladorVeiculoParanacidade;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,3 +51,21 @@ Route::delete('/veiculosProprios/{id}', [ControladorVeiculoProprio::class, 'dest
 Route::get('/veiculosProprios/edit/{id}', [ControladorVeiculoProprio::class, 'edit'])->middleware('auth');
 Route::put('/veiculosProprios/update/{id}', [ControladorVeiculoProprio::class, 'update'])->middleware('auth');
 Route::post('/veiculosProprios', [ControladorVeiculoProprio::class,'store'])->middleware('auth');
+
+// ROTAS PARA OBJETIVOS
+Route::get('/objetivos/objetivos', [ControladorObjetivoViagem::class, 'objetivos'])->middleware('auth');
+Route::get('/objetivos/create', [ControladorObjetivoViagem::class, 'create'])->middleware('auth');
+Route::get('/objetivos/{id}', [ControladorObjetivoViagem::class, 'show'])->middleware('auth');
+Route::delete('/objetivos/{id}', [ControladorObjetivoViagem::class, 'destroy'])->middleware('auth');
+Route::get('/objetivos/edit/{id}', [ControladorObjetivoViagem::class, 'edit'])->middleware('auth');
+Route::put('/objetivos/update/{id}', [ControladorObjetivoViagem::class, 'update'])->middleware('auth');
+Route::post('/objetivos', [ControladorObjetivoViagem::class,'store'])->middleware('auth');
+
+// ROTAS PARA VEICULOS PARANACIDADE
+Route::get('/veiculosParanacidade/veiculosParanacidade', [ControladorVeiculoParanacidade::class, 'veiculosParanacidade'])->middleware('auth');
+Route::get('/veiculosParanacidade/create', [ControladorVeiculoParanacidade::class, 'create'])->middleware('auth');
+Route::get('/veiculosParanacidade/{id}', [ControladorVeiculoParanacidade::class, 'show'])->middleware('auth');
+Route::delete('/veiculosParanacidade/{id}', [ControladorVeiculoParanacidade::class, 'destroy'])->middleware('auth');
+Route::get('/veiculosParanacidade/edit/{id}', [ControladorVeiculoParanacidade::class, 'edit'])->middleware('auth');
+Route::put('/veiculosParanacidade/update/{id}', [ControladorVeiculoParanacidade::class, 'update'])->middleware('auth');
+Route::post('/veiculosParanacidade', [ControladorVeiculoParanacidade::class,'store'])->middleware('auth');

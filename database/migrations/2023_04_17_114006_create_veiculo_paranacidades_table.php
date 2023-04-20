@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('objetivos', function (Blueprint $table) {
+        Schema::create('veiculo_paranacidades', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nomeObjetivo');
+            $table->string('marca')->nullable();
+            $table->string('modelo')->nullable();
+            $table->string('placa')->nullable();
+            $table->boolean('isAtivo')->nullable();
+            $table->string('observacao')->nullable();
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('objetivos');
+        Schema::dropIfExists('veiculo_paranacidades');
     }
 };

@@ -9,11 +9,11 @@
             @csrf
             @method('PUT')
 
-            <div class="form-group">
-                <label for="objetivo_id" class="control-label">Qual é o Objetivo da viagem</label>
-
-                    <select class="custom-select" id="objetivo_id" name="objetivo_id" >
-                        
+            <div class="form-group" id="nomeObjetivo" >
+                <label for="objetivo_id" class="control-label" required>Qual é o Objetivo da viagem? (selecione)</label>
+                <br>
+                    <select class="custom-select {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
+                        id="objetivo_id" name="objetivo_id">
                         <option value="" name=""> Selecione</option>
                         @for($i = 0; $i < count($objetivos); $i++)
                             <div>
@@ -22,32 +22,67 @@
                             </div>
                         @endfor
                     </select>
-                
+
+                    @if ($errors->has('objetivo_id'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('objetivo_id') }}
+                    </div>
+                    @endif
             </div>
+
+            <div class="form-group" id="outroObjetivo">
+                <label for="outro" class="control-label">Digite outro objetivo: </label>
+                <div class="input-group">
+                    <input type="text" class="form-control {{ $errors->has('outroObjetivo') ? 'is-invalid' :''}}" 
+                    name="outroObjetivo"
+                    id="outroObjetivo" placeholder="Outro" value="{{$av->outroObjetivo}}">
+                </div>
+
+                @if ($errors->has('outroObjetivo'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('outroObjetivo') }}
+                    </div>
+                @endif
+            </div>
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" 
+                style="height: 20px; width: 40px" onChange="desativarCampoObjetivo()"  {{$av->outroObjetivo != "" ? "checked" : ""}}>
+                <label class="form-check-label" for="flexSwitchCheckDefault" style="padding-left: 10px">Não achei o objetivo que desejo na lista!</label>
+            </div>
+            <input type="boolean" id="isSelecionado" name="isSelecionado" value="0" hidden="true">
+            <br>
+            <br>
 
             <div class="form-group">
                 <label for="prioridade" class="control-label">Qual é a Prioridade da sua viagem? (selecione)</label>
-                    <select class="custom-select" id="prioridade" name="prioridade">
+                    <select class="custom-select {{ $errors->has('prioridade') ? 'is-invalid' :''}}" 
+                        id="prioridade" name="prioridade">
                         <option value="" name=""> Selecione</option>
                         <option value="Alta" {{ $av->prioridade == "Alta" ? "selected='selected'" : ""}} name="Alta"> Alta</option>
                         <option value="Média" {{ $av->prioridade == "Média" ? "selected='selected'" : ""}} name="Média"> Média</option>
                         <option value="Baixa" {{ $av->prioridade == "Baixa" ? "selected='selected'" : ""}} name="Baixa"> Baixa</option>
                     </select>
+
+                    @if ($errors->has('prioridade'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('prioridade') }}
+                    </div>
+                    @endif
             </div>
 
             <div class="form-group">
                 <label for="isVeiculoProprio" class="control-label">Você vai utilizar veículo próprio? (selecione)</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
+                    <select class="custom-select {{ $errors->has('isVeiculoProprio') ? 'is-invalid' :''}}" 
                         id="isVeiculoProprio" name="isVeiculoProprio" onChange="desativarCampo()" required>
-                        <option value="" name=""> Selecione</option>
-                        <option value="1" name="1" {{ $av->isVeiculoProprio == "1" ? "selected='selected'" : ""}}> Sim</option>
                         <option value="0" name="0" {{ $av->isVeiculoProprio == "0" ? "selected='selected'" : ""}}> Não</option>
+                        <option value="1" name="1" {{ $av->isVeiculoProprio == "1" ? "selected='selected'" : ""}}> Sim</option>
                     </select>
 
-                    @if ($errors->has('objetivo_id'))
+                    @if ($errors->has('isVeiculoProprio'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('objetivo_id') }}
+                        {{ $errors->first('isVeiculoProprio') }}
                     </div>
                     @endif
             </div>
@@ -68,7 +103,7 @@
 
                     @if ($errors->has('veiculoProprio_id'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('objetivo_id') }}
+                        {{ $errors->first('veiculoProprio_id') }}
                     </div>
                     @endif
             </div>
@@ -76,15 +111,15 @@
             <div class="form-group">
                 <label for="isVeiculoEmpresa" class="control-label" required>Você vai utilizar veículo do Paranacidade? (selecione)</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
+                    <select class="custom-select {{ $errors->has('isVeiculoEmpresa') ? 'is-invalid' :''}}" 
                         id="isVeiculoEmpresa" name="isVeiculoEmpresa">
                         <option value="0" name="0" {{ $av->isVeiculoEmpresa == "1" ? "selected='selected'" : ""}}> Não</option>
                         <option value="1" name="1" {{ $av->isVeiculoEmpresa == "0" ? "selected='selected'" : ""}}> Sim</option>
                     </select>
 
-                    @if ($errors->has('objetivo_id'))
+                    @if ($errors->has('isVeiculoEmpresa'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('objetivo_id') }}
+                        {{ $errors->first('isVeiculoEmpresa') }}
                     </div>
                     @endif
             </div>
@@ -135,17 +170,42 @@
 @section('javascript')
     <script type="text/javascript">
 
-function desativarCampo(){
+            function desativarCampo(){
             var isVeiculoProprio = document.getElementById("isVeiculoProprio")
             var selecaoVeiculo = document.getElementById("selecaoVeiculo")
 
-            if(isVeiculoProprio.value=="1") {
-                document.getElementById("isVeiculoEmpresa").hidden = true;
+            if(isVeiculoProprio.value=="1") {//Se for veículo próprio
+                document.getElementById("veiculoEmpresa").hidden = true;
                 document.getElementById("selecaoVeiculo").hidden = false;
+                document.getElementById("veiculoProprio_id").value = "";
+                
             } else if(isVeiculoProprio.value=="0"){
-                document.getElementById("isVeiculoEmpresa").hidden = false;
+                document.getElementById("veiculoEmpresa").hidden = false;
                 document.getElementById("selecaoVeiculo").hidden = true;
+                document.getElementById("isVeiculoEmpresa").value="0";
             }
+        }
+
+        function desativarCampoObjetivo(){
+            var seletor = document.getElementById("flexSwitchCheckDefault")
+
+            if(seletor.checked == true) {
+                document.getElementById("outroObjetivo").hidden = false;
+                document.getElementById("nomeObjetivo").hidden = true;
+                document.getElementById("outroObjetivo").value = "";
+                document.getElementById("nomeObjetivo").value = "";
+                document.getElementById("isSelecionado").value = "1";
+            } else if(seletor.checked == false){
+                document.getElementById("outroObjetivo").hidden = true;
+                document.getElementById("nomeObjetivo").hidden = false;
+                document.getElementById("outroObjetivo").value = "";
+                document.getElementById("isSelecionado").value = "0";
+            }
+        }
+        
+        function ativarCampoObjetivoInicial(){
+            document.getElementById("nomeObjetivo").hidden = false;
+            document.getElementById("outroObjetivo").hidden = true;
         }
 
         $.ajaxSetup({
@@ -156,7 +216,27 @@ function desativarCampo(){
         
                 //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
         $(function(){
-            desativarCampo()
-        })
+        //Se o campo de outro objetivo for vazio, ativa o campo de seleção de objetivo e desabilita o de outro objetivo
+            if(document.getElementById("outroObjetivo").value == ""){
+                ativarCampoObjetivoInicial();
+            }else{//Se o campo de outro objetivo tiver algo, faz o contrário
+                document.getElementById("nomeObjetivo").hidden = true;//Desabilita seleção de objetivo
+                document.getElementById("outroObjetivo").hidden = false;// Habilita campo de outro objetivo
+            }
+
+            //Se veio objetivo do banco, habilita o campo de objetivo
+            if(document.getElementById("objetivo_id").value != ""){
+                document.getElementById("nomeObjetivo").hidden = false;
+                document.getElementById("outroObjetivo").hidden = true;//Desabilita o campo de outro objetivo
+            }
+
+            var seletor = document.getElementById("flexSwitchCheckDefault")
+            if(seletor.checked == true) {
+                document.getElementById("isSelecionado").value = "1";
+            } else if(seletor.checked == false){
+                document.getElementById("isSelecionado").value = "0";
+            }
+            
+        })  
     </script>
 @endsection

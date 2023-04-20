@@ -46,6 +46,12 @@ return new class extends Migration
             //Referencia a tabela objetivos
             $table->integer('objetivo_id')->unsigned()->nullable();
             $table->foreign('objetivo_id')->references('id')->on('objetivos');
+            
+            $table->string('outroObjetivo')->nullable();
+
+            //Referencia a tabela veículos Paranacidade
+            $table->integer('veiculoParanacidade_id')->unsigned()->nullable();
+            $table->foreign('veiculoParanacidade_id')->references('id')->on('veiculo_paranacidades');
 
             $table->timestamps();
         });
