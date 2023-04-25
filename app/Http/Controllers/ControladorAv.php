@@ -48,13 +48,8 @@ class ControladorAv extends Controller
     {
         $regras = [
             'objetivo_id' => 'required',
-            'prioridade' => 'required',
-            'isVeiculoProprio' => 'required',
+            'prioridade' => 'required'
         ];
-
-        if($request->isVeiculoProprio=="1"){ // Se for veículo próprio, adiciona validação de campo
-            $regras += ['veiculoProprio_id' => 'required'];
-        }
 
         $mensagens = [
             'required' => 'Este campo não pode estar em branco',
@@ -72,25 +67,10 @@ class ControladorAv extends Controller
         else{
             $av->objetivo_id = $request->objetivo_id;
         }
-        echo "Teste aqui" . $request->isSelecionado;
 
         $request->validate($regras, $mensagens);
         
         $av->prioridade = $request->prioridade;
-
-        //Validação para salvar no banco de dados, ou é veículo próprio ou da empresa, ou nenhum
-        if($request->isVeiculoProprio==1){
-            $av->isVeiculoProprio = 1;
-            $av->isVeiculoEmpresa = 0;
-            $av->veiculoProprio_id = $request->veiculoProprio_id;
-        }else if($request->isVeiculoEmpresa==1){
-            $av->isVeiculoProprio = 0;
-            $av->isVeiculoEmpresa = 1;
-            $av->veiculoParanacidade_id = $request->veiculoParanacidade_id;
-        } else if($request->isVeiculoProprio==0 && $request->isVeiculoEmpresa==0){
-            $av->isVeiculoProprio = 0;
-            $av->isVeiculoEmpresa = 0;
-        }//-----------------------------------------------------------------
         
         $av->dataCriacao = new DateTime();
         $av->banco = $request->banco;
@@ -107,6 +87,7 @@ class ControladorAv extends Controller
         $av->save();
 
         return redirect('/')->with('msg', 'AV criada com sucesso!');
+        //return view('rotas.createRota', ['av' => $av]);
     }
 
     public function show($id)

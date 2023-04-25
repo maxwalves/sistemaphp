@@ -8,6 +8,7 @@ use App\Http\Controllers\ControladorVeiculoProprio;
 use App\Http\Controllers\ControladorObjetivoViagem;
 use App\Http\Controllers\ControladorVeiculoParanacidade;
 use App\Http\Controllers\ControladorRota;
+use App\Http\Controllers\LocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,3 +80,30 @@ Route::delete('/rotas/{id}', [ControladorRota::class, 'destroy'])->middleware('a
 Route::get('/rotas/edit/{id}', [ControladorRota::class, 'edit'])->middleware('auth');
 Route::put('/rotas/update/{id}', [ControladorRota::class, 'update'])->middleware('auth');
 Route::post('/rotas', [ControladorRota::class,'store'])->middleware('auth');
+
+
+    Route::get('/countries', [LocationController::class, 'getCountries']);
+
+    # Get a Country by its ID
+    Route::get('/country/{id}', [LocationController::class, 'getCountry']);
+
+    # Get all States
+    Route::get('/states', [LocationController::class, 'getStates']);
+
+    # Get a State by its ID
+    Route::get('/state/{id}', [LocationController::class, 'getState']);
+
+    # Get all States in a Country using the Country ID
+    Route::get('states/{countryId}', [LocationController::class, 'getStatesByCountry']);
+
+    # Get all Cities
+    Route::get('cities', [LocationController::class, 'getCities']);
+
+    # Get a City by its ID
+    Route::get('city/{id}', [LocationController::class, 'getCity']);
+
+    # Get all Cities in a State using the State ID
+    Route::get('cities/{stateId}', [LocationController::class, 'getCitiesByStates']);
+
+    # Get all Cities in a Country using the Country ID
+    Route::get('country-cities/{countryId}', [LocationController::class, 'getCitiesByCountry']);

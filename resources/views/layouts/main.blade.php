@@ -6,20 +6,21 @@
 
         <title>@yield('title')</title>
 
-        
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-   
-        <script src="/js/bootstrap.bundle.min.js"></script>
-        <!-- Fonte do Google -->
         <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
+
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <!-- CSS Bootstrap -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+  
+        
         
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
-  
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
-
-
+        <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.tailwindcss.com"></script>
 
         <!-- CSS da aplicação -->
 
@@ -28,74 +29,72 @@
         <link href="/css/headers.css" rel="stylesheet">
         <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/headers/">
         <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
-        <link href="/css/bootstrap.min.css" rel="stylesheet">
-
         <link href="/css/sidebars.css" rel="stylesheet">
         <script src="/js/sidebars.js"></script>
 
                 
             
     </head>
-    <body class="antialiased">
+    <body class="antialiased" >
         <!-- HEADER MODELO BOOTSTRAP-->
         <header class="p-3 mb-3 border-bottom">
                 <div class="container">
-                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                    <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-                    <img src="/img/1.png" alt="Paranacidade" width="100" height="72">
-                    </a>
-
-                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <p class="tituloSistema justify-content-center mb-md-0">Sistema de Controle de Viagens</p></li>
-                    </ul>
-
-                    <div class="navbarMenu">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-                            @guest
-                            <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link" href="/register">Registre-se</a>
-                            </li>
-                            @endguest
-                        </ul>
-                    </div>
-
-                    <div class="dropdown text-end">
-                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/img/user.png" alt="mdo" width="42" height="42" class="rounded-circle">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                        <img src="/img/1.png" alt="Paranacidade" width="100" height="72">
                         </a>
-                        <ul class="dropdown-menu text-small">
 
-                            @auth
-                                <li><a class="dropdown-item" href="/veiculosProprios/veiculosProprios">Meus veículos</a></li>
-                                <li><a class="dropdown-item" href="/veiculosParanacidade/veiculosParanacidade">Veículos Paranacidade</a></li>
-                                <li><a class="dropdown-item" href="/objetivos/objetivos">Objetivos de viagem</a></li>
-                                <li><a class="dropdown-item" href="#">Configurações</a></li>
-                                <li><a class="dropdown-item" href="#">Meu perfil</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                
-                                <li>
-                                    <form action="/logout" method="POST">
-                                        @csrf
-                                        <a class="dropdown-item" href="/logout" 
-                                        onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                                        Sair
-                                        </a>
-                                    </form>
-                                </li>
-                            @endauth
-                            
+                        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <p class="tituloSistema justify-content-center mb-md-0">Sistema de Controle de Viagens</p></li>
                         </ul>
+
+                        <div class="navbarMenu">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                                @guest
+                                <li class="nav-item">
+                                <a class="nav-link" href="/login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="/register">Registre-se</a>
+                                </li>
+                                @endguest
+                            </ul>
+                        </div>
+
+                        <div class="dropdown text-end">
+                            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="/img/user.png" alt="mdo" width="42" height="42" class="rounded-circle">
+                            </a>
+                            <ul class="dropdown-menu text-small">
+
+                                @auth
+                                    <li><a class="dropdown-item" href="/veiculosProprios/veiculosProprios">Meus veículos</a></li>
+                                    <li><a class="dropdown-item" href="/veiculosParanacidade/veiculosParanacidade">Veículos Paranacidade</a></li>
+                                    <li><a class="dropdown-item" href="/objetivos/objetivos">Objetivos de viagem</a></li>
+                                    <li><a class="dropdown-item" href="#">Configurações</a></li>
+                                    <li><a class="dropdown-item" href="#">Meu perfil</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    
+                                    <li>
+                                        <form action="/logout" method="POST">
+                                            @csrf
+                                            <a class="dropdown-item" href="/logout" 
+                                            onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                                            Sair
+                                            </a>
+                                        </form>
+                                    </li>
+                                @endauth
+                                
+                            </ul>
+                        </div>
+                                
                     </div>
-                            
-                </div>
                 </div>
 
-                <div class="espacoAntesFooter"></div>
+                <div class="espaco"></div>
 
                 <!-- NAVBAR COM OPÇÕES -->
                 <nav class="navbar navbar-expand-lg bg-light rounded" aria-label="Eleventh navbar example">
@@ -107,7 +106,7 @@
                         <div class="collapse navbar-collapse" id="navbarsExample09">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                <a class="btn btn-success rounded-pill px-3" type="button" href="/avs/create" >Criar nova AV!</a>
+                                <a class="btn btn-success" type="button" href="/avs/create" >Criar nova AV!</a>
                                 </li>
                                 <li class="nav-item">
                                 <a class="nav-link" href="/">Início</a>
@@ -132,11 +131,15 @@
                 
         </header>    
         
-        <main>
+        <main data-theme="emerald">
             <div class="container-fluid">
                 <div class="row">
                     @if(session('msg'))
-                        <p class="msg"> {{ session('msg') }} </p>    
+                        <div class="col-4">
+                        <div class="alert alert-success shadow-lg" style="width: 70%">
+                            <p > {{ session('msg') }} </p>    
+                        </div>
+                        </div>
                     @endif
                     @yield('content')
                 </div>
@@ -147,9 +150,6 @@
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <link rel="stylesheet" href="/css/styles.css">
 
-        <div class="espacoAntesFooter">
-        </div>
-        <br><br>
         <footer>
         <address class="adr">
             <p><span class="street-address">Palácio das Araucárias </p>
@@ -160,15 +160,22 @@
             <p><span class="tel">(41) 3350-3300 <a href="https://goo.gl/maps/bBwaZedpjBJ2" target="_blank" class="map">Localização</a></span></p>
             </address>
         </footer>
+
+        {{--
         <script src="{‌{ asset('js/app.js') }}" type="text/javascript"></script>
         <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-        <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-        <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-
         <script src="{‌{ asset('js/app.js') }}" type="text/javascript"></script>
+        
+        <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        
+        {{-- -------------------------------------- --}}
+        <!-- Fonte do Google -->
+        
+
         @hasSection ('javascript')
             @yield('javascript')
         @endif

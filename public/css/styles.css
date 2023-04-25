@@ -70,9 +70,13 @@
 }
 
 body {
-    min-height: 100vh;
-    padding-bottom: 100px;
+    
+    padding-bottom: 150px;
     position: relative;
+}
+
+main {
+    min-height: 100vh;
 }
 
 header{
@@ -80,24 +84,17 @@ header{
     border-bottom: 1px solid #CCC;
 }
 
-.row{
+main .row{
     margin: 0;
+    
 }
 
-.container-fluid{
+main .container-fluid{
     padding: 0;
+    min-height: 110vh;
 }
 
 
-.btn-primary {
-    background-color: #2f6beb;
-    border: 2px solid #C28008;
-}
-
-.btn-primary:hover {
-    background-color: #C28008;
-    border-color: #C28008;
-}
 
 #avs-container {
     padding-left: 50px;
@@ -158,6 +155,9 @@ footer p{
 .espacoAntesFooter {
     height: 30px;
 }
+.espaco {
+    height: 10px;
+}
 
 .msg {
     background-color: #D4EDDA;
@@ -173,6 +173,8 @@ footer p{
 /* av create page */
 #av-create-container {
     padding: 30px;
+    padding-top: 10px;
+    min-height: 100vh;
 }
 #av-create-container label {
     font-weight: bold;
@@ -273,4 +275,5 @@ footer p{
 #btSalvarAv {
     padding-left: 30%;
 }
+
 

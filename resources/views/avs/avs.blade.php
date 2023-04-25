@@ -27,12 +27,12 @@
                 <td> {{$av->status}} </td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/edit/{{ $av->id }}" class="btn btn-info btn-sm edit-btn"
+                        <a href="/avs/edit/{{ $av->id }}" class="btn btn-success btn-sm"
                             style="width: 80px">  Editar</a> 
                         <form action="/avs/{{ $av->id }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm delete-btn"
+                            <button type="submit" class="btn btn-active btn-accent btn-sm"
                             style="width: 80px" > Deletar</button>
                         </form>
                     </div>
