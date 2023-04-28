@@ -33,6 +33,7 @@ Route::post('/avs', [ControladorAv::class,'store'])->middleware('auth');
 Route::delete('/avs/{id}', [ControladorAv::class, 'destroy'])->middleware('auth');
 Route::get('/avs/edit/{id}', [ControladorAv::class, 'edit'])->middleware('auth');
 Route::put('/avs/update/{id}', [ControladorAv::class, 'update'])->middleware('auth');
+Route::get('/avs/concluir/{id}', [ControladorAv::class, 'concluir'])->middleware('auth');
 
 //---------------------------------------------------------------- TESTES
 Route::get('/contact', function () {
@@ -73,8 +74,8 @@ Route::put('/veiculosParanacidade/update/{id}', [ControladorVeiculoParanacidade:
 Route::post('/veiculosParanacidade', [ControladorVeiculoParanacidade::class,'store'])->middleware('auth');
 
 // ROTAS PARA ROTAS
-Route::get('/rotas/rotas', [ControladorRota::class, 'rotas'])->middleware('auth');
-Route::get('/rotas/create', [ControladorRota::class, 'create'])->middleware('auth');
+Route::get('/rotas/rotas/{id}', [ControladorRota::class, 'rotas'])->middleware('auth');
+Route::get('/rotas/create/{id}', [ControladorRota::class, 'create'])->middleware('auth');
 Route::get('/rotas/{id}', [ControladorRota::class, 'show'])->middleware('auth');
 Route::delete('/rotas/{id}', [ControladorRota::class, 'destroy'])->middleware('auth');
 Route::get('/rotas/edit/{id}', [ControladorRota::class, 'edit'])->middleware('auth');

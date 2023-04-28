@@ -9,15 +9,17 @@ class ControladorVeiculoParanacidade extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $veiculosParanacidade = VeiculoParanacidade::all();
 
-        return view('veiculosParanacidade.veiculosParanacidade', ['avs' => $veiculosParanacidade]);
+        return view('veiculosParanacidade.veiculosParanacidade', ['avs' => $veiculosParanacidade, 'user'=> $user]);
     }
 
     public function veiculosParanacidade()
     {
+        $user = auth()->user();
         $veiculosParanacidade = VeiculoParanacidade::all();
-        return view('veiculosParanacidade.veiculosParanacidade', ['veiculosParanacidade' => $veiculosParanacidade]);
+        return view('veiculosParanacidade.veiculosParanacidade', ['veiculosParanacidade' => $veiculosParanacidade, 'user'=> $user]);
     }
 
     public function create()
@@ -53,11 +55,12 @@ class ControladorVeiculoParanacidade extends Controller
 
     public function show($id)
     {
+        $user = auth()->user();
         $veiculoParanacidade = VeiculoParanacidade::findOrFail($id);
 
         //$avOwner = Av::where('id', $av->user_id)->first()->toArray();
 
-        return view('veiculosParanacidade.show', ['veiculoParanacidade' => $veiculoParanacidade]);
+        return view('veiculosParanacidade.show', ['veiculoParanacidade' => $veiculoParanacidade, 'user'=> $user]);
     }
 
     public function destroy($id)
@@ -73,13 +76,14 @@ class ControladorVeiculoParanacidade extends Controller
 
     public function edit($id)
     {
+        $user = auth()->user();
         $veiculoParanacidade = VeiculoParanacidade::findOrFail($id);
 
         //if($user->id != $veiculoParanacidade->user->id) {  ** AQUI COLOCAR REGRA PARA APENAS ADM EDITAR VEÍCULO **
         //    return redirect('/veiculosParanacidade/veiculosParanacidade')->with('msg', 'Você não tem permissão para editar este veículo!');
         //}
 
-        return view('veiculosParanacidade.editVeiculoParanacidade', ['veiculoParanacidade' => $veiculoParanacidade]);
+        return view('veiculosParanacidade.editVeiculoParanacidade', ['veiculoParanacidade' => $veiculoParanacidade, 'user'=> $user]);
     }
 
     public function update(Request $request)

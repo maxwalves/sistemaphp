@@ -6,6 +6,8 @@
 
         <title>@yield('title')</title>
 
+        <link rel="shortcut icon" type="imagex/png" href="/img/aviao.png">
+
         <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
 
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -31,6 +33,9 @@
         <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
         <link href="/css/sidebars.css" rel="stylesheet">
         <script src="/js/sidebars.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.38.0/js/tempusdominus-bootstrap-4.min.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.38.0/css/tempusdominus-bootstrap-4.min.css" crossorigin="anonymous" />
 
                 
             
@@ -65,6 +70,7 @@
                         <div class="dropdown text-end">
                             <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="/img/user.png" alt="mdo" width="42" height="42" class="rounded-circle">
+                                {{$user->name}}
                             </a>
                             <ul class="dropdown-menu text-small">
 
@@ -106,9 +112,6 @@
                         <div class="collapse navbar-collapse" id="navbarsExample09">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                <a class="btn btn-success" type="button" href="/avs/create" >Criar nova AV!</a>
-                                </li>
-                                <li class="nav-item">
                                 <a class="nav-link" href="/">Início</a>
                                 </li>
                                 </li>
@@ -122,9 +125,6 @@
                                 <a class="nav-link" href="#">Relatórios gerenciais</a>
                                 </li>
                             </ul>
-                            <form role="search" method="GET">
-                                <input name="search" class="form-control" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
-                            </form>
                         </div>
                     </div>
                 </nav>
@@ -136,7 +136,7 @@
                 <div class="row">
                     @if(session('msg'))
                         <div class="col-4">
-                        <div class="alert alert-success shadow-lg" style="width: 70%">
+                        <div class="alert alert-info shadow-lg" style="width: 70%">
                             <p > {{ session('msg') }} </p>    
                         </div>
                         </div>
@@ -150,15 +150,9 @@
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <link rel="stylesheet" href="/css/styles.css">
 
-        <footer>
+        <footer class="footer items-center p-4 bg-neutral text-neutral-content">
         <address class="adr">
-            <p><span class="street-address">Palácio das Araucárias </p>
-            <p> Rua Jacy Loureiro de Campos, 180 - 2º andar - Centro Cívico</span> - <span class="postal-code">80530-140</span> - <span class="locality">Curitiba</span> - <abbr class="region" title="Paraná">PR</abbr></p>
-            
-            <p>Horário de Atendimento: das 8h30 às 12h e das 13h30 às 18h.</p>
-
-            <p><span class="tel">(41) 3350-3300 <a href="https://goo.gl/maps/bBwaZedpjBJ2" target="_blank" class="map">Localização</a></span></p>
-            </address>
+            <p><span class="street-address">Paranacidade </p>
         </footer>
 
         {{--

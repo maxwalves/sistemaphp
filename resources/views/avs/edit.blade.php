@@ -3,6 +3,11 @@
 @section('title', 'Editando: ' . $av->id)
 @section('content')
 
+<div class="row justify-content-start" style="padding-left: 5%">
+    <div class="col-3">
+        <a href="/avs/avs/" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
+    </div>
+</div>
 <div id="av-create-container" class="col-md-6 offset-md-3">
         <h2>Editando: {{ $av->id }}</h2>
         <form action="/avs/update/{{ $av->id }}" method="POST" enctype="multipart/form-data">
@@ -12,7 +17,7 @@
             <div class="form-group" id="nomeObjetivo" >
                 <label for="objetivo_id" class="control-label" required>Qual é o Objetivo da viagem? (selecione)</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
+                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
                         id="objetivo_id" name="objetivo_id">
                         <option value="" name=""> Selecione</option>
                         @for($i = 0; $i < count($objetivos); $i++)
@@ -56,7 +61,7 @@
 
             <div class="form-group">
                 <label for="prioridade" class="control-label">Qual é a Prioridade da sua viagem? (selecione)</label>
-                    <select class="custom-select {{ $errors->has('prioridade') ? 'is-invalid' :''}}" 
+                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('prioridade') ? 'is-invalid' :''}}" 
                         id="prioridade" name="prioridade">
                         <option value="" name=""> Selecione</option>
                         <option value="Alta" {{ $av->prioridade == "Alta" ? "selected='selected'" : ""}} name="Alta"> Alta</option>
@@ -74,7 +79,7 @@
             <div class="form-group">
                 <label for="isVeiculoProprio" class="control-label">Você vai utilizar veículo próprio? (selecione)</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('isVeiculoProprio') ? 'is-invalid' :''}}" 
+                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('isVeiculoProprio') ? 'is-invalid' :''}}" 
                         id="isVeiculoProprio" name="isVeiculoProprio" onChange="ativaCampo()" required>
                         <option value="0" name="0" {{ $av->isVeiculoProprio == "0" ? "selected='selected'" : ""}}> Não</option>
                         <option value="1" name="1" {{ $av->isVeiculoProprio == "1" ? "selected='selected'" : ""}}> Sim</option>
@@ -90,7 +95,7 @@
             <div class="form-group" id="selecaoVeiculo">
                 <label for="veiculoProprio_id" class="control-label" required>Selecione o veículo?</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('veiculoProprio_id') ? 'is-invalid' :''}}" 
+                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('veiculoProprio_id') ? 'is-invalid' :''}}" 
                         id="veiculoProprio_id" name="veiculoProprio_id">
                         <option value="" name=""> Selecione</option>
                         @for($i = 0; $i < count($veiculosProprios); $i++)
@@ -112,7 +117,7 @@
             <div class="form-group" id="temVeiculoEmpresa">
                 <label for="isVeiculoEmpresa" class="control-label" required>Você vai utilizar veículo do Paranacidade? (selecione)</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('isVeiculoEmpresa') ? 'is-invalid' :''}}" 
+                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('isVeiculoEmpresa') ? 'is-invalid' :''}}" 
                         id="isVeiculoEmpresa" name="isVeiculoEmpresa">
                         <option value="0" name="0" {{ $av->isVeiculoEmpresa == "0" ? "selected='selected'" : ""}}> Não</option>
                         <option value="1" name="1" {{ $av->isVeiculoEmpresa == "1" ? "selected='selected'" : ""}}> Sim</option>

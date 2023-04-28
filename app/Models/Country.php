@@ -11,6 +11,6 @@ class Country extends Model
 
     public function getTable()
     {
-        return Config::get('location.countries_table', $this->table);
+        return Config::get('countries', $this->table);
     }
 }

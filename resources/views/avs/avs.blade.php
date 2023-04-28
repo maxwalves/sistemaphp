@@ -3,12 +3,25 @@
 @section('title', 'Dashboard')
 @section('content')
 
-<div class="col-md-10 offset-md-1 dashboard-title-container">
-    <h4>Minhas autorizações de viagens</h4>
-</div>
+<div style="padding-left: 10%" class="container">
+    
+    <div class="row justify-content-between">
+        
+        <div class="col-8">
+            <h4>Minhas autorizações de viagens</h4>
+        </div>
+        
+        <div class="col-3">
+            <strong>Adicionar AV</strong> 
+            <a class="btn btn-success" type="button" href="/avs/create" > <ion-icon name="add-circle-outline" size="large"></ion-icon></a>
+        </div>
+    </div>
+    <br>
+</div> 
+
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
     @if(count($avs) > 0 )
-    <table id="minhaTabela">
+    <table id="minhaTabela" class="cell-border compact stripe">
         <thead>
             <tr>
                 <th>Número</th>
@@ -28,12 +41,14 @@
                 <td> 
                     <div class="opcoesGerenciarAv">
                         <a href="/avs/edit/{{ $av->id }}" class="btn btn-success btn-sm"
-                            style="width: 80px">  Editar</a> 
+                            style="width: 110px">  Editar</a>
+                        <a href="/rotas/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                            style="width: 110px">  Adm Rotas</a> 
                         <form action="/avs/{{ $av->id }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-active btn-accent btn-sm"
-                            style="width: 80px" > Deletar</button>
+                            style="width: 110px" > Deletar</button>
                         </form>
                     </div>
                 </td>
@@ -54,7 +69,7 @@
 
         $(document).ready(function(){
             $('#minhaTabela').DataTable({
-                    scrollY: 400,
+                    scrollY: 800,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

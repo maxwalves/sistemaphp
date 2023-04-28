@@ -20,14 +20,14 @@ class ControladorVeiculoProprio extends Controller
             ])->get();
         }
 
-        return view('veiculosProprios.veiculosProprios', ['avs' => $veiculosProprios, 'search' => $search]); //Referenciar a view de adm de veiculos
+        return view('veiculosProprios.veiculosProprios', ['avs' => $veiculosProprios, 'search' => $search, 'user'=> $user]); //Referenciar a view de adm de veiculos
     }
 
     public function veiculosProprios()
     {
         $user = auth()->user();
         $veiculosProprios = $user->veiculosProprios;
-        return view('veiculosProprios.veiculosProprios', ['veiculosProprios' => $veiculosProprios]);
+        return view('veiculosProprios.veiculosProprios', ['veiculosProprios' => $veiculosProprios, 'user'=> $user]);
     }
 
     public function create()
@@ -64,11 +64,12 @@ class ControladorVeiculoProprio extends Controller
 
     public function show($id)
     {
+        $user = auth()->user();
         $veiculoProprio = VeiculoProprio::findOrFail($id);
 
         //$avOwner = Av::where('id', $av->user_id)->first()->toArray();
 
-        return view('veiculosProprios.show', ['veiculoProprio' => $veiculoProprio]);
+        return view('veiculosProprios.show', ['veiculoProprio' => $veiculoProprio, 'user'=> $user]);
     }
 
     public function destroy($id)
@@ -88,7 +89,7 @@ class ControladorVeiculoProprio extends Controller
             return redirect('/veiculosProprios/veiculosProprios')->with('msg', 'Você não tem permissão para editar este veículo!');
         }
 
-        return view('veiculosProprios.editVeiculo', ['veiculoProprio' => $veiculoProprio]);
+        return view('veiculosProprios.editVeiculo', ['veiculoProprio' => $veiculoProprio, 'user'=> $user]);
     }
 
     public function update(Request $request)

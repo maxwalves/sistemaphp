@@ -7,6 +7,7 @@ use App\Models\Av;
 use App\Models\Objetivo;
 use App\Models\VeiculoProprio;
 use App\Models\VeiculoParanacidade;
+use App\Models\Rota;
 use DateTime;
 
 class ControladorAv extends Controller
@@ -24,14 +25,14 @@ class ControladorAv extends Controller
             ])->get();
         }
 
-        return view('welcome', ['avs' => $avs, 'search' => $search]);
+        return view('welcome', ['avs' => $avs, 'search' => $search, 'user'=> $user]);
     }
 
     public function avs()
     {
         $user = auth()->user();
         $avs = $user->avs;
-        return view('avs.avs', ['avs' => $avs]);
+        return view('avs.avs', ['avs' => $avs, 'user'=> $user]);
     }
 
     public function create()
@@ -41,7 +42,7 @@ class ControladorAv extends Controller
 
         $objetivos = Objetivo::all();
         $veiculosParanacidade = VeiculoParanacidade::all(); // Fazer filtro para apresentar somentes os ativos
-        return view('avs.create', ['objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'veiculosParanacidade' => $veiculosParanacidade]);
+        return view('avs.create', ['objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'veiculosParanacidade' => $veiculosParanacidade, 'user'=> $user]);
     }
 
     public function store(Request $request)
@@ -86,8 +87,117 @@ class ControladorAv extends Controller
     
         $av->save();
 
-        return redirect('/')->with('msg', 'AV criada com sucesso!');
+        return redirect('/rotas/rotas/' . $av->id)->with('msg', 'AV criada com sucesso!');
         //return view('rotas.createRota', ['av' => $av]);
+    }
+    public function concluir($id){
+        $objetivos = Objetivo::all();
+
+        $user = auth()->user();
+
+        $av = Av::findOrFail($id);
+        $rotas = $av->rotas;//Busca as rotas da AV
+
+        //Valor cálculo de rota e verificar quanto que terá que pagar ao usuário
+        $diariaTotal = 0;
+        $meiaDiaria = 0;
+
+        $valorReais = 0;
+        $valorDolar = 0;
+        $teste =[];
+        
+        foreach ($rotas as $r){
+
+            if($r->isViagemInternacional ==1)
+            {
+                if($r->continenteDestinoInternacional == 1){
+                    $diariaTotal = 100;
+                    $meiaDiaria = 50;
+                }
+                else if($r->continenteDestinoInternacional == 2){
+                    $diariaTotal = 150;
+                    $meiaDiaria = 75;
+                }
+                else if($r->continenteDestinoInternacional == 3){
+                    $diariaTotal = 180;
+                    $meiaDiaria = 90;
+                }
+                else if($r->continenteDestinoInternacional == 4){
+                    $diariaTotal = 140;
+                    $meiaDiaria = 70;
+                }
+                else if($r->continenteDestinoInternacional == 5){
+                    $diariaTotal = 190;
+                    $meiaDiaria = 95;
+                }
+            }
+            //Implementar o valor para as cidades no Brasil
+
+
+            $date1 = new DateTime($r->dataHoraSaida);
+            $date2 = new DateTime($r->dataHoraChegada);
+
+            $anoSaida = $date1->format('Y');
+            $mesSaida = $date1->format('m');
+            $diaSaida = $date1->format('d');
+            $horaSaida = $date1->format('H');
+            $minutoSaida = $date1->format('i');
+            $segundoSaida = $date1->format('s');
+
+            $anoChegada = $date2->format('Y');
+            $mesChegada = $date2->format('m');
+            $diaChegada = $date2->format('d');
+            $horaChegada = $date2->format('H');
+            $minutoChegada = $date2->format('i');
+            $segundoChegada = $date2->format('s');
+
+            if($diaSaida==$diaChegada){//Sair e chegar no mesmo dia
+                if($horaSaida < 12 && $horaChegada >= 13 && $horaChegada < 19){//Se sair antes de 12 e chegar entre 13 e 19
+                    $valorReais += $meiaDiaria;
+                }
+                else if($horaSaida >= 13 && $horaChegada >= 19){ //Se sair depois das 13 e chegar após 19
+                    $valorReais += $meiaDiaria;
+                }
+                else if($horaSaida < 12 && $horaChegada >= 19){ // Se sair antes de 12 e chegar após 19
+                    $valorReais += $diariaTotal;
+                }
+            }
+
+            if($diaSaida != $diaChegada){ // Sair e chegar em dia diferente
+            
+                if($horaSaida <12){
+                    $valorReais += $diariaTotal;//Se no primeiro dia ele sair antes de 12 já ganha diária total
+                }
+                else if($horaSaida >= 13){
+                    $valorReais += $meiaDiaria;//Se no primeiro dia ele sair após as 13, ganha meia diária
+                }
+                //Roda o laço a partir do segundo dia até o penúltimo
+                for($i = $diaSaida+1; $i < $diaChegada ; $i++){
+                    $valorReais += $diariaTotal; //Acrescenta uma diária completa para cada dia intermediário
+                }
+                if($horaChegada < 13){ //Se no último dia a chegada for antes das 13, recebe meia diária
+                    $valorReais += $meiaDiaria;
+                }
+                else if($horaChegada >=19){ // Se no último dia a chegada for após as 19, recebe diária inteira
+                    $valorReais += $diariaTotal;
+                }
+            
+            }
+
+            $teste += ['Data saída: ' => $valorReais];
+            $teste += ['Data chegada: ' => $anoChegada. "/" .$mesChegada. "/" .$diaChegada. "/" .$horaChegada. "/" .$minutoChegada. "/" .$segundoChegada];
+            
+        }
+
+        //dd($teste);
+
+        $veiculosProprios = $user->veiculosProprios;
+
+        if($user->id != $av->user->id) {
+            return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
+        }
+
+        return view('avs.concluir', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
     }
 
     public function show($id)
@@ -104,7 +214,7 @@ class ControladorAv extends Controller
             $veiculoProprio = VeiculoProprio::all();
         }
  
-        return view('avs.show', ['av' => $av, 'objetivo' => $objetivo, 'veiculoProprio' => $veiculoProprio]);
+        return view('avs.show', ['av' => $av, 'objetivo' => $objetivo, 'veiculoProprio' => $veiculoProprio, 'user'=> $user]);
     }
 
     public function dashboard()
@@ -147,7 +257,7 @@ class ControladorAv extends Controller
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
         }
 
-        return view('avs.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios]);
+        return view('avs.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
     }
 
     public function update(Request $request)
@@ -192,6 +302,6 @@ class ControladorAv extends Controller
 
         Av::findOrFail($request->id)->update($data);
 
-        return redirect('/avs/avs')->with('msg', 'av editado com sucesso!' . 'Valor obj: ' . $request->objetivo_id . 'Selecionado: ' . $request->isSelecionado);
+        return redirect('/avs/avs')->with('msg', 'av editado com sucesso!');
     }
 }

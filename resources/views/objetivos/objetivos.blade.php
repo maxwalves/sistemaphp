@@ -12,6 +12,7 @@
         <thead>
             <tr>
                 <th>Nome Objetivo</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -19,11 +20,11 @@
             <tr>
                 <td> {{$objetivo->nomeObjetivo}} </td>
                 <td> 
-                    <a href="/objetivos/edit/{{ $objetivo->id }}" class="btn btn-info btn-sm edit-btn"> <ion-icon name="create-outline"></ion-icon> Editar</a> 
+                    <a href="/objetivos/edit/{{ $objetivo->id }}" class="btn btn-success btn-sm"><ion-icon name="create-outline"></ion-icon>  Editar</a> 
                     <form action="/objetivos/{{ $objetivo->id }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm delete-btn"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
+                        <button type="submit" class="btn btn-error btn-sm"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
                     </form>
                 </td>
             </tr>

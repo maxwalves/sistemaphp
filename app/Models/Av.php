@@ -26,8 +26,6 @@ class Av extends Model
         'status',
         'valorExtra',
         'justificativaValorExtra',
-        'isVeiculoProprio',
-        'isVeiculoEmpresa',
         'contatos',
         'atividades',
         'conclusoes',
@@ -35,11 +33,9 @@ class Av extends Model
         'dataAutorizacaoVeiculoProprio',
         'assinaturaDiretoriaExecutiva',
         'usuarioDiretoriaExecutiva',
-        'veiculoProprio_id',
-        'user_id',
-        'objetivo_id',
         'outroObjetivo',
-        'veiculoParanacidade_id'
+        'user_id',
+        'objetivo_id'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio'];

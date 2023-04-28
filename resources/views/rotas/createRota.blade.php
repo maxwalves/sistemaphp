@@ -4,19 +4,53 @@
 @section('content')
 
     <div id="container">
-        <h2>Cadastrao de nova rota!</h2>
+        
         <form action="/rotas" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="row justify-content-center">
-                <div class="col-4">
-                    <ul class="steps">
-                        <li class="step step-primary">Curitiba</li>
-                        <li class="step step-neutral" href=""> VOCÊ ESTÁ AQUI</li>
-                        <li class="step step-primary" >Curitiba</li>
-                    </ul>
+            <div class="row justify-content-start">
+                <div class="col-3">
+                    <a href="/rotas/rotas/{{ $av->id }}" type="submit" class="btn btn-success btn-sm"> Voltar!</a>
                 </div>
-                <div class="col-4">
-                    <div class="form-group">
+                <div class="col-8">
+                    <label for="idav"> <strong>Cadastro de nova rota da Autorização de Viagem nº </strong> </label>
+                    <input type="text" style="width: 50px" value="{{ $av->id }}" id="idav" name="idav" readonly>
+    
+                    <h2> <strong>Objetivo da Autorização de Viagem: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
+                </div>
+            </div>
+            <div style="padding-left: 50px" class="form-group">
+                
+                @if ($errors->has('isViagemInternacional') ||
+                        $errors->has('selecaoContinenteOrigem') ||
+                        $errors->has('selecaoPaisOrigem') ||
+                        $errors->has('selecaoEstadoOrigem') ||
+                        $errors->has('selecaoCidadeOrigem') ||
+                        $errors->has('selecaoContinenteDestinoInternacional') ||
+                        $errors->has('selecaoPaisDestinoInternacional') ||
+                        $errors->has('selecaoEstadoDestinoInternacional') ||
+                        $errors->has('selecaoCidadeDestinoInternacional') ||
+                        $errors->has('selecaoEstadoOrigemNacional') ||
+                        $errors->has('selecaoCidadeOrigemNacional') ||
+                        $errors->has('selecaoEstadoDestinoNacional') ||
+                        $errors->has('selecaoCidadeDestinoNacional') ||
+                        $errors->has('tipoTransporte') ||
+                        $errors->has('veiculoProprio_id'))
+                    <div>
+                        <p style="color: red"> <strong>Existem campos pendentes de preenchimento!</strong></p>
+                        <p style="color: red"> <strong>Selecione o tipo de viagem e verifique os campos!</strong></p>
+                    </div>
+                @endif
+            </div>
+            
+            <div class="row justify-content-center">
+                
+                    <ul class="steps">
+                        <li class="step step-primary">Origem</li>
+                        <li class="step step-neutral" href=""> VOCÊ ESTÁ AQUI</li>
+                        <li class="step step-primary" >Origem</li>
+                    </ul>
+                
+                    <div class="form-group" style="padding-left: 10%">
                         <label for="isViagemInternacional" class="control-label">A viagem será internacional?</label>
                         <br>
                             <select class="select select-bordered w-full max-w-xs {{ $errors->has('isViagemInternacional') ? 'is-invalid' :''}}" 
@@ -32,13 +66,12 @@
                             </div>
                             @endif
                     </div>
-                </div>
             </div>
             <div id="isInternacional">
                 <br>
                         
                 <div class="row justify-content-center">
-                    <div class="col-4">
+                    <div class="col-5">
                         {{-- CAMPOS DE ORIGEM INTERNACIONAL ---------------------------------}}
                         <h3 style="color: brown"> <ion-icon name="airplane-outline"></ion-icon> VIAGEM INTERNACIONAL</h3>
                         <br>
@@ -85,7 +118,7 @@
                             <br>
                                 <input class="input input-bordered input-primary w-full max-w-xs {{ $errors->has('selecaoEstadoOrigem') ? 'is-invalid' :''}}" type="text"
                                 id="selecaoEstadoOrigem" name="selecaoEstadoOrigem">
-            
+
                                 @if ($errors->has('selecaoEstadoOrigem'))
                                 <div class="invalid-feedback">
                                     {{ $errors->first('selecaoEstadoOrigem') }}
@@ -108,21 +141,21 @@
                         </div>
 
                         <div>
-                            <input style="font-size: 12px" type="text" id="botaoResetOrigemInternacional"
-                            class="btn btn-outline btn-secondary btn-sm" value="Resetar Origem!" onClick="resetarCampoOrigemInternacional()">
+                            <input type="text" id="botaoResetOrigemInternacional"
+                            class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemInternacional()">
                         </div>
 
                         
 
                         <div class="form-group"> 
-                            <div id="dataHoraSaida" class="input-append date">
-                                <label for="dataHoraSaida" class="control-label">Data/Hora de saída: </label>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaida"
-                                    id="dataHoraSaida" placeholder="Data/Hora de saída">
+                            <div id="dataHoraSaidaInternacional" class="input-append date">
+                                <label for="dataHoraSaidaInternacional" class="control-label">Data/Hora de saída: </label>
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaInternacional"
+                                    id="dataHoraSaidaInternacional" placeholder="Data/Hora de saída">
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-5">
                         {{-- CAMPOS DE DETINO INTERNACIONAL ---------------------------------}}
                         <br><br>
                         <h4 style="color: crimson"> Destino: </h4>
@@ -192,17 +225,17 @@
                         </div>
 
                         <div>
-                            <input style="font-size: 12px" type="text" id="botaoResetDestinoInternacional"
-                            class="btn btn-outline btn-secondary btn-sm" value="Resetar Destino!" onClick="resetarCampoDestinoInternacional()">
+                            <input type="text" id="botaoResetDestinoInternacional"
+                            class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoInternacional()">
                         </div>
 
                         
 
                         <div class="form-group"> 
-                            <div id="dataHoraChegada" class="input-append date">
-                                <label for="dataHoraChegada" class="control-label">Data/Hora de chegada: </label>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegada"
-                                    id="dataHoraChegada" placeholder="Data/Hora de chegada">
+                            <div id="dataHoraChegadaInternacional" class="input-append date">
+                                <label for="dataHoraChegadaInternacional" class="control-label">Data/Hora de chegada: </label>
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaInternacional"
+                                    id="dataHoraChegadaInternacional" placeholder="Data/Hora de chegada">
                             </div>
                         </div>
                     
@@ -218,7 +251,7 @@
                 <br>    
 
                 <div class="row justify-content-center">
-                    <div class="col-4">
+                    <div class="col-5">
                         <h3 style="color: forestgreen"> <ion-icon name="bus-outline"></ion-icon> VIAGEM NACIONAL </h3>
                         <br>   
                         <h4 style="color: darkolivegreen"> Origem: </h4>
@@ -253,21 +286,21 @@
                         </div>
 
                         <div class="form-group"> 
-                            <div id="dataHoraSaida" class="input-append date">
-                                <label for="dataHoraSaida" class="control-label">Data/Hora de saída: </label>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaida"
-                                    id="dataHoraSaida" placeholder="Data/Hora de saída">
+                            <div id="dataHoraSaidaNacional" class="input-append date">
+                                <label for="dataHoraSaidaNacional" class="control-label">Data/Hora de saída: </label>
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional"
+                                    id="dataHoraSaidaNacional" placeholder="Data/Hora de saída">
                             </div>
                         </div>
 
                         <div>
-                            <input style="font-size: 12px" type="text" id="botaoResetOrigemNacional"
-                            class="btn btn-outline btn-secondary btn-sm" value="Resetar Origem!" onClick="resetarCampoOrigemNacional()">
+                            <input type="text" id="botaoResetOrigemNacional"
+                            class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemNacional()">
                         </div>
                     </div>
 
                         
-                    <div class="col-4">    
+                    <div class="col-5">    
                         <br><br>
                         <h4 style="color: darkolivegreen"> Destino: </h4>
                         <div class="form-group">
@@ -302,16 +335,16 @@
                         </div>
 
                         <div class="form-group"> 
-                            <div id="dataHoraChegada" class="input-append date">
-                                <label for="dataHoraChegada" class="control-label">Data/Hora de chegada: </label>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegada"
-                                    id="dataHoraChegada" placeholder="Data/Hora de chegada">
+                            <div id="dataHoraChegadaNacional" class="input-append date">
+                                <label for="dataHoraChegadaNacional" class="control-label">Data/Hora de chegada: </label>
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaNacional"
+                                    id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada">
                             </div>
                         </div>
 
                         <div>
                             <input type="text" id="botaoResetDestinoNacional"
-                            class="btn btn-outline btn-secondary btn-sm" value="Resetar Destino!" onClick="resetarCampoDestinoNacional()">
+                            class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoNacional()">
                         </div>
 
                     </div>
@@ -432,8 +465,8 @@
                 document.getElementById("isNacional").hidden = false;
                 document.getElementById("isInternacional").hidden = true;
                 botaoConfirmaRota.hidden = false;
-                selecaoEstadoOrigemNacional();
-                selecaoEstadoDestinoNacional();
+                popularEstadoOrigemNacional();
+                popularEstadoDestinoNacional();
                 document.getElementById("camposFinais").hidden = true;
                 document.getElementById("btSalvarRota").hidden = true;
             }
@@ -472,7 +505,7 @@
             });
         }
 
-        function selecaoEstadoOrigemNacional(){
+        function popularEstadoOrigemNacional(){
 
             var idPais = 30;
             
@@ -483,15 +516,18 @@
 
                 for(i=0; i<data.length; i++){
                     if(data[i].country_id == idPais ){
-                        opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
-                        
+
+                        var valor = "{'id':'" + data[i].id + "', 'name':'" + data[i].name + "'}";
+
+                        opcao = '<option value="' + valor + '">' + data[i].name + '</option>';
+
                         $('#selecaoEstadoOrigemNacional').append(opcao);
                     }
                 }
             });
         }
 
-        function selecaoEstadoDestinoNacional(){
+        function popularEstadoDestinoNacional(){
             
             var idPais = 30;
 
@@ -502,7 +538,10 @@
 
                 for(i=0; i<data.length; i++){
                     if(data[i].country_id == idPais ){
-                        opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+
+                        var valor = "{'id':'" + data[i].id + "', 'name':'" + data[i].name + "'}";
+
+                        opcao = '<option value="' + valor + '">' + data[i].name + '</option>';
                         
                         $('#selecaoEstadoDestinoNacional').append(opcao);
                     }
@@ -512,17 +551,23 @@
 
         function carregarCidadesOrigemNacional(){
 
-            document.getElementById("selecaoEstadoOrigemNacional").disabled = true;
+            document.getElementById("selecaoEstadoOrigemNacional").disabled = false;
             document.getElementById("selecaoCidadeOrigemNacional").disabled = false; 
 
-            var idEstado = document.getElementById("selecaoEstadoOrigemNacional");
+            var idEstado = document.getElementById("selecaoEstadoOrigemNacional").value;//Recebe o valur como String
+            var resultado = idEstado.replace(/'/g, "\"");//Adiciona as aspas para deixar no formato JSON
+            var objeto = JSON.parse(resultado);//Transforma em JSON
+            
+            $("#selecaoCidadeOrigemNacional").html('');
+            $("#selecaoCidadeOrigemNacional").html('<option value="">Selecione</option>');
+            document.getElementById("selecaoCidadeOrigemNacional").value ="";
 
             $.getJSON('/cities', function(data){
                 
                 for(i=0; i<data.length; i++){
 
-                    if(data[i].state_id == idEstado.value ){
-                        opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+                    if(data[i].state_id == objeto.id ){
+                        opcao = '<option value="' + data[i].name + '">' + data[i].name + '</option>';
                         $('#selecaoCidadeOrigemNacional').append(opcao);
                     }
                 }
@@ -531,17 +576,23 @@
 
         function carregarCidadesDestinoNacional(){
 
-            document.getElementById("selecaoEstadoDestinoNacional").disabled = true;
+            document.getElementById("selecaoEstadoDestinoNacional").disabled = false;
             document.getElementById("selecaoCidadeDestinoNacional").disabled = false;
 
-            var idEstado = document.getElementById("selecaoEstadoDestinoNacional");
+            var idEstado = document.getElementById("selecaoEstadoDestinoNacional").value;//Recebe o valur como String
+            var resultado = idEstado.replace(/'/g, "\"");//Adiciona as aspas para deixar no formato JSON
+            var objeto = JSON.parse(resultado);//Transforma em JSON
 
+            $("#selecaoCidadeDestinoNacional").html('');
+            $("#selecaoCidadeDestinoNacional").html('<option value="">Selecione</option>');
+            document.getElementById("selecaoCidadeDestinoNacional").value ="";
+            
             $.getJSON('/cities', function(data){
             
             for(i=0; i<data.length; i++){
 
-                if(data[i].state_id == idEstado.value ){
-                    opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+                if(data[i].state_id == objeto.id ){
+                    opcao = '<option value="' + data[i].name + '">' + data[i].name + '</option>';
                     $('#selecaoCidadeDestinoNacional').append(opcao);
                 }
             }
@@ -594,8 +645,8 @@
             document.getElementById("selecaoCidadeOrigemNacional").value ="";
             document.getElementById("selecaoEstadoOrigemNacional").disabled = false; 
             document.getElementById("selecaoCidadeOrigemNacional").disabled = true; 
-            selecaoEstadoOrigemNacional();
-            selecaoEstadoDestinoNacional();
+            popularEstadoOrigemNacional();
+            popularEstadoDestinoNacional();
         }
         function resetarCampoDestinoNacional(){
             document.getElementById("selecaoEstadoDestinoNacional").value ="";
@@ -604,8 +655,8 @@
             document.getElementById("selecaoCidadeDestinoNacional").value ="";
             document.getElementById("selecaoEstadoDestinoNacional").disabled = false; 
             document.getElementById("selecaoCidadeDestinoNacional").disabled = true; 
-            selecaoEstadoOrigemNacional();
-            selecaoEstadoDestinoNacional();
+            popularEstadoOrigemNacional();
+            popularEstadoDestinoNacional();
         }
 
         function confirmaDados(){

@@ -14,19 +14,35 @@ return new class extends Migration
         Schema::create('rotas', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('cidadeSaida')->nullable();
+            $table->boolean('isViagemInternacional')->nullable();
+
+            $table->string('estadoOrigemNacional')->nullable();
+            $table->string('cidadeOrigemNacional')->nullable();
+            $table->string('estadoDestinoNacional')->nullable();
+            $table->string('cidadeDestinoNacional')->nullable();
+
+            $table->string('continenteOrigemInternacional')->nullable();
+            $table->string('paisOrigemInternacional')->nullable();
+            $table->string('estadoOrigemInternacional')->nullable();
+            $table->string('cidadeOrigemInternacional')->nullable();
+
+            $table->string('continenteDestinoInternacional')->nullable();
+            $table->string('paisDestinoInternacional')->nullable();
+            $table->string('estadoDestinoInternacional')->nullable();
+            $table->string('cidadeDestinoInternacional')->nullable();
+
+
             $table->dateTime('dataHoraSaida')->nullable();
-            $table->string('cidadeChegada')->nullable();
             $table->dateTime('dataHoraChegada')->nullable();
 
             $table->boolean('isReservaHotel')->nullable();
-            $table->boolean('isViagemInternacional')->nullable();
-
+            
             $table->boolean('isOnibusLeito')->nullable();
             $table->boolean('isOnibusConvencional')->nullable();
             $table->boolean('isVeiculoProprio')->nullable();
             $table->boolean('isVeiculoEmpresa')->nullable();
             $table->boolean('isAereo')->nullable();
+
 
             //Referencia a tabela AV
             $table->integer('av_id')->unsigned()->nullable();

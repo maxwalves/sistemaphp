@@ -3,12 +3,16 @@
 @section('title', 'Criar Autorização de viagem')
 @section('content')
 
+<div class="row justify-content-start" style="padding-left: 5%">
+    <div class="col-3">
+        <a href="/avs/avs/" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
+    </div>
+</div>
 <div id="av-create-container" class="col-md-6 offset-md-3">
         <h2>Crie uma autorização de viagem!</h2>
         <form action="/avs" method="POST" enctype="multipart/form-data">
             @csrf
-
-
+            
             <div class="form-group" id="nomeObjetivo">
                 <label for="objetivo_id" class="control-label" required>Qual é o Objetivo da viagem? (selecione)</label>
                 <br>

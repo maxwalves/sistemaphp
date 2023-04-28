@@ -13,6 +13,7 @@
                 <th>Marca</th>
                 <th>Modelo</th>
                 <th>Placa</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>

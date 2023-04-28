@@ -15,17 +15,19 @@ class ControladorObjetivoViagem extends Controller
 
     public function index()
     {
+        $user = auth()->user();
         $objetivos = Objetivo::all();
 
         $search = request('search');
 
-        return view('objetivos.objetivos', ['avs' => $objetivos, 'search' => $search]); //Referenciar a view de adm de objetivos
+        return view('objetivos.objetivos', ['avs' => $objetivos, 'search' => $search, 'user'=> $user]); //Referenciar a view de adm de objetivos
     }
 
     public function objetivos()
     {
+        $user = auth()->user();
         $objetivos = Objetivo::all();
-        return view('objetivos.objetivos', ['objetivos' => $objetivos]);
+        return view('objetivos.objetivos', ['objetivos' => $objetivos, 'user'=> $user]);
     }
 
     public function create()
@@ -47,11 +49,12 @@ class ControladorObjetivoViagem extends Controller
 
     public function show($id)
     {
+        $user = auth()->user();
         $objetivo = Objetivo::findOrFail($id);
 
         //$avOwner = Av::where('id', $av->user_id)->first()->toArray();
 
-        return view('objetivos.show', ['objetivo' => $objetivo]);
+        return view('objetivos.show', ['objetivo' => $objetivo, 'user'=> $user]);
     }
 
     public function destroy($id)
@@ -68,7 +71,7 @@ class ControladorObjetivoViagem extends Controller
 
     public function edit($id)
     {
-        //$user = auth()->user();
+        $user = auth()->user();
 
         $objetivo = Objetivo::findOrFail($id);
 
@@ -76,7 +79,7 @@ class ControladorObjetivoViagem extends Controller
         //    return redirect('/objetivos/objetivos')->with('msg', 'Você não tem permissão para editar este objetivo!');
         //}
 
-        return view('objetivos.editObjetivo', ['objetivo' => $objetivo]);
+        return view('objetivos.editObjetivo', ['objetivo' => $objetivo, 'user'=> $user]);
     }
 
     public function update(Request $request)
