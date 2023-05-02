@@ -15,10 +15,11 @@
             <div class="col-4">
                 <a href="/avs/concluir/{{ $av->id }}" type="button" class="btn btn-active btn-secondary">Calcular diárias</a>
             </div>
+            
         </div>
         <div class="col-4">
             <label for="idav" > <strong>AV nº </strong> </label>
-            <input style="width: 50px" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
+            <input style="width: 50px; font-size: 16px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
             <h2> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
         </div>
     </div>
@@ -70,6 +71,7 @@
             @endforeach
         </tbody>
     </table>
+    
     @else
     <p>Você ainda não tem rotas, <a href="/rotas/create/{{ $av->id }}"> Criar nova rota</a></p>
     @endif
@@ -88,7 +90,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Procure uma AV"
                     }
                 });
         });

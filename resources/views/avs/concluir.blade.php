@@ -3,18 +3,41 @@
 @section('title', 'Editando: ' . $av->id)
 @section('content')
 
-<div class="row justify-content-start" style="padding-left: 5%">
-    <div class="col-3">
-        <a href="/avs/avs/" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
+
+
+<div style="padding-left: 50px, padding-right: 50px" class="container">
+    <div class="row justify-content-between" style="padding-left: 5%">
+        
+        <div class="col-4">
+            <a href="/rotas/rotas/{{ $av->id }}" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
+        </div>
+
+        <div class="col-4">
+            <label for="my-modal-3" class="btn btn-active btn-ghost">Como é calculada a diária de alimentação?</label>
+        </div>
     </div>
 </div>
+
+<input type="checkbox" id="my-modal-3" class="modal-toggle" />
+<div class="modal fade bd-example-modal-lg">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+        <br>
+        <h3 class="text-lg font-bold" style="padding-left: 10%">A diária de alimentação é calculada da seguinte forma:</h3>
+        <img src="/img/horarios.png" style="width: 100vw; height: 40vh">
+    </div>
+    
+  </div>
+</div>
+
 <div id="av-create-container" class="container">
         <div class="col-4">
             <label for="idav" > <strong>AV nº </strong> </label>
-            <input style="width: 50px" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
+            <input style="width: 50px; font-size: 16px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
             <h2> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
         </div>
-        <form action="/avs/update/{{ $av->id }}" method="POST" enctype="multipart/form-data">
+        <form action="/avs/enviarGestor/{{ $av->id }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             
@@ -106,9 +129,15 @@
                 </div>
                 <div class="col-4" >
                     <div class="form-group">
-                        <label for="valorExtra" class="control-label">Você vai precisar de valor extra em R$?</label>
-                        <input type="number" class="form-control" name="valorExtra"
-                            id="valorExtra" placeholder="Valor Extra" value="{{$av->valorExtra}}">
+                        <label for="valorExtraReais" class="control-label">Você vai precisar de valor extra em reais?</label>
+                        <input type="number" class="form-control" name="valorExtraReais" onblur="calcular()"
+                            id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="valorExtraDolar" class="control-label">Você vai precisar de valor extra em dólar?</label>
+                        <input type="number" class="form-control" name="valorExtraDolar" onblur="calcular()"
+                            id="valorExtraDolar" placeholder="Valor Extra em dólar" value="{{$av->valorExtraDolar}}">
                     </div>
 
                     <div class="form-group">
@@ -117,30 +146,52 @@
                             id="justificativaValorExtra" placeholder="Justificativa" value="{{$av->justificativaValorExtra}}">
                     </div>
                     <div>
-                        <input type="submit" class="btn btn-active btn-primary btn-lg" value="Salvar">
+                        <input type="submit" class="btn btn-active btn-primary btn-lg" value="Salvar e enviar para o Gestor">
                     </div>
                 </div>
             </div>
             <div class="row justify-content-start" style="padding-left: 5%">
 
                 <div class="col-11" >
-                    <div class="stats shadow">
+                    <div class="stats shadow" >
+        
+                        <div class="stat" >
+                        <div class="stat-title">Diárias de alimentação em reais: </div>
+                        <div class="stat-value text-secondary" id="valorReais" data-value="{{$av->valorReais}}">R$ {{$av->valorReais}}</div>
+                        </div>
+                
+                        <div class="stat">
+                        <div class="stat-figure text-secondary">
+                            <div class="avatar">
+                              <div class="w-16 rounded-full">
+                                <img src="/img/real.png">
+                              </div>
+                            </div>
+                        </div>
+                        <div class="stat-title">Total com valor extra em reais:</div>
+                        
+                        <div class="stat-value text-primary" id="result1"> R$ </div>
+                        </div>
+                        
+                    </div>
+                    <div class="stats shadow" >
         
                         <div class="stat">
-                        <div class="stat-title">Diárias de alimentação em reais: </div>
-                        <div class="stat-value text-primary">R$500,00</div>
+                            <div class="stat-title">Diárias de alimentação em dólar:</div>
+                            <div class="stat-value text-secondary" id="valorDolar" data-value="{{$av->valorDolar}}">$ {{$av->valorDolar}}</div>
                         </div>
                         
                         <div class="stat">
-                        <div class="stat-title">Diárias de alimentação em dólar:</div>
-                        <div class="stat-value text-secondary">$0,00</div>
-                        </div>
-                        
-                        <div class="stat">
-                        <div class="stat-title">Total com valor extra:</div>
                         <div class="stat-figure text-secondary">
+                            <div class="avatar">
+                              <div class="w-16 rounded-full">
+                                <img src="/img/dolar.png">
+                              </div>
+                            </div>
                         </div>
-                        <div class="stat-value">R$500,00</div>
+                        <div class="stat-title">Total com valor extra em dólar:</div>
+                        
+                        <div class="stat-value text-primary" id="result2"> $ </div>
                         </div>
                         
                     </div>
@@ -190,6 +241,28 @@
             document.getElementById("outroObjetivo").hidden = true;
         }
 
+        function calcular(){
+            var valor1 = parseFloat(document.getElementById("valorReais").getAttribute('data-value'));
+            var valor2 = parseFloat(document.getElementById("valorDolar").getAttribute('data-value'));
+            var valor3 = parseFloat(document.getElementById('valorExtraReais').value);
+            var valor4 = parseFloat(document.getElementById('valorExtraDolar').value);
+           
+            if(document.getElementById('valorExtraReais').value != ""){
+                var somaReais = valor1 + valor3;
+            } else{
+                var somaReais = 0;
+            }
+            
+            if(document.getElementById('valorExtraDolar').value != ""){
+                var somaDolar = valor2 + valor4;
+            } else{
+                var somaDolar = 0;
+            }
+
+            document.getElementById('result1').innerHTML = "R$ " + somaReais;
+            document.getElementById('result2').innerHTML = "$ " + somaDolar;
+        }  
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -199,7 +272,8 @@
                 //Assim que a tela carrega, aciona automaticamente essas funções ------------------------
         $(function(){
         //Se o campo de outro objetivo for vazio, ativa o campo de seleção de objetivo e desabilita o de outro objetivo
-
+            calcular();
+    
             if(document.getElementById("outroObjetivo").value == ""){
                 ativarCampoObjetivoInicial();
             }else{//Se o campo de outro objetivo tiver algo, faz o contrário

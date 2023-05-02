@@ -26,13 +26,14 @@ use App\Http\Controllers\EventController;
 Route::get('/', [ControladorAv::class, 'index'])->middleware('auth');
 Route::get('/avs/avs', [ControladorAv::class, 'avs'])->middleware('auth');
 Route::get('/avs/create', [ControladorAv::class, 'create'])->middleware('auth');
-Route::get('/avs/{id}', [ControladorAv::class, 'show'])->middleware('auth');
+Route::get('/avs/show/{id}', [ControladorAv::class, 'show'])->middleware('auth');
 
 Route::post('/avs', [ControladorAv::class,'store'])->middleware('auth');
 
 Route::delete('/avs/{id}', [ControladorAv::class, 'destroy'])->middleware('auth');
 Route::get('/avs/edit/{id}', [ControladorAv::class, 'edit'])->middleware('auth');
 Route::put('/avs/update/{id}', [ControladorAv::class, 'update'])->middleware('auth');
+Route::put('/avs/enviarGestor/{id}', [ControladorAv::class, 'enviarGestor'])->middleware('auth');
 Route::get('/avs/concluir/{id}', [ControladorAv::class, 'concluir'])->middleware('auth');
 
 //---------------------------------------------------------------- TESTES

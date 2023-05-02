@@ -98,7 +98,7 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($id);
         $rotas = $av->rotas;//Busca as rotas da AV
 
-        //Valor cálculo de rota e verificar quanto que terá que pagar ao usuário
+        //Valor do cálculo de rota e verificar quanto que terá que pagar ao usuário
         $diariaTotal = 0;
         $meiaDiaria = 0;
 
@@ -108,34 +108,54 @@ class ControladorAv extends Controller
         
         foreach ($rotas as $r){
 
-            if($r->isViagemInternacional ==1)
+            if($r->isViagemInternacional ==1) //Se a viagem for internacional, seta o valor de acordo com o continente
             {
-                if($r->continenteDestinoInternacional == 1){
+                if($r->continenteDestinoInternacional == 1){//América Latina ou Amética Central
                     $diariaTotal = 100;
                     $meiaDiaria = 50;
                 }
-                else if($r->continenteDestinoInternacional == 2){
+                else if($r->continenteDestinoInternacional == 2){//América do Norte
                     $diariaTotal = 150;
                     $meiaDiaria = 75;
                 }
-                else if($r->continenteDestinoInternacional == 3){
+                else if($r->continenteDestinoInternacional == 3){//Europa
                     $diariaTotal = 180;
                     $meiaDiaria = 90;
                 }
-                else if($r->continenteDestinoInternacional == 4){
+                else if($r->continenteDestinoInternacional == 4){//África
                     $diariaTotal = 140;
                     $meiaDiaria = 70;
                 }
-                else if($r->continenteDestinoInternacional == 5){
+                else if($r->continenteDestinoInternacional == 5){//Ásia
                     $diariaTotal = 190;
                     $meiaDiaria = 95;
+                }
+            }
+
+            if($r->isViagemInternacional ==0)
+            {
+                if($r->cidadeDestinoNacional == "Curitiba" || $r->cidadeDestinoNacional == "Foz do Iguaçu"){//Se for Curitiba ou Foz do Iguaçu
+                    $diariaTotal = 65;
+                    $meiaDiaria = 32.5;
+                }
+                else if($r->estadoDestinoNacional == "Parana"){//Se for outra cidade do Paraná
+                    $diariaTotal = 55;
+                    $meiaDiaria = 27.5;
+                }
+                else if($r->cidadeDestinoNacional == "Brasília"){//Se for Brasília
+                    $diariaTotal = 100;
+                    $meiaDiaria = 50;
+                }
+                else{//Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
+                    $diariaTotal = 80;
+                    $meiaDiaria = 40;
                 }
             }
             //Implementar o valor para as cidades no Brasil
 
 
-            $date1 = new DateTime($r->dataHoraSaida);
-            $date2 = new DateTime($r->dataHoraChegada);
+            $date1 = new DateTime($r->dataHoraSaida);//Data de saída
+            $date2 = new DateTime($r->dataHoraChegada);//Data de chegada
 
             $anoSaida = $date1->format('Y');
             $mesSaida = $date1->format('m');
@@ -153,43 +173,58 @@ class ControladorAv extends Controller
 
             if($diaSaida==$diaChegada){//Sair e chegar no mesmo dia
                 if($horaSaida < 12 && $horaChegada >= 13 && $horaChegada < 19){//Se sair antes de 12 e chegar entre 13 e 19
-                    $valorReais += $meiaDiaria;
+                    if($r->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                    if($r->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
                 }
                 else if($horaSaida >= 13 && $horaChegada >= 19){ //Se sair depois das 13 e chegar após 19
-                    $valorReais += $meiaDiaria;
+                    if($r->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                    if($r->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
                 }
                 else if($horaSaida < 12 && $horaChegada >= 19){ // Se sair antes de 12 e chegar após 19
-                    $valorReais += $diariaTotal;
+                    if($r->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                    if($r->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
                 }
             }
 
             if($diaSaida != $diaChegada){ // Sair e chegar em dia diferente
             
-                if($horaSaida <12){
-                    $valorReais += $diariaTotal;//Se no primeiro dia ele sair antes de 12 já ganha diária total
+                if($horaSaida <12){//Se no primeiro dia ele sair antes de 12 já ganha diária total
+                    if($r->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                    if($r->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
                 }
-                else if($horaSaida >= 13){
-                    $valorReais += $meiaDiaria;//Se no primeiro dia ele sair após as 13, ganha meia diária
+                else if($horaSaida >= 13){//Se no primeiro dia ele sair após as 13, ganha meia diária
+                    if($r->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                    if($r->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
                 }
                 //Roda o laço a partir do segundo dia até o penúltimo
-                for($i = $diaSaida+1; $i < $diaChegada ; $i++){
-                    $valorReais += $diariaTotal; //Acrescenta uma diária completa para cada dia intermediário
+                for($i = $diaSaida+1; $i < $diaChegada ; $i++){//Acrescenta uma diária completa para cada dia intermediário
+                    if($r->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                    if($r->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
                 }
                 if($horaChegada < 13){ //Se no último dia a chegada for antes das 13, recebe meia diária
-                    $valorReais += $meiaDiaria;
+                    if($r->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                    if($r->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
+                }
+                else if($horaChegada >= 13 && $horaChegada < 19){
+                    if($r->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                    if($r->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
                 }
                 else if($horaChegada >=19){ // Se no último dia a chegada for após as 19, recebe diária inteira
-                    $valorReais += $diariaTotal;
+                    if($r->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                    if($r->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
                 }
             
             }
 
-            $teste += ['Data saída: ' => $valorReais];
-            $teste += ['Data chegada: ' => $anoChegada. "/" .$mesChegada. "/" .$diaChegada. "/" .$horaChegada. "/" .$minutoChegada. "/" .$segundoChegada];
+            //$teste += ['Data saída: ' => $valorReais];
+            //$teste += ['Data chegada: ' => $anoChegada. "/" .$mesChegada. "/" .$diaChegada. "/" .$horaChegada. "/" .$minutoChegada. "/" .$segundoChegada];
             
         }
 
         //dd($teste);
+
+        $av->valorReais = $valorReais;
+        $av->valorDolar = $valorDolar;
 
         $veiculosProprios = $user->veiculosProprios;
 
@@ -197,19 +232,33 @@ class ControladorAv extends Controller
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
         }
 
+        //Atualiza no banco de dados o valor calculado para a diária de alimentação
+        $dados = array(
+            "valorReais" => $av->valorReais,
+            "valorDolar" => $av->valorDolar
+        );
+        Av::findOrFail($av->id)->update($dados);
+
         return view('avs.concluir', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
     }
 
     public function show($id)
     {
         $av = Av::findOrFail($id);
-
+        
         $user = auth()->user();
+        
         $veiculosProprios = $user->veiculosProprios;
-        $objetivo = Objetivo::findOrFail($av->objetivo_id);
-    
+        
+        try {
+            $objetivo = Objetivo::findOrFail($av->objetivo_id);
+        } catch (\Throwable $th) {
+            $objetivo = $av->outroObjetivo;
+        }
+
         try {
             $veiculoProprio = VeiculoProprio::findOrFail($av->veiculoProprio_id);
+            
         } catch (\Throwable $th) {
             $veiculoProprio = VeiculoProprio::all();
         }
@@ -258,6 +307,17 @@ class ControladorAv extends Controller
         }
 
         return view('avs.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
+    }
+
+    public function enviarGestor(Request $request)
+    {
+        $data = $request->all();
+
+        //dd($data);
+
+        Av::findOrFail($request->id)->update($data);
+
+        return redirect('/avs/avs')->with('msg', 'av editado com sucesso!');
     }
 
     public function update(Request $request)

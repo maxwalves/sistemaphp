@@ -117,12 +117,17 @@ class ControladorRota extends Controller
             //Recupera o value do campo e decompõe em um JSON para obter o name
             $objetoTransformar = str_replace("'", "\"", $request->get('selecaoEstadoOrigemNacional'));
             $obj = json_decode($objetoTransformar, true);
-            $rota->estadoOrigemNacional = $obj['name'];
+            try {
+                $rota->estadoOrigemNacional = $obj['name'];
+            } catch (\Throwable $th) {}//Tenta recuperar o valor, se não der certo a validação vai avisar o usuário
+            
 
             //Recupera o value do campo e decompõe em um JSON para obter o name
             $objetoTransformar2 = str_replace("'", "\"", $request->get('selecaoEstadoDestinoNacional'));
             $obj2 = json_decode($objetoTransformar2, true);
-            $rota->estadoDestinoNacional = $obj2['name'];
+            try {
+                $rota->estadoDestinoNacional = $obj2['name'];
+            } catch (\Throwable $th) {}//Tenta recuperar o valor, se não der certo a validação vai avisar o usuário
 
             $rota->cidadeOrigemNacional = $request->selecaoCidadeOrigemNacional;
             $rota->cidadeDestinoNacional = $request->selecaoCidadeDestinoNacional;

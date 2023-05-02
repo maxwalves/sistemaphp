@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Av extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $casts = [
         'expired_at' => 'datetime',
@@ -24,7 +26,8 @@ class Av extends Model
         'pix',
         'comentario',
         'status',
-        'valorExtra',
+        'valorExtraReais',
+        'valorExtraDolar',
         'justificativaValorExtra',
         'contatos',
         'atividades',
@@ -35,10 +38,12 @@ class Av extends Model
         'usuarioDiretoriaExecutiva',
         'outroObjetivo',
         'user_id',
-        'objetivo_id'
+        'objetivo_id',
+        'valorReais',
+        'valorDolar'
     ];
 
-    protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio'];
+    protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio', 'deleted_at'];
     
     //Retorna o usuário relacionado a AV
     public function user()

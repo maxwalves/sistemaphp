@@ -34,9 +34,13 @@
                         $errors->has('selecaoEstadoDestinoNacional') ||
                         $errors->has('selecaoCidadeDestinoNacional') ||
                         $errors->has('tipoTransporte') ||
+                        $errors->has('dataHoraSaidaInternacional') ||
+                        $errors->has('dataHoraChegadaInternacional') ||
+                        $errors->has('dataHoraSaidaNacional') ||
+                        $errors->has('dataHoraChegadaNacional') ||
                         $errors->has('veiculoProprio_id'))
                     <div>
-                        <p style="color: red"> <strong>Existem campos pendentes de preenchimento!</strong></p>
+                        <p style="color: red"> <strong>Alguns campos não foram preenchidos!</strong></p>
                         <p style="color: red"> <strong>Selecione o tipo de viagem e verifique os campos!</strong></p>
                     </div>
                 @endif
@@ -151,7 +155,13 @@
                             <div id="dataHoraSaidaInternacional" class="input-append date">
                                 <label for="dataHoraSaidaInternacional" class="control-label">Data/Hora de saída: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaInternacional"
-                                    id="dataHoraSaidaInternacional" placeholder="Data/Hora de saída">
+                                    id="dataHoraSaidaInternacional" placeholder="Data/Hora de saída" class="{{ $errors->has('dataHoraSaidaInternacional') ? 'is-invalid' :''}}">
+
+                                @if ($errors->has('dataHoraSaidaInternacional'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('dataHoraSaidaInternacional') }}
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -235,7 +245,13 @@
                             <div id="dataHoraChegadaInternacional" class="input-append date">
                                 <label for="dataHoraChegadaInternacional" class="control-label">Data/Hora de chegada: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaInternacional"
-                                    id="dataHoraChegadaInternacional" placeholder="Data/Hora de chegada">
+                                    id="dataHoraChegadaInternacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaInternacional') ? 'is-invalid' :''}}">
+
+                                @if ($errors->has('dataHoraChegadaInternacional'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('dataHoraChegadaInternacional') }}
+                                </div>
+                                @endif
                             </div>
                         </div>
                     
@@ -289,7 +305,13 @@
                             <div id="dataHoraSaidaNacional" class="input-append date">
                                 <label for="dataHoraSaidaNacional" class="control-label">Data/Hora de saída: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional"
-                                    id="dataHoraSaidaNacional" placeholder="Data/Hora de saída">
+                                    id="dataHoraSaidaNacional" placeholder="Data/Hora de saída" class="{{ $errors->has('dataHoraSaidaNacional') ? 'is-invalid' :''}}">
+
+                                @if ($errors->has('dataHoraSaidaNacional'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('dataHoraSaidaNacional') }}
+                                </div>
+                                @endif
                             </div>
                         </div>
 
@@ -338,7 +360,13 @@
                             <div id="dataHoraChegadaNacional" class="input-append date">
                                 <label for="dataHoraChegadaNacional" class="control-label">Data/Hora de chegada: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaNacional"
-                                    id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada">
+                                    id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaNacional') ? 'is-invalid' :''}}">
+
+                                @if ($errors->has('dataHoraChegadaNacional'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('dataHoraChegadaNacional') }}
+                                </div>
+                                @endif
                             </div>
                         </div>
 

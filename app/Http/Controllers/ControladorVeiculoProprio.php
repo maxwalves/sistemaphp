@@ -32,7 +32,8 @@ class ControladorVeiculoProprio extends Controller
 
     public function create()
     {
-        return view('veiculosProprios.createVeiculo');
+        $user = auth()->user();
+        return view('veiculosProprios.createVeiculo', ['user'=> $user]);
     }
 
     public function store(Request $request)

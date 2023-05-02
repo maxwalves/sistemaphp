@@ -32,7 +32,8 @@ class ControladorObjetivoViagem extends Controller
 
     public function create()
     {
-        return view('objetivos.createObjetivo');
+        $user = auth()->user();
+        return view('objetivos.createObjetivo', ['user'=> $user]);
     }
 
     public function store(Request $request)

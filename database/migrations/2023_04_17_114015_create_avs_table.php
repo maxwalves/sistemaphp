@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('status');//É setado automaticamente no Back-end
 
             //Campos que serão preenchidos após a criação das rotas
-            $table->integer('valorExtra')->nullable();
+            $table->integer('valorExtraReais')->nullable();
+            $table->integer('valorExtraDolar')->nullable();
             $table->string('justificativaValorExtra')->nullable();
             
             //Campos que serão preenchidos após a viagem
@@ -51,6 +52,10 @@ return new class extends Migration
             $table->integer('objetivo_id')->unsigned()->nullable();
             $table->foreign('objetivo_id')->references('id')->on('objetivos');
 
+            $table->integer('valorReais')->nullable();
+            $table->integer('valorDolar')->nullable();
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }
