@@ -31,7 +31,7 @@
         <link rel="shortcut icon" type="imagex/png" href="/img/aviao.png">
         <x-slot name="logo">
             <div class="clientes-logo">
-                <img src="/img/1.png" alt="Paranacidade">
+                <img src="{{asset('/img/1.png')}}" alt="Paranacidade">
             </div>
             <div>
                 <p class="tituloSistema">Sistema de Controle de Viagens</p></li>

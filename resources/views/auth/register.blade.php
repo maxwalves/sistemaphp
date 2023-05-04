@@ -29,7 +29,7 @@
     <x-authentication-card>
         <x-slot name="logo">
             <div class="clientes-logo">
-                <img src="/img/1.png" alt="Paranacidade">
+                <img src="{{asset('/img/1.png')}}" alt="Paranacidade">
             </div>
             <div>
                 <p class="tituloSistema">Registrar usuário</p></li>

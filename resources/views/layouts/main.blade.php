@@ -6,15 +6,15 @@
 
         <title>@yield('title')</title>
 
-        <link rel="shortcut icon" type="imagex/png" href="/img/aviao.png">
+        <link rel="shortcut icon" type="imagex/png" href="{{asset('/img/aviao.png')}}">
 
         <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
 
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <!-- CSS Bootstrap -->
-        <script src="/js/bootstrap.bundle.min.js"></script>
-        <link href="/css/bootstrap.min.css" rel="stylesheet">
+        <script src="{{asset('/js/bootstrap.bundle.min.js')}}"></script>
+        <link href="{{asset('/css/bootstrap.min.css')}}" rel="stylesheet">
   
         
         
@@ -26,13 +26,13 @@
 
         <!-- CSS da aplicação -->
 
-        <link rel="stylesheet" href="/css/styles.css">
-        <script src="/js/scripts.js"></script>
-        <link href="/css/headers.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{asset('/css/styles.css')}}">
+        <script src="{{asset('/js/scripts.js')}}"></script>
+        <link href="{{asset('/css/headers.css')}}" rel="stylesheet">
         <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/headers/">
         <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
-        <link href="/css/sidebars.css" rel="stylesheet">
-        <script src="/js/sidebars.js"></script>
+        <link href="{{asset('/css/sidebars.css')}}" rel="stylesheet">
+        <script src="{{asset('/js/sidebars.js')}}"></script>
 
        
                 
@@ -44,7 +44,7 @@
                 <div class="container">
                     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-                        <img src="/img/1.png" alt="Paranacidade" width="100" height="72">
+                        <img src="{{asset('/img/1.png')}}" alt="Paranacidade" width="100" height="72">
                         </a>
 
                         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
@@ -67,7 +67,7 @@
 
                         <div class="dropdown text-end">
                             <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="/img/user.png" alt="mdo" width="42" height="42" class="rounded-circle">
+                                <img src="{{asset('/img/user.png')}}" alt="mdo" width="42" height="42" class="rounded-circle">
                                 {{$user->name}}
                             </a>
                             <ul class="dropdown-menu text-small">
@@ -146,7 +146,7 @@
 
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="{{asset('/css/styles.css')}}">
 
         <footer class="footer items-center p-4 bg-neutral text-neutral-content">
         <address class="adr">
