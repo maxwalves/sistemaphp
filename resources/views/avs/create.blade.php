@@ -76,40 +76,43 @@
             </div>
 
             <div class="form-group">
-                <label for="banco" class="control-label">Banco</label>
-                <input type="number" class="form-control" name="banco"
+                <label for="banco" class="control-label">Banco</label><br>
+                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="banco"
                 id="banco" placeholder="Banco">
             </div>
 
             <div class="form-group">
-                <label for="agencia" class="control-label">Agência</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" name="agencia"
+                <label for="agencia" class="control-label">Agência</label><br>
+                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="agencia"
                     id="agencia" placeholder="Agência">
-                </div>
+                
             </div>
 
             <div class="form-group">
-                <label for="conta" class="control-label">Conta</label>
-                <input type="number" class="form-control" name="conta"
+                <label for="conta" class="control-label">Conta</label><br>
+                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="conta"
                 id="conta" placeholder="Conta">
             </div>
 
             <div class="form-group">
-                <label for="pix" class="control-label">Pix</label>
-                <input type="number" class="form-control" name="pix"
+                <label for="pix" class="control-label">Pix</label><br>
+                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="pix"
                     id="pix" placeholder="Pix">
             </div>
 
             <div class="form-group">
-                <label for="comentario" class="control-label">Comentários</label>
-                <input type="text" class="form-control" name="comentario"
+                <label for="comentario" class="control-label">Comentários</label><br>
+                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="comentario"
                     id="comentario" placeholder="Comentário">
             </div>
-            <div id="btSalvarAv">
-                <input style="font-size: 16px" type="submit" class="btn btn-primary btn-lg" value="Salvar e escolher itinerário!">
+
+            <br>
+
+            <div class="row justify-content-center" style="background-color: lightgrey">
+                <div id="btSalvarAv">
+                    <input style="font-size: 14px" type="submit" class="btn btn-active btn-secondary" value="Salvar e escolher itinerário!">
+                </div>
             </div>
-            
         </form>
 
     </div>

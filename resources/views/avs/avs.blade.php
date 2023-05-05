@@ -21,10 +21,11 @@
 
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
     @if(count($avs) > 0 )
-    <table id="minhaTabela" class="cell-border compact stripe">
+    <table id="minhaTabela" class="display nowrap">
         <thead>
             <tr>
                 <th>Número</th>
+                <th>Objetivo</th>
                 <th>Data</th>
                 <th>Prioridade</th>
                 <th>Status</th>
@@ -35,6 +36,22 @@
             @foreach($avs as $av)
             <tr>
                 <td scropt="row">{{ $av->id }}</td>
+                
+                @for($i = 0; $i < count($objetivos); $i++)
+
+                    @if ($av->objetivo_id == $objetivos[$i]->id )
+                        @if ($objetivos[$i]->nomeObjetivo!="")
+                            <td> {{$objetivos[$i]->nomeObjetivo}} </td>
+                            @break
+                        @endif
+                    @endif
+
+                    @if(isset($objetivos[$i]->id))
+                            <td> {{$av->outroObjetivo }} </td>
+                            @break
+                    @endif
+                @endfor
+                
                 <td> <a> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </a></td>
                 <td> {{$av->prioridade}} </td>
                 <td> {{$av->status}} </td>

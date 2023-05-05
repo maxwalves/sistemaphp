@@ -32,7 +32,8 @@ class ControladorAv extends Controller
     {
         $user = auth()->user();
         $avs = $user->avs;
-        return view('avs.avs', ['avs' => $avs, 'user'=> $user]);
+        $objetivos = Objetivo::all();
+        return view('avs.avs', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
     }
 
     public function create()
@@ -218,46 +219,47 @@ class ControladorAv extends Controller
                 }
             
             }
+            
         }
         else if(sizeof($rotas)>1){//Se existir mais de uma rota
             
             for ($i=0; $i < sizeof($rotas)-1 ; $i++) { 
 
-                if($rotas[0]->isViagemInternacional ==1) //Se a viagem for internacional, seta o valor de acordo com o continente
+                if($rotas[$i]->isViagemInternacional ==1) //Se a viagem for internacional, seta o valor de acordo com o continente
                 {
-                    if($rotas[0]->continenteDestinoInternacional == 1){//América Latina ou Amética Central
+                    if($rotas[$i]->continenteDestinoInternacional == 1){//América Latina ou Amética Central
                         $diariaTotal = 100;
                         $meiaDiaria = 50;
                     }
-                    else if($rotas[0]->continenteDestinoInternacional == 2){//América do Norte
+                    else if($rotas[$i]->continenteDestinoInternacional == 2){//América do Norte
                         $diariaTotal = 150;
                         $meiaDiaria = 75;
                     }
-                    else if($rotas[0]->continenteDestinoInternacional == 3){//Europa
+                    else if($rotas[$i]->continenteDestinoInternacional == 3){//Europa
                         $diariaTotal = 180;
                         $meiaDiaria = 90;
                     }
-                    else if($rotas[0]->continenteDestinoInternacional == 4){//África
+                    else if($rotas[$i]->continenteDestinoInternacional == 4){//África
                         $diariaTotal = 140;
                         $meiaDiaria = 70;
                     }
-                    else if($rotas[0]->continenteDestinoInternacional == 5){//Ásia
+                    else if($rotas[$i]->continenteDestinoInternacional == 5){//Ásia
                         $diariaTotal = 190;
                         $meiaDiaria = 95;
                     }
                 }
 
-                if($rotas[0]->isViagemInternacional ==0)//Se a viagem não for internacional
+                if($rotas[$i]->isViagemInternacional ==0)//Se a viagem não for internacional
                 {
-                    if($rotas[0]->cidadeDestinoNacional == "Curitiba" || $rotas[0]->cidadeDestinoNacional == "Foz do Iguaçu"){//Se for Curitiba ou Foz do Iguaçu
+                    if($rotas[$i]->cidadeDestinoNacional == "Curitiba" || $rotas[0]->cidadeDestinoNacional == "Foz do Iguaçu"){//Se for Curitiba ou Foz do Iguaçu
                         $diariaTotal = 65;
                         $meiaDiaria = 32.5;
                     }
-                    else if($rotas[0]->estadoDestinoNacional == "Parana"){//Se for outra cidade do Paraná
+                    else if($rotas[$i]->estadoDestinoNacional == "Parana"){//Se for outra cidade do Paraná
                         $diariaTotal = 55;
                         $meiaDiaria = 27.5;
                     }
-                    else if($rotas[0]->cidadeDestinoNacional == "Brasília"){//Se for Brasília
+                    else if($rotas[$i]->cidadeDestinoNacional == "Brasília"){//Se for Brasília
                         $diariaTotal = 100;
                         $meiaDiaria = 50;
                     }
@@ -266,130 +268,117 @@ class ControladorAv extends Controller
                         $meiaDiaria = 40;
                     }
                 }
+
+                //Verifica quais são das datas da rota atual e da próxima
                 $dataHoraSaidaRota1 = new DateTime($rotas[$i]->dataHoraSaida);//Data de saída da rota 1
                 $dataHoraChegadaRota1 = new DateTime($rotas[$i]->dataHoraChegada);//Data de chegada da rota 1
 
                 $dataHoraSaidaRota2 = new DateTime($rotas[$i + 1]->dataHoraSaida);//Data de saída da rota 2
                 $dataHoraChegadaRota2 = new DateTime($rotas[$i + 1]->dataHoraChegada);//Data de chegada da rota 2
                 
-
+                //DATAS ROTA 1
                 $diaSaidaRota1 = $dataHoraSaidaRota1->format('d');
                 $horaSaidaRota1 = $dataHoraSaidaRota1->format('H');
 
                 $diaChegadaRota1 = $dataHoraChegadaRota1->format('d');
                 $horaChegadaRota1 = $dataHoraChegadaRota1->format('H');
 
+                //DATAS ROTA 2
                 $diaSaidaRota2 = $dataHoraSaidaRota2->format('d');
                 $horaSaidaRota2 = $dataHoraSaidaRota2->format('H');
 
                 $diaChegadaRota2 = $dataHoraChegadaRota2->format('d');
                 $horaChegadaRota2 = $dataHoraChegadaRota2->format('H');
                     
-                //A partir do próximo dia após a chegada, conta até o último dia antes da partida
-                $diasCompletos += ($diaSaidaRota2)-($diaChegadaRota1+1);    
-                    
+                //CÁLCULOS:
+
+                //A partir do próximo dia após a chegada da rota 1, conta até o último dia antes da partida da rota 2
+                $diasCompletos = ($diaSaidaRota2)-($diaChegadaRota1+1);  
+                
                 if($rotas[$i]->isViagemInternacional ==0) {$valorReais += ($diariaTotal * $diasCompletos) ;}
                 if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += ($diariaTotal * $diasCompletos);}
-
+                
+                
                 if($diaSaidaRota1==$diaChegadaRota1){// Se a viagem de ida durar um dia
-                    if($horaSaidaRota1 < 12){//Se sair antes de 12
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
+                    
+                    if($horaSaidaRota1 < 12){//Se sair antes de 12h 
+                        if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                        if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
                     }
-                    else if($horaSaidaRota1 >=13){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
-                    }
-
-                    if($horaChegadaRota1 < 13){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
-                    }
-                    else if($horaChegadaRota1 >= 13){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
+                    else if($horaSaidaRota1 >=13){//Sair depois das 13h e chegar depois das 19h
+                        if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                        if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
                     }
                 } 
                 else if($diaSaidaRota1!=$diaChegadaRota1){//Se a viagem de ida demorar mais de um dia
-
+                    
                     if($horaSaidaRota1 < 12){//Se sair antes de 12
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
+                        if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                        if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
                     }
-                    else if($horaSaidaRota1 >=13){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
-                    }
-
-                    for($i = $diaSaidaRota1+1; $i < $diaChegadaRota1 ; $i++){//Acrescenta uma diária completa para cada dia intermediário
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
+                    else if($horaSaidaRota1 >=13 && $horaSaidaRota1 <19){
+                        if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                        if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
                     }
 
-                    if($horaChegadaRota1 < 13){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
+                    for($j = $diaSaidaRota1; $j < $diaChegadaRota1 ; $j++){//Acrescenta uma diária completa para cada dia intermediário
+                        if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                        if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
                     }
-                    else if($horaChegadaRota1 >= 13 && $horaChegadaRota1 < 19){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
-                    }
-                    else if($horaChegadaRota1 >=19){ // Se no último dia da Rota 1 a chegada for após as 19, recebe diária inteira
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
-                    }
+                    
                 }
 
+                //Soma o período antes do início de uma nova rota, caso complete meia diária ou total
+                if($horaSaidaRota2 >= 13){
+                    if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                    if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
+                }
+                else if($horaSaidaRota2 >= 19){
+                    if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                    if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
+                }
+                
 
-
-
-
-                if($diaSaidaRota2==$diaChegadaRota2){// Se a viagem de volta durar um dia
-                    if($horaSaidaRota2 < 12){//Se sair antes de 12
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
-                    }
-                    else if($horaSaidaRota2 >=13){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
-                    }
-
-                    if($horaChegadaRota2 < 13){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
-                    }
-                    else if($horaChegadaRota2 >= 13){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
-                    }
-                } 
-                else if($diaSaidaRota2!=$diaChegadaRota2){//Se a viagem de volta demorar mais de um dia
-
-                    if($horaSaidaRota2 < 12){//Se sair antes de 12
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
-                    }
-                    else if($horaSaidaRota2 >=13){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
-                    }
-
-                    for($i = $diaSaidaRota2+1; $i < $diaChegadaRota2 ; $i++){//Acrescenta uma diária completa para cada dia intermediário
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
-                    }
-
-                    if($horaChegadaRota2 < 12 && $horaChegadaRota2 >= 13 && $horaChegadaRota2 < 19){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
-                    }
-                    else if($horaChegadaRota2 >= 13 && $horaChegadaRota2 < 19){
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
-                    }
-                    else if($horaChegadaRota2 < 12 && $horaChegadaRota2 >= 19){ // Se no último dia da Rota 1 a chegada for após as 19, recebe diária inteira
-                        if($rotas[0]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
-                        if($rotas[0]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
+                if($i+1 >= sizeof($rotas)-1){//Se estou na última rota
+                    if($diaSaidaRota2==$diaChegadaRota2){// Se a viagem da rota 2 durar um dia
+                        if($horaSaidaRota2 < 12 && $horaChegadaRota2 >=19){
+                            if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                            if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
+                        }
+                        else if($horaSaidaRota2 >=13 && $horaChegadaRota2 >=19){
+                            if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                            if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
+                        } 
+                        else if($horaSaidaRota2 < 12 && $horaChegadaRota2 >= 13 && $horaChegadaRota2 < 19){
+                            if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                            if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
+                        }
+                        
+                    } 
+                    else if($diaSaidaRota2!=$diaChegadaRota2){//Se a viagem da rota 2 demorar mais de um dia
+    
+                        if($horaSaidaRota2 < 12){//Se sair antes de 12
+                            if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                            if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
+                        }
+                        else if($horaSaidaRota2 >=13){
+                            if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                            if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
+                        }
+    
+                        for($j = $diaSaidaRota2+1; $j < $diaChegadaRota2 ; $j++){//Acrescenta uma diária completa para cada dia intermediário
+                            if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                            if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
+                        }
+    
+                        if($horaChegadaRota2 >=13 && $horaChegadaRota2 < 19){
+                            if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
+                            if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
+                        }
+                        else if($horaChegadaRota2 >= 19){ // Se no último dia da Rota 1 a chegada for após as 19, recebe diária inteira
+                            if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
+                            if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
+                        }
                     }
                 }
             }

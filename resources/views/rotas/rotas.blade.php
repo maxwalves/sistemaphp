@@ -5,15 +5,15 @@
 
 <div style="padding-left: 50px, padding-right: 50px" class="container">
     <div class="row justify-content-between" style="padding-left: 5%">
-        <div class="btn-group" >
-            <div class="col-4">
-                <a href="/avs/avs/" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
+        <div class="btn-group">
+            <div class="col-4" >
+                <a href="/avs/avs/" type="submit" class="btn btn-active btn-ghost" style="width: 200px"> Voltar!</a>
             </div>
-            <div class="col-4">
-                <a href="/rotas/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary"> + CADASTRAR ROTA</a>
+            <div class="col-4" >
+                <a href="/rotas/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 200px"> + CADASTRAR ROTA</a>
             </div>
-            <div class="col-4">
-                <a href="/avs/concluir/{{ $av->id }}" type="button" class="btn btn-active btn-secondary">Calcular diárias</a>
+            <div class="col-4" >
+                <a href="/avs/concluir/{{ $av->id }}" type="button" class="btn btn-active btn-secondary" style="width: 200px">Calcular diárias</a>
             </div>
             
         </div>
@@ -28,10 +28,10 @@
 </div>
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
     @if(count($rotas) > 0 )
-    <table id="tabelaRota" class="cell-border compact stripe">
+    <table id="tabelaRota" class="display nowrap" style="width:100%">
         <thead>
             <tr>
-                <th>Número Rota</th>
+                <th>Número</th>
                 <th>Tipo</th>
                 <th>Cidade de saída</th>
                 <th>Data/Hora de saída</th>
@@ -48,9 +48,9 @@
                 <td> {{$rota->id}} </td>
                 <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
                 <td> {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} </td>
-                <td> {{ date('d/m/Y H:m:s', strtotime($rota->dataHoraSaida)) }} </td>
+                <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
                 <td> {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} </td>
-                <td> {{ date('d/m/Y H:m:s', strtotime($rota->dataHoraChegada)) }} </td>
+                <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
                 <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
                 <td> 
                     {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}

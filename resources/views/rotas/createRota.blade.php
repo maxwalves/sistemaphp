@@ -149,12 +149,12 @@
                             class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemInternacional()">
                         </div>
 
-                        
+                        <br>
 
                         <div class="form-group"> 
-                            <div id="dataHoraSaidaInternacional" class="input-append date">
+                            <div id="dataHoraSaidaInternacional" class="input-append date" >
                                 <label for="dataHoraSaidaInternacional" class="control-label">Data/Hora de saída: </label>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaInternacional"
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaInternacional" style="border-width: 1px; border-color: black"
                                     id="dataHoraSaidaInternacional" placeholder="Data/Hora de saída" class="{{ $errors->has('dataHoraSaidaInternacional') ? 'is-invalid' :''}}">
 
                                 @if ($errors->has('dataHoraSaidaInternacional'))
@@ -239,12 +239,12 @@
                             class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoInternacional()">
                         </div>
 
-                        
+                        <br>
 
                         <div class="form-group"> 
                             <div id="dataHoraChegadaInternacional" class="input-append date">
                                 <label for="dataHoraChegadaInternacional" class="control-label">Data/Hora de chegada: </label>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaInternacional"
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaInternacional" style="border-width: 1px; border-color: black"
                                     id="dataHoraChegadaInternacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaInternacional') ? 'is-invalid' :''}}">
 
                                 @if ($errors->has('dataHoraChegadaInternacional'))
@@ -301,10 +301,12 @@
                                 @endif
                         </div>
 
+                        <br>
+
                         <div class="form-group"> 
                             <div id="dataHoraSaidaNacional" class="input-append date">
                                 <label for="dataHoraSaidaNacional" class="control-label">Data/Hora de saída: </label>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional"
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional" style="border-width: 1px; border-color: black"
                                     id="dataHoraSaidaNacional" placeholder="Data/Hora de saída" class="{{ $errors->has('dataHoraSaidaNacional') ? 'is-invalid' :''}}">
 
                                 @if ($errors->has('dataHoraSaidaNacional'))
@@ -356,10 +358,12 @@
                                 @endif
                         </div>
 
+                        <br>
+
                         <div class="form-group"> 
                             <div id="dataHoraChegadaNacional" class="input-append date">
                                 <label for="dataHoraChegadaNacional" class="control-label">Data/Hora de chegada: </label>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaNacional"
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaNacional" style="border-width: 1px; border-color: black"
                                     id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaNacional') ? 'is-invalid' :''}}">
 
                                 @if ($errors->has('dataHoraChegadaNacional'))
@@ -379,78 +383,82 @@
                 </div>
             </div>
             <br>
-            <div class="row justify-content-center">
-                <div class="col-4">
-
-                    <div id="btConfirmaRota">
-                        <input type="text" 
-                            class="btn btn-secondary btn-sm" value="Confirma dados!" onClick="confirmaDados()">
+            <div class="row justify-content-center" style="background-color: lightgrey">
+                
+                <div class="col-md-6 offset-md-3">
+                    <div>
+                        <div class="btn-group" >
+                            <div id="btConfirmaRota">
+                                <input type="text" 
+                                    class="btn btn-active btn-secondary" value="Confirma dados!" onClick="confirmaDados()">
+                            </div>
+                        </div>
                     </div>
+                        
+                    <div>
+                        <div id="camposFinais" hidden="true">
+                            <div class="form-group" >
+                                <label for="isReservaHotel" class="control-label">Você vai precisar de reserva de hotel?</label>
+                                <br>
+                                    <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('isReservaHotel') ? 'is-invalid' :''}}" 
+                                        id="isReservaHotel" name="isReservaHotel" >
+                                        <option value="0" name="0"> Não</option>
+                                        <option value="1" name="1" > Sim</option>
+                                    </select>
+                
+                                    @if ($errors->has('isReservaHotel'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('isReservaHotel') }}
+                                    </div>
+                                    @endif
+                            </div>
+                
+                
+                            <div class="form-group">
+                                <label for="tipoTransporte" class="control-label">Qual o tipo de transporte?</label>
+                                <br>
+                                    <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('tipoTransporte') ? 'is-invalid' :''}}" 
+                                        id="tipoTransporte" name="tipoTransporte" onChange="ativarCampo()">
+                                        <option value="0" name="0"> Onibus Leito</option>
+                                        <option value="1" name="1" > Onibus convencional</option>
+                                        <option value="2" name="2" > Veículo próprio</option>
+                                        <option value="3" name="3" > Veículo do Paranacidade</option>
+                                        <option value="4" name="4" > Avião</option>
+                                    </select>
+                
+                                    @if ($errors->has('tipoTransporte'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('tipoTransporte') }}
+                                    </div>
+                                    @endif
+                            </div>
+                
+                            <div class="form-group" id="selecaoVeiculo" hidden="true">
+                                <label for="veiculoProprio_id" class="control-label" required>Selecione o veículo?</label>
+                                <br>
+                                    <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('veiculoProprio_id') ? 'is-invalid' :''}}" 
+                                        id="veiculoProprio_id" name="veiculoProprio_id">
+                                        <option value="" name=""> Selecione</option>
+                                        @for($i = 0; $i < count($veiculosProprios); $i++)
+                                            <div>
+                                                <option value="{{ $veiculosProprios[$i]->id }}" 
+                                                    name="{{ $veiculosProprios[$i]->id }}"> {{ $veiculosProprios[$i] ->modelo }} - {{ $veiculosProprios[$i] ->placa }} </option>
+                                            </div>
+                                        @endfor
+                                    </select>
+                
+                                    @if ($errors->has('veiculoProprio_id'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('veiculoProprio_id') }}
+                                    </div>
+                                    @endif
+                            </div>
 
-                </div>
-                <div class="col-4">
-                    <div id="camposFinais" hidden="true">
-                        <div class="form-group" >
-                            <label for="isReservaHotel" class="control-label">Você vai precisar de reserva de hotel?</label>
-                            <br>
-                                <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('isReservaHotel') ? 'is-invalid' :''}}" 
-                                    id="isReservaHotel" name="isReservaHotel" >
-                                    <option value="0" name="0"> Não</option>
-                                    <option value="1" name="1" > Sim</option>
-                                </select>
-            
-                                @if ($errors->has('isReservaHotel'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('isReservaHotel') }}
-                                </div>
-                                @endif
-                        </div>
-            
-            
-                        <div class="form-group">
-                            <label for="tipoTransporte" class="control-label">Qual o tipo de transporte?</label>
-                            <br>
-                                <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('tipoTransporte') ? 'is-invalid' :''}}" 
-                                    id="tipoTransporte" name="tipoTransporte" onChange="ativarCampo()">
-                                    <option value="0" name="0"> Onibus Leito</option>
-                                    <option value="1" name="1" > Onibus convencional</option>
-                                    <option value="2" name="2" > Veículo próprio</option>
-                                    <option value="3" name="3" > Veículo do Paranacidade</option>
-                                    <option value="4" name="4" > Avião</option>
-                                </select>
-            
-                                @if ($errors->has('tipoTransporte'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('tipoTransporte') }}
-                                </div>
-                                @endif
-                        </div>
-            
-                        <div class="form-group" id="selecaoVeiculo" hidden="true">
-                            <label for="veiculoProprio_id" class="control-label" required>Selecione o veículo?</label>
-                            <br>
-                                <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('veiculoProprio_id') ? 'is-invalid' :''}}" 
-                                    id="veiculoProprio_id" name="veiculoProprio_id">
-                                    <option value="" name=""> Selecione</option>
-                                    @for($i = 0; $i < count($veiculosProprios); $i++)
-                                        <div>
-                                            <option value="{{ $veiculosProprios[$i]->id }}" 
-                                                name="{{ $veiculosProprios[$i]->id }}"> {{ $veiculosProprios[$i] ->modelo }} - {{ $veiculosProprios[$i] ->placa }} </option>
-                                        </div>
-                                    @endfor
-                                </select>
-            
-                                @if ($errors->has('veiculoProprio_id'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('veiculoProprio_id') }}
-                                </div>
-                                @endif
-                        </div>
+                            <div id="btSalvarRota">
+                                <input style="font-size: 16px" type="submit" class="btn btn-active btn-secondary" value="Cadastrar Rota!">
+                            </div>
 
-                        <div id="btSalvarRota">
-                            <input style="font-size: 16px" type="submit" class="btn btn-primary btn-sm" value="Cadastrar Rota!">
                         </div>
-
                     </div>
                 </div>
             </div>
