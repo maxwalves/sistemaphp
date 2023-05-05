@@ -26,6 +26,7 @@
             <tr>
                 <th>Número</th>
                 <th>Objetivo</th>
+                <th>Rota</th>
                 <th>Data</th>
                 <th>Prioridade</th>
                 <th>Status</th>
@@ -37,21 +38,35 @@
             <tr>
                 <td scropt="row">{{ $av->id }}</td>
                 
-                @for($i = 0; $i < count($objetivos); $i++)
+                <td>
+                    @for($i = 0; $i < count($objetivos); $i++)
 
-                    @if ($av->objetivo_id == $objetivos[$i]->id )
-                        @if ($objetivos[$i]->nomeObjetivo!="")
-                            <td> {{$objetivos[$i]->nomeObjetivo}} </td>
-                            @break
+                        @if ($av->objetivo_id == $objetivos[$i]->id )
+                                {{$objetivos[$i]->nomeObjetivo}}     
                         @endif
-                    @endif
 
-                    @if(isset($objetivos[$i]->id))
-                            <td> {{$av->outroObjetivo }} </td>
-                            @break
+                    @endfor
+
+                    @if (isset($av->outroObjetivo))
+                            {{$av->outroObjetivo }} 
                     @endif
-                @endfor
-                
+                </td>
+
+                <td>
+                    @for($i = 0; $i < count($av->rotas); $i++)
+
+                        @if($av->rotas[$i]->isViagemInternacional == 0)
+                           - {{$av->rotas[$i]->cidadeOrigemNacional}}
+                        @endif
+                        
+                        @if($av->rotas[$i]->isViagemInternacional == 1)
+                           - {{$av->rotas[$i]->cidadeOrigemInternacional}} 
+                        @endif
+
+                    @endfor
+
+                </td>
+
                 <td> <a> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </a></td>
                 <td> {{$av->prioridade}} </td>
                 <td> {{$av->status}} </td>
@@ -86,7 +101,7 @@
 
         $(document).ready(function(){
             $('#minhaTabela').DataTable({
-                    scrollY: 800,
+                    scrollY: 500,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

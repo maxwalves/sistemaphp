@@ -339,7 +339,7 @@ class ControladorRota extends Controller
             'required' => 'Este campo não pode estar em branco',
         ];
 
-        $request->validate($regras, $mensagens);
+        //$request->validate($regras, $mensagens);
 
         Rota::findOrFail($request->id)->update($dados);
 

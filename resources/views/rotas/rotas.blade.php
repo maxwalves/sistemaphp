@@ -47,9 +47,40 @@
             <tr>
                 <td> {{$rota->id}} </td>
                 <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
-                <td> {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} </td>
+                <td> 
+                    @if($rota->isAereo == 1)
+                        <img src="{{asset('/img/aviaosubindo.png')}}" style="width: 40px" >
+                    @endif
+
+                    @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                        <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+                    @endif
+
+                    @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                        <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                    @endif
+
+                    {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
+                    
+                </td>
                 <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
-                <td> {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} </td>
+
+                <td> 
+                    @if($rota->isAereo == 1)
+                        <img src="{{asset('/img/aviaodescendo.png')}}" style="width: 40px" >
+                    @endif
+
+                    @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                        <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+                    @endif
+
+                    @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                        <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                    @endif
+
+                    {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
+                </td>
+
                 <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
                 <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
                 <td> 
