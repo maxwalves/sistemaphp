@@ -24,10 +24,10 @@
     <table id="minhaTabela" class="display nowrap">
         <thead>
             <tr>
-                <th>Número</th>
+                <th style="width: 50px">Número</th>
                 <th>Objetivo</th>
                 <th>Rota</th>
-                <th>Data</th>
+                <th>Data criação</th>
                 <th>Prioridade</th>
                 <th>Status</th>
                 <th>Ações</th>
