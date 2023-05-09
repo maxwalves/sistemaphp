@@ -4,11 +4,15 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable
 {
@@ -17,6 +21,8 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -77,5 +83,10 @@ class User extends Authenticatable
     public function eventsAsParticipant()
     {
         return $this->belongsToMany('App\Models\Event');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
     }
 }

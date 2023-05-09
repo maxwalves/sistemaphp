@@ -73,6 +73,14 @@
                             <ul class="dropdown-menu text-small">
 
                                 @auth
+                                    
+                                    
+
+                                @can('view-users', $user)
+                                    <li><a class="dropdown-item" href="/users/users">Gerenciar usuários</a></li>
+                                @endcan
+                                    
+                                    
                                     <li><a class="dropdown-item" href="/veiculosProprios/veiculosProprios">Meus veículos</a></li>
                                     <li><a class="dropdown-item" href="/veiculosParanacidade/veiculosParanacidade">Veículos Paranacidade</a></li>
                                     <li><a class="dropdown-item" href="/objetivos/objetivos">Objetivos de viagem</a></li>

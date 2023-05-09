@@ -5,6 +5,7 @@ use App\Http\Controllers\ControladorAv;
 use App\Http\Controllers\ControladorProduto;
 use App\Http\Controllers\ControladorCategoria;
 use App\Http\Controllers\ControladorVeiculoProprio;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ControladorObjetivoViagem;
 use App\Http\Controllers\ControladorVeiculoParanacidade;
 use App\Http\Controllers\ControladorRota;
@@ -109,3 +110,19 @@ Route::post('/rotas', [ControladorRota::class,'store'])->middleware('auth');
 
     # Get all Cities in a Country using the Country ID
     Route::get('country-cities/{countryId}', [LocationController::class, 'getCitiesByCountry']);
+
+
+    // ROTAS PARA ADM USERS
+Route::get('/users/users', [UsersController::class, 'users'])->middleware('auth');
+Route::get('/users/create', [UsersController::class, 'create'])->middleware('auth');
+Route::get('/users/{id}', [UsersController::class, 'show'])->middleware('auth');
+Route::delete('/users/{id}', [UsersController::class, 'destroy'])->middleware('auth');
+Route::get('/users/edit/{id}', [UsersController::class, 'edit'])->middleware('auth');
+
+Route::get('/users/editPerfil/{id}', [UsersController::class, 'editPerfil'])->middleware('auth');
+Route::get('/users/editPerfil/{id}/{ordem}', [UsersController::class, 'updatePerfil'])->middleware('auth');
+
+Route::put('/users/update/{id}', [UsersController::class, 'update'])->middleware('auth');
+Route::post('/users', [UsersController::class,'store'])->middleware('auth');
+
+Route::get('/unauthorized', [UsersController::class, 'naoAutorizado'])->middleware('auth');
