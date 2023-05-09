@@ -49,7 +49,6 @@ class UsersController extends Controller
         } catch (\Throwable $th) {
             return view('unauthorized', ['user'=> $user]);
         }
-        
 
     }
 

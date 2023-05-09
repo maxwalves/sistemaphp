@@ -46,7 +46,7 @@
 
             <div class="divider"></div> 
             <div style="border-bottom: 2px; border-color: black">
-                <p>Perfis que usuário possui: </p>
+                <p><strong>Perfis que usuário possui:</strong> </p>
                 
                 @if ($dados["permission1"] == 'true')
                     <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarAdmin" class="btn btn-active btn-primary" id="btAdminPossui">Admin</a> 
