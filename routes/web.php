@@ -10,6 +10,7 @@ use App\Http\Controllers\ControladorObjetivoViagem;
 use App\Http\Controllers\ControladorVeiculoParanacidade;
 use App\Http\Controllers\ControladorRota;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\SetorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -126,3 +127,16 @@ Route::put('/users/update/{id}', [UsersController::class, 'update'])->middleware
 Route::post('/users', [UsersController::class,'store'])->middleware('auth');
 
 Route::get('/unauthorized', [UsersController::class, 'naoAutorizado'])->middleware('auth');
+
+
+    // ROTAS PARA ADM SETORES
+    Route::get('/setores/setores', [SetorController::class, 'setores'])->middleware('auth');
+    Route::get('/setores/create', [SetorController::class, 'create'])->middleware('auth');
+    Route::get('/setores/{id}', [SetorController::class, 'show'])->middleware('auth');
+    Route::delete('/setores/{id}', [SetorController::class, 'destroy'])->middleware('auth');
+    Route::get('/setores/edit/{id}', [SetorController::class, 'edit'])->middleware('auth');
+
+    Route::get('/setores/funcSetor/{id}', [SetorController::class, 'funcSetor'])->middleware('auth');
+    
+    Route::put('/setores/update/{id}', [SetorController::class, 'update'])->middleware('auth');
+    Route::post('/setores', [SetorController::class,'store'])->middleware('auth');

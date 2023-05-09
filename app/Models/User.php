@@ -89,4 +89,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function setor()
+    {
+        return $this->belongsTo('App\Models\Setor');
+    }
 }

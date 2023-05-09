@@ -36,9 +36,15 @@
         </tbody>
     </table>
     @else
-    <p>Você ainda não tem veículos, <a href="/users/create"> Criar novo usuário</a></p>
+    <p>Você ainda não tem usuários, <a href="/users/create"> Criar novo usuário</a></p>
     @endif
-    <a style="font-size: 16px" href="/users/create" type="submit" class="btn btn-primary btn-lg"> Cadastrar novo usuário!</a>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <a style="font-size: 16px" href="/users/create" type="submit" class="btn btn-active btn-primary btn-lg"><ion-icon name="add-circle-outline" size="large"></ion-icon>  Novo usuário!</a>
+            <a style="font-size: 16px" href="/setores/setores" type="submit" class="btn btn-active btn-secondary btn-lg"> Gerenciar setores!</a>
+        </div>
+    </div>
+    
 </div>
 
 @endsection
