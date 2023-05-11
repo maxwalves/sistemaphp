@@ -273,7 +273,7 @@ class ControladorAv extends Controller
 
         $dados = array(
             "isAprovadoGestor" => 1,
-            "isVistoDiretoria" =>1,
+            "isVistoDiretoria" => 1,
             "status" => "Aguardando reserva pela Secretaria",
             "isAprovadoViagemInternacional" => "0",
             "isAprovadoCarroDiretoriaExecutiva" => "0",
@@ -284,7 +284,6 @@ class ControladorAv extends Controller
         else if($isCarroProprio == true){
             $dados['isAprovadoCarroDiretoriaExecutiva'] = 1;
         }
-        
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
@@ -795,6 +794,7 @@ class ControladorAv extends Controller
             "isRealizadoReserva" => 0,
             "isAprovadoFinanceiro" => 0,
             "isReservadoVeiculoProprio" => 0,
+            "isVistoDiretoria" => 0,
             "status" => "Aguardando envio para o Gestor"
         );
 
