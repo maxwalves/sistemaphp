@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,6 +13,7 @@
 
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        
         <!-- CSS Bootstrap -->
         <script src="{{asset('/js/bootstrap.bundle.min.js')}}"></script>
         <link href="{{asset('/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -21,6 +23,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
         <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+        
         <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css" />
         <script src="https://cdn.tailwindcss.com"></script>
 
@@ -34,11 +37,13 @@
         <link href="{{asset('/css/sidebars.css')}}" rel="stylesheet">
         <script src="{{asset('/js/sidebars.js')}}"></script>
 
-       
+        {{-- Tailwind CSS - Flowbite --}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js"></script>
                 
             
     </head>
-    <body class="antialiased" >
+    <body  >
         <!-- HEADER MODELO BOOTSTRAP-->
         <header class="p-3 mb-3 border-bottom">
                 <div class="container">
@@ -79,7 +84,6 @@
                                 @can('view-users', $user)
                                     <li><a class="dropdown-item" href="/users/users">Gerenciar usuários</a></li>
                                 @endcan
-                                    
                                     
                                     <li><a class="dropdown-item" href="/veiculosProprios/veiculosProprios">Meus veículos</a></li>
                                     <li><a class="dropdown-item" href="/veiculosParanacidade/veiculosParanacidade">Veículos Paranacidade</a></li>
@@ -130,6 +134,11 @@
                                 <li class="nav-item">
                                 <a class="nav-link" href="#">Relatórios gerenciais</a>
                                 </li>
+                                @can('aprov-avs-gestor', $user)
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/avs/autGestor">Autorizações de AV pendentes</a>
+                                    </li>
+                                @endcan
                             </ul>
                         </div>
                     </div>
@@ -156,10 +165,7 @@
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <link rel="stylesheet" href="{{asset('/css/styles.css')}}">
 
-        <footer class="footer items-center p-4 bg-neutral text-neutral-content">
-        <address class="adr">
-            <p><span class="street-address">Paranacidade </p>
-        </footer>
+        
 
         {{--
         <script src="{‌{ asset('js/app.js') }}" type="text/javascript"></script>
@@ -181,4 +187,5 @@
         @endif
     </body>
 
+    
 </html>

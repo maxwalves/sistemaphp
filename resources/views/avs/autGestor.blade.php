@@ -71,26 +71,11 @@
                 <td> {{$av->prioridade}} </td>
                 <td> {{$av->status}} </td>
                 <td> 
-                    @if($av->isEnviadoUsuario == 0)
-                        <div class="opcoesGerenciarAv">
-                            <a href="/avs/edit/{{ $av->id }}" class="btn btn-success btn-sm"
-                                style="width: 110px">  Editar</a>
-                            <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                                style="width: 110px"> Ver</a> 
-                            <a href="/rotas/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                                style="width: 110px"> Rotas</a> 
-                            <form action="/avs/{{ $av->id }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-active btn-accent btn-sm"
-                                style="width: 110px" > Deletar</button>
-                            </form>
-                        </div>
-                    @else
-                    <label for="my-modal" data-av="{{ json_encode($av) }}" class="btn btn-active btn-warning btn-sm">Voltar AV e editar</label>
-                    <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                        style="width: 110px"> Ver</a> 
-                    @endif
+                    <div class="opcoesGerenciarAv">
+                        <a href="/avs/verFluxoGestor/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                            style="width: 110px"> Ver</a> 
+                        
+                    </div>
                 </td>
             </tr>
             @endforeach
@@ -108,7 +93,7 @@
             <div class="modal-action">
             
             <a class="btn btn-error btn-sm" id="btn-submit-modal"
-                style="width: 200px">  Voltar av e editar</a>
+                style="width: 200px">  Voltar AV e editar</a>
             
             <label for="my-modal" class="btn btn-success btn-sm" style="width: 100px">Não</label>
             </div>

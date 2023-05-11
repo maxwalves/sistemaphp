@@ -37,6 +37,13 @@ Route::get('/avs/edit/{id}', [ControladorAv::class, 'edit'])->middleware('auth')
 Route::put('/avs/update/{id}', [ControladorAv::class, 'update'])->middleware('auth');
 Route::put('/avs/enviarGestor/{id}', [ControladorAv::class, 'enviarGestor'])->middleware('auth');
 Route::get('/avs/concluir/{id}', [ControladorAv::class, 'concluir'])->middleware('auth');
+Route::get('/avs/fluxo/{id}', [ControladorAv::class, 'verFluxo'])->middleware('auth');
+Route::get('/avs/verFluxoGestor/{id}', [ControladorAv::class, 'verFluxoGestor'])->middleware('auth');
+Route::get('/avs/voltarAv/{id}', [ControladorAv::class, 'voltarAv'])->middleware('auth');
+Route::get('/avs/autGestor', [ControladorAv::class, 'autGestor'])->middleware('auth');
+Route::put('/avs/gestorAprovarAv', [ControladorAv::class, 'gestorAprovarAv'])->middleware('auth');
+Route::put('/avs/gestorReprovarAv', [ControladorAv::class, 'gestorReprovarAv'])->middleware('auth');
+Route::get('/avs/verDetalhesAv/{id}', [ControladorAv::class, 'verDetalhesAv'])->middleware('auth');
 
 //---------------------------------------------------------------- TESTES
 Route::get('/contact', function () {

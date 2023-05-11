@@ -70,13 +70,12 @@
 }
 
 body {
-    
-    padding-bottom: 150px;
     position: relative;
+    min-height: 150vh;
 }
 
 main {
-    min-height: 130vh;
+    min-height: 150vh;
 }
 
 header{

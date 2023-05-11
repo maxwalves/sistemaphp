@@ -21,7 +21,7 @@
                     <p class="card-participants"> <strong> Status: </strong> {{ $avs[$i]->status }} </p>
                     <p class="card-participants"> <strong> Comentários: </strong> {{ $avs[$i]->comentario }} </p>
                     <p class="card-participants"> <strong> Prioridade: </strong> {{ $avs[$i]->prioridade }} </p>
-                    <a href="/avs/show/{{ $avs[$i]->id }}" class="btn btn-primary">Saber Mais</a>
+                    <a href="/avs/verDetalhesAv/{{ $avs[$i]->id }}" class="btn btn-primary">Saber Mais</a>
                 </div> 
             </div>
             <!-- Verifica se existem mais de 4 AV e mostra apenas 4 -->

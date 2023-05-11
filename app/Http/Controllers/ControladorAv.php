@@ -8,6 +8,8 @@ use App\Models\Objetivo;
 use App\Models\VeiculoProprio;
 use App\Models\VeiculoParanacidade;
 use App\Models\Rota;
+use App\Models\User;
+use App\Models\Historico;
 use DateTime;
 
 class ControladorAv extends Controller
@@ -44,6 +46,146 @@ class ControladorAv extends Controller
         $objetivos = Objetivo::all();
         $veiculosParanacidade = VeiculoParanacidade::all(); // Fazer filtro para apresentar somentes os ativos
         return view('avs.create', ['objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'veiculosParanacidade' => $veiculosParanacidade, 'user'=> $user]);
+    }
+    public function verFluxo($id){
+
+        $objetivos = Objetivo::all();
+        $historicos = Historico::all();
+        $users = User::all();
+
+        $user = auth()->user();
+
+        $av = Av::findOrFail($id);
+
+        $user = auth()->user();
+        $veiculosProprios = $user->veiculosProprios;
+
+        if($user->id != $av->user->id) {
+            return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
+        }
+
+        return view('avs.fluxo', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'historicos'=> $historicos, 'users'=> $users]);
+
+    }
+
+    public function verFluxoGestor($id){
+
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $users = User::all();
+        $historicos = [];
+        $user = auth()->user();
+
+        $av = Av::findOrFail($id);
+
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        $user = auth()->user();
+        $veiculosProprios = $user->veiculosProprios;
+
+        return view('avs.verFluxoGestor', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'historicos'=> $historicos, 'users'=> $users]);
+
+    }
+
+    public function verDetalhesAv($id){
+
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $historicos = [];
+
+        $users = User::all();
+
+        $user = auth()->user();
+
+        $av = Av::findOrFail($id);
+
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        $user = auth()->user();
+        $veiculosProprios = $user->veiculosProprios;
+
+        return view('avs.verDetalhesAv', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'historicos'=> $historicos, 'users'=> $users]);
+
+    }
+
+    public function gestorAprovarAv(Request $request){
+
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+        
+        $avs = Av::all();
+        $isDiretoria = false;
+        $dados = [];
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "Aprovado pelo Gestor";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Gestor";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+        
+        foreach($avs as $avAtual){
+            foreach($avAtual->rotas as $rota){
+                if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){
+                    $isDiretoria = true;
+                }
+            }
+        }
+        if($isDiretoria==true){
+            $dados = array(
+                "isAprovadoGestor" => 1,
+                "status" => "Aguardando aprovação Diretoria Executiva",
+            );
+        }
+        else{
+            $dados = array(
+                "isAprovadoGestor" => 1,
+                "status" => "Aguardando reserva Secretaria"
+            );
+        }
+        
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+
+        return redirect('/avs/autGestor')->with('msg', 'AV aprovada!');
+    }
+
+    public function gestorReprovarAv(Request $request){
+        $av = Av::findOrFail($request->get('id'));
+        $avs = Av::all();
+        $user = auth()->user();
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "Reprovado pelo Gestor";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Gestor";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+
+        $dados = array(
+            "isEnviadoUsuario" => 0,
+            "isAprovadoGestor" => 0,
+            "status" => "Aguardando envio para o Gestor"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+        return redirect('/avs/avs')->with('msg', 'AV aprovada!');
     }
 
     public function store(Request $request)
@@ -437,6 +579,9 @@ class ControladorAv extends Controller
 
     public function dashboard()
     {
+
+        $user = auth()->user();
+
         $search = request('search');
 
         if ($search) {
@@ -450,7 +595,7 @@ class ControladorAv extends Controller
         $user = auth()->user();
         $avs = $user->avs;
 
-        return view('avs.dashboard', ['avs' => $avs], ['search' => $search]);
+        return view('avs.dashboard', ['avs' => $avs], ['search' => $search, 'user'=> $user]);
     }
 
     public function destroy($id)
@@ -480,14 +625,78 @@ class ControladorAv extends Controller
 
     public function enviarGestor(Request $request)
     {
-        $data = $request->all();
+        $dados = array(
+            "valorExtraReais" => $request->valorExtraReais,
+            "valorExtraDolar" => $request->valorExtraDolar,
+            "justificativaValorExtra"=>$request->justificativaValorExtra,
+            "status"=>"AV aguardando aprovação do Gestor"
+        );
 
-        //dd($data);
+        $av = Av::findOrFail($request->id);
+        $user = auth()->user();
 
-        Av::findOrFail($request->id)->update($data);
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "Aguardando avaliação do Gestor";
+        $historico->comentario = "Envio de AV para gestor";
+        $historico->perfilDonoComentario = "Usuário";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
 
-        return redirect('/avs/avs')->with('msg', 'av editado com sucesso!');
+        $dados["isEnviadoUsuario"] = 1;
+
+        //dd($dados);
+
+        Av::findOrFail($request->id)->update($dados);
+        $historico->save();
+
+        return redirect('/avs/avs')->with('msg', 'AV enviada ao gestor!');
     }
+
+    public function voltarAv($id){
+        
+        $av = Av::findOrFail($id);
+
+        $dados = array(
+            "isEnviadoUsuario" => 0,
+            "status" => "Aguardando envio para o Gestor"
+        );
+
+        //dd($dados);
+
+        Av::findOrFail($av->id)->update($dados);
+
+        return redirect('/avs/avs')->with('msg', 'AV atualizada!');
+
+    }
+
+    public function autGestor(){
+        
+        $user = auth()->user();
+        $avs = Av::all();
+        $users = User::all();
+        $usersFiltrados = [];
+        foreach ($users as $u){//Percorre todos os usuários do sistema
+            if($u->setor_id == $user->setor_id && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo
+                array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
+            }
+        }
+        
+        $avsFiltradas = [];
+        foreach($usersFiltrados as $uf){//Verifica todos os usuários encontrados
+            foreach($uf->avs as $av){//Percorre todas as Avs do usuário encontrado
+                if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==false){ //Se a av dele já foi enviada, mas ainda não autorizada, adiciona ao array de avs filtradas
+                    
+                    array_push($avsFiltradas, $av);
+                }
+            }
+        }
+        $avs = $avsFiltradas;
+        $objetivos = Objetivo::all();
+        return view('avs.autGestor', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
+    }
+    
 
     public function update(Request $request)
     {

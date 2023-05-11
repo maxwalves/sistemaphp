@@ -24,4 +24,14 @@ class UserPolicy
         }
     }
 
+    public function aprovAvsGestor(User $user)
+    {
+        $permission = Permission::where('name', 'aprov avs gestor')->first();
+        try {
+            return $user->hasPermissionTo($permission);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
 }

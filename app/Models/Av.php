@@ -40,7 +40,26 @@ class Av extends Model
         'user_id',
         'objetivo_id',
         'valorReais',
-        'valorDolar'
+        'valorDolar',
+        'isAprovadoGestor',
+        'isAprovadoCarroDiretoriaExecutiva',
+        'isAprovadoViagemInternacional',
+        'isRealizadoReserva',
+        'isAprovadoFinanceiro',
+        'isReservadoVeiculoProprio',
+        'isPrestacaoContasRealizada',
+        'isFinanceiroAprovouPC',
+        'isGestorAprovouPC',
+        'isAcertoContasRealizado',
+        'usuario_gestor',
+        'usuario_diretoria',
+        'usuario_secretaria',
+        'usuario_financeiro',
+        'usuario_frota',
+        'usuario_financeiro_pc',
+        'usuario_gestor_pc',
+        'usuario_fin_ac',
+        'isEnviadoUsuario'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio', 'deleted_at'];
