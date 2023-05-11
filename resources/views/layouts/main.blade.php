@@ -136,9 +136,15 @@
                                 </li>
                                 @can('aprov-avs-gestor', $user)
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/avs/autGestor">Autorizações de AV pendentes</a>
+                                        <a class="nav-link" href="/avs/autGestor">Autorizações de AV pendentes Gestor</a>
                                     </li>
                                 @endcan
+                                @can('aprov-avs-diretoria', $user)
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/avs/autDiretoria">Autorizações de AV pendentes Diretoria</a>
+                                    </li>
+                                @endcan
+
                             </ul>
                         </div>
                     </div>

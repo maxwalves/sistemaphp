@@ -67,7 +67,7 @@
                 <td> {{$av->status}} </td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/verFluxoGestor/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                        <a href="/avs/verFluxoDiretoria/{{ $av->id }}" class="btn btn-secondary btn-sm"
                             style="width: 110px"> Ver</a> 
                         
                     </div>

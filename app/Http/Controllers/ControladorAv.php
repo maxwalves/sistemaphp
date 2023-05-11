@@ -75,8 +75,21 @@ class ControladorAv extends Controller
         $users = User::all();
         $historicos = [];
         $user = auth()->user();
+        $usersFiltrados = [];
+        $possoEditar = false;
 
         $av = Av::findOrFail($id);
+
+        foreach ($users as $u){//Percorre todos os usuários do sistema
+            if($u->setor_id == $user->setor_id && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo
+                array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
+            }
+        }
+        foreach ($usersFiltrados as $u){//Percorre todos os usuários do sistema
+            if($av->user_id == $u->id){//Verifica se o usuário do da AV atual pertence ao meu seu time
+                $possoEditar = true;
+            }
+        }
 
         foreach($historicosTodos as $historico){
             if($historico->av_id == $av->id){
@@ -84,11 +97,53 @@ class ControladorAv extends Controller
             }
         }
 
-        $user = auth()->user();
         $veiculosProprios = $user->veiculosProprios;
 
-        return view('avs.verFluxoGestor', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'historicos'=> $historicos, 'users'=> $users]);
+        if($possoEditar == true){
+            return view('avs.verFluxoGestor', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'historicos'=> $historicos, 'users'=> $users]);
+        }
+        else{
+            return redirect('/dashboard')->with('msg', 'Você não tem permissão para avaliar esta av!');
+        }
+        
+    }
 
+    public function verFluxoDiretoria($id){
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $users = User::all();
+        $historicos = [];
+        $user = auth()->user();
+        $usersFiltrados = [];
+        $possoEditar = false;
+
+        $av = Av::findOrFail($id);
+
+        foreach ($users as $u){//Percorre todos os usuários do sistema
+            if($u->setor_id == $user->setor_id && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo
+                array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
+            }
+        }
+        foreach ($usersFiltrados as $u){//Percorre todos os usuários do sistema
+            if($av->user_id == $u->id){//Verifica se o usuário do da AV atual pertence ao meu seu time
+                $possoEditar = true;
+            }
+        }
+
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        $veiculosProprios = $user->veiculosProprios;
+
+        if($possoEditar == true){
+            return view('avs.verFluxoDiretoria', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'historicos'=> $historicos, 'users'=> $users]);
+        }
+        else{
+            return redirect('/dashboard')->with('msg', 'Você não tem permissão para avaliar esta av!');
+        }
     }
 
     public function verDetalhesAv($id){
@@ -120,8 +175,7 @@ class ControladorAv extends Controller
 
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
-        
-        $avs = Av::all();
+
         $isDiretoria = false;
         $dados = [];
 
@@ -134,13 +188,13 @@ class ControladorAv extends Controller
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
         
-        foreach($avs as $avAtual){
-            foreach($avAtual->rotas as $rota){
-                if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){
-                    $isDiretoria = true;
-                }
+
+        foreach($av->rotas as $rota){
+            if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){
+                $isDiretoria = true;
             }
         }
+        
         if($isDiretoria==true){
             $dados = array(
                 "isAprovadoGestor" => 1,
@@ -150,10 +204,9 @@ class ControladorAv extends Controller
         else{
             $dados = array(
                 "isAprovadoGestor" => 1,
-                "status" => "Aguardando reserva Secretaria"
+                "status" => "Aguardando reserva pela Secretaria"
             );
         }
-        
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
@@ -185,7 +238,85 @@ class ControladorAv extends Controller
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
-        return redirect('/avs/avs')->with('msg', 'AV aprovada!');
+        return redirect('/avs/autGestor')->with('msg', 'AV reprovada!');
+    }
+
+    public function diretoriaAprovarAv(Request $request){
+
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+        
+        $avs = Av::all();
+        $isInternacional = false;
+        $isCarroProprio = false;
+        $dados = [];
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "Aprovado pela Diretoria";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Diretoria Executiva";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+        
+        foreach($avs as $avAtual){
+            foreach($avAtual->rotas as $rota){
+                if($rota["isViagemInternacional"]==1){
+                    $isInternacional = true;
+                }
+                else if($rota["isVeiculoProprio"]==1){
+                    $isCarroProprio = true;
+                }
+            }
+        }
+
+        $dados = array(
+            "isAprovadoGestor" => 1,
+            "isVistoDiretoria" =>1,
+            "status" => "Aguardando reserva pela Secretaria",
+            "isAprovadoViagemInternacional" => "0",
+            "isAprovadoCarroDiretoriaExecutiva" => "0",
+        );
+        if($isInternacional==true){
+            $dados['isAprovadoViagemInternacional'] = 1;
+        }
+        else if($isCarroProprio == true){
+            $dados['isAprovadoCarroDiretoriaExecutiva'] = 1;
+        }
+        
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+
+        return redirect('/avs/autDiretoria')->with('msg', 'AV aprovada!');
+    }
+
+    public function diretoriaReprovarAv(Request $request){
+        $av = Av::findOrFail($request->get('id'));
+        $avs = Av::all();
+        $user = auth()->user();
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "Reprovado pela Diretoria";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Diretoria Executiva";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+
+        $dados = array(
+            "isEnviadoUsuario" => 0,
+            "isAprovadoGestor" => 0,
+            "status" => "Aguardando envio para o Gestor"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+        return redirect('/avs/autDiretoria')->with('msg', 'AV reprovada!');
     }
 
     public function store(Request $request)
@@ -657,15 +788,29 @@ class ControladorAv extends Controller
     public function voltarAv($id){
         
         $av = Av::findOrFail($id);
-
+        $user = auth()->user();
         $dados = array(
             "isEnviadoUsuario" => 0,
+            "isAprovadoGestor" => 0,
+            "isRealizadoReserva" => 0,
+            "isAprovadoFinanceiro" => 0,
+            "isReservadoVeiculoProprio" => 0,
             "status" => "Aguardando envio para o Gestor"
         );
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "Usuário retornou AV a estado inicial";
+        $historico->comentario = "Retorno de AV para correção";
+        $historico->perfilDonoComentario = "Usuário";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
 
         //dd($dados);
 
         Av::findOrFail($av->id)->update($dados);
+        $historico->save();
 
         return redirect('/avs/avs')->with('msg', 'AV atualizada!');
 
@@ -695,6 +840,31 @@ class ControladorAv extends Controller
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();
         return view('avs.autGestor', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
+    }
+
+    public function autDiretoria(){
+        $user = auth()->user();
+        $avs = Av::all();
+        $users = User::all();
+
+        $avsFiltradas = [];
+        foreach($users as $uf){//Verifica todos os usuários
+            if($uf->id != $user->id){
+                foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isVistoDiretoria"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                        foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
+                            if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){//Se a viagem for internacional ou tiver veículo próprio
+                                array_push($avsFiltradas, $avAtual);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $avs = $avsFiltradas;
+        $objetivos = Objetivo::all();
+        return view('avs.autDiretoria', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
     }
     
 

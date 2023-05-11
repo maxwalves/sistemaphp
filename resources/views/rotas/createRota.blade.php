@@ -386,19 +386,11 @@
             <div class="row justify-content-center" style="background-color: lightgrey">
                 
                 <div class="col-md-6 offset-md-3">
-                    <div>
-                        <div class="btn-group" >
-                            <div id="btConfirmaRota">
-                                <input type="text" 
-                                    class="btn btn-active btn-secondary" value="Confirma dados!" onClick="confirmaDados()">
-                            </div>
-                        </div>
-                    </div>
-                        
+                                            
                     <div>
                         <div id="camposFinais" hidden="true">
                             <div class="form-group" >
-                                <label for="isReservaHotel" class="control-label">Você vai precisar de reserva de hotel?</label>
+                                <label for="isReservaHotel" class="control-label">Você vai precisar de reserva de hotel no destino?</label>
                                 <br>
                                     <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('isReservaHotel') ? 'is-invalid' :''}}" 
                                         id="isReservaHotel" name="isReservaHotel" >
@@ -492,35 +484,32 @@
         });
 
         function gerenciaNacionalInternacional(){
+            
             var isViagemInternacional = document.getElementById("isViagemInternacional");
-            var botaoConfirmaRota = document.getElementById("btConfirmaRota");
+            
+            document.getElementById("camposFinais").hidden = false;
+            document.getElementById("btSalvarRota").hidden = false;
 
             if(isViagemInternacional.value=="0") {
                 resetarCampoOrigemInternacional();
                 resetarCampoDestinoInternacional();
                 document.getElementById("isNacional").hidden = false;
                 document.getElementById("isInternacional").hidden = true;
-                botaoConfirmaRota.hidden = false;
+    
                 popularEstadoOrigemNacional();
                 popularEstadoDestinoNacional();
-                document.getElementById("camposFinais").hidden = true;
-                document.getElementById("btSalvarRota").hidden = true;
             }
             else if(isViagemInternacional.value=="1"){
                 resetarCampoOrigemNacional();
                 resetarCampoDestinoNacional();
                 document.getElementById("isNacional").hidden = true;
                 document.getElementById("isInternacional").hidden = false;
-                botaoConfirmaRota.hidden = false;
-                document.getElementById("camposFinais").hidden = true;
-                document.getElementById("btSalvarRota").hidden = true;
+                
             }
             else{
                 document.getElementById("isNacional").hidden = true;
                 document.getElementById("isInternacional").hidden = true;
-                botaoConfirmaRota.hidden = true;
-                document.getElementById("camposFinais").hidden = true;
-                document.getElementById("btSalvarRota").hidden = true;
+                
             }
         }
 
@@ -695,12 +684,6 @@
             popularEstadoDestinoNacional();
         }
 
-        function confirmaDados(){
-            document.getElementById("camposFinais").hidden = false;
-            document.getElementById("btConfirmaRota").hidden = true;
-            document.getElementById("btSalvarRota").hidden = false;
-        }
-
                 //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
         $(function(){
             
@@ -708,7 +691,6 @@
             document.getElementById("isNacional").hidden = true;
             document.getElementById("isInternacional").hidden = true;
             document.getElementById("btSalvarRota").hidden = true;
-            document.getElementById("btConfirmaRota").hidden = true;
         })
     </script>
 @endsection

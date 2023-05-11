@@ -5,7 +5,7 @@
 
 <div class="row justify-content-start" style="padding-left: 5%">
     <div class="col-3">
-        <a href="/avs/autGestor" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
+        <a href="/avs/autDiretoria" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
     </div>
 </div>
 <div id="av-create-container" class="container">
@@ -114,7 +114,7 @@
         <div class="divider"></div> 
         
         <div class="flex flex-row">
-            <form action="/avs/gestorAprovarAv" method="POST" enctype="multipart/form-data">
+            <form action="/avs/diretoriaAprovarAv" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                     <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
@@ -127,7 +127,7 @@
                     <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
             </form>
             
-            <form action="/avs/gestorReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
+            <form action="/avs/diretoriaReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
                 @csrf
                 @method('PUT')
                     <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
@@ -199,13 +199,14 @@
                 <br>
                 <h1 class="text-lg font-bold">Dados básicos:</h1>
                 <div class="stats stats-vertical shadow">
+                    
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                    </ion-icon> <strong>Nome do usuário: </strong> 
-                    @foreach($users as $u)
-                            @if ($u->id == $av->user_id)
-                                {{ $u->name }}
-                            @endif
-                    @endforeach
+                        </ion-icon> <strong>Nome do usuário: </strong> 
+                        @foreach($users as $u)
+                                @if ($u->id == $av->user_id)
+                                    {{ $u->name }}
+                                @endif
+                        @endforeach
                     </p>        
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
                     </ion-icon> <strong>E-mail do usuário: </strong> 
@@ -214,7 +215,7 @@
                                 {{ $u->email }}
                             @endif
                     @endforeach
-                    </p>
+                    </p>     
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="calendar-outline"></ion-icon> <strong>Data de criação: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="flag-outline"></ion-icon> <strong>Objetivo:</strong> {{ isset($objetivo->nomeObjetivo) ? $objetivo->nomeObjetivo : $av->outroObjetivo }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="alert-circle-outline"></ion-icon> <strong>Prioridade:</strong> {{ $av->prioridade }} </p>

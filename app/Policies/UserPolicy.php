@@ -34,4 +34,14 @@ class UserPolicy
         }
     }
 
+    public function aprovAvsDiretoria(User $user)
+    {
+        $permission = Permission::where('name', 'aprov avs diretoria')->first();
+        try {
+            return $user->hasPermissionTo($permission);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
 }
