@@ -48,6 +48,7 @@ Route::get('/avs/autDiretoria', [ControladorAv::class, 'autDiretoria'])->middlew
 Route::get('/avs/verFluxoDiretoria/{id}', [ControladorAv::class, 'verFluxoDiretoria'])->middleware('auth');
 Route::put('/avs/diretoriaAprovarAv', [ControladorAv::class, 'diretoriaAprovarAv'])->middleware('auth');
 Route::put('/avs/diretoriaReprovarAv', [ControladorAv::class, 'diretoriaReprovarAv'])->middleware('auth');
+Route::get('/avs/autSecretaria', [ControladorAv::class, 'autSecretaria'])->middleware('auth');
 
 //---------------------------------------------------------------- TESTES
 Route::get('/contact', function () {

@@ -866,6 +866,40 @@ class ControladorAv extends Controller
         $objetivos = Objetivo::all();
         return view('avs.autDiretoria', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
     }
+
+    public function autSecretaria(){
+        $user = auth()->user();
+        $avs = Av::all();
+        $users = User::all();
+
+        $avsFiltradas = [];
+        foreach($users as $uf){//Verifica todos os usuários
+            if($uf->id != $user->id){//Se  o usuário não for você
+                foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                        $isNecessarioAvaliacaoDiretoria = false;
+                        $passouPelaDiretoria = false;
+                        foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
+                            if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){//Se a viagem for internacional ou tiver veículo próprio
+                                $isNecessarioAvaliacaoDiretoria = true;
+
+                                if($avAtual["isVistoDiretoria"]==true)
+                                {
+                                    $passouPelaDiretoria = true;
+                                }
+                            }
+                        }
+                        if(($isNecessarioAvaliacaoDiretoria == true && $passouPelaDiretoria == true) || $isNecessarioAvaliacaoDiretoria == false){
+                            array_push($avsFiltradas, $avAtual);
+                        }
+                    }
+                }
+            }
+        }
+        $avs = $avsFiltradas;
+        $objetivos = Objetivo::all();
+        return view('avs.autSecretaria', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
+    }
     
 
     public function update(Request $request)

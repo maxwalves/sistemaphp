@@ -122,26 +122,31 @@
                         <div class="collapse navbar-collapse" id="navbarsExample09">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                <a class="nav-link" href="/">Início</a>
+                                <a class="btn btn-active btn-success rounded-none" href="/">Início</a>
                                 </li>
                                 </li>
                                 <li class="nav-item">
-                                <a class="nav-link" href="/avs/avs">Autorizações de viagem</a>
+                                <a class="btn btn-active btn-success rounded-none" href="/avs/avs">Autorizações de viagem</a>
                                 </li>
                                 <li class="nav-item">
-                                <a class="nav-link" href="#">Prestação de contas</a>
+                                <a class="btn btn-active btn-success rounded-none" href="#">Prestação de contas</a>
                                 </li>
                                 <li class="nav-item">
-                                <a class="nav-link" href="#">Relatórios gerenciais</a>
+                                <a class="btn btn-active btn-success rounded-none" href="#">Relatórios gerenciais</a>
                                 </li>
                                 @can('aprov-avs-gestor', $user)
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/avs/autGestor">Autorizações de AV pendentes Gestor</a>
+                                        <a class="btn btn-active rounded-none" href="/avs/autGestor">Autorizações de AV pendentes Gestor</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-diretoria', $user)
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/avs/autDiretoria">Autorizações de AV pendentes Diretoria</a>
+                                        <a class="btn btn-active btn-accent rounded-none" href="/avs/autDiretoria">Autorizações de AV pendentes Diretoria</a>
+                                    </li>
+                                @endcan
+                                @can('aprov-avs-secretaria', $user)
+                                    <li class="nav-item">
+                                        <a class="btn btn-active btn-accent bg-info rounded-none" href="/avs/autSecretaria">Autorizações de AV pendentes Secretaria</a>
                                     </li>
                                 @endcan
 

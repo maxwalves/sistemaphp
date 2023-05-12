@@ -44,4 +44,14 @@ class UserPolicy
         }
     }
 
+    public function aprovAvsSecretaria(User $user)
+    {
+        $permission = Permission::where('name', 'aprov avs secretaria')->first();
+        try {
+            return $user->hasPermissionTo($permission);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
 }
