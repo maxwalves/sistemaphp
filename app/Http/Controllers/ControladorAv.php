@@ -1117,7 +1117,7 @@ class ControladorAv extends Controller
         $user = auth()->user();
         $avs = $user->avs;
 
-        return view('avs.dashboard', ['avs' => $avs], ['search' => $search, 'user'=> $user]);
+        return view('welcome', ['avs' => $avs, 'search' => $search, 'user'=> $user]);
     }
 
     public function destroy($id)
