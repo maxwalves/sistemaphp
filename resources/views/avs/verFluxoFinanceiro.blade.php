@@ -3,16 +3,32 @@
 @section('title', 'Editando: ' . $av->id)
 @section('content')
 
-<div class="row justify-content-start" style="padding-left: 5%">
-    <div class="col-3">
-        <a href="/avs/avs" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
+    <div class="row justify-content-start" style="padding-left: 5%">
+        <div class="col-3">
+            <a href="/avs/autFinanceiro" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
+        </div>
     </div>
-</div>
-<div id="av-create-container" class="container">
+    <div id="av-create-container" class="container">
     
         
         <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong> {{ $av->id }}</h1>
         <h1 style="font-size: 24px"><strong>Status atual:</strong> {{ $av->status }}</h1>
+        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+        </ion-icon> <strong>Nome do usuário: </strong> 
+        @foreach($users as $u)
+                @if ($u->id == $av->user_id)
+                    {{ $u->name }}
+                @endif
+        @endforeach
+        </p>        
+        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+        </ion-icon> <strong>E-mail do usuário: </strong> 
+        @foreach($users as $u)
+                @if ($u->id == $av->user_id)
+                    {{ $u->email }}
+                @endif
+        @endforeach
+        </p>  
 
             <div >
                 <label for="my-modal-3" class="btn">Histórico</label>
@@ -25,77 +41,142 @@
             <div class="divider"></div> 
         
 
-            <div class="col-md-10 offset-md-0">
-                <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
-                <table id="tabelaRota" class="display nowrap" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Número</th>
-                            <th>Tipo</th>
-                            <th>Cidade de saída</th>
-                            <th>Data/Hora de saída</th>
-                            <th>Cidade de chegada</th>
-                            <th>Data/Hora de chegada</th>
-                            <th>Hotel?</th>
-                            <th>Tipo de transporte</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($av->rotas as $rota)
-                        <tr>
-                            <td> {{$rota->id}} </td>
-                            <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
-                            <td> 
-                                @if($rota->isAereo == 1)
-                                    <img src="{{asset('/img/aviaosubindo.png')}}" style="width: 40px" >
-                                @endif
+        <div class="col-md-12 offset-md-0">
+            <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
+            <table id="tabelaRota" class="display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Tipo</th>
+                        <th>Cidade de saída</th>
+                        <th>Data/Hora de saída</th>
+                        <th>Cidade de chegada</th>
+                        <th>Data/Hora de chegada</th>
+                        <th>Hotel?</th>
+                        <th>Tipo de transporte</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($av->rotas as $rota)
+                    <tr>
+                        <td> {{$rota->id}} </td>
+                        <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
+                        <td> 
+                            @if($rota->isAereo == 1)
+                                <img src="{{asset('/img/aviaosubindo.png')}}" style="width: 40px" >
+                            @endif
+        
+                            @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+                            @endif
+        
+                            @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                            @endif
+        
+                            {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
+                            
+                        </td>
+                        <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
+        
+                        <td> 
+                            @if($rota->isAereo == 1)
+                                <img src="{{asset('/img/aviaodescendo.png')}}" style="width: 40px" >
+                            @endif
+        
+                            @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+                            @endif
+        
+                            @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                            @endif
+        
+                            {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
+                        </td>
+        
+                        <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
+                        <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
+                        <td> 
+                            {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
+                            {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
+                            {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
+                            {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
+                            {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
             
-                                @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                    <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
-                                @endif
-            
-                                @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                    <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
-                                @endif
-            
-                                {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
-                                
-                            </td>
-                            <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
-            
-                            <td> 
-                                @if($rota->isAereo == 1)
-                                    <img src="{{asset('/img/aviaodescendo.png')}}" style="width: 40px" >
-                                @endif
-            
-                                @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                    <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
-                                @endif
-            
-                                @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                    <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
-                                @endif
-            
-                                {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
-                            </td>
-            
-                            <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
-                            <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
-                            <td> 
-                                {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
-                                {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                                {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
-                                {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
-                                {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                
-              </div>
+        </div>
 
         <div class="divider"></div> 
+
+        <div class="col-3">
+            <strong>Adicionar Comprovante de adiantamento</strong> 
+            <label for="my-modal-6" class="btn btn-active btn-success"><ion-icon name="add-circle-outline" size="large"></ion-icon></label>
+        </div>
+        <div class="col-md-6 offset-md-0">
+            <h1 style="font-size: 24px"><strong>Comprovante de adiantamentos: </strong></h1>
+            <table id="minhaTabela2" class="display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Anexo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($anexos as $anexo)
+                        <tr>
+                            <td> {{$anexo->descricao}} </td>
+                        
+                            <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexo->anexoFinanceiro) }}" 
+                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                            
+                            <td>
+                                <form action="/avs/deletarAnexoFinanceiro/{{ $anexo->id }}/{{ $av->id }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-active btn-accent btn-sm"
+                                    style="width: 110px" > Deletar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <div class="divider"></div> 
+        
+        <div class="flex flex-row">
+            <form action="/avs/financeiroAprovarAv" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                    <label for="comentario">Comentário no envio: </label>
+                    <br>
+                    <textarea type="text" class="textarea textarea-bordered h-24" 
+                        name="comentario" style="width: 200px"
+                        id="comentario" placeholder="Comentário"></textarea>
+
+                    <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
+            </form>
+            
+            <form action="/avs/financeiroReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
+                @csrf
+                @method('PUT')
+                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                    <label for="comentario">Voltar AV para o usuário: </label>
+                    <br>
+                    <textarea type="text" class="textarea textarea-bordered h-24" 
+                        name="comentario" style="width: 200px"
+                        id="comentario" placeholder="Comentário"></textarea>
+                    <button type="submit" class="btn btn-active btn-error">Reprovar AV</button>
+            </form>
+        </div>
 
     </div>
 
@@ -135,7 +216,6 @@
                                         <td>{{ $u->name }}</td>
                                     @endif
                                 @endforeach
-                                
                             </tr>
                     @endforeach
     
@@ -157,6 +237,23 @@
                 <br>
                 <h1 class="text-lg font-bold">Dados básicos:</h1>
                 <div class="stats stats-vertical shadow">
+                    
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+                        </ion-icon> <strong>Nome do usuário: </strong> 
+                        @foreach($users as $u)
+                                @if ($u->id == $av->user_id)
+                                    {{ $u->name }}
+                                @endif
+                        @endforeach
+                    </p>        
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+                    </ion-icon> <strong>E-mail do usuário: </strong> 
+                    @foreach($users as $u)
+                            @if ($u->id == $av->user_id)
+                                {{ $u->email }}
+                            @endif
+                    @endforeach
+                    </p>     
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="calendar-outline"></ion-icon> <strong>Data de criação: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="flag-outline"></ion-icon> <strong>Objetivo:</strong> {{ isset($objetivo->nomeObjetivo) ? $objetivo->nomeObjetivo : $av->outroObjetivo }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="alert-circle-outline"></ion-icon> <strong>Prioridade:</strong> {{ $av->prioridade }} </p>
@@ -209,7 +306,7 @@
                 <div style="padding-left: 10px">
 
                     <ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0">
-                        <li class="flex items-center text-gray-600 dark:text-gray-400 space-x-2.5">
+                        <li class="flex items-center text-blue-600 dark:text-blue-500 space-x-2.5">
                             @if($av->isEnviadoUsuario == 1)
                                 <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
                                     <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
@@ -246,7 +343,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    3
+                                    -
                                 </span>
                             @endif
                             <span>
@@ -269,7 +366,7 @@
                                 <div class="badge badge-outline">Realiza reservas</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
+                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 border-2 border-black">
                             @if($av->isAprovadoFinanceiro == 1)
                                 <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
                                     <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
@@ -306,16 +403,10 @@
                 <div style="padding-left: 10px">
     
                     <ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0">
-                        <li class="flex items-center text-gray-600 dark:text-gray-400 space-x-2.5">
-                            @if($av->isAprovadoFinanceiro == 1 || $av->isReservadoVeiculoProprio == 1)
-                                <span class="flex items-center justify-center w-8 h-8 text-gray-600 dark:text-gray-400 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <ion-icon size="large" name="arrow-forward-circle-outline"></ion-icon>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-gray-400">
-                                    7
-                                </span>
-                            @endif
+                        <li class="flex items-center text-blue-600 dark:text-blue-500 space-x-2.5">
+                            <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-gray-400">
+                                7
+                            </span>
                             <span>
                                 <h3 class="font-medium leading-tight">Viagem</h3>
                             </span>
@@ -386,6 +477,27 @@
             </div>
         </div>
     </div>
+
+    <input type="checkbox" id="my-modal-6" class="modal-toggle" />
+
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-1xl">
+            <div class="modal-content">
+                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <br>
+                <form action="/avs/gravarAdiantamento" method="POST" enctype="multipart/form-data">
+                    @csrf
+                        <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
+                        <input type="text" hidden="true" id="avId" name="avId" value="{{ $av->id }}">
+                        <br><br>
+                        <label for="descricao">Descrição</label>
+                        <input type="text" id="descricao" name="descricao" class="input input-bordered input-secondary w-full max-w-xs">
+                        <br><br>
+                        <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
+                </form>
+            </div>
+        </div>
+    </div>
     
 @endsection
 
@@ -407,8 +519,21 @@
         });
 
         $(document).ready(function(){
+            $('#minhaTabela2').DataTable({
+                    scrollY: 100,
+                    "language": {
+                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                        "zeroRecords": "Nada encontrado",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum registro disponível",
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                    }
+                });
+        });
+
+        $(document).ready(function(){
             $('#tabelaRota').DataTable({
-                    scrollY: 300,
+                    scrollY: 250,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",
@@ -419,6 +544,20 @@
                     }
                 });
         });
+
+        $(function(){
+            
+
+            const input = document.getElementById('arquivo1');
+            const botaoEnviar = document.getElementById('botaoEnviarArquivo1');
+
+            input.addEventListener('change', (event) => {
+                if (event.target.value !== '') {
+                botaoEnviar.removeAttribute('disabled');
+                }
+            });
+
+        })
 
     </script>
 @endsection

@@ -80,4 +80,9 @@ class Av extends Model
     {
         return $this->hasMany('App\Models\Rota');
     }
+
+    public function anexosFinanceiro()
+    {
+        return $this->hasMany('App\Models\AnexoFinanceiro');
+    }
 }

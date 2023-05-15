@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnexoRota;
+use App\Models\AnexoFinanceiro;
 use Illuminate\Http\Request;
 use App\Models\Av;
 use App\Models\Objetivo;
@@ -146,6 +148,270 @@ class ControladorAv extends Controller
         }
     }
 
+    public function verFluxoSecretaria($id){
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $users = User::all();
+        $historicos = [];
+        $user = auth()->user();
+        $usersFiltrados = [];
+        $possoEditar = false;
+        $veiculosProprios = $user->veiculosProprios;
+
+        $av = Av::findOrFail($id);
+
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+            $isNecessarioAvaliacaoDiretoria = false;
+            $passouPelaDiretoria = false;
+            foreach($av->rotas as $rota){//Percorre todas as rotas da AV
+                if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){//Se a viagem for internacional ou tiver veículo próprio
+                    $isNecessarioAvaliacaoDiretoria = true;
+
+                    if($av["isVistoDiretoria"]==true)
+                    {
+                        $passouPelaDiretoria = true;
+                    }
+                }
+            }
+            if(($isNecessarioAvaliacaoDiretoria == true && $passouPelaDiretoria == true) || $isNecessarioAvaliacaoDiretoria == false){
+                $possoEditar = true;
+            }
+        }
+
+
+        if($possoEditar == true){
+            return view('avs.verFluxoSecretaria', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'historicos'=> $historicos, 'users'=> $users]);
+        }
+        else{
+            return redirect('avs/autSecretaria')->with('msg', 'Você não tem permissão para avaliar esta av!');
+        }
+    }
+
+    public function verFluxoFinanceiro($id){
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $users = User::all();
+        $historicos = [];
+        $anexos = [];
+        $user = auth()->user();
+        $usersFiltrados = [];
+        $possoEditar = false;
+        $veiculosProprios = $user->veiculosProprios;
+        $anexosFinanceiro = AnexoFinanceiro::all();
+
+        $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
+        
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        foreach($anexosFinanceiro as $a){
+            if($a->av_id == $av->id){
+                array_push($anexos, $a);
+            }
+        }
+
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+                $possoEditar = true;
+        }
+
+
+        if($possoEditar == true){
+            return view('avs.verFluxoFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'historicos'=> $historicos, 'anexos' => $anexos, 'users'=> $users, 'userAv' => $userAv]);
+        }
+        else{
+            return redirect('avs/autFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
+        }
+    }
+
+    public function gravarReservaHotel(Request $request){
+        $rota = Rota::findOrFail($request->rotaId);
+        $av = Av::findOrFail($rota->av_id);
+        $userAv = User::findOrFail($av->user_id);
+        $user = auth()->user();
+        $users = User::all();
+        $anexoRota = new AnexoRota();
+        
+        if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
+        {
+            $requestFile = $request->arquivo1;
+
+            $extension = $requestFile->extension();
+
+            $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
+            
+            $requestFile->move(public_path('AVs/' . $userAv->name . '/' . $av->id . '/'), $fileName);
+
+            $anexoRota->anexoHotel = $fileName;
+            $anexoRota->usuario_id = $av->user_id;
+            $anexoRota->rota_id = $rota->id;
+            $anexoRota->descricao = $request->descricao;
+            $anexoRota->save();
+        }
+        return redirect('/avs/realizarReservas/' . $rota->id)->with('msg', 'Anexo salvo com sucesso!');
+    }
+
+    public function gravarReservaTransporte(Request $request){
+        $rota = Rota::findOrFail($request->get('rotaId'));
+        $av = Av::findOrFail($rota->av_id);
+        $userAv = User::findOrFail($av->user_id);
+        $user = auth()->user();
+        $users = User::all();
+        $anexoRota = new AnexoRota();
+
+        if($request->hasFile('arquivo2') && $request->file('arquivo2')->isValid())
+        {
+            $requestFile = $request->arquivo2;
+
+            $extension = $requestFile->extension();
+
+            $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
+            
+            $requestFile->move(public_path('AVs/' . $userAv->name . '/' . $av->id . '/'), $fileName);
+
+            $anexoRota->anexoTransporte = $fileName;
+            $anexoRota->usuario_id = $av->user_id;
+            $anexoRota->rota_id = $rota->id;
+            $anexoRota->descricao = $request->descricao;
+            $anexoRota->save();
+        }
+
+        return redirect('/avs/realizarReservas/' . $rota->id)->with('msg', 'Anexo salvo com sucesso!');
+    }
+
+    public function deletarAnexoHotel($id, $rotaId)
+    {
+        $rota = Rota::findOrFail($rotaId);
+        $av = Av::findOrFail($rota->av_id);
+        $userAv = User::findOrFail($av->user_id);
+        $anexoRota = AnexoRota::findOrFail($id);
+
+        $fileName = $anexoRota->anexoHotel;
+        
+        $filePath = public_path('AVs\\' . $userAv->name . '\\' . $av->id . '\\') . $fileName;
+        //dd($filePath);
+        if (file_exists($filePath)) {
+            //dd($filePath);
+            unlink($filePath);
+        }
+
+        $anexoRota->delete();
+        return redirect('/avs/realizarReservas/' . $rota->id)->with('msg', 'Anexo excluído com sucesso!');
+    }
+
+    public function deletarAnexoTransporte($id, $rotaId)
+    {
+        $rota = Rota::findOrFail($rotaId);
+        $av = Av::findOrFail($rota->av_id);
+        $userAv = User::findOrFail($av->user_id);
+        $anexoRota = AnexoRota::findOrFail($id);
+
+        $fileName = $anexoRota->anexoTransporte;
+        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '\\') . $fileName;
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $anexoRota->delete();
+
+        return redirect('/avs/realizarReservas/' . $rota->id)->with('msg', 'Anexo excluído com sucesso!');
+    }
+
+    public function deletarAnexoFinanceiro($id, $avId)
+    {
+        $av = Av::findOrFail($avId);
+        $userAv = User::findOrFail($av->user_id);
+        $anexoFin = AnexoFinanceiro::findOrFail($id);
+
+        $fileName = $anexoFin->anexoFinanceiro;
+        
+        $filePath = public_path('AVs\\' . $userAv->name . '\\' . $av->id . '\\adiantamentos' . '\\') . $fileName;
+        
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $anexoFin->delete();
+        return redirect('/avs/verFluxoFinanceiro/' . $av->id)->with('msg', 'Anexo excluído com sucesso!');
+    }
+
+    public function gravarAdiantamento(Request $request){
+        
+        $av = Av::findOrFail($request->get('avId'));
+        $userAv = User::findOrFail($av->user_id);
+        $user = auth()->user();
+        $users = User::all();
+        $anexoFinanceiro = new AnexoFinanceiro();
+        
+        if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
+        {
+            $requestFile = $request->arquivo1;
+
+            $extension = $requestFile->extension();
+
+            $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
+            
+            $requestFile->move(public_path('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/'), $fileName);
+
+            $anexoFinanceiro->anexoFinanceiro = $fileName;
+            $anexoFinanceiro->av_id = $av->id;
+            $anexoFinanceiro->descricao = $request->descricao;
+            $anexoFinanceiro->save();
+        }
+
+        return redirect('/avs/verFluxoFinanceiro/' . $av->id)->with('msg', 'Anexo salvo com sucesso!');
+    }
+
+    public function realizarReservas($id){
+        
+        $rota = Rota::findOrFail($id);
+        $anexos = $rota->anexos;
+        $av = Av::findOrFail($rota->av_id);
+        $userAv = User::findOrFail($av->user_id);
+        $users = User::all();
+        $user = auth()->user();
+        $possoEditar = false;
+
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+            $isNecessarioAvaliacaoDiretoria = false;
+            $passouPelaDiretoria = false;
+            foreach($av->rotas as $r){//Percorre todas as rotas da AV
+                if($r["isViagemInternacional"]==1 || $r["isVeiculoProprio"]==1){//Se a viagem for internacional ou tiver veículo próprio
+                    $isNecessarioAvaliacaoDiretoria = true;
+
+                    if($av["isVistoDiretoria"]==true)
+                    {
+                        $passouPelaDiretoria = true;
+                    }
+                }
+            }
+            if(($isNecessarioAvaliacaoDiretoria == true && $passouPelaDiretoria == true) || $isNecessarioAvaliacaoDiretoria == false){
+                $possoEditar = true;
+            }
+        }
+
+        //Puxar do banco todas os arquivos e passar para a tela
+
+
+
+        if($possoEditar == true){
+            return view('avs.realizarReservas', ['rota' => $rota, 'user'=> $user, 'av' => $av, 'users' => $users, 'anexos' => $anexos, 'userAv' => $userAv]);
+        }
+        else{
+            return redirect('avs/autSecretaria')->with('msg', 'Você não tem permissão para avaliar esta av!');
+        }
+    }
+
     public function verDetalhesAv($id){
 
         $objetivos = Objetivo::all();
@@ -239,6 +505,132 @@ class ControladorAv extends Controller
         $historico->save();
 
         return redirect('/avs/autGestor')->with('msg', 'AV reprovada!');
+    }
+
+    public function secretariaAprovarAv(Request $request){
+
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $dados = [];
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "Reserva realizada pela Secretaria";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Secretaria";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+        
+        $dados = array(
+            "isRealizadoReserva" => 1,
+            "status" => "Aguardando aprovação Financeiro"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+
+        return redirect('/avs/autSecretaria')->with('msg', 'AV aprovada pela secretaria!');
+    }
+
+    public function secretariaReprovarAv(Request $request){
+        
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "AV reprovada pela Secretaria";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Secretaria";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+
+        $dados = array(
+            "isEnviadoUsuario" => 0,
+            "isAprovadoGestor" => 0,
+            "isRealizadoReserva" => 0,
+            "status" => "Aguardando envio para o Gestor"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+        return redirect('/avs/autSecretaria')->with('msg', 'AV reprovada pela secretaria!');
+    }
+
+    public function financeiroAprovarAv(Request $request){
+
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $dados = [];
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "Adiantamento realizado pelo Financeiro";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Financeiro";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+        $isVeiculoProprio = false;
+
+        foreach ($av->rotas as $r){
+            if($r->isVeiculoProprio == true){
+                $isVeiculoProprio = true;
+            }
+        }
+
+        if($isVeiculoProprio ==true){
+            $dados = array(
+                "isAprovadoFinanceiro" => 1,
+                "status" => "Aguardando reserva de veículo pela administração"
+            );
+        }
+        else{
+            $dados = array(
+                "isAprovadoFinanceiro" => 1,
+                "status" => "Aguardando prestação de contas do usuário"
+            );
+        }
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+
+        return redirect('/avs/autFinanceiro')->with('msg', 'AV aprovada pelo financeiro!');
+    }
+
+    public function financeiroReprovarAv(Request $request){
+        
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "AV reprovada pelo Financeiro";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Financeiro";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+
+        $dados = array(
+            "isEnviadoUsuario" => 0,
+            "isAprovadoGestor" => 0,
+            "isRealizadoReserva" => 0,
+            "isAprovadoFinanceiro" =>0,
+            "status" => "Aguardando envio para o Gestor"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+        return redirect('/avs/autFinanceiro')->with('msg', 'AV reprovada pelo financeiro!');
     }
 
     public function diretoriaAprovarAv(Request $request){
@@ -876,7 +1268,7 @@ class ControladorAv extends Controller
         foreach($users as $uf){//Verifica todos os usuários
             if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
                         $isNecessarioAvaliacaoDiretoria = false;
                         $passouPelaDiretoria = false;
                         foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
@@ -900,7 +1292,28 @@ class ControladorAv extends Controller
         $objetivos = Objetivo::all();
         return view('avs.autSecretaria', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
     }
-    
+
+    public function autFinanceiro(){
+        $user = auth()->user();
+        $avs = Av::all();
+        $users = User::all();
+
+        $avsFiltradas = [];
+        foreach($users as $uf){//Verifica todos os usuários
+            if($uf->id != $user->id){//Se  o usuário não for você
+                foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==false ){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+
+                        array_push($avsFiltradas, $avAtual);
+                    }
+                }
+            }
+        }
+        $avs = $avsFiltradas;
+        $objetivos = Objetivo::all();
+        return view('avs.autFinanceiro', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
+    }
+
 
     public function update(Request $request)
     {

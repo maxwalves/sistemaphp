@@ -75,7 +75,7 @@ body {
 }
 
 main {
-    min-height: 150vh;
+    min-height: 200vh;
 }
 
 header{
@@ -168,6 +168,9 @@ footer p{
     padding: 10px;
 }
 
+#container_reserva{
+    min-height: 200vh;
+}
 
 /* av create page */
 #av-create-container {

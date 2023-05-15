@@ -54,4 +54,14 @@ class UserPolicy
         }
     }
 
+    public function aprovAvsFinanceiro(User $user)
+    {
+        $permission = Permission::where('name', 'aprov avs financeiro')->first();
+        try {
+            return $user->hasPermissionTo($permission);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
 }

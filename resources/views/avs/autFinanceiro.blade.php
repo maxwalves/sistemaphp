@@ -67,8 +67,8 @@
                 <td> {{$av->status}} </td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/verFluxoSecretaria/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                            style="width: 200px"> Realizar Reservas</a> 
+                        <a href="/avs/verFluxoFinanceiro/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                            style="width: 200px"> Fazer adiantamento</a> 
                         
                     </div>
                 </td>

@@ -49,6 +49,23 @@ Route::get('/avs/verFluxoDiretoria/{id}', [ControladorAv::class, 'verFluxoDireto
 Route::put('/avs/diretoriaAprovarAv', [ControladorAv::class, 'diretoriaAprovarAv'])->middleware('auth');
 Route::put('/avs/diretoriaReprovarAv', [ControladorAv::class, 'diretoriaReprovarAv'])->middleware('auth');
 Route::get('/avs/autSecretaria', [ControladorAv::class, 'autSecretaria'])->middleware('auth');
+Route::get('/avs/verFluxoSecretaria/{id}', [ControladorAv::class, 'verFluxoSecretaria'])->middleware('auth');
+Route::get('/avs/realizarReservas/{id}', [ControladorAv::class, 'realizarReservas'])->middleware('auth');
+Route::post('/avs/gravarReservaHotel', [ControladorAv::class,'gravarReservaHotel'])->middleware('auth');
+Route::post('/avs/gravarReservaTransporte', [ControladorAv::class,'gravarReservaTransporte'])->middleware('auth');
+Route::delete('/avs/deletarAnexoHotel/{id}/{rota}', [ControladorAv::class, 'deletarAnexoHotel'])->middleware('auth');
+Route::delete('/avs/deletarAnexoTransporte/{id}/{rota}', [ControladorAv::class, 'deletarAnexoTransporte'])->middleware('auth');
+Route::put('/avs/secretariaAprovarAv', [ControladorAv::class, 'secretariaAprovarAv'])->middleware('auth');
+Route::put('/avs/secretariaReprovarAv', [ControladorAv::class, 'secretariaReprovarAv'])->middleware('auth');
+
+Route::get('/avs/autFinanceiro', [ControladorAv::class, 'autFinanceiro'])->middleware('auth');
+Route::get('/avs/verFluxoFinanceiro/{id}', [ControladorAv::class, 'verFluxoFinanceiro'])->middleware('auth');
+Route::post('/avs/gravarAdiantamento', [ControladorAv::class,'gravarAdiantamento'])->middleware('auth');
+Route::delete('/avs/deletarAnexoFinanceiro/{id}/{avId}', [ControladorAv::class, 'deletarAnexoFinanceiro'])->middleware('auth');
+Route::put('/avs/financeiroAprovarAv', [ControladorAv::class, 'financeiroAprovarAv'])->middleware('auth');
+Route::put('/avs/financeiroReprovarAv', [ControladorAv::class, 'financeiroReprovarAv'])->middleware('auth');
+
+
 
 //---------------------------------------------------------------- TESTES
 Route::get('/contact', function () {

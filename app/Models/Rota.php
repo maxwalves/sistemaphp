@@ -48,4 +48,9 @@ class Rota extends Model
     {
         return $this->belongsTo('App\Models\Av');
     }
+
+    public function anexos()
+    {
+        return $this->hasMany('App\Models\AnexoRota');
+    }
 }

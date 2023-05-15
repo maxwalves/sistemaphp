@@ -149,6 +149,11 @@
                                         <a class="btn btn-active btn-accent bg-info rounded-none" href="/avs/autSecretaria">Autorizações de AV pendentes Secretaria</a>
                                     </li>
                                 @endcan
+                                @can('aprov-avs-financeiro', $user)
+                                    <li class="nav-item">
+                                        <a class="btn btn-active rounded-none" href="/avs/autFinanceiro">Autorizações de AV pendentes Financeiro</a>
+                                    </li>
+                                @endcan
 
                             </ul>
                         </div>
