@@ -24,7 +24,8 @@ class ControladorVeiculoParanacidade extends Controller
 
     public function create()
     {
-        return view('veiculosParanacidade.createVeiculoParanacidade');
+        $user = auth()->user();
+        return view('veiculosParanacidade.createVeiculoParanacidade', ['user'=> $user]);
     }
 
     public function store(Request $request)

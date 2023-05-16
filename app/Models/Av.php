@@ -60,7 +60,8 @@ class Av extends Model
         'usuario_gestor_pc',
         'usuario_fin_ac',
         'isEnviadoUsuario',
-        'isVistoDiretoria'
+        'isVistoDiretoria',
+        'isReservadoVeiculoParanacidade'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio', 'deleted_at'];

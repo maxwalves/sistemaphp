@@ -64,4 +64,14 @@ class UserPolicy
         }
     }
 
+    public function aprovAvsFrota(User $user)
+    {
+        $permission = Permission::where('name', 'aprov avs frota')->first();
+        try {
+            return $user->hasPermissionTo($permission);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
 }

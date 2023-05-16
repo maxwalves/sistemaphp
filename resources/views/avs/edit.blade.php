@@ -60,7 +60,7 @@
             <br>
 
             <div class="form-group">
-                <label for="prioridade" class="control-label">Qual é a Prioridade da sua viagem? (selecione)</label>
+                <label for="prioridade" class="control-label">Qual é a Prioridade da sua viagem? (selecione)</label><br>
                     <select class="select select-bordered w-full max-w-xs {{ $errors->has('prioridade') ? 'is-invalid' :''}}" 
                         id="prioridade" name="prioridade">
                         <option value="" name=""> Selecione</option>
@@ -75,90 +75,36 @@
                     </div>
                     @endif
             </div>
-
-            <div class="form-group">
-                <label for="isVeiculoProprio" class="control-label">Você vai utilizar veículo próprio? (selecione)</label>
-                <br>
-                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('isVeiculoProprio') ? 'is-invalid' :''}}" 
-                        id="isVeiculoProprio" name="isVeiculoProprio" onChange="ativaCampo()" required>
-                        <option value="0" name="0" {{ $av->isVeiculoProprio == "0" ? "selected='selected'" : ""}}> Não</option>
-                        <option value="1" name="1" {{ $av->isVeiculoProprio == "1" ? "selected='selected'" : ""}}> Sim</option>
-                    </select>
-
-                    @if ($errors->has('isVeiculoProprio'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('isVeiculoProprio') }}
-                    </div>
-                    @endif
-            </div>
-
-            <div class="form-group" id="selecaoVeiculo">
-                <label for="veiculoProprio_id" class="control-label" required>Selecione o veículo?</label>
-                <br>
-                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('veiculoProprio_id') ? 'is-invalid' :''}}" 
-                        id="veiculoProprio_id" name="veiculoProprio_id">
-                        <option value="" name=""> Selecione</option>
-                        @for($i = 0; $i < count($veiculosProprios); $i++)
-                            <div>
-                                <option value="{{ $veiculosProprios[$i]->id }}" {{ $av->veiculoProprio_id == $veiculosProprios[$i]->id ? "selected='selected'" : ""}}
-                                    name="{{ $veiculosProprios[$i]->id }}"> {{ $veiculosProprios[$i] ->modelo }} - {{ $veiculosProprios[$i] ->placa }} </option>
-                            </div>
-                        @endfor
-                    </select>
-
-                    @if ($errors->has('veiculoProprio_id'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('veiculoProprio_id') }}
-                    </div>
-                    @endif
-            </div>
-
-
-            <div class="form-group" id="temVeiculoEmpresa">
-                <label for="isVeiculoEmpresa" class="control-label" required>Você vai utilizar veículo do Paranacidade? (selecione)</label>
-                <br>
-                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('isVeiculoEmpresa') ? 'is-invalid' :''}}" 
-                        id="isVeiculoEmpresa" name="isVeiculoEmpresa">
-                        <option value="0" name="0" {{ $av->isVeiculoEmpresa == "0" ? "selected='selected'" : ""}}> Não</option>
-                        <option value="1" name="1" {{ $av->isVeiculoEmpresa == "1" ? "selected='selected'" : ""}}> Sim</option>
-                    </select>
-
-                    @if ($errors->has('isVeiculoEmpresa'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('isVeiculoEmpresa') }}
-                    </div>
-                    @endif
-            </div>
             
             <div class="form-group">
-                <label for="banco" class="control-label">Banco</label>
-                <input type="number" class="form-control" name="banco"
+                <label for="banco" class="control-label">Banco</label><br>
+                <input type="number" class="input input-bordered input-secondary w-full max-w-xs" name="banco"
                 id="banco" placeholder="Banco" value="{{$av->banco}}"> 
             </div>
 
             <div class="form-group">
-                <label for="agencia" class="control-label">Agência</label>
+                <label for="agencia" class="control-label">Agência</label><br>
                 <div class="input-group">
-                    <input type="number" class="form-control" name="agencia"
+                    <input type="number" class="input input-bordered input-secondary w-full max-w-xs" name="agencia"
                     id="agencia" placeholder="Agência" value="{{$av->agencia}}">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="conta" class="control-label">Conta</label>
-                <input type="number" class="form-control" name="conta"
+                <label for="conta" class="control-label">Conta</label><br>
+                <input type="number" class="input input-bordered input-secondary w-full max-w-xs" name="conta"
                 id="conta" placeholder="Conta" value="{{$av->conta}}">
             </div>
 
             <div class="form-group">
-                <label for="pix" class="control-label">Pix</label>
-                <input type="number" class="form-control" name="pix"
+                <label for="pix" class="control-label">Pix</label><br>
+                <input type="number" class="input input-bordered input-secondary w-full max-w-xs" name="pix"
                     id="pix" placeholder="Pix" value="{{$av->pix}}">
             </div>
 
             <div class="form-group">
-                <label for="comentario" class="control-label">Comentários</label>
-                <input type="text" class="form-control" name="comentario"
+                <label for="comentario" class="control-label">Comentários</label><br>
+                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="comentario"
                     id="comentario" placeholder="Comentário" value="{{$av->comentario}}">
             </div>
 

@@ -10,7 +10,7 @@
 </div>
 <div id="av-create-container" class="col-md-6 offset-md-3">
         <h2>Crie uma autorização de viagem!</h2>
-        <form action="/avs" method="POST" enctype="multipart/form-data">
+        <form action="/avs/gravarAv" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div class="form-group" id="nomeObjetivo">

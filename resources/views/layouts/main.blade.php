@@ -129,7 +129,7 @@
                                 <a class="btn btn-active btn-success rounded-none" href="/avs/avs">Autorizações de viagem</a>
                                 </li>
                                 <li class="nav-item">
-                                <a class="btn btn-active btn-success rounded-none" href="#">Prestação de contas</a>
+                                <a class="btn btn-active btn-success rounded-none" href="/avs/prestacaoContasUsuario">Prestação de contas</a>
                                 </li>
                                 <li class="nav-item">
                                 <a class="btn btn-active btn-success rounded-none" href="#">Relatórios gerenciais</a>
@@ -152,6 +152,11 @@
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
                                         <a class="btn btn-active rounded-none" href="/avs/autFinanceiro">Autorizações de AV pendentes Financeiro</a>
+                                    </li>
+                                @endcan
+                                @can('aprov-avs-frota', $user)
+                                    <li class="nav-item">
+                                        <a class="btn btn-active rounded-none" href="/avs/autAdmFrota">Autorizações de AV pendentes Adm Frota</a>
                                     </li>
                                 @endcan
 

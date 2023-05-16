@@ -31,6 +31,7 @@ Route::get('/avs/create', [ControladorAv::class, 'create'])->middleware('auth');
 Route::get('/avs/show/{id}', [ControladorAv::class, 'show'])->middleware('auth');
 
 Route::post('/avs', [ControladorAv::class,'store'])->middleware('auth');
+Route::post('/avs/gravarAv', [ControladorAv::class,'store'])->middleware('auth');
 
 Route::delete('/avs/{id}', [ControladorAv::class, 'destroy'])->middleware('auth');
 Route::get('/avs/edit/{id}', [ControladorAv::class, 'edit'])->middleware('auth');
@@ -40,14 +41,17 @@ Route::get('/avs/concluir/{id}', [ControladorAv::class, 'concluir'])->middleware
 Route::get('/avs/fluxo/{id}', [ControladorAv::class, 'verFluxo'])->middleware('auth');
 Route::get('/avs/verFluxoGestor/{id}', [ControladorAv::class, 'verFluxoGestor'])->middleware('auth');
 Route::get('/avs/voltarAv/{id}', [ControladorAv::class, 'voltarAv'])->middleware('auth');
+
 Route::get('/avs/autGestor', [ControladorAv::class, 'autGestor'])->middleware('auth');
 Route::put('/avs/gestorAprovarAv', [ControladorAv::class, 'gestorAprovarAv'])->middleware('auth');
 Route::put('/avs/gestorReprovarAv', [ControladorAv::class, 'gestorReprovarAv'])->middleware('auth');
 Route::get('/avs/verDetalhesAv/{id}', [ControladorAv::class, 'verDetalhesAv'])->middleware('auth');
+
 Route::get('/avs/autDiretoria', [ControladorAv::class, 'autDiretoria'])->middleware('auth');
 Route::get('/avs/verFluxoDiretoria/{id}', [ControladorAv::class, 'verFluxoDiretoria'])->middleware('auth');
 Route::put('/avs/diretoriaAprovarAv', [ControladorAv::class, 'diretoriaAprovarAv'])->middleware('auth');
 Route::put('/avs/diretoriaReprovarAv', [ControladorAv::class, 'diretoriaReprovarAv'])->middleware('auth');
+
 Route::get('/avs/autSecretaria', [ControladorAv::class, 'autSecretaria'])->middleware('auth');
 Route::get('/avs/verFluxoSecretaria/{id}', [ControladorAv::class, 'verFluxoSecretaria'])->middleware('auth');
 Route::get('/avs/realizarReservas/{id}', [ControladorAv::class, 'realizarReservas'])->middleware('auth');
@@ -65,7 +69,15 @@ Route::delete('/avs/deletarAnexoFinanceiro/{id}/{avId}', [ControladorAv::class, 
 Route::put('/avs/financeiroAprovarAv', [ControladorAv::class, 'financeiroAprovarAv'])->middleware('auth');
 Route::put('/avs/financeiroReprovarAv', [ControladorAv::class, 'financeiroReprovarAv'])->middleware('auth');
 
+Route::get('/avs/autAdmFrota', [ControladorAv::class, 'autAdmFrota'])->middleware('auth');
+Route::get('/avs/verFluxoAdmFrota/{id}', [ControladorAv::class, 'verFluxoAdmFrota'])->middleware('auth');
+Route::get('/avs/escolherVeiculo/{rota}/{veiculo}', [ControladorAv::class, 'escolherVeiculo'])->middleware('auth');
+Route::put('/avs/admFrotaAprovarAv', [ControladorAv::class, 'admFrotaAprovarAv'])->middleware('auth');
+Route::put('/avs/admFrotaReprovarAv', [ControladorAv::class, 'admFrotaReprovarAv'])->middleware('auth');
 
+
+Route::get('/avs/prestacaoContasUsuario', [ControladorAv::class, 'prestacaoContasUsuario'])->middleware('auth');
+Route::get('/avs/fazerPrestacaoContas/{id}', [ControladorAv::class, 'fazerPrestacaoContas'])->middleware('auth');
 
 //---------------------------------------------------------------- TESTES
 Route::get('/contact', function () {

@@ -193,6 +193,101 @@ class ControladorAv extends Controller
         }
     }
 
+    public function fazerPrestacaoContas($id){
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $users = User::all();
+        $historicos = [];
+        $anexos = [];
+        $user = auth()->user();
+        $usersFiltrados = [];
+        $possoEditar = false;
+        $veiculosProprios = $user->veiculosProprios;
+        $anexosFinanceiro = AnexoFinanceiro::all();
+
+        $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
+        
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        foreach($anexosFinanceiro as $a){
+            if($a->av_id == $av->id){
+                array_push($anexos, $a);
+            }
+        }
+
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+                $possoEditar = true;
+        }
+
+
+        if($possoEditar == true){
+            return view('avs.fazerPrestacaoContas', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'historicos'=> $historicos, 'anexos' => $anexos, 'users'=> $users, 'userAv' => $userAv]);
+        }
+        else{
+            return redirect('avs/autFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
+        }
+    }
+
+    public function verFluxoAdmFrota($id){
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $users = User::all();
+        $historicos = [];
+        $user = auth()->user();
+        $possoEditar = false;
+        $veiculosParanacidade = VeiculoParanacidade::all();
+
+        $av = Av::findOrFail($id);
+
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+
+            foreach($av->rotas as $rota){//Percorre todas as rotas da AV
+                if($rota["isVeiculoEmpresa"]==1){//Se a viage tiver veículo da empresa
+                    $possoEditar = true;
+                }
+            }
+        }
+
+        if($possoEditar == true){
+            return view('avs.verFluxoAdmFrota', ['av' => $av, 'objetivos' => $objetivos, 'veiculosParanacidade' => $veiculosParanacidade, 'user'=> $user, 'historicos'=> $historicos, 'users'=> $users]);
+        }
+        else{
+            return redirect('avs/autSecretaria')->with('msg', 'Você não tem permissão para avaliar esta av!');
+        }
+    }
+
+    public function escolherVeiculo($rota, $veiculo){
+
+        $rota = Rota::findOrFail($rota);
+        if($veiculo !=0){
+            $veiculoParanacidade = VeiculoParanacidade::findOrFail($veiculo);
+
+            $dados = array(
+                "veiculoParanacidade_id"=> $veiculoParanacidade->id
+            );
+        }
+        else{
+            $dados = array(
+                "veiculoParanacidade_id"=> null
+            );
+        }
+
+        $rota->update($dados);
+        return redirect('/avs/verFluxoAdmFrota/' . $rota->av_id)->with('msg', 'Veículo escolhido!');
+
+    }
+
     public function verFluxoFinanceiro($id){
         $objetivos = Objetivo::all();
         $historicosTodos = Historico::all();
@@ -577,15 +672,15 @@ class ControladorAv extends Controller
         $historico->usuario_id = $av->user_id;
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
-        $isVeiculoProprio = false;
+        $isVeiculoEmpresa = false;
 
         foreach ($av->rotas as $r){
-            if($r->isVeiculoProprio == true){
-                $isVeiculoProprio = true;
+            if($r->isVeiculoEmpresa == true){
+                $isVeiculoEmpresa = true;
             }
         }
 
-        if($isVeiculoProprio ==true){
+        if($isVeiculoEmpresa ==true){
             $dados = array(
                 "isAprovadoFinanceiro" => 1,
                 "status" => "Aguardando reserva de veículo pela administração"
@@ -708,6 +803,63 @@ class ControladorAv extends Controller
         $historico->save();
 
         return redirect('/avs/autDiretoria')->with('msg', 'AV reprovada!');
+    }
+
+    public function admFrotaAprovarAv(Request $request){
+
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $dados = [];
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "Veículo do Paranacidade reservado pela Adm Frota";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Adm Frota";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+        $isVeiculoEmpresa = false;
+
+        $dados = array(
+            "isReservadoVeiculoParanacidade" => true,
+            "status" => "Aguardando prestação de contas do usuário"
+        );
+        
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+        return redirect('/avs/autAdmFrota')->with('msg', 'AV aprovada pela Adm Frota!');
+    }
+
+    public function admFrotaReprovarAv(Request $request){
+        
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $historico = new Historico();
+        $historico->dataOcorrencia = new DateTime();
+        $historico->tipoOcorrencia = "AV reprovada pela Adm Frota";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Adm Frota";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+
+        $dados = array(
+            "isEnviadoUsuario" => 0,
+            "isAprovadoGestor" => 0,
+            "isRealizadoReserva" => 0,
+            "isAprovadoFinanceiro" =>0,
+            "isReservadoVeiculoParanacidade" => 0,
+            "status" => "Aguardando envio para o Gestor"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+        return redirect('/avs/autAdmFrota')->with('msg', 'AV reprovada pela Adm Frota!');
     }
 
     public function store(Request $request)
@@ -1291,6 +1443,64 @@ class ControladorAv extends Controller
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();
         return view('avs.autSecretaria', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
+    }
+
+    public function prestacaoContasUsuario(){
+        $user = auth()->user();
+        $avs = Av::all();
+        $users = User::all();
+
+        $avsFiltradas = [];
+        foreach($users as $uf){//Verifica todos os usuários
+            if($uf->id == $user->id){//Se o usuário for você
+                foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true){
+                        $isVeiculoEmpresa = false;
+                        foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
+                            if($rota["isVeiculoEmpresa"]==1){//Se a viagem tiver veículo da empresa
+                                if($avAtual["isReservadoVeiculoParanacidade"]==true){
+                                    $isVeiculoEmpresa = true;
+                                    array_push($avsFiltradas, $avAtual);
+                                    break;
+                                }
+                            }
+                        }
+                        if($isVeiculoEmpresa == false){
+                            array_push($avsFiltradas, $avAtual);
+                        }
+                    }
+                }
+            }
+        }
+        $avs = $avsFiltradas;
+        $objetivos = Objetivo::all();
+        return view('avs.prestacaoContasUsuario', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
+    }
+
+    public function autAdmFrota(){
+        $user = auth()->user();
+        $avs = Av::all();
+        $users = User::all();
+
+        $avsFiltradas = [];
+        foreach($users as $uf){//Verifica todos os usuários
+            if($uf->id != $user->id){//Se  o usuário não for você
+                foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isReservadoVeiculoParanacidade"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+
+                        foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
+                            if($rota["isVeiculoEmpresa"]==1){//Se a viagem tiver veículo da empresa
+                                array_push($avsFiltradas, $avAtual);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $avs = $avsFiltradas;
+        $objetivos = Objetivo::all();
+        return view('avs.autAdmFrota', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
     }
 
     public function autFinanceiro(){

@@ -3,12 +3,12 @@
 @section('title', 'Editando: ' . $av->id)
 @section('content')
 
-    <div class="row justify-content-start" style="padding-left: 5%">
-        <div class="col-3">
-            <a href="/avs/autFinanceiro" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
-        </div>
+<div class="row justify-content-start" style="padding-left: 5%">
+    <div class="col-3">
+        <a href="/avs/autAdmFrota" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
     </div>
-    <div id="av-create-container" class="container">
+</div>
+<div id="av-create-container" class="container">
     
         
         <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong> {{ $av->id }}</h1>
@@ -54,6 +54,8 @@
                         <th>Data/Hora de chegada</th>
                         <th>Hotel?</th>
                         <th>Tipo de transporte</th>
+                        <th>Veículo alocado</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,6 +106,16 @@
                             {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                             {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                         </td>
+                        <td>
+                            @foreach($veiculosParanacidade as $v)
+                                @if($rota->veiculoParanacidade_id == $v->id)
+                                {{ $v->modelo }} ({{ $v->placa }})
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            <label for="my-modal-6" data-rota="{{ $rota->id }}" class="btn btn-active btn-success">Alocar veículo</label>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -112,47 +124,9 @@
         </div>
 
         <div class="divider"></div> 
-
-        <div class="col-3">
-            <strong>Adicionar Comprovante de adiantamento</strong> 
-            <label for="my-modal-6" class="btn btn-active btn-success"><ion-icon name="add-circle-outline" size="large"></ion-icon></label>
-        </div>
-        <div class="col-md-6 offset-md-0">
-            <h1 style="font-size: 24px"><strong>Comprovante de adiantamentos: </strong></h1>
-            <table id="minhaTabela2" class="display nowrap" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Descrição</th>
-                        <th>Anexo</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($anexos as $anexo)
-                        <tr>
-                            <td> {{$anexo->descricao}} </td>
-                        
-                            <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexo->anexoFinanceiro) }}" 
-                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                            
-                            <td>
-                                <form action="/avs/deletarAnexoFinanceiro/{{ $anexo->id }}/{{ $av->id }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-active btn-accent btn-sm"
-                                    style="width: 110px" > Deletar</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
-        <div class="divider"></div> 
         
         <div class="flex flex-row">
-            <form action="/avs/financeiroAprovarAv" method="POST" enctype="multipart/form-data">
+            <form action="/avs/admFrotaAprovarAv" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                     <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
@@ -165,7 +139,7 @@
                     <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
             </form>
             
-            <form action="/avs/financeiroReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
+            <form action="/avs/admFrotaReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
                 @csrf
                 @method('PUT')
                     <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
@@ -351,7 +325,7 @@
                                 <div class="badge badge-error gap-2">Avalia pedido</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
+                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 border-2 border-black">
                             @if($av->isRealizadoReserva == 1)
                                 <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
                                     <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
@@ -366,7 +340,7 @@
                                 <div class="badge badge-outline">Realiza reservas</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 border-2 border-black">
+                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
                             @if($av->isAprovadoFinanceiro == 1)
                                 <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
                                     <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
@@ -485,16 +459,25 @@
             <div class="modal-content">
                 <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                 <br>
-                <form action="/avs/gravarAdiantamento" method="POST" enctype="multipart/form-data">
-                    @csrf
-                        <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
-                        <input type="text" hidden="true" id="avId" name="avId" value="{{ $av->id }}">
+                <h3 class="text-lg font-bold" style="padding-left: 10%">Selecione um veículo:</h3>
+                <div class="form-group" style="padding-left: 20px" id="selecaoVeiculoParanacidade">
+                    <label for="veiculoParanacidade_id" class="control-label" required>Selecione o veículo do Paranacidade?</label>
+                    <br>
+                        <select class="select select-bordered w-full max-w-xs" 
+                            id="veiculoParanacidade_id" name="veiculoParanacidade_id">
+                            <option value="-" name="-"> Selecione</option>
+                            <option value="0" name="0"> Nenhum</option>
+                            @for($i = 0; $i < count($veiculosParanacidade); $i++)
+                                <div>
+                                    <option value="{{ $veiculosParanacidade[$i]->id }}" 
+                                        name="{{ $veiculosParanacidade[$i]->id }}"> {{ $veiculosParanacidade[$i] ->modelo }}. Placa: {{ $veiculosParanacidade[$i] ->placa }} </option>
+                                </div>
+                            @endfor
+                        </select>
                         <br><br>
-                        <label for="descricao">Descrição</label>
-                        <input type="text" id="descricao" name="descricao" class="input input-bordered input-secondary w-full max-w-xs">
-                        <br><br>
-                        <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
-                </form>
+                        <a class="btn btn-warning btn-sm" id="btn-submit-modal"
+                        style="width: 200px">  Vincular veículo</a>
+                </div>
             </div>
         </div>
     </div>
@@ -504,6 +487,29 @@
 {{-- Para implementação futura de AJAX --}} 
 @section('javascript')
     <script type="text/javascript">
+
+        $(function() {
+                const modal = document.querySelector('.modal');
+                const avLabels = document.querySelectorAll('.btn[data-rota]');
+                
+                avLabels.forEach(function(avLabel) {
+                    avLabel.addEventListener('click', function() {
+                    const rota = this.getAttribute('data-rota');
+                    
+                        $('#btn-submit-modal').click(function() {
+                            
+                            var veiculo = document.getElementById("veiculoParanacidade_id").value;
+                            if(veiculo != '-'){
+                                window.location.href = '/avs/escolherVeiculo/' + rota + '/' + veiculo;
+                            }
+                            else{
+                                alert("Escolha um veículo!");
+                            }
+                        });
+                    });
+                });
+        });
+        
 
         $(document).ready(function(){
             $('#minhaTabela').DataTable({
@@ -519,21 +525,8 @@
         });
 
         $(document).ready(function(){
-            $('#minhaTabela2').DataTable({
-                    scrollY: 100,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
-                    }
-                });
-        });
-
-        $(document).ready(function(){
             $('#tabelaRota').DataTable({
-                    scrollY: 250,
+                    scrollY: 300,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",
@@ -544,20 +537,6 @@
                     }
                 });
         });
-
-        $(function(){
-            
-
-            const input = document.getElementById('arquivo1');
-            const botaoEnviar = document.getElementById('botaoEnviarArquivo1');
-
-            input.addEventListener('change', (event) => {
-                if (event.target.value !== '') {
-                botaoEnviar.removeAttribute('disabled');
-                }
-            });
-
-        })
 
     </script>
 @endsection
