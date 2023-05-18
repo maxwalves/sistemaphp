@@ -136,7 +136,7 @@
                                 </li>
                                 @can('aprov-avs-gestor', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active rounded-none" href="/avs/autGestor">Autorizações de AV pendentes Gestor</a>
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autGestor">Autorizações de AV pendentes Gestor</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-diretoria', $user)
@@ -151,12 +151,22 @@
                                 @endcan
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active rounded-none" href="/avs/autFinanceiro">Autorizações de AV pendentes Financeiro</a>
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autFinanceiro">Autorizações de AV pendentes Financeiro</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-frota', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active rounded-none" href="/avs/autAdmFrota">Autorizações de AV pendentes Adm Frota</a>
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autAdmFrota">Autorizações de AV pendentes Adm Frota</a>
+                                    </li>
+                                @endcan
+                                @can('aprov-avs-financeiro', $user)
+                                    <li class="nav-item">
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcFinanceiro">Prestações de contas pendentes Financeiro</a>
+                                    </li>
+                                @endcan
+                                @can('aprov-avs-gestor', $user)
+                                    <li class="nav-item">
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcGestor">Prestações de contas pendentes Gestor</a>
                                     </li>
                                 @endcan
 

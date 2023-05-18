@@ -99,6 +99,16 @@ Route::post('/avs/gravarComprovante', [ControladorAv::class,'gravarComprovante']
 Route::delete('/avs/deletarComprovante/{id}/{avId}', [ControladorAv::class, 'deletarComprovante'])->middleware('auth');
 Route::put('/avs/usuarioEnviarPrestacaoContas', [ControladorAv::class, 'usuarioEnviarPrestacaoContas'])->middleware('auth');
 
+Route::get('/avs/autPcFinanceiro', [ControladorAv::class, 'autPcFinanceiro'])->middleware('auth');
+Route::get('/avs/avaliarPcFinanceiro/{id}', [ControladorAv::class, 'avaliarPcFinanceiro'])->middleware('auth');
+Route::put('/avs/financeiroAprovaPrestacaoContas', [ControladorAv::class, 'financeiroAprovaPrestacaoContas'])->middleware('auth');
+Route::put('/avs/financeiroReprovaPrestacaoContas', [ControladorAv::class, 'financeiroReprovaPrestacaoContas'])->middleware('auth');
+
+Route::get('/avs/autPcGestor', [ControladorAv::class, 'autPcGestor'])->middleware('auth');
+Route::get('/avs/avaliarPcGestor/{id}', [ControladorAv::class, 'avaliarPcGestor'])->middleware('auth');
+Route::put('/avs/gestorAprovaPrestacaoContas', [ControladorAv::class, 'gestorAprovaPrestacaoContas'])->middleware('auth');
+Route::put('/avs/gestorReprovaPrestacaoContas', [ControladorAv::class, 'gestorReprovaPrestacaoContas'])->middleware('auth');
+
 //---------------------------------------------------------------- TESTES
 Route::get('/contact', function () {
     return view('contact');

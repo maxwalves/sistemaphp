@@ -262,6 +262,134 @@ class ControladorAv extends Controller
         }
     }
 
+    public function avaliarPcFinanceiro($id){
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $users = User::all();
+        $historicos = [];
+        $anexos = [];
+        $user = auth()->user();
+        $usersFiltrados = [];
+        $possoEditar = false;
+        $veiculosProprios = $user->veiculosProprios;
+        $anexosFinanceiro = [];
+        $anexosRotas = [];
+        $comprovantesAll = ComprovanteDespesa::all();
+        $comprovantes = [];
+
+        $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
+        $historicoPcAll = HistoricoPc::all();
+        $historicoPc = [];
+
+        foreach($comprovantesAll as $comp){
+            if($comp->av_id == $av->id){
+                array_push($comprovantes, $comp);
+            }
+        }
+        
+        foreach($historicoPcAll as $hisPc){
+            if($hisPc->av_id == $av->id){
+                array_push($historicoPc, $hisPc);
+            }
+        }
+
+        foreach($av->rotas as $r){//Verifica todas as rotas da AV
+            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+            }
+        }
+        
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        foreach($av->anexosFinanceiro as $anexF){
+                array_push($anexosFinanceiro, $anexF);
+        }
+
+
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+                $possoEditar = true;
+        }
+
+
+        if($possoEditar == true){
+            return view('avs.avaliarPcFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
+            'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
+            'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes]);
+        }
+        else{
+            return redirect('avs/autPcFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
+        }
+    }
+
+    public function avaliarPcGestor($id){
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $users = User::all();
+        $historicos = [];
+        $anexos = [];
+        $user = auth()->user();
+        $usersFiltrados = [];
+        $possoEditar = false;
+        $veiculosProprios = $user->veiculosProprios;
+        $anexosFinanceiro = [];
+        $anexosRotas = [];
+        $comprovantesAll = ComprovanteDespesa::all();
+        $comprovantes = [];
+
+        $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
+        $historicoPcAll = HistoricoPc::all();
+        $historicoPc = [];
+
+        foreach($comprovantesAll as $comp){
+            if($comp->av_id == $av->id){
+                array_push($comprovantes, $comp);
+            }
+        }
+        
+        foreach($historicoPcAll as $hisPc){
+            if($hisPc->av_id == $av->id){
+                array_push($historicoPc, $hisPc);
+            }
+        }
+
+        foreach($av->rotas as $r){//Verifica todas as rotas da AV
+            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+            }
+        }
+        
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        foreach($av->anexosFinanceiro as $anexF){
+                array_push($anexosFinanceiro, $anexF);
+        }
+
+
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+                $possoEditar = true;
+        }
+
+
+        if($possoEditar == true){
+            return view('avs.avaliarPcGestor', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
+            'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
+            'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes]);
+        }
+        else{
+            return redirect('avs/autPcGestor')->with('msg', 'Você não tem permissão para avaliar esta av!');
+        }
+    }
+
     public function verFluxoAdmFrota($id){
         $objetivos = Objetivo::all();
         $historicosTodos = Historico::all();
@@ -832,9 +960,9 @@ class ControladorAv extends Controller
         $historico = new Historico();
         $timezone = new DateTimeZone('America/Sao_Paulo');
         $historico->dataOcorrencia = new DateTime('now', $timezone);
-        $historico->tipoOcorrencia = "Reserva realizada pela Secretaria";
+        $historico->tipoOcorrencia = "Prestação de contas realizada pelo usuário";
         $historico->comentario = $request->get('comentario');
-        $historico->perfilDonoComentario = "Secretaria";
+        $historico->perfilDonoComentario = "Usuário";
         $historico->usuario_id = $av->user_id;
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
@@ -878,6 +1006,117 @@ class ControladorAv extends Controller
         $historico->save();
 
         return redirect('/avs/autFinanceiro')->with('msg', 'AV reprovada pelo financeiro!');
+    }
+
+    public function financeiroAprovaPrestacaoContas(Request $request){
+
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $dados = [];
+
+        $historico = new Historico();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
+        $historico->tipoOcorrencia = "Prestação de contas aprovado pelo Financeiro";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Financeiro";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+        
+        $dados = array(
+            "isFinanceiroAprovouPC" => 1,
+            "status" => "Aguardando aprovação da prestação de contas pelo Gestor"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+
+        return redirect('/avs/autPcFinanceiro')->with('msg', 'Prestação de contas aprovado pelo Financeiro!');
+    }
+
+    public function financeiroReprovaPrestacaoContas(Request $request){
+        
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $historico = new Historico();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
+        $historico->tipoOcorrencia = "Prestação de contas reprovado pelo Financeiro";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Financeiro";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+
+        $dados = array(
+            "isPrestacaoContasRealizada" => 0,
+            "status" => "Aguardando prestação de contas do usuário"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+        return redirect('/avs/autPcFinanceiro')->with('msg', 'Prestação de contas reprovado pelo Financeiro!');
+    }
+
+    public function gestorAprovaPrestacaoContas(Request $request){
+
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $dados = [];
+
+        $historico = new Historico();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
+        $historico->tipoOcorrencia = "Prestação de contas aprovado pelo Gestor";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Gestor";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+        
+        $dados = array(
+            "isGestorAprovouPC" => 1,
+            "status" => "Aguardando acerto de contas"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+
+        return redirect('/avs/autPcGestor')->with('msg', 'Prestação de contas aprovado pelo Gestor!');
+    }
+
+    public function gestorReprovaPrestacaoContas(Request $request){
+        
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $historico = new Historico();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
+        $historico->tipoOcorrencia = "Prestação de contas reprovado pelo Gestor";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Gestor";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+
+        $dados = array(
+            "isPrestacaoContasRealizada" => 0,
+            "isFinanceiroAprovouPC" => 0,
+            "status" => "Aguardando prestação de contas do usuário"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+        return redirect('/avs/autPcGestor')->with('msg', 'Prestação de contas reprovado pelo Gestor!');
     }
 
     public function diretoriaAprovarAv(Request $request){
@@ -1734,6 +1973,50 @@ class ControladorAv extends Controller
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();
         return view('avs.autFinanceiro', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
+    }
+
+    public function autPcFinanceiro(){
+        $user = auth()->user();
+        $avs = Av::all();
+        $users = User::all();
+
+        $avsFiltradas = [];
+        foreach($users as $uf){//Verifica todos os usuários
+            if($uf->id != $user->id){//Se  o usuário não for você
+                foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
+                    && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+
+                        array_push($avsFiltradas, $avAtual);
+                    }
+                }
+            }
+        }
+        $avs = $avsFiltradas;
+        $objetivos = Objetivo::all();
+        return view('avs.autPcFinanceiro', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
+    }
+
+    public function autPcGestor(){
+        $user = auth()->user();
+        $avs = Av::all();
+        $users = User::all();
+
+        $avsFiltradas = [];
+        foreach($users as $uf){//Verifica todos os usuários
+            if($uf->id != $user->id){//Se  o usuário não for você
+                foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
+                    && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==true  && $avAtual["isGestorAprovouPC"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+
+                        array_push($avsFiltradas, $avAtual);
+                    }
+                }
+            }
+        }
+        $avs = $avsFiltradas;
+        $objetivos = Objetivo::all();
+        return view('avs.autPcGestor', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
     }
 
 
