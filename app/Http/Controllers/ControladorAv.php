@@ -6,13 +6,18 @@ use App\Models\AnexoRota;
 use App\Models\AnexoFinanceiro;
 use Illuminate\Http\Request;
 use App\Models\Av;
+use App\Models\ComprovanteDespesa;
 use App\Models\Objetivo;
 use App\Models\VeiculoProprio;
 use App\Models\VeiculoParanacidade;
 use App\Models\Rota;
 use App\Models\User;
 use App\Models\Historico;
+use App\Models\HistoricoPc;
 use DateTime;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Storage;
+use DateTimeZone;
 
 class ControladorAv extends Controller
 {
@@ -203,10 +208,33 @@ class ControladorAv extends Controller
         $usersFiltrados = [];
         $possoEditar = false;
         $veiculosProprios = $user->veiculosProprios;
-        $anexosFinanceiro = AnexoFinanceiro::all();
+        $anexosFinanceiro = [];
+        $anexosRotas = [];
+        $comprovantesAll = ComprovanteDespesa::all();
+        $comprovantes = [];
 
         $av = Av::findOrFail($id);
         $userAv = User::findOrFail($av->user_id);
+        $historicoPcAll = HistoricoPc::all();
+        $historicoPc = [];
+
+        foreach($comprovantesAll as $comp){
+            if($comp->av_id == $av->id){
+                array_push($comprovantes, $comp);
+            }
+        }
+        
+        foreach($historicoPcAll as $hisPc){
+            if($hisPc->av_id == $av->id){
+                array_push($historicoPc, $hisPc);
+            }
+        }
+
+        foreach($av->rotas as $r){//Verifica todas as rotas da AV
+            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+            }
+        }
         
         foreach($historicosTodos as $historico){
             if($historico->av_id == $av->id){
@@ -214,11 +242,10 @@ class ControladorAv extends Controller
             }
         }
 
-        foreach($anexosFinanceiro as $a){
-            if($a->av_id == $av->id){
-                array_push($anexos, $a);
-            }
+        foreach($av->anexosFinanceiro as $anexF){
+                array_push($anexosFinanceiro, $anexF);
         }
+
 
         if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
@@ -226,7 +253,9 @@ class ControladorAv extends Controller
 
 
         if($possoEditar == true){
-            return view('avs.fazerPrestacaoContas', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'historicos'=> $historicos, 'anexos' => $anexos, 'users'=> $users, 'userAv' => $userAv]);
+            return view('avs.fazerPrestacaoContas', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
+            'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
+            'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes]);
         }
         else{
             return redirect('avs/autFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -440,6 +469,24 @@ class ControladorAv extends Controller
         return redirect('/avs/verFluxoFinanceiro/' . $av->id)->with('msg', 'Anexo excluído com sucesso!');
     }
 
+    public function deletarComprovante($id, $avId)
+    {
+        $av = Av::findOrFail($avId);
+        $userAv = User::findOrFail($av->user_id);
+        $comprovante = ComprovanteDespesa::findOrFail($id);
+
+        $fileName = $comprovante->anexoDespesa;
+        
+        $filePath = public_path('AVs\\' . $userAv->name . '\\' . $av->id . '\\comprovantesDespesa' . '\\') . $fileName;
+        
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $comprovante->delete();
+        return redirect('/avs/fazerPrestacaoContas/' . $av->id)->with('msg', 'Comprovante excluído com sucesso!');
+    }
+
     public function gravarAdiantamento(Request $request){
         
         $av = Av::findOrFail($request->get('avId'));
@@ -465,6 +512,37 @@ class ControladorAv extends Controller
         }
 
         return redirect('/avs/verFluxoFinanceiro/' . $av->id)->with('msg', 'Anexo salvo com sucesso!');
+    }
+
+    public function gravarComprovante(Request $request){
+        
+        $av = Av::findOrFail($request->get('avId'));
+        $userAv = User::findOrFail($av->user_id);
+        $user = auth()->user();
+        $users = User::all();
+        $comprovante = new ComprovanteDespesa();
+        
+        if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
+        {
+            $requestFile = $request->arquivo1;
+
+            $extension = $requestFile->extension();
+
+            $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
+            
+            $requestFile->move(public_path('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/'), $fileName);
+
+            $comprovante->anexoDespesa = $fileName;
+            $comprovante->av_id = $av->id;
+            $comprovante->descricao = $request->descricao;
+            $comprovante->valorReais = $request->valorReais;
+            $comprovante->valorDolar = $request->valorDolar;
+            $timezone = new DateTimeZone('America/Sao_Paulo');
+            $comprovante->dataOcorrencia = new DateTime('now', $timezone);
+            $comprovante->save();
+        }
+
+        return redirect('/avs/fazerPrestacaoContas/' . $av->id)->with('msg', 'Comprovante salvo com sucesso!');
     }
 
     public function realizarReservas($id){
@@ -541,7 +619,8 @@ class ControladorAv extends Controller
         $dados = [];
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "Aprovado pelo Gestor";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Gestor";
@@ -582,7 +661,8 @@ class ControladorAv extends Controller
         $user = auth()->user();
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "Reprovado pelo Gestor";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Gestor";
@@ -610,7 +690,8 @@ class ControladorAv extends Controller
         $dados = [];
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "Reserva realizada pela Secretaria";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Secretaria";
@@ -636,7 +717,8 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($request->get('id'));
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "AV reprovada pela Secretaria";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Secretaria";
@@ -661,11 +743,14 @@ class ControladorAv extends Controller
 
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
+        $userAv = User::findOrFail($av->user_id);
 
         $dados = [];
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
+
         $historico->tipoOcorrencia = "Adiantamento realizado pelo Financeiro";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Financeiro";
@@ -674,6 +759,42 @@ class ControladorAv extends Controller
         $historico->av_id = $av->id;
         $isVeiculoEmpresa = false;
 
+        //Gera o PDF
+        $avs = Av::all();
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $historicos = [];
+        $users = User::all();
+
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users')));
+        $dompdf->render();
+
+        $nomeArquivo = md5("relatorio" . strtotime("now")) . ".pdf";
+        $caminhoDiretorio = public_path('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/');
+        $caminhoArquivo = $caminhoDiretorio . $nomeArquivo;
+        if (!file_exists($caminhoDiretorio)) {
+            mkdir($caminhoDiretorio, 0777, true);
+        }
+        file_put_contents($caminhoArquivo, $dompdf->output());
+ 
+        //Salva no HistoricoPC
+        $historicoPc = new HistoricoPc();
+        $historicoPc->valorReais = $av->valorReais;
+        $historicoPc->valorDolar = $av->valorDolar;
+        $historicoPc->ocorrencia ="Financeiro aprovou AV";
+        $historicoPc->comentario ="Adiantamento realizado - valor inicial";
+        $historicoPc->av_id = $av->id;
+
+        $historicoPc->dataOcorrencia = new DateTime('now', $timezone);
+        $historicoPc->anexoRelatorio = $nomeArquivo;
+
+        //----------------------------------------------------------------
         foreach ($av->rotas as $r){
             if($r->isVeiculoEmpresa == true){
                 $isVeiculoEmpresa = true;
@@ -695,9 +816,39 @@ class ControladorAv extends Controller
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
+        $historicoPc->save();
 
 
         return redirect('/avs/autFinanceiro')->with('msg', 'AV aprovada pelo financeiro!');
+    }
+
+    public function usuarioEnviarPrestacaoContas(Request $request){
+
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $dados = [];
+
+        $historico = new Historico();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
+        $historico->tipoOcorrencia = "Reserva realizada pela Secretaria";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Secretaria";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+        
+        $dados = array(
+            "isPrestacaoContasRealizada" => 1,
+            "status" => "Aguardando aprovação da Prestação de Contas pelo Financeiro"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+
+        return redirect('/avs/prestacaoContasUsuario')->with('msg', 'Prestação de contas realizada!');
     }
 
     public function financeiroReprovarAv(Request $request){
@@ -706,7 +857,8 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($request->get('id'));
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "AV reprovada pelo Financeiro";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Financeiro";
@@ -739,7 +891,8 @@ class ControladorAv extends Controller
         $dados = [];
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "Aprovado pela Diretoria";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Diretoria Executiva";
@@ -785,7 +938,8 @@ class ControladorAv extends Controller
         $user = auth()->user();
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "Reprovado pela Diretoria";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Diretoria Executiva";
@@ -813,7 +967,8 @@ class ControladorAv extends Controller
         $dados = [];
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "Veículo do Paranacidade reservado pela Adm Frota";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Adm Frota";
@@ -839,7 +994,8 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($request->get('id'));
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "AV reprovada pela Adm Frota";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Adm Frota";
@@ -907,12 +1063,12 @@ class ControladorAv extends Controller
         return redirect('/rotas/rotas/' . $av->id)->with('msg', 'AV criada com sucesso!');
         //return view('rotas.createRota', ['av' => $av]);
     }
-    public function concluir($id){
+    public function concluir(Request $request){
         $objetivos = Objetivo::all();
 
         $user = auth()->user();
 
-        $av = Av::findOrFail($id);
+        $av = Av::findOrFail($request->avId);
         $rotas = $av->rotas;//Busca as rotas da AV
 
         //Valor do cálculo de rota e verificar quanto que terá que pagar ao usuário
@@ -1224,7 +1380,12 @@ class ControladorAv extends Controller
         );
         Av::findOrFail($av->id)->update($dados);
 
-        return view('avs.concluir', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
+        if($request->isPc=="sim"){
+            return view('avspc.concluir', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
+        }
+        else{
+            return view('avs.concluir', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
+        }
     }
 
     public function show($id)
@@ -1297,6 +1458,24 @@ class ControladorAv extends Controller
         return view('avs.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
     }
 
+    public function editAvPc($id)
+    {
+        $objetivos = Objetivo::all();
+
+        $user = auth()->user();
+
+        $av = Av::findOrFail($id);
+
+        $user = auth()->user();
+        $veiculosProprios = $user->veiculosProprios;
+
+        if($user->id != $av->user->id) {
+            return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
+        }
+
+        return view('avspc.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
+    }
+
     public function enviarGestor(Request $request)
     {
         $dados = array(
@@ -1310,7 +1489,8 @@ class ControladorAv extends Controller
         $user = auth()->user();
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "Aguardando avaliação do Gestor";
         $historico->comentario = "Envio de AV para gestor";
         $historico->perfilDonoComentario = "Usuário";
@@ -1328,6 +1508,36 @@ class ControladorAv extends Controller
         return redirect('/avs/avs')->with('msg', 'AV enviada ao gestor!');
     }
 
+    public function salvarCalculoRotaPc(Request $request)
+    {
+        
+        $dados = array(
+            "valorExtraReais" => $request->valorExtraReais,
+            "valorExtraDolar" => $request->valorExtraDolar,
+            "justificativaValorExtra"=>$request->justificativaValorExtra,
+        );
+        
+        $av = Av::findOrFail($request->id);
+        $user = auth()->user();
+        
+        $historico = new Historico();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
+        $historico->tipoOcorrencia = "Atualização de cálculo de diárias";
+        $historico->comentario = "Edição de Av na Prestação de Contas";
+        $historico->perfilDonoComentario = "Usuário";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+
+        //dd($dados);
+        
+        Av::findOrFail($request->id)->update($dados);
+        $historico->save();
+
+        return redirect('/rotaspc/rotas/' . $request->id )->with('msg', 'Cálculo salvo!');
+    }
+
     public function voltarAv($id){
         
         $av = Av::findOrFail($id);
@@ -1343,7 +1553,8 @@ class ControladorAv extends Controller
         );
 
         $historico = new Historico();
-        $historico->dataOcorrencia = new DateTime();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "Usuário retornou AV a estado inicial";
         $historico->comentario = "Retorno de AV para correção";
         $historico->perfilDonoComentario = "Usuário";
@@ -1454,7 +1665,8 @@ class ControladorAv extends Controller
         foreach($users as $uf){//Verifica todos os usuários
             if($uf->id == $user->id){//Se o usuário for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true){
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true 
+                    && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isPrestacaoContasRealizada"]==false){
                         $isVeiculoEmpresa = false;
                         foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
                             if($rota["isVeiculoEmpresa"]==1){//Se a viagem tiver veículo da empresa
@@ -1532,8 +1744,6 @@ class ControladorAv extends Controller
             'objetivo_id' => 'required',
             'outroObjetivo' => 'required',
             'prioridade' => 'required',
-            'isVeiculoProprio' => 'required',
-            'isVeiculoEmpresa' => 'required',
         ];
 
         if($request->get('isVeiculoProprio')=="1"){ // Se for veículo próprio, adiciona validação de campo
@@ -1549,7 +1759,7 @@ class ControladorAv extends Controller
             'required' => 'Este campo não pode estar em branco',
         ];
         
-        if ($request->get('isSelecionado')=="1") //Se existir outro objetivo, remove a necessidade de validação de objetivo
+        if ($request->get('isSelecionado')=="1" || $request->get('outroObjetivo') != null) //Se existir outro objetivo, remove a necessidade de validação de objetivo
         {
             $request->request->set('objetivo_id', null);
             unset($regras['objetivo_id']); //Retira a regra de validação de objetivo
@@ -1558,15 +1768,16 @@ class ControladorAv extends Controller
             $request->request->set('outroObjetivo', null);
             unset($regras['outroObjetivo']); //Retira a regra de validação de outro objetivo
         }
-        
-        
-        
         $request->validate($regras, $mensagens);
 
         $data = $request->all();
-
+        
         Av::findOrFail($request->id)->update($data);
-
-        return redirect('/avs/avs')->with('msg', 'av editado com sucesso!');
+        if($request->isPc=="sim"){
+            return redirect('/avs/fazerPrestacaoContas/' . $request->id)->with('msg', 'av editado com sucesso!');
+        }
+        else{
+            return redirect('/avs/avs')->with('msg', 'av editado com sucesso!');
+        }
     }
 }

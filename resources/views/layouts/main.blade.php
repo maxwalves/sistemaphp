@@ -172,9 +172,9 @@
                 <div class="row">
                     @if(session('msg'))
                         <div class="col-4">
-                        <div class="alert alert-info shadow-lg" style="width: 70%">
-                            <p > {{ session('msg') }} </p>    
-                        </div>
+                            <div class="alert alert-info shadow-lg" style="width: 70%">
+                                <p > {{ session('msg') }} </p>    
+                            </div>
                         </div>
                     @endif
                     @yield('content')

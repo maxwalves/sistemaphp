@@ -11,6 +11,7 @@ use App\Http\Controllers\ControladorVeiculoParanacidade;
 use App\Http\Controllers\ControladorRota;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SetorController;
+use App\Http\Controllers\RelatorioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +38,7 @@ Route::delete('/avs/{id}', [ControladorAv::class, 'destroy'])->middleware('auth'
 Route::get('/avs/edit/{id}', [ControladorAv::class, 'edit'])->middleware('auth');
 Route::put('/avs/update/{id}', [ControladorAv::class, 'update'])->middleware('auth');
 Route::put('/avs/enviarGestor/{id}', [ControladorAv::class, 'enviarGestor'])->middleware('auth');
-Route::get('/avs/concluir/{id}', [ControladorAv::class, 'concluir'])->middleware('auth');
+Route::put('/avs/concluir/', [ControladorAv::class, 'concluir'])->middleware('auth');
 Route::get('/avs/fluxo/{id}', [ControladorAv::class, 'verFluxo'])->middleware('auth');
 Route::get('/avs/verFluxoGestor/{id}', [ControladorAv::class, 'verFluxoGestor'])->middleware('auth');
 Route::get('/avs/voltarAv/{id}', [ControladorAv::class, 'voltarAv'])->middleware('auth');
@@ -78,6 +79,25 @@ Route::put('/avs/admFrotaReprovarAv', [ControladorAv::class, 'admFrotaReprovarAv
 
 Route::get('/avs/prestacaoContasUsuario', [ControladorAv::class, 'prestacaoContasUsuario'])->middleware('auth');
 Route::get('/avs/fazerPrestacaoContas/{id}', [ControladorAv::class, 'fazerPrestacaoContas'])->middleware('auth');
+
+
+//Prestação de contas
+Route::get('/avspc/edit/{id}', [ControladorAv::class, 'editAvPc'])->middleware('auth');
+Route::get('/rotaspc/rotas/{id}', [ControladorRota::class, 'rotaspc'])->middleware('auth');
+Route::get('/rotaspc/create/{id}', [ControladorRota::class, 'createpc'])->middleware('auth');
+Route::post('/rotaspc', [ControladorRota::class,'store'])->middleware('auth');
+Route::delete('/rotaspc/{id}', [ControladorRota::class, 'destroyRotaPc'])->middleware('auth');
+Route::get('/rotaspc/edit/{id}', [ControladorRota::class, 'editRotaPc'])->middleware('auth');
+Route::put('/rotaspc/update/{id}', [ControladorRota::class, 'update'])->middleware('auth');
+Route::put('/avspc/concluir/', [ControladorAv::class, 'concluir'])->middleware('auth');
+
+Route::put('/avs/salvarCalculoRotaPc/', [ControladorAv::class, 'salvarCalculoRotaPc'])->middleware('auth');
+
+Route::get('/avs/relatorio-pdf/{id}', [RelatorioController::class, 'gerarRelatorioPDF']);
+Route::get('/avs/relatorio/{id}', [RelatorioController::class, 'abrirPagina']);
+Route::post('/avs/gravarComprovante', [ControladorAv::class,'gravarComprovante'])->middleware('auth');
+Route::delete('/avs/deletarComprovante/{id}/{avId}', [ControladorAv::class, 'deletarComprovante'])->middleware('auth');
+Route::put('/avs/usuarioEnviarPrestacaoContas', [ControladorAv::class, 'usuarioEnviarPrestacaoContas'])->middleware('auth');
 
 //---------------------------------------------------------------- TESTES
 Route::get('/contact', function () {

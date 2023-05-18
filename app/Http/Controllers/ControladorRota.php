@@ -36,6 +36,15 @@ class ControladorRota extends Controller
         return view('rotas.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user]);
     }
 
+    public function rotaspc($id)//Id da AV
+    {
+        $user = auth()->user();
+        $av = Av::findOrFail($id);//Busca a AV com base no ID
+        $rotas = $av->rotas;//Busca as rotas da AV
+
+        return view('rotaspc.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user]);
+    }
+
     public function create($id)//Id da AV
     {
         $user = auth()->user();
@@ -53,6 +62,25 @@ class ControladorRota extends Controller
         $veiculosProprios = $user->veiculosProprios;
         
         return view('rotas.createRota', ['veiculosProprios' => $veiculosProprios, 'av' => $av, 'user'=> $user]);
+    }
+
+    public function createpc($id)//Id da AV
+    {
+        $user = auth()->user();
+        $avs = $user->avs;
+        $av = null;
+        foreach ($avs as $a){
+            if ($a->id == $id){
+                $av = $a;
+            }
+        }
+        if($av == null){
+            return redirect('/avs/avs')->with('msg', 'Você não tem autorização para criar uma rota de AV de outro usuário!');
+        }
+
+        $veiculosProprios = $user->veiculosProprios;
+        
+        return view('rotaspc.createRota', ['veiculosProprios' => $veiculosProprios, 'av' => $av, 'user'=> $user]);
     }
 
     public function store(Request $request)
@@ -162,7 +190,12 @@ class ControladorRota extends Controller
     
         $rota->save();
 
-        return redirect('/rotas/rotas/' . $request->idav )->with('msg', 'Rota criada com sucesso!');
+        if($request->isPc=="sim"){
+            return redirect('/rotaspc/rotas/' . $request->idav )->with('msg', 'Rota criada com sucesso!');
+        }
+        else{
+            return redirect('/rotas/rotas/' . $request->idav )->with('msg', 'Rota criada com sucesso!');
+        }
     }
 
     public function show($id)
@@ -182,6 +215,15 @@ class ControladorRota extends Controller
         $rota->delete();
 
         return redirect('/rotas/rotas/'  . $idAv)->with('msg', 'Rota excluída com sucesso!');
+    }
+
+    public function destroyRotaPc($id)
+    {
+        $rota = Rota::findOrFail($id);
+        $idAv = $rota->av_id;
+        $rota->delete();
+
+        return redirect('/rotaspc/rotas/'  . $idAv)->with('msg', 'Rota excluída com sucesso!');
     }
 
     public function edit($id)
@@ -204,6 +246,28 @@ class ControladorRota extends Controller
         $veiculosProprios = $user->veiculosProprios;
 
         return view('rotas.editRota', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
+    }
+
+    public function editRotaPc($id)
+    {
+        $rota = Rota::findOrFail($id);
+        $idAv = $rota->av_id;
+
+        $user = auth()->user();
+        $avs = $user->avs;
+        $av = null;
+        foreach ($avs as $a){
+            if ($a->id == $idAv){
+                $av = $a;
+            }
+        }
+        if($av == null){
+            return redirect('/rotas/rotas/' . $idAv)->with('msg', 'Você não tem autorização para editar uma rota de AV de outro usuário!');
+        }
+
+        $veiculosProprios = $user->veiculosProprios;
+
+        return view('rotaspc.editRota', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
     }
 
     public function update(Request $request)
@@ -343,6 +407,11 @@ class ControladorRota extends Controller
 
         Rota::findOrFail($request->id)->update($dados);
 
-        return redirect('/rotas/rotas/' . $request->idav )->with('msg', 'Rota editada com sucesso!');
+        if($request->isPc=="sim"){
+            return redirect('/rotaspc/rotas/' . $request->idav )->with('msg', 'Rota editada com sucesso!');
+        }
+        else{
+            return redirect('/rotas/rotas/' . $request->idav )->with('msg', 'Rota editada com sucesso!');
+        }
     }
 }

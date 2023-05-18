@@ -8,7 +8,7 @@
         <a href="/avs/autSecretaria" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
     </div>
 </div>
-<div id="av-create-container" class="container">
+    <div id="av-create-container" class="container">
     
         
         <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong> {{ $av->id }}</h1>
@@ -29,19 +29,24 @@
                 @endif
         @endforeach
         </p>  
-
+        
             <div >
-                <label for="my-modal-3" class="btn btn-sm">Histórico</label>
-                <label for="my-modal-4" class="btn btn-sm">Dados da AV</label>
-                <label for="my-modal-5" class="btn btn-sm">FLUXO</label>
+                <label for="my-modal-3" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="layers-outline" size="large"></ion-icon>Histórico</label>
+                <label for="my-modal-4" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="cube-outline" size="large"></ion-icon>Dados da AV</label>
+                <label for="my-modal-5" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="analytics-outline" size="large"></ion-icon>FLUXO</label>
                 
-                <a href="/avs/edit/{{ $av->id }}" class="btn btn-success btn-sm"
-                    style="width: 110px">  Editar</a>
-                <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                    style="width: 110px"> Ver</a> 
-                <a href="/rotas/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                <br><br>
+
+                <label for="my-modal-6" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="bed-outline" size="large"></ion-icon>Reservas de hotel</label>
+                <label for="my-modal-7" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="car-outline" size="large"></ion-icon>Reservas de transporte</label>
+                <label for="my-modal-8" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="cash-outline" size="large"></ion-icon>Adiantamentos</label>
+                <label for="my-modal-9" class="btn btn-sm btn-warning"> Ver Documento AV</label>
+
+                <br><br>
+                <a href="/avspc/edit/{{ $av->id }}" class="btn btn-success btn-sm"
+                    style="width: 110px">  Editar AV</a>
+                <a href="/rotaspc/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"
                     style="width: 150px"> Editar Rotas</a> 
-                <br>
                 
             </div>
             <div class="divider"></div> 
@@ -118,13 +123,54 @@
         </div>
 
         <div class="divider"></div> 
-        
+
+        <div class="col-3">
+            <label for="my-modal-10" class="btn btn-active btn-success btn-sm" style="padding-bottom: 30px; width:150px"><ion-icon name="add-circle-outline" size="large"></ion-icon>Adicionar</label>
+        </div>
+        <div class="col-md-6 offset-md-0">
+            <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
+            <table id="minhaTabela5" class="display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Valor em reais</th>
+                        <th>Valor em dólar</th>
+                        <th>Anexo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($comprovantes as $comp)
+                        <tr>
+                            <td> {{$comp->descricao}} </td>
+                            <td> R${{$comp->valorReais}},00 </td>
+                            <td> ${{$comp->valorDolar}},00 </td>
+                        
+                            <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
+                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                            
+                            <td>
+                                <form action="/avs/deletarComprovante/{{ $comp->id }}/{{ $av->id }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-active btn-accent btn-sm"
+                                    style="width: 110px" > Deletar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <div class="divider"></div> 
+
         <div class="flex flex-row">
-            <form action="/avs/secretariaAprovarAv" method="POST" enctype="multipart/form-data">
+            <form action="/avs/usuarioEnviarPrestacaoContas" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                     <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                    <label for="comentario">Comentário no envio: </label>
+                    <label for="comentario">Enviar AV para aprovação do Financeiro: </label>
                     <br>
                     <textarea type="text" class="textarea textarea-bordered h-24" 
                         name="comentario" style="width: 200px"
@@ -133,20 +179,11 @@
                     <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
             </form>
             
-            <form action="/avs/secretariaReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
-                @csrf
-                @method('PUT')
-                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                    <label for="comentario">Voltar AV para o usuário: </label>
-                    <br>
-                    <textarea type="text" class="textarea textarea-bordered h-24" 
-                        name="comentario" style="width: 200px"
-                        id="comentario" placeholder="Comentário"></textarea>
-                    <button type="submit" class="btn btn-active btn-error">Reprovar AV</button>
-            </form>
         </div>
 
     </div>
+
+    
 
     <input type="checkbox" id="my-modal-3" class="modal-toggle" />
 
@@ -165,7 +202,7 @@
                         <th>Ocorrência</th>
                         <th>Comentário</th>
                         <th>Perfil</th>
-                        <th>Quem comentou?</th>
+                        <th>Autor</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -223,7 +260,22 @@
                     @endforeach
                     </p>     
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="calendar-outline"></ion-icon> <strong>Data de criação: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="flag-outline"></ion-icon> <strong>Objetivo:</strong> {{ isset($objetivo->nomeObjetivo) ? $objetivo->nomeObjetivo : $av->outroObjetivo }} </p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="flag-outline">
+                        </ion-icon> <strong>Objetivo:</strong> 
+
+                        @for($i = 0; $i < count($objetivos); $i++)
+    
+                            @if ($av->objetivo_id == $objetivos[$i]->id )
+                                    {{$objetivos[$i]->nomeObjetivo}}     
+                            @endif
+        
+                        @endfor
+    
+                        @if (isset($av->outroObjetivo))
+                                {{$av->outroObjetivo }} 
+                        @endif
+
+                    </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="alert-circle-outline"></ion-icon> <strong>Prioridade:</strong> {{ $av->prioridade }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="pricetag-outline"></ion-icon> <strong>Comentário:</strong> {{ $av->comentario }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Status:</strong>  {{ $av->status }} </p>
@@ -445,6 +497,211 @@
             </div>
         </div>
     </div>
+
+    <input type="checkbox" id="my-modal-6" class="modal-toggle" />
+
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-7xl">
+            <div class="modal-content">
+                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <br>
+                <h3 class="text-lg font-bold" style="padding-left: 10%">Reserva de hotel</h3>
+                <table id="minhaTabela1" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>IdRota</th>
+                            <th>Rota</th>
+                            <th>Anexo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($anexosRotas as $anexoHotel)
+                        @if($anexoHotel->anexoHotel !=null)
+                            <tr>
+                                <td> {{$anexoHotel->descricao}} </td>
+                                
+                                <td>
+                                    @for($i = 0; $i < count($av->rotas); $i++)
+
+                                        @if($anexoHotel->rota_id == $av->rotas[$i]->id)
+                                            {{$av->rotas[$i]->id}}
+                                        @endif
+                                    @endfor
+                                </td>    
+                                <td>
+                                    @for($i = 0; $i < count($av->rotas); $i++)
+
+                                        @if($anexoHotel->rota_id == $av->rotas[$i]->id)
+                                            @if($av->rotas[$i]->isViagemInternacional == 0)
+                                            - {{$av->rotas[$i]->cidadeOrigemNacional}}
+                                            -> {{$av->rotas[$i]->cidadeDestinoNacional}}
+                                            @endif
+                                            
+                                            @if($av->rotas[$i]->isViagemInternacional == 1)
+                                            - {{$av->rotas[$i]->cidadeOrigemInternacional}} 
+                                            -> {{$av->rotas[$i]->cidadeDestinoInternacional}} 
+                                            @endif
+                                        @endif
+                                    @endfor
+                                </td>
+                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}" 
+                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                            </tr>
+                        @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <input type="checkbox" id="my-modal-7" class="modal-toggle" />
+
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-7xl">
+            <div class="modal-content">
+                <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <br>
+                <h3 class="text-lg font-bold" style="padding-left: 10%">Reservas de transporte</h3>
+                
+                <table id="minhaTabela2" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>IdRota</th>
+                            <th>Rota</th>
+                            <th>Anexo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($anexosRotas as $anexoTransporte)
+                            @if($anexoTransporte->anexoTransporte !=null)
+                                <tr>
+                                    <td> {{$anexoTransporte->descricao}} </td>
+                                    
+                                    <td>
+                                        @for($i = 0; $i < count($av->rotas); $i++)
+
+                                            @if($anexoTransporte->rota_id == $av->rotas[$i]->id)
+                                                {{$av->rotas[$i]->id}}
+                                            @endif
+                                        @endfor
+                                    </td>    
+                                    <td>
+                                        @for($i = 0; $i < count($av->rotas); $i++)
+
+                                            @if($anexoTransporte->rota_id == $av->rotas[$i]->id)
+                                                @if($av->rotas[$i]->isViagemInternacional == 0)
+                                                - {{$av->rotas[$i]->cidadeOrigemNacional}}
+                                                -> {{$av->rotas[$i]->cidadeDestinoNacional}}
+                                                @endif
+                                                
+                                                @if($av->rotas[$i]->isViagemInternacional == 1)
+                                                - {{$av->rotas[$i]->cidadeOrigemInternacional}} 
+                                                -> {{$av->rotas[$i]->cidadeDestinoInternacional}} 
+                                                @endif
+                                            @endif
+                                        @endfor
+                                    </td>
+                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}" 
+                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <input type="checkbox" id="my-modal-8" class="modal-toggle" />
+
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-7xl">
+            <div class="modal-content">
+                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <br>
+                <h3 class="text-lg font-bold" style="padding-left: 10%">Adiantamentos realizados</h3>
+
+                <table id="minhaTabela3" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Anexo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($anexosFinanceiro as $anexoFinanceiro)
+                            <tr>
+                                <td> {{$anexoFinanceiro->descricao}} </td>
+                            
+                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}" 
+                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <input type="checkbox" id="my-modal-9" class="modal-toggle" />
+
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-7xl">
+            <div class="modal-content">
+                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <br>
+                <h1 style="font-size: 24px"><strong>Documento AV gerado: </strong></h1>
+                <table id="minhaTabela4" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Anexo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($historicoPc as $hist)
+                            <tr>
+                                <td> {{$hist->comentario}} </td>
+                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}" 
+                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <input type="checkbox" id="my-modal-10" class="modal-toggle" />
+
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-1xl">
+            <div class="modal-content">
+                <label for="my-modal-10" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <br>
+                <form action="/avs/gravarComprovante" method="POST" enctype="multipart/form-data">
+                    @csrf
+                        <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
+                        <input type="text" hidden="true" id="avId" name="avId" value="{{ $av->id }}">
+                        <br><br>
+                        <label for="descricao">Descrição</label><br>
+                        <input type="text" id="descricao" name="descricao" class="input input-bordered input-secondary w-full max-w-xs"><br>
+                        <label for="valorReais">Valor em reais utilizado: </label><br>
+                        <input type="number" id="valorReais" name="valorReais" class="input input-bordered input-secondary w-full max-w-xs"><br>
+                        <label for="valorDolar">Valor em dólar utilizado: </label><br>
+                        <input type="number" id="valorDolar" name="valorDolar" class="input input-bordered input-secondary w-full max-w-xs">
+                        <br><br>
+                        <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
+                </form>
+            </div>
+        </div>
+    </div>
     
 @endsection
 
@@ -467,7 +724,7 @@
 
         $(document).ready(function(){
             $('#tabelaRota').DataTable({
-                    scrollY: 300,
+                    scrollY: 200,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",
@@ -476,8 +733,77 @@
                         "infoFiltered": "(filtrado de _MAX_ registros no total)",
                         "search": "Procure uma AV"
                     }
-                });
+            });
+
+            $('#minhaTabela1').DataTable({
+                    scrollY: 300,
+                    "language": {
+                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                        "zeroRecords": "Nada encontrado",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum registro disponível",
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                    }
+            });
+
+            $('#minhaTabela2').DataTable({
+                    scrollY: 300,
+                    "language": {
+                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                        "zeroRecords": "Nada encontrado",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum registro disponível",
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                    }
+            });
+
+            $('#minhaTabela3').DataTable({
+                    scrollY: 300,
+                    "language": {
+                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                        "zeroRecords": "Nada encontrado",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum registro disponível",
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                    }
+            });
+
+            $('#minhaTabela4').DataTable({
+                    scrollY: 200,
+                    "language": {
+                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                        "zeroRecords": "Nada encontrado",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum registro disponível",
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                    }
+            });
+
+            $('#minhaTabela5').DataTable({
+                    scrollY: 200,
+                    "language": {
+                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                        "zeroRecords": "Nada encontrado",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum registro disponível",
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                    }
+            });
         });
+
+        $(function(){
+            
+
+            const input = document.getElementById('arquivo1');
+            const botaoEnviar = document.getElementById('botaoEnviarArquivo1');
+
+            input.addEventListener('change', (event) => {
+                if (event.target.value !== '') {
+                botaoEnviar.removeAttribute('disabled');
+                }
+            });
+
+        })
 
     </script>
 @endsection

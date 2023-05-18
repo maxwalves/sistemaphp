@@ -139,17 +139,6 @@
                     <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
             </form>
             
-            <form action="/avs/admFrotaReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
-                @csrf
-                @method('PUT')
-                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                    <label for="comentario">Voltar AV para o usuário: </label>
-                    <br>
-                    <textarea type="text" class="textarea textarea-bordered h-24" 
-                        name="comentario" style="width: 200px"
-                        id="comentario" placeholder="Comentário"></textarea>
-                    <button type="submit" class="btn btn-active btn-error">Reprovar AV</button>
-            </form>
         </div>
 
     </div>

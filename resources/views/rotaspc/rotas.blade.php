@@ -7,21 +7,23 @@
     <div class="row justify-content-between" style="padding-left: 5%">
         <div class="btn-group">
             <div class="col-4" >
-                <a href="/avs/avs/" type="submit" class="btn btn-active btn-ghost" style="width: 200px"> Voltar!</a>
+                <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-ghost" style="width: 200px"> Voltar!</a>
             </div>
             <div class="col-4" >
-                <a href="/rotas/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 200px"> + CADASTRAR ROTA</a>
+                <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 200px"> + CADASTRAR ROTA</a>
             </div>
 
-            <form action="/avs/concluir/" method="POST" enctype="multipart/form-data">
+            <form action="/avspc/concluir/" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
+                <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
                 <div id="btSalvarRota">
                     <input style="font-size: 16px" type="submit" class="btn btn-active btn-secondary" value="Calcular diárias">
                 </div>
             </form>
-            
+
+
         </div>
         <div class="col-4">
             <label for="idav" > <strong>AV nº </strong> </label>
@@ -97,8 +99,8 @@
                     {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                 </td>
                 <td> 
-                    <a href="/rotas/edit/{{ $rota->id }}" class="btn btn-success btn-sm" style="width: 85px"> Editar</a> 
-                    <form action="/rotas/{{ $rota->id }}" style="width: 85px" method="POST">
+                    <a href="/rotaspc/edit/{{ $rota->id }}" class="btn btn-success btn-sm" style="width: 85px"> Editar</a> 
+                    <form action="/rotaspc/{{ $rota->id }}" style="width: 85px" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-error btn-sm"> Deletar</button>

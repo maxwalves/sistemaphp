@@ -158,7 +158,22 @@
                 <h1 class="text-lg font-bold">Dados básicos:</h1>
                 <div class="stats stats-vertical shadow">
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="calendar-outline"></ion-icon> <strong>Data de criação: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="flag-outline"></ion-icon> <strong>Objetivo:</strong> {{ isset($objetivo->nomeObjetivo) ? $objetivo->nomeObjetivo : $av->outroObjetivo }} </p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="flag-outline">
+                    </ion-icon> <strong>Objetivo:</strong> 
+
+                    @for($i = 0; $i < count($objetivos); $i++)
+
+                        @if ($av->objetivo_id == $objetivos[$i]->id )
+                                {{$objetivos[$i]->nomeObjetivo}}     
+                        @endif
+    
+                    @endfor
+
+                    @if (isset($av->outroObjetivo))
+                            {{$av->outroObjetivo }} 
+                    @endif
+
+                    </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="alert-circle-outline"></ion-icon> <strong>Prioridade:</strong> {{ $av->prioridade }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="pricetag-outline"></ion-icon> <strong>Comentário:</strong> {{ $av->comentario }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Status:</strong>  {{ $av->status }} </p>
