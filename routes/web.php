@@ -108,6 +108,16 @@ Route::get('/avs/autPcGestor', [ControladorAv::class, 'autPcGestor'])->middlewar
 Route::get('/avs/avaliarPcGestor/{id}', [ControladorAv::class, 'avaliarPcGestor'])->middleware('auth');
 Route::put('/avs/gestorAprovaPrestacaoContas', [ControladorAv::class, 'gestorAprovaPrestacaoContas'])->middleware('auth');
 Route::put('/avs/gestorReprovaPrestacaoContas', [ControladorAv::class, 'gestorReprovaPrestacaoContas'])->middleware('auth');
+Route::get('/avs/acertoContasFinanceiro', [ControladorAv::class, 'acertoContasFinanceiro'])->middleware('auth');
+Route::get('/avs/realizarAcertoContasFinanceiro/{id}', [ControladorAv::class, 'realizarAcertoContasFinanceiro'])->middleware('auth');
+Route::post('/avs/gravarComprovanteAcertoContas', [ControladorAv::class,'gravarComprovanteAcertoContas'])->middleware('auth');
+Route::delete('/avs/deletarComprovanteAcertoContas/{id}/{avId}', [ControladorAv::class, 'deletarComprovanteAcertoContas'])->middleware('auth');
+Route::put('/avs/financeiroRealizaAcertoContas', [ControladorAv::class, 'financeiroRealizaAcertoContas'])->middleware('auth');
+
+Route::get('/avs/validarAcertoContasUsuario/{id}', [ControladorAv::class, 'validarAcertoContasUsuario'])->middleware('auth');
+Route::put('/avs/usuarioAprovarAcertoContas', [ControladorAv::class, 'usuarioAprovarAcertoContas'])->middleware('auth');
+Route::put('/avs/usuarioReprovarAcertoContas', [ControladorAv::class, 'usuarioReprovarAcertoContas'])->middleware('auth');
+
 
 //---------------------------------------------------------------- TESTES
 Route::get('/contact', function () {

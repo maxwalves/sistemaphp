@@ -169,6 +169,11 @@
                                         <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcGestor">Prestações de contas pendentes Gestor</a>
                                     </li>
                                 @endcan
+                                @can('aprov-avs-financeiro', $user)
+                                    <li class="nav-item">
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/acertoContasFinanceiro">Acertos de Contas pendentes</a>
+                                    </li>
+                                @endcan
 
                             </ul>
                         </div>

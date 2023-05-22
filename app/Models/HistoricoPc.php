@@ -17,7 +17,9 @@ class HistoricoPc extends Model
         'comentario',
         'anexoRelatorio',
         'av_id',
-        'dataOcorrencia'
+        'dataOcorrencia',
+        'valorExtraReais',
+        'valorExtraDolar'
     ];
 
     protected $dates = ['dataOcorrencia'];

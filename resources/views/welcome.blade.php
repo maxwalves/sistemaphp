@@ -4,16 +4,17 @@
 @section('content')
 
 
-<div id="avs-container" class="col-md-12">
+<div >
     @if ($search)
     <h2>Buscando por: {{ $search }}</h2>
     @else
     <h2 >Suas últimas autorizações de viagens:</h2>
     @endif
     
-    <div id="cards-container" class="row">
+    <div class="row">
         @for($i = count($avs)-1; $i >=0; $i--)<!-- Mostra de trás pra frente -->
-            <div class= "card col-md-3" >
+        <div class="col-12 col-xl-4">
+            <div class= "card" >
                 
                 <div class="card-body">
                     <p class="card-date"> Data de criação: {{ date('d/m/Y', strtotime($avs[$i]->dataCriacao)) }}</p>
@@ -24,6 +25,8 @@
                     <a href="/avs/verDetalhesAv/{{ $avs[$i]->id }}" class="btn btn-primary">Saber Mais</a>
                 </div> 
             </div>
+        </div>
+            
             <!-- Verifica se existem mais de 4 AV e mostra apenas 4 -->
             @if($i==(count($avs)-4))
             @break

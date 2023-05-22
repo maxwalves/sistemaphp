@@ -90,7 +90,7 @@ main .row{
 
 main .container-fluid{
     padding: 0;
-    min-height: 120vh;
+    min-height: 130vh;
 }
 
 
@@ -278,4 +278,32 @@ footer p{
     padding-left: 30%;
 }
 
+.containerAcertoContas {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .box {
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .box-40 {
+    flex: 0 0 40%; /* Div 1 ocupa 20% da largura do container */
+  }
 
+  .box-20 {
+    flex: 0 0 20%; /* Div 1 ocupa 20% da largura do container */
+  }
+  
+  .box-80 {
+    flex: 0 0 80%; /* Div 2 ocupa 80% da largura do container */
+  }
+
+  .box-90 {
+    flex: 0 0 90%; /* Div 2 ocupa 80% da largura do container */
+  }
+
+  .box-10 {
+    flex: 0 0 10%; /* Div 2 ocupa 80% da largura do container */
+  }

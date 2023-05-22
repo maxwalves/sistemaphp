@@ -10,11 +10,6 @@
         <div class="col-8">
             <h4>Minhas autorizações de viagens</h4>
         </div>
-        
-        <div class="col-3">
-            <strong>Adicionar AV</strong> 
-            <a class="btn btn-success" type="button" href="/avs/create" > <ion-icon name="add-circle-outline" size="large"></ion-icon></a>
-        </div>
     </div>
     <br>
 </div> 
@@ -71,37 +66,18 @@
                 <td> {{$av->prioridade}} </td>
                 <td> {{$av->status}} </td>
                 <td> 
-                    @if($av->isEnviadoUsuario == 0)
-                        <div class="opcoesGerenciarAv">
-                            <a href="/avs/edit/{{ $av->id }}" class="btn btn-success btn-sm"
-                                style="width: 110px">  Editar</a>
-                            <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                                style="width: 110px"> Ver</a> 
-                            <a href="/rotas/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                                style="width: 110px"> Rotas</a> 
-                            <form action="/avs/{{ $av->id }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-active btn-accent btn-sm"
-                                style="width: 110px" > Deletar</button>
-                            </form>
-                        </div>
-                    @else
-                    <label for="my-modal" data-av="{{ json_encode($av) }}" class="btn btn-active btn-warning btn-sm">Voltar AV e editar</label>
-                    <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                        style="width: 110px"> Ver</a> 
-                        @if($av->isAcertoContasRealizado == 1 && $av->isUsuarioAprovaAcertoContas != 1)
-                            <a href="/avs/validarAcertoContasUsuario/{{ $av->id }}" class="btn btn-success btn-sm"
-                            style="width: 110px"> Validar PC</a>
-                        @endif
-                    @endif
+                    <div class="opcoesGerenciarAv">
+                        <a href="/avs/realizarAcertoContasFinanceiro/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                            style="width: 230px"> Realizar Acerto de Contas</a> 
+                        
+                    </div>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
     @else
-    <p>Você ainda não tem autorizações de viagens, <a href="/avs/create"> Criar Nova AV</a></p>
+        <p>Você não tem autorizações de viagens para avaliar</p>
     @endif
     
     <input type="checkbox" id="my-modal" class="modal-toggle" />
@@ -112,7 +88,7 @@
             <div class="modal-action">
             
             <a class="btn btn-error btn-sm" id="btn-submit-modal"
-                style="width: 200px">  Voltar av e editar</a>
+                style="width: 200px">  Voltar AV e editar</a>
             
             <label for="my-modal" class="btn btn-success btn-sm" style="width: 100px">Não</label>
             </div>

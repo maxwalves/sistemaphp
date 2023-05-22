@@ -6,8 +6,8 @@
 <nav class="bg-base-200">
     <div class="flex flex-wrap items-center justify-between mx-auto p-1">
         <a href="#" class="flex items-center">
-            <img src="{{asset('/img/visualizar.png')}}" class="h-12 mr-3" />
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">Detalhes da AV</span>
+            <img src="{{asset('/img/balanca.png')}}" class="h-12 mr-3" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">Acerto de contas</span>
         </a>
       <button data-collapse-toggle="navbar-dropdown" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-dropdown" aria-expanded="false">
         <span class="sr-only">Open main menu</span>
@@ -66,6 +66,9 @@
                 </ul>
             </div>
         </li>
+        <li>
+            <label for="my-modal-9" class="btn" style="padding-bottom: 30px"><ion-icon name="cash-outline" size="large"></ion-icon>VALIDAR</label>
+        </li>
         </ul>
       </div>
     </div>
@@ -101,82 +104,80 @@
 
     <div id="av-create-container" class="container">
             <div class="containerAcertoContas">
-                @if($av->isPrestacaoContasRealizada==1)
-                    <div class="box box-40">
-                        <div class="col-md-12 offset-md-0">
-                            <h1 style="font-size: 24px"><strong>Acerto de contas: </strong></h1>
-                            <br>
-                            <p><strong>Recebido antes da viagem</strong></p>
-                            <div class="stats shadow">
-                
-                                <div class="stat">
+                <div class="box box-40">
+                    <div class="col-md-12 offset-md-0">
+                        <h1 style="font-size: 24px"><strong>Acerto de contas: </strong></h1>
+                        <br>
+                        <p><strong>Recebido antes da viagem</strong></p>
+                        <div class="stats shadow">
+              
+                            <div class="stat">
+                              <div class="stat-title">Valor em Reais</div>
+                              <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais}}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-title">Valor extra em Reais</div>
+                                <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais}}</div>
+                              </div>
+                            
+                            <div class="stat">
+                              <div class="stat-title">Valor em dólar</div>
+                              <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar}}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-title">Valor extra em dólar</div>
+                                <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar}}</div>
+                            </div>
+                            
+                        </div>
+                        <br><br>
+                        <p><strong>Informado na prestação de contas</strong></p>
+                        <div class="stats shadow">
+              
+                            <div class="stat">
                                 <div class="stat-title">Valor em Reais</div>
-                                <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais}}</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-title">Valor extra em Reais</div>
-                                    <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais}}</div>
-                                </div>
-                                
-                                <div class="stat">
+                                <div class="stat-value text-primary">R$ {{$av->valorReais}}</div>
+                            </div>
+                            <div class="stat">
+                                  <div class="stat-title">Valor extra em Reais</div>
+                                  <div class="stat-value text-primary">R$ {{$av->valorExtraReais}}</div>
+                            </div>
+                              
+                            <div class="stat">
                                 <div class="stat-title">Valor em dólar</div>
-                                <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar}}</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-title">Valor extra em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar}}</div>
-                                </div>
-                                
+                                <div class="stat-value text-primary">$ {{$av->valorDolar}}</div>
                             </div>
-                            <br><br>
-                            <p><strong>Informado na prestação de contas</strong></p>
-                            <div class="stats shadow">
-                
-                                <div class="stat">
-                                    <div class="stat-title">Valor em Reais</div>
-                                    <div class="stat-value text-primary">R$ {{$av->valorReais}}</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-title">Valor extra em Reais</div>
-                                    <div class="stat-value text-primary">R$ {{$av->valorExtraReais}}</div>
-                                </div>
-                                
-                                <div class="stat">
-                                    <div class="stat-title">Valor em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$av->valorDolar}}</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-title">Valor extra em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$av->valorExtraDolar}}</div>
-                                </div>
-                                
+                            <div class="stat">
+                                  <div class="stat-title">Valor extra em dólar</div>
+                                  <div class="stat-value text-primary">$ {{$av->valorExtraDolar}}</div>
                             </div>
-                            <br><br>
-                            <p><strong>Acerto de contas:</strong></p>
-                            <div class="stats shadow">
-                
-                                <div class="stat">
-                                    <div class="stat-title">Valor em Reais</div>
-                                    <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais-$av->valorReais}}</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-title">Valor extra em Reais</div>
-                                    <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais-$av->valorExtraReais}}</div>
-                                </div>
-                                
-                                <div class="stat">
-                                    <div class="stat-title">Valor em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-title">Valor extra em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar-$av->valorExtraDolar}}</div>
-                                </div>
-                                
+                            
+                        </div>
+                        <br><br>
+                        <p><strong>Acerto de contas:</strong></p>
+                        <div class="stats shadow">
+              
+                            <div class="stat">
+                                <div class="stat-title">Valor em Reais</div>
+                                <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais-$av->valorReais}}</div>
                             </div>
+                            <div class="stat">
+                                  <div class="stat-title">Valor extra em Reais</div>
+                                  <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais-$av->valorExtraReais}}</div>
+                            </div>
+                              
+                            <div class="stat">
+                                <div class="stat-title">Valor em dólar</div>
+                                <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
+                            </div>
+                            <div class="stat">
+                                  <div class="stat-title">Valor extra em dólar</div>
+                                  <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar-$av->valorExtraDolar}}</div>
+                            </div>
+                            
                         </div>
                     </div>
-                @endif
+                </div>
                 <div class="box box-40">
                     <div >
                         <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
@@ -197,60 +198,59 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        @if($av->isPrestacaoContasRealizada==1)
-                            <p><strong>Resultado:</strong></p>
-                            <div class="stats shadow">
-                
-                                <div class="stat">
-                                    <div class="stat-title">
-                                        <p>
-                                            @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais))<0)
-                                                Valor a receber em reais
-                                            @endif
-                                            @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais))>0)
-                                                Valor a pagar em reais
-                                            @endif
-                                        </p>
-                                    </div>
-                                    @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais))<0)
-                                        <div class="stat-value text-green-500">
-                                                
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais)) * (-1)}}
-                                        </div>
-                                    @endif
-                                    @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais))>0)
-                                        <div class="stat-value text-error">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais))}}
-                                        </div>
-                                    @endif
-                                    
+
+                        <p><strong>Resultado:</strong></p>
+                        <div class="stats shadow">
+              
+                            <div class="stat">
+                                <div class="stat-title">
+                                    <p>
+                                        @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais))<0)
+                                            Valor a receber em reais
+                                        @endif
+                                        @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais))>0)
+                                            Valor a pagar em reais
+                                        @endif
+                                    </p>
                                 </div>
-                                <div class="stat">
-                                    <div class="stat-title">
-                                        <p>
-                                            @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar))<0)
-                                                Valor a receber em dólar
-                                            @endif
-                                            @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar))>0)
-                                                Valor a pagar em dólar
-                                            @endif
-                                        </p>
+                                @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais))<0)
+                                    <div class="stat-value text-green-500">
+                                            
+                                            R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais)) * (-1)}}
                                     </div>
-                                    @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar))<0)
-                                        <div class="stat-value text-green-500">
-                                                
-                                                $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar)) * (-1)}}
-                                        </div>
-                                    @endif
-                                    @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar))>0)
-                                        <div class="stat-value text-error">
-                                                $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar))}}
-                                        </div>
-                                    @endif
-                                </div>
+                                @endif
+                                @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais))>0)
+                                    <div class="stat-value text-error">
+                                            R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$av->valorExtraReais))}}
+                                    </div>
+                                @endif
                                 
                             </div>
-                        @endif
+                            <div class="stat">
+                                <div class="stat-title">
+                                    <p>
+                                        @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar))<0)
+                                            Valor a receber em dólar
+                                        @endif
+                                        @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar))>0)
+                                            Valor a pagar em dólar
+                                        @endif
+                                    </p>
+                                </div>
+                                @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar))<0)
+                                    <div class="stat-value text-green-500">
+                                            
+                                            $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar)) * (-1)}}
+                                    </div>
+                                @endif
+                                @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar))>0)
+                                    <div class="stat-value text-error">
+                                            $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$av->valorExtraDolar))}}
+                                    </div>
+                                @endif
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
             </div>
@@ -765,6 +765,45 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <input type="checkbox" id="my-modal-9" class="modal-toggle" />
+
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-3xl">
+            <div class="modal-content">
+                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <br>
+                <h1 style="font-size: 24px; padding-left: 10px"><strong>Aprovar prestação de contas: </strong></h1>
+                <div class="flex flex-row" style="padding-left: 10px">
+                    <form action="/avs/usuarioAprovarAcertoContas" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                            <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                            <label for="comentario">Finalizar ciclo de vida da AV: </label>
+                            <br>
+                            <textarea type="text" class="textarea textarea-bordered h-24" 
+                                name="comentario" style="width: 200px"
+                                id="comentario" placeholder="Comentário"></textarea>
+        
+                            <button type="submit" class="btn btn-active btn-success">Aprovar PC</button>
+                    </form>
+        
+                    <form action="/avs/usuarioReprovarAcertoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
+                        @csrf
+                        @method('PUT')
+                            <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                            <label for="comentario">Voltar AV para o Financeiro: </label>
+                            <br>
+                            <textarea type="text" class="textarea textarea-bordered h-24" 
+                                name="comentario" style="width: 200px"
+                                id="comentario" placeholder="Comentário"></textarea>
+                            <button type="submit" class="btn btn-active btn-error">Reprovar PC</button>
+                    </form>
+                    
+                </div>
             </div>
         </div>
     </div>
