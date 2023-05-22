@@ -12,7 +12,7 @@
                 <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 200px"> + CADASTRAR ROTA</a>
             </div>
 
-            <form action="/avspc/concluir/" method="POST" enctype="multipart/form-data">
+            <form action="/avspc/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
