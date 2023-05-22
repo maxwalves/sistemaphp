@@ -87,7 +87,9 @@
                             </form>
                         </div>
                     @else
-                    <label for="my-modal" data-av="{{ json_encode($av) }}" class="btn btn-active btn-warning btn-sm">Voltar AV e editar</label>
+                    @if($av->isUsuarioAprovaAcertoContas != 1)
+                        <label for="my-modal" data-av="{{ json_encode($av) }}" class="btn btn-active btn-warning btn-sm">Voltar AV e editar</label>
+                    @endif
                     <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
                         style="width: 110px"> Ver</a> 
                         @if($av->isAcertoContasRealizado == 1 && $av->isUsuarioAprovaAcertoContas != 1)

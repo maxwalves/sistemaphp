@@ -2,7 +2,6 @@
 
 @section('title', 'Dashboard')
 @section('content')
-
 <div style="padding-left: 50px, padding-right: 50px" class="container">
     <div class="row justify-content-between" style="padding-left: 5%">
         <div class="btn-group">
