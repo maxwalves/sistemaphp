@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use Laravel\Fortify\Fortify;
+use Illuminate\Support\Facades\Auth;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App\Policies\UserPolicy;
-use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -25,8 +27,24 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::resource('users', UserPolicy::class);
         $this->registerPolicies();
 
-        Gate::resource('users', UserPolicy::class);
+        Fortify::authenticateUsing(function ($request) {
+            $validated = Auth::validate([
+                'mail' => $request->username,
+                'password' => $request->password
+            ]);
+
+            return $validated ? Auth::getLastAttempted() : null;
+        });
+
+        Fortify::confirmPasswordsUsing(function (User $user, $password) {
+            return Auth::validate([
+                'mail' => $user->username,
+                'password' => $password,
+            ]);
+        });
+
     }
 }

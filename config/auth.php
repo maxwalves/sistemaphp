@@ -38,6 +38,10 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
+            'provider' => 'ldap',
+        ],
+        'fortify' => [
+            'driver' => 'session',
             'provider' => 'users',
         ],
     ],
@@ -60,11 +64,25 @@ return [
     */
 
     'providers' => [
+
+        'ldap' => [
+            'driver' => 'ldap',
+            'model' => LdapRecord\Models\ActiveDirectory\User::class,
+            'rules' => [],
+            'database' => [
+                'model' => App\Models\User::class,
+                'sync_passwords' => true,
+                'sync_attributes' => [
+                    'name' => 'cn',
+                    'username' => 'mail',
+                ],
+            ],
+        ],
+        
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -89,7 +107,7 @@ return [
     | quickly generating a very large amount of password reset tokens.
     |
     */
-
+/*
     'passwords' => [
         'users' => [
             'provider' => 'users',
@@ -98,7 +116,7 @@ return [
             'throttle' => 60,
         ],
     ],
-
+*/
     /*
     |--------------------------------------------------------------------------
     | Password Confirmation Timeout
@@ -110,6 +128,6 @@ return [
     |
     */
 
-    'password_timeout' => 10800,
+    //'password_timeout' => 10800,
 
 ];

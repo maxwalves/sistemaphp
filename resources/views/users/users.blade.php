@@ -7,7 +7,7 @@
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
     @if(count($users) > 0 )
     <h3> <strong> Usuários do sistema </strong></h3>
-    <table class="table table-hover table-sm table-responsive">
+    <table id="tabelaRota" class="display nowrap" style="width:100%">
         <thead>
             <tr>
                 <th>Id</th>
@@ -23,13 +23,8 @@
                 <td> {{$userLinha->name}} </td>
                 <td> {{$userLinha->email}} </td>
                 <td> 
-                    <a href="/users/edit/{{ $userLinha->id }}" class="btn btn-success btn-sm"> <ion-icon name="create-outline"></ion-icon> Editar</a>
                     <a href="/users/editPerfil/{{ $userLinha->id }}" class="btn btn-success btn-sm"> <ion-icon name="create-outline"></ion-icon> Gerenciar perfil</a> 
-                    <form action="/users/{{ $userLinha->id }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-error btn-sm"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
-                    </form>
+                    
                 </td>
             </tr>
             @endforeach
@@ -47,4 +42,24 @@
     
 </div>
 
+@endsection
+
+@section('javascript')
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            $('#tabelaRota').DataTable({
+                    scrollY: 400,
+                    "language": {
+                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                        "zeroRecords": "Nada encontrado",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum registro disponível",
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Procure uma AV"
+                    }
+                });
+        });
+
+    </script>
 @endsection
