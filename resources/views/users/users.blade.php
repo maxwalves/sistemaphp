@@ -13,6 +13,9 @@
                 <th>Id</th>
                 <th>Nome</th>
                 <th>E-mail</th>
+                <th>Gerente</th>
+                <th>Departamento</th>
+                <th>Número</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -21,9 +24,12 @@
             <tr>
                 <td> {{$userLinha->id}} </td>
                 <td> {{$userLinha->name}} </td>
-                <td> {{$userLinha->email}} </td>
+                <td> {{$userLinha->username}} </td>
+                <td> {{$userLinha->manager}} </td>
+                <td> {{$userLinha->department}} </td>
+                <td> {{$userLinha->employeeNumber}} </td>
                 <td> 
-                    <a href="/users/editPerfil/{{ $userLinha->id }}" class="btn btn-success btn-sm"> <ion-icon name="create-outline"></ion-icon> Gerenciar perfil</a> 
+                    <a href="/users/editPerfil/{{ $userLinha->id }}" class="btn btn-success btn-sm"> Gerenciar perfil</a> 
                     
                 </td>
             </tr>
@@ -35,8 +41,7 @@
     @endif
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <a style="font-size: 16px" href="/users/create" type="submit" class="btn btn-active btn-primary btn-lg"><ion-icon name="add-circle-outline" size="large"></ion-icon>  Novo usuário!</a>
-            <a style="font-size: 16px" href="/setores/setores" type="submit" class="btn btn-active btn-secondary btn-lg"> Gerenciar setores!</a>
+            
         </div>
     </div>
     

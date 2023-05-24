@@ -31,6 +31,18 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Fortify::authenticateUsing(function ($request) {
+
+            $credentials = $request->only('username', 'password');
+            $user = User::where('username', $request->username)->first();
+            try {
+                if ($user->employeeNumber==null) {
+
+                    return redirect('/login')->with('msg', 'Erro!');
+                }
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+            
             $validated = Auth::validate([
                 'mail' => $request->username,
                 'password' => $request->password

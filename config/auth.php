@@ -75,6 +75,9 @@ return [
                 'sync_attributes' => [
                     'name' => 'cn',
                     'username' => 'mail',
+                    'manager' => 'manager',
+                    'department' => 'department',
+                    'employeeNumber' => 'employeeNumber'
                 ],
             ],
         ],

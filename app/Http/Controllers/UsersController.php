@@ -37,13 +37,29 @@ class UsersController extends Controller
     {
         $user = auth()->user();
         $userEncontrado = User::findOrFail($user->id);
+        $users = User::all();
+        foreach ($users as $u) {
+            $managerDN = $u->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+            // Dividir a string em partes usando o caractere de vírgula como delimitador
+            $parts = explode(',', $managerDN);
+
+            // Extrair o nome do gerente da primeira parte
+            $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+            $u->manager =$managerName;
+        }
+        foreach ($users as $key => $u) {
+            if (is_null($u->employeeNumber)) {
+                unset($users[$key]);
+            }
+        }
 
         //$permission = Permission::where('name', 'view users')->first();
         //$userEncontrado->givePermissionTo($permission); //Criar uma tela de gerenciamento de perfil para o usuário
 
         try {
             if (Gate::authorize('view users', $userEncontrado)) {
-                $users = User::all();
+                
                 return view('users.users', ['users' => $users, 'user'=> $user]);
         }
         } catch (\Throwable $th) {
