@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
             try {
                 if ($user->employeeNumber==null) {
 
-                    return redirect('/login')->with('msg', 'Erro!');
+                    return null;
                 }
             } catch (\Throwable $th) {
                 //throw $th;
