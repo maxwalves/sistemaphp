@@ -77,7 +77,7 @@
         </tbody>
     </table>
     @else
-        <p>Você não tem autorizações de viagens para avaliar</p>
+        <p>Você não tem prestação de contas para avaliar</p>
     @endif
     
     <input type="checkbox" id="my-modal" class="modal-toggle" />

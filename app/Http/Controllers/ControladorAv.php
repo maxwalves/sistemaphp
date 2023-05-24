@@ -88,7 +88,7 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($id);
 
         foreach ($users as $u){//Percorre todos os usuários do sistema
-            if($u->setor_id == $user->setor_id && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo
+            if($u->department == $user->department && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo
                 array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
             }
         }
@@ -346,11 +346,17 @@ class ControladorAv extends Controller
         $historicoPcAll = HistoricoPc::all();
         $historicoPc = [];
         $valorRecebido = null;
+        $valorAcertoContasReal = 0;
+        $valorAcertoContasDolar = 0;
 
         foreach($comprovantesAll as $comp){
             if($comp->av_id == $av->id){
                 array_push($comprovantes, $comp);
             }
+        }
+        foreach($comprovantes as $compFiltrado){
+            $valorAcertoContasReal += $compFiltrado->valorReais;
+            $valorAcertoContasDolar += $compFiltrado->valorDolar;
         }
         
         foreach($historicoPcAll as $hisPc){
@@ -387,7 +393,8 @@ class ControladorAv extends Controller
         if($possoEditar == true){
             return view('avs.realizarAcertoContasFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
-            'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido]);
+            'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
+            'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar]);
         }
         else{
             return redirect('avs/autPcFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -408,6 +415,8 @@ class ControladorAv extends Controller
         $anexosRotas = [];
         $comprovantesAll = ComprovanteDespesa::all();
         $comprovantes = [];
+        $valorAcertoContasReal = 0;
+        $valorAcertoContasDolar = 0;
 
         $av = Av::findOrFail($id);
         $userAv = User::findOrFail($av->user_id);
@@ -419,6 +428,11 @@ class ControladorAv extends Controller
             if($comp->av_id == $av->id){
                 array_push($comprovantes, $comp);
             }
+        }
+
+        foreach($comprovantes as $compFiltrado){
+            $valorAcertoContasReal += $compFiltrado->valorReais;
+            $valorAcertoContasDolar += $compFiltrado->valorDolar;
         }
         
         foreach($historicoPcAll as $hisPc){
@@ -455,7 +469,8 @@ class ControladorAv extends Controller
         if($possoEditar == true){
             return view('avs.validarAcertoContasUsuario', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
-            'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido]);
+            'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
+            'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar]);
         }
         else{
             return redirect('avs/autPcFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -912,6 +927,8 @@ class ControladorAv extends Controller
         $anexosRotas = [];
         $comprovantesAll = ComprovanteDespesa::all();
         $comprovantes = [];
+        $valorAcertoContasReal = 0;
+        $valorAcertoContasDolar = 0;
 
         $av = Av::findOrFail($id);
         $userAv = User::findOrFail($av->user_id);
@@ -923,6 +940,11 @@ class ControladorAv extends Controller
             if($comp->av_id == $av->id){
                 array_push($comprovantes, $comp);
             }
+        }
+
+        foreach($comprovantes as $compFiltrado){
+            $valorAcertoContasReal += $compFiltrado->valorReais;
+            $valorAcertoContasDolar += $compFiltrado->valorDolar;
         }
         
         foreach($historicoPcAll as $hisPc){
@@ -959,7 +981,8 @@ class ControladorAv extends Controller
 
         return view('avs.verDetalhesAv', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
         'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
-        'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido]);
+        'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
+        'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar]);
     }
 
     public function gestorAprovarAv(Request $request){
@@ -1139,6 +1162,8 @@ class ControladorAv extends Controller
         $historicoPc = new HistoricoPc();
         $historicoPc->valorReais = $av->valorReais;
         $historicoPc->valorDolar = $av->valorDolar;
+        $historicoPc->valorExtraReais = $av->valorExtraReais;
+        $historicoPc->valorExtraDolar = $av->valorExtraDolar;
         $historicoPc->ocorrencia ="Financeiro aprovou AV";
         $historicoPc->comentario ="Adiantamento realizado - valor inicial";
         $historicoPc->av_id = $av->id;
@@ -2129,7 +2154,7 @@ class ControladorAv extends Controller
         $users = User::all();
         $usersFiltrados = [];
         foreach ($users as $u){//Percorre todos os usuários do sistema
-            if($u->setor_id == $user->setor_id && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo
+            if($u->department == $user->department && $u->id != $user->id){//Verifica se cada um pertence ao seu setor, exceto vc mesmo
                 array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
             }
         }
@@ -2316,7 +2341,7 @@ class ControladorAv extends Controller
 
         $avsFiltradas = [];
         foreach($users as $uf){//Verifica todos os usuários
-            if($uf->id != $user->id){//Se  o usuário não for você
+            //if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
                     if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
                     && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==true 
@@ -2325,7 +2350,7 @@ class ControladorAv extends Controller
                         array_push($avsFiltradas, $avAtual);
                     }
                 }
-            }
+            //}
         }
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();

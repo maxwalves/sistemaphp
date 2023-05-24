@@ -34,6 +34,11 @@ class AuthServiceProvider extends ServiceProvider
 
             $credentials = $request->only('username', 'password');
             $user = User::where('username', $request->username)->first();
+
+            $sufixo = '@paranacidade.org.br';
+            $request->username = strtolower($request->username);
+            $request->username = str_contains($request->username, $sufixo) ? $request->username : $request->username.$sufixo;
+            
             try {
                 if ($user->employeeNumber==null) {
 

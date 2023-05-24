@@ -41,7 +41,7 @@
     @endif
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            
+            <li><a class="btn btn-success btn-lg" href="/users/sincronizarGerentes">Sincronizar gerentes</a></li>
         </div>
     </div>
     
@@ -54,7 +54,7 @@
 
         $(document).ready(function(){
             $('#tabelaRota').DataTable({
-                    scrollY: 400,
+                    scrollY: 500,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

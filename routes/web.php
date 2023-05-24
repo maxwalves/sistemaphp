@@ -196,6 +196,7 @@ Route::post('/rotas', [ControladorRota::class,'store'])->middleware('auth');
 
     // ROTAS PARA ADM USERS
 Route::get('/users/users', [UsersController::class, 'users'])->middleware('auth');
+Route::get('/users/sincronizarGerentes', [UsersController::class, 'sincronizarGerentes'])->middleware('auth');
 Route::get('/users/create', [UsersController::class, 'create'])->middleware('auth');
 Route::get('/users/{id}', [UsersController::class, 'show'])->middleware('auth');
 Route::delete('/users/{id}', [UsersController::class, 'destroy'])->middleware('auth');

@@ -130,21 +130,22 @@
                 </div>
                 <div class="col-4" >
                     <div class="form-group">
-                        <label for="valorExtraReais" class="control-label">Você vai precisar de valor extra em reais?</label>
+                        <p style="color: red">Na página de prestação de contas apresente os comprovantes referentes ao valor extra!</p>
+                        <label for="valorExtraReais" class="control-label">Valor extra em reais informado:</label>
                         <input type="number" class="form-control" name="valorExtraReais" onblur="calcular()"
-                            id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}">
+                            id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}" disabled>
                     </div>
 
                     <div class="form-group">
-                        <label for="valorExtraDolar" class="control-label">Você vai precisar de valor extra em dólar?</label>
+                        <label for="valorExtraDolar" class="control-label">Valor extra em dólar informado:</label>
                         <input type="number" class="form-control" name="valorExtraDolar" onblur="calcular()"
-                            id="valorExtraDolar" placeholder="Valor Extra em dólar" value="{{$av->valorExtraDolar}}">
+                            id="valorExtraDolar" placeholder="Valor Extra em dólar" value="{{$av->valorExtraDolar}}" disabled>
                     </div>
 
                     <div class="form-group">
                         <label for="justificativaValorExtra" class="control-label">Justificativa para o valor extra</label>
                         <input type="text" class="form-control" name="justificativaValorExtra"
-                            id="justificativaValorExtra" placeholder="Justificativa" value="{{$av->justificativaValorExtra}}">
+                            id="justificativaValorExtra" placeholder="Justificativa" value="{{$av->justificativaValorExtra}}" disabled>
                     </div>
                     <div>
                         <input type="submit" class="btn btn-active btn-primary btn-lg" value="Salvar">
