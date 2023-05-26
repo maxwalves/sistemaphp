@@ -5,11 +5,6 @@
 
 
 <div >
-    @if ($search)
-    <h2>Buscando por: {{ $search }}</h2>
-    @else
-    <h2 >Suas últimas autorizações de viagens:</h2>
-    @endif
     
     <div class="row">
         @for($i = count($avs)-1; $i >=0; $i--)<!-- Mostra de trás pra frente -->

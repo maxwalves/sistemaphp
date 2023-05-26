@@ -11,6 +11,8 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use PHPUnit\TextUI\Configuration\Php;
+use DateTimeZone;
+use DateTime;
 
 class UsersController extends Controller
 {
@@ -336,6 +338,27 @@ class UsersController extends Controller
         }
 
         return view('users.editPerfil', ['usuarioEditar' => $usuarioEditar, 'user'=> $user, 'dados' => $dados]);
+    }
+
+    public function aprovarTermoResponsabilidade(Request $request)
+    {
+        $user = auth()->user();
+        $avs = $user->avs;
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+
+        $data = array(
+            "dataAssinaturaTermo"=> new DateTime('now', $timezone)
+        );
+        
+        User::findOrFail($user->id)->update($data);
+
+        return view('welcome', ['avs' => $avs, 'user'=> $user]);
+    }
+    
+    public function termoResponsabilidade(){
+
+        $user = auth()->user();
+        return view('termoResponsabilidade', ['user'=> $user]);
     }
 
     public function update(Request $request)

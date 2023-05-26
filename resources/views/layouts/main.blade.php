@@ -83,14 +83,15 @@
                                 
                                 @can('view-users', $user)
                                     <li><a class="dropdown-item" href="/users/users">Gerenciar usuários</a></li>
-                                @endcan
-                                
-                                    
-                                    <li><a class="dropdown-item" href="/veiculosProprios/veiculosProprios">Meus veículos</a></li>
                                     <li><a class="dropdown-item" href="/veiculosParanacidade/veiculosParanacidade">Veículos Paranacidade</a></li>
                                     <li><a class="dropdown-item" href="/objetivos/objetivos">Objetivos de viagem</a></li>
-                                    <li><a class="dropdown-item" href="#">Configurações</a></li>
-                                    <li><a class="dropdown-item" href="#">Meu perfil</a></li>
+                                @endcan
+                                @can('aprov-avs-frota', $user)
+                                    <li><a class="dropdown-item" href="/veiculosParanacidade/veiculosParanacidade">Veículos Paranacidade</a></li>
+                                @endcan
+
+                                    <li><a class="dropdown-item" href="/veiculosProprios/veiculosProprios">Meus veículos</a></li>
+
                                     <li><hr class="dropdown-divider"></li>
                                     
                                     <li>

@@ -41,16 +41,12 @@ class ControladorAv extends Controller
     {
         $user = auth()->user();
         $avs = $user->avs;
-
-        $search = request('search');
-
-        if ($search) {
-            $avs = $avs::where([
-                ['title', 'like', '%'.$search. '%']
-            ])->get();
+        if ($user->dataAssinaturaTermo == null) {
+            return view('termoResponsabilidade', ['user'=> $user]);
         }
-
-        return view('welcome', ['avs' => $avs, 'search' => $search, 'user'=> $user]);
+        else{
+            return view('welcome', ['avs' => $avs, 'user'=> $user]);
+        }
     }
 
     public function avs()

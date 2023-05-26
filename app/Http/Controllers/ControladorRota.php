@@ -162,6 +162,7 @@ class ControladorRota extends Controller
         }
         //DADOS DE HOTEL E TRANSPORTE
         
+       
         $rota->isReservaHotel = $request->isReservaHotel;
 
         //Verifica o tipo de transporte e seta o campo corretamente
