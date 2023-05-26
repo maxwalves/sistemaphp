@@ -18,6 +18,22 @@ use DateTime;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Storage;
 use DateTimeZone;
+use App\Mail\EnvioEmailGestor;
+use App\Mail\EnvioGestorToDiretoria;
+use App\Mail\EnvioGestorToSecretaria;
+use App\Mail\EnvioDiretoriaToSecretaria;
+use App\Mail\EnvioSecretariaToFinanceiro;
+use App\Mail\EnvioFinanceiroToAdmFrota;
+use App\Mail\EnvioFinanceiroToUsuarioAdiantamento;
+use App\Mail\EnvioUsuarioToFinanceiroPc;
+use App\Mail\EnvioFinanceiroToGestorPc;
+use App\Mail\EnvioGestorToFinanceiroAcertoContas;
+use App\Mail\EnvioFinanceiroToUsuarioAcertoContas;
+use App\Mail\EnvioUsuarioToFinanceiroAcertoContas;
+use App\Mail\EnvioFinanceiroToUsuarioReprovarAcertoContas;
+use App\Mail\EnvioGestorToUsuarioReprovarPc;
+use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Models\Permission;
 
 class ControladorAv extends Controller
 {
@@ -54,6 +70,7 @@ class ControladorAv extends Controller
         $veiculosParanacidade = VeiculoParanacidade::all(); // Fazer filtro para apresentar somentes os ativos
         return view('avs.create', ['objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'veiculosParanacidade' => $veiculosParanacidade, 'user'=> $user]);
     }
+
     public function verFluxo($id){
 
         $objetivos = Objetivo::all();
@@ -88,7 +105,15 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($id);
 
         foreach ($users as $u){//Percorre todos os usuários do sistema
-            if($u->department == $user->department && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo
+            $managerDN = $u->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+            // Dividir a string em partes usando o caractere de vírgula como delimitador
+            $parts = explode(',', $managerDN);
+
+            // Extrair o nome do gerente da primeira parte
+            $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+            
+            if($managerName == $user->name && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo
                 array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
             }
         }
@@ -126,14 +151,14 @@ class ControladorAv extends Controller
 
         $av = Av::findOrFail($id);
 
-        foreach ($users as $u){//Percorre todos os usuários do sistema
-            if($u->setor_id == $user->setor_id && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo
-                array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
-            }
-        }
-        foreach ($usersFiltrados as $u){//Percorre todos os usuários do sistema
-            if($av->user_id == $u->id){//Verifica se o usuário do da AV atual pertence ao meu seu time
-                $possoEditar = true;
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isVistoDiretoria"]==false){ //Se a av já foi enviada e autorizada pelo Gestor
+            foreach($av->rotas as $rota){//Percorre todas as rotas da AV
+                if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){//Se a viagem for internacional ou tiver veículo próprio
+                    
+                    //if( $av->user_id != $user->id){//Verifica se não é vc mesmo
+                        $possoEditar = true;
+                    //}
+                }
             }
         }
 
@@ -310,11 +335,12 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
 
-
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if($userAv->id != $user->id){
+            if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
+                    && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
+            }
         }
-
 
         if($possoEditar == true){
             return view('avs.avaliarPcFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
@@ -384,12 +410,16 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
 
-
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if($userAv->id != $user->id){//Se  o usuário não for você
+            if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
+                    && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true 
+                    && $av["isGestorAprovouPC"]==true&& $av["isAcertoContasRealizado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
+            }
         }
+        
 
-
+        
         if($possoEditar == true){
             return view('avs.realizarAcertoContasFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
@@ -525,11 +555,12 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
 
-
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if($userAv->id != $user->id){//Se  o usuário não for você
+            if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
+                && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true  && $av["isGestorAprovouPC"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
+            }
         }
-
 
         if($possoEditar == true){
             return view('avs.avaliarPcGestor', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
@@ -1026,6 +1057,35 @@ class ControladorAv extends Controller
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
+        $permission = Permission::where('name', 'aprov avs diretoria')->first();
+        $permission2 = Permission::where('name', 'aprov avs secretaria')->first();
+
+        if($isDiretoria==true){
+            $users = User::all();
+            foreach($users as $u){
+                try {
+                    if($u->hasPermissionTo($permission)){
+                        Mail::to($u->username)
+                        ->send(new EnvioGestorToDiretoria($av->user_id, $u->id));
+                    }
+                } catch (\Throwable $th) {
+                    
+                }
+            }
+        }
+        else{
+            $users = User::all();
+            foreach($users as $u){
+                try {
+                    if($u->hasPermissionTo($permission2)){
+                        Mail::to($u->username)
+                        ->send(new EnvioGestorToSecretaria($av->user_id, $u->id));
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
+        }
+        
 
         return redirect('/avs/autGestor')->with('msg', 'AV aprovada!');
     }
@@ -1082,6 +1142,19 @@ class ControladorAv extends Controller
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
+        $permission = Permission::where('name', 'aprov avs financeiro')->first();
+
+        $users = User::all();
+        foreach($users as $u){
+            try {
+                if($u->hasPermissionTo($permission)){
+                    Mail::to($u->username)
+                    ->send(new EnvioSecretariaToFinanceiro($av->user_id, $u->id));
+                }
+            } catch (\Throwable $th) {
+                
+            }
+        }
 
         return redirect('/avs/autSecretaria')->with('msg', 'AV aprovada pela secretaria!');
     }
@@ -1195,7 +1268,25 @@ class ControladorAv extends Controller
         $historico->save();
         $historicoPc->save();
 
+        $permission = Permission::where('name', 'aprov avs frota')->first();
 
+        Mail::to($userAv->username)
+                        ->send(new EnvioFinanceiroToUsuarioAdiantamento($userAv->id));
+        
+        if($isVeiculoEmpresa ==true){
+            $users = User::all();
+            foreach($users as $u){
+                try {
+                    dd($u->username);
+                    if($u->hasPermissionTo($permission)){
+                        Mail::to($u->username)
+                        ->send(new EnvioFinanceiroToAdmFrota($av->user_id, $u->id));
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
+        }
+        
         return redirect('/avs/autFinanceiro')->with('msg', 'AV aprovada pelo financeiro!');
     }
 
@@ -1224,6 +1315,18 @@ class ControladorAv extends Controller
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
+        $permission = Permission::where('name', 'aprov avs financeiro')->first();
+        
+        $users = User::all();
+            foreach($users as $u){
+                try {
+                    if($u->hasPermissionTo($permission)){
+                        Mail::to($u->username)
+                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u->id));
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
 
         return redirect('/avs/prestacaoContasUsuario')->with('msg', 'Prestação de contas realizada!');
     }
@@ -1261,6 +1364,7 @@ class ControladorAv extends Controller
 
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
+        $userAv = User::findOrFail($av->user_id);
 
         $dados = [];
 
@@ -1282,6 +1386,26 @@ class ControladorAv extends Controller
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
+        $email = null;
+        $usermanager = null;
+        $managerDN = $userAv->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+        // Dividir a string em partes usando o caractere de vírgula como delimitador
+        $parts = explode(',', $managerDN);
+
+        // Extrair o nome do gerente da primeira parte
+        $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+
+        $users = User::all();
+        foreach ($users as $u){
+            if($u->name == $managerName){
+                $email = $u->username;
+                $usermanager = $u;
+            }
+        }
+
+        Mail::to($email)
+            ->send(new EnvioFinanceiroToGestorPc($user->id, $usermanager->id));
 
         return redirect('/avs/autPcFinanceiro')->with('msg', 'Prestação de contas aprovado pelo Financeiro!');
     }
@@ -1290,6 +1414,7 @@ class ControladorAv extends Controller
 
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
+        $userAv = User::findOrFail($av->user_id);
 
         $dados = [];
 
@@ -1311,6 +1436,8 @@ class ControladorAv extends Controller
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
+        Mail::to($userAv->username)
+                        ->send(new EnvioFinanceiroToUsuarioAcertoContas($userAv->id));
 
         return redirect('/avs/acertoContasFinanceiro')->with('msg', 'Acerto de contas realizado pelo Financeiro!');
     }
@@ -1339,7 +1466,6 @@ class ControladorAv extends Controller
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
-
 
         return redirect('/avs/avs')->with('msg', 'Acerto de contas aprovado pelo Usuário!');
     }
@@ -1370,6 +1496,18 @@ class ControladorAv extends Controller
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
+        $permission = Permission::where('name', 'aprov avs financeiro')->first();
+
+        $users = User::all();
+        foreach($users as $u){
+            try {
+                if($u->hasPermissionTo($permission)){
+                    Mail::to($u->username)
+                    ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u->id));
+                }
+            } catch (\Throwable $th) {
+            }
+        }
 
         return redirect('/avs/avs')->with('msg', 'Acerto de contas reprovado pelo Usuário!');
     }
@@ -1378,6 +1516,7 @@ class ControladorAv extends Controller
         
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
+        $userAv = User::findOrFail($av->user_id);
 
         $historico = new Historico();
         $timezone = new DateTimeZone('America/Sao_Paulo');
@@ -1391,11 +1530,16 @@ class ControladorAv extends Controller
 
         $dados = array(
             "isPrestacaoContasRealizada" => 0,
-            "status" => "Aguardando prestação de contas do usuário"
+            'isFinanceiroAprovouPC' => 0,
+            'isGestorAprovouPC' => 0,
+            "status" => "Aguardando nova prestação de contas do usuário - reprovado pelo Financeiro"
         );
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
+
+        Mail::to($userAv->username)
+                        ->send(new EnvioFinanceiroToUsuarioReprovarAcertoContas($userAv->id));
 
         return redirect('/avs/autPcFinanceiro')->with('msg', 'Prestação de contas reprovado pelo Financeiro!');
     }
@@ -1419,11 +1563,24 @@ class ControladorAv extends Controller
         
         $dados = array(
             "isGestorAprovouPC" => 1,
-            "status" => "Aguardando acerto de contas"
+            "status" => "Aguardando acerto de contas pelo financeiro"
         );
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
+
+        $permission = Permission::where('name', 'aprov avs financeiro')->first();
+
+        $users = User::all();
+        foreach($users as $u){
+            try {
+                if($u->hasPermissionTo($permission)){
+                    Mail::to($u->username)
+                    ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u->id));
+                }
+            } catch (\Throwable $th) {
+            }
+        }
 
 
         return redirect('/avs/autPcGestor')->with('msg', 'Prestação de contas aprovado pelo Gestor!');
@@ -1433,6 +1590,7 @@ class ControladorAv extends Controller
         
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
+        $userAv = User::findOrFail($av->user_id);
 
         $historico = new Historico();
         $timezone = new DateTimeZone('America/Sao_Paulo');
@@ -1447,11 +1605,14 @@ class ControladorAv extends Controller
         $dados = array(
             "isPrestacaoContasRealizada" => 0,
             "isFinanceiroAprovouPC" => 0,
-            "status" => "Aguardando prestação de contas do usuário"
+            "status" => "Aguardando prestação de contas do usuário - reprovado gestor"
         );
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
+
+        Mail::to($userAv->username)
+                        ->send(new EnvioGestorToUsuarioReprovarPc($userAv->id));
 
         return redirect('/avs/autPcGestor')->with('msg', 'Prestação de contas reprovado pelo Gestor!');
     }
@@ -1504,6 +1665,18 @@ class ControladorAv extends Controller
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
+        $permission = Permission::where('name', 'aprov avs secretaria')->first();
+
+        $users = User::all();
+        foreach($users as $u){
+            try {
+                if($u->hasPermissionTo($permission)){
+                    Mail::to($u->username)
+                    ->send(new EnvioDiretoriaToSecretaria($av->user_id, $u->id));
+                }
+            } catch (\Throwable $th) {
+            }
+        }
 
         return redirect('/avs/autDiretoria')->with('msg', 'AV aprovada!');
     }
@@ -1659,7 +1832,7 @@ class ControladorAv extends Controller
 
 
         if(sizeof($rotas)==1){//Se tem apenas uma rota
-
+            
             if($rotas[0]->isViagemInternacional ==1) //Se a viagem for internacional, seta o valor de acordo com o continente
             {
                 if($rotas[0]->continenteDestinoInternacional == 1){//América Latina ou Amética Central
@@ -1796,6 +1969,7 @@ class ControladorAv extends Controller
                         $meiaDiaria = 95;
                     }
                 }
+                
 
                 if($rotas[$i]->isViagemInternacional ==0)//Se a viagem não for internacional
                 {
@@ -1825,23 +1999,52 @@ class ControladorAv extends Controller
                 $dataHoraChegadaRota2 = new DateTime($rotas[$i + 1]->dataHoraChegada);//Data de chegada da rota 2
                 
                 //DATAS ROTA 1
+                $anoSaidaRota1 = $dataHoraSaidaRota1->format('Y');
+                $mesSaidaRota1 = $dataHoraSaidaRota1->format('m');
                 $diaSaidaRota1 = $dataHoraSaidaRota1->format('d');
                 $horaSaidaRota1 = $dataHoraSaidaRota1->format('H');
 
+                $mesChegadaRota1 = $dataHoraChegadaRota1->format('m');
                 $diaChegadaRota1 = $dataHoraChegadaRota1->format('d');
                 $horaChegadaRota1 = $dataHoraChegadaRota1->format('H');
 
                 //DATAS ROTA 2
+                $mesSaidaRota2 = $dataHoraSaidaRota2->format('m');
                 $diaSaidaRota2 = $dataHoraSaidaRota2->format('d');
                 $horaSaidaRota2 = $dataHoraSaidaRota2->format('H');
 
+                $mesChegadaRota2 = $dataHoraChegadaRota2->format('m');
                 $diaChegadaRota2 = $dataHoraChegadaRota2->format('d');
                 $horaChegadaRota2 = $dataHoraChegadaRota2->format('H');
                     
                 //CÁLCULOS:
 
                 //A partir do próximo dia após a chegada da rota 1, conta até o último dia antes da partida da rota 2
-                $diasCompletos = ($diaSaidaRota2)-($diaChegadaRota1+1);  
+                $mesesDiferenca = 0;
+                if($mesSaidaRota1 != $mesChegadaRota2){//Verifica se as datas estão em meses diferentes
+                    $mesesDiferenca = $mesChegadaRota2-$mesSaidaRota1;
+                    
+                    $data1 = $dataHoraSaidaRota1->format('Y-m-d');
+
+                    $ultimoDiaMes1 = date('t', strtotime($data1));
+
+                    if($mesesDiferenca==1){
+                        $diasCompletos += $ultimoDiaMes1 - ($diaChegadaRota1+1);
+                        $diasCompletos += $diaSaidaRota2;
+                    }
+                    else if($mesesDiferenca==2){
+                        $diasCompletos += $ultimoDiaMes1 - ($diaChegadaRota1+1);
+
+                        $ultimoDiaMesx = date('t', strtotime($anoSaidaRota1 . '-' . $mesSaidaRota1 + 1 . '-' . $diaSaidaRota1));
+                        
+                        $diasCompletos += $ultimoDiaMesx;
+                        $diasCompletos += $diaSaidaRota2;
+                    }
+                }
+                else if($mesSaidaRota1 == $mesChegadaRota2){
+                    $diasCompletos = ($diaSaidaRota2)-($diaChegadaRota1+1);  
+                }
+                
                 
                 if($rotas[$i]->isViagemInternacional ==0) {$valorReais += ($diariaTotal * $diasCompletos) ;}
                 if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += ($diariaTotal * $diasCompletos);}
@@ -1938,7 +2141,7 @@ class ControladorAv extends Controller
             
         
 
-        //dd($teste);
+       
 
         $av->valorReais = $valorReais;
         $av->valorDolar = $valorDolar;
@@ -2077,11 +2280,36 @@ class ControladorAv extends Controller
         $dados["isEnviadoUsuario"] = 1;
 
         //dd($dados);
+        $users = User::all();
+        $email = null;
+        $usermanager = null;
+        $managerDN = $user->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+        // Dividir a string em partes usando o caractere de vírgula como delimitador
+        $parts = explode(',', $managerDN);
+
+        // Extrair o nome do gerente da primeira parte
+        $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+
+        foreach ($users as $u){
+            if($u->name == $managerName){
+                $email = $u->username;
+                $usermanager = $u;
+            }
+        }
+        //dd($email);
+
+        Mail::to($email)
+            ->send(new EnvioEmailGestor($user->id, $usermanager->id));
 
         Av::findOrFail($request->id)->update($dados);
         $historico->save();
 
         return redirect('/avs/avs')->with('msg', 'AV enviada ao gestor!');
+    }
+
+    public function envioEmail(){
+        return view('emails.envioEmailGestor');
     }
 
     public function salvarCalculoRotaPc(Request $request)
@@ -2154,7 +2382,15 @@ class ControladorAv extends Controller
         $users = User::all();
         $usersFiltrados = [];
         foreach ($users as $u){//Percorre todos os usuários do sistema
-            if($u->department == $user->department && $u->id != $user->id){//Verifica se cada um pertence ao seu setor, exceto vc mesmo
+            $managerDN = $u->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+            // Dividir a string em partes usando o caractere de vírgula como delimitador
+            $parts = explode(',', $managerDN);
+
+            // Extrair o nome do gerente da primeira parte
+            $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+            
+            if($managerName == $user->name && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo 
                 array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
             }
         }
@@ -2298,14 +2534,14 @@ class ControladorAv extends Controller
 
         $avsFiltradas = [];
         foreach($users as $uf){//Verifica todos os usuários
-            if($uf->id != $user->id){//Se  o usuário não for você
+            //if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
                     if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==false ){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
 
                         array_push($avsFiltradas, $avAtual);
                     }
                 }
-            }
+            //}
         }
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();
@@ -2341,7 +2577,7 @@ class ControladorAv extends Controller
 
         $avsFiltradas = [];
         foreach($users as $uf){//Verifica todos os usuários
-            //if($uf->id != $user->id){//Se  o usuário não for você
+            if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
                     if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
                     && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==true 
@@ -2350,7 +2586,7 @@ class ControladorAv extends Controller
                         array_push($avsFiltradas, $avAtual);
                     }
                 }
-            //}
+            }
         }
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();
@@ -2361,16 +2597,29 @@ class ControladorAv extends Controller
         $user = auth()->user();
         $avs = Av::all();
         $users = User::all();
+        $usersFiltrados = [];
+
+        foreach ($users as $u){//Percorre todos os usuários do sistema
+            $managerDN = $u->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+            // Dividir a string em partes usando o caractere de vírgula como delimitador
+            $parts = explode(',', $managerDN);
+
+            // Extrair o nome do gerente da primeira parte
+            $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+            
+            if($managerName == $user->name && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo  
+                array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
+            }
+        }
 
         $avsFiltradas = [];
-        foreach($users as $uf){//Verifica todos os usuários
-            if($uf->id != $user->id){//Se  o usuário não for você
-                foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
-                    && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==true  && $avAtual["isGestorAprovouPC"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+        foreach($usersFiltrados as $uf){//Verifica todos os usuários
+            foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
+                if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
+                && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==true  && $avAtual["isGestorAprovouPC"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
 
-                        array_push($avsFiltradas, $avAtual);
-                    }
+                    array_push($avsFiltradas, $avAtual);
                 }
             }
         }

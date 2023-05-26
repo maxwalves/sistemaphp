@@ -25,6 +25,11 @@ use App\Http\Controllers\RelatorioController;
 */
 use App\Http\Controllers\EventController;
 
+
+//EMAIL
+
+Route::get('/email/envioEmail', [ControladorAv::class, 'envioEmail'])->middleware('auth');
+
 // ROTAS PARA AVS
 Route::get('/', [ControladorAv::class, 'index'])->middleware('auth');
 Route::get('/avs/avs', [ControladorAv::class, 'avs'])->middleware('auth');
