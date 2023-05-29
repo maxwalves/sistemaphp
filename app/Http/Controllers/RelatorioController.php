@@ -42,11 +42,12 @@ class RelatorioController extends Controller
         $historicosTodos = Historico::all();
         $historicos = [];
         $users = User::all();
+        $user = User::findOrFail($av->user_id);
         foreach($historicosTodos as $historico){
             if($historico->av_id == $av->id){
                 array_push($historicos, $historico);
             }
         }
-        return view('relatorio', ['avs' => $avs, 'av' => $av, 'objetivos' => $objetivos, 'historicos' => $historicos, 'users' => $users]);
+        return view('relatorio', ['avs' => $avs, 'av' => $av, 'objetivos' => $objetivos, 'historicos' => $historicos, 'users' => $users, 'user' => $user]);
     }
 }

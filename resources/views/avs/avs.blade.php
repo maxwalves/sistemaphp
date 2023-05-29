@@ -89,7 +89,7 @@
                     @else
                     @if($av->isUsuarioAprovaAcertoContas == 0 && $av->status != 'Aguardando prestação de contas do usuário' && $av->status != 'Acerto de Contas realizado, aguardando validação do usuário'
                     && $av->status != 'PC reprovada pelo usuário, pendente de validação pelo Financeiro' && $av->status != 'Aguardando prestação de contas do usuário - reprovado gestor'
-                    && $av->status != 'Aguardando nova prestação de contas do usuário - reprovado pelo Financeiro')
+                    && $av->status != 'Aguardando nova prestação de contas do usuário - reprovado pelo Financeiro' && $av->status != 'Aguardando acerto de contas pelo financeiro')
                         <label for="my-modal" data-av="{{ json_encode($av) }}" class="btn btn-active btn-warning btn-sm">Voltar AV e editar</label>
                     @endif
                     <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"

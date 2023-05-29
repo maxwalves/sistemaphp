@@ -38,9 +38,9 @@
             </div>
 
             <div class="form-group">
-                <label for="email" class="control-label">Email</label>
+                <label for="username" class="control-label">Email</label>
                 <input type="text" class="form-control" disabled="true"
-                name="email" id="email" placeholder="Email" value="{{$usuarioEditar->email}}">
+                name="username" id="username" placeholder="Email" value="{{$usuarioEditar->username}}">
 
             </div>
 

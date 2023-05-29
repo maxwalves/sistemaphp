@@ -5,7 +5,7 @@
 
 <div id="av-create-container" class="col-md-6 offset-md-3">
         <h2>Editando: {{ $veiculoParanacidade->modelo }}</h2>
-        <form action="/veiculosProprios/update/{{ $veiculoParanacidade->id }}" method="POST" enctype="multipart/form-data">
+        <form action="/veiculosParanacidade/update/{{ $veiculoParanacidade->id }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -33,23 +33,17 @@
             <div class="form-group" id="veiculoAtivo">
                 <label for="isAtivo" class="control-label" required>O veículo está em condições de circulação? (selecione)</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('isAtivo') ? 'is-invalid' :''}}" 
+                    <select class="custom-select" 
                         id="isAtivo" name="isAtivo">
-                        <option value="0" name="0" {{ $veiculoParanacidade->isAtivo == "1" ? "selected='selected'" : ""}}> Não</option>
-                        <option value="1" name="1" {{ $veiculoParanacidade->isAtivo == "0" ? "selected='selected'" : ""}}> Sim</option>
+                        <option value="0" name="0" {{ $veiculoParanacidade->isAtivo == "0" ? "selected='selected'" : ""}}> Não</option>
+                        <option value="1" name="1" {{ $veiculoParanacidade->isAtivo == "1" ? "selected='selected'" : ""}}> Sim</option>
                     </select>
-
-                    @if ($errors->has('isAtivo'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('isAtivo') }}
-                    </div>
-                    @endif
             </div>
 
             <div class="form-group">
                 <label for="observacao" class="control-label">Observação: </label>
                 <input type="observacao" class="form-control" name="observacao"
-                id="observacao" placeholder="Observação">
+                id="observacao" placeholder="Observação" value="{{$veiculoParanacidade->observacao}}">
             </div>
 
 

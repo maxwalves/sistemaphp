@@ -3,59 +3,81 @@
 @section('title', 'Editando: ' . $av->id)
 @section('content')
 
+<nav class="bg-base-200">
+    <div class="flex flex-wrap items-center justify-between mx-auto p-1">
+        <a href="#" class="flex items-center">
+            <img src="{{asset('/img/visualizar.png')}}" class="h-12 mr-3" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">Avaliar Prestação de Contas</span>
+        </a>
+      <button data-collapse-toggle="navbar-dropdown" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-dropdown" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+      </button>
+      <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
+        
+        <ul class="flex flex-col font-medium p-4 md:p-0 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-200 dark:border-gray-700">
+          <li>
+            <a href="/avs/autPcFinanceiro" type="submit" style="padding-bottom: 40px" class="btn btn bg-slate-600"><ion-icon name="chevron-back-outline" size="large"></ion-icon> Voltar!</a>
+          </li>
+          <li>
+            <label for="my-modal-3" class="btn btn-sm" style="padding-bottom: 40px"><ion-icon name="layers-outline" size="large"></ion-icon>Histórico</label>
+          </li>
+          <li>
+              <button id="dropdownNavbarLink" style="padding-bottom: 40px" data-dropdown-toggle="dropdownNavbar" class="btn btn-sm"><ion-icon name="layers-outline" size="large"></ion-icon>AV <svg class="w-5 h-5 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+              <!-- Dropdown menu -->
+              <div id="dropdownNavbar" class="z-10 hidden font-normal bg-dark divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                  <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+                    <li>
+                        <label for="my-modal-4" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Dados atuais</label>
+                    </li>
+                    <li>
+                        <label for="my-modal-5" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >FLUXO</label>
+                    </li>
+                  </ul>
+              </div>
+          </li>
+          
+          <li>
+            <button id="dropdownNavbarLink2" style="padding-bottom: 40px" data-dropdown-toggle="dropdownNavbar2" class="btn btn-sm"><ion-icon name="layers-outline" size="large"></ion-icon>Reservas <svg class="w-5 h-5 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+            <!-- Dropdown menu -->
+            <div id="dropdownNavbar2" class="z-10 hidden font-normal bg-dark divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+                  <li>
+                      <label for="my-modal-6" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Hotel</label>
+                  </li>
+                  <li>
+                      <label for="my-modal-7" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Transporte</label>
+                  </li>
+                </ul>
+            </div>
+        </li>
+
+        <li>
+            <button id="dropdownNavbarLink3" style="padding-bottom: 40px" data-dropdown-toggle="dropdownNavbar3" class="btn btn-sm"><ion-icon name="layers-outline" size="large"></ion-icon>Financeiro <svg class="w-5 h-5 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+            <!-- Dropdown menu -->
+            <div id="dropdownNavbar3" class="z-10 hidden font-normal bg-dark divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+                    <li>
+                        <label for="my-modal-8" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Adiantamentos</label>
+                    </li>
+                    <li>
+                        <label for="my-modal-9" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"> Ver AV INICIAL</label>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+
 <div class="row justify-content-start" style="padding-left: 5%">
     <div class="col-1"></div>
-    <div class="col-2">
-        <a href="/avs/autPcFinanceiro" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
-    </div>
     <div class="col-6"></div>
     <div class="col-1">
-        <div class="dropdown dropdown-bottom dropdown-end">
-            <label tabindex="0" class="btn m-1">Ajuda</label>
-            <ul tabindex="0" class="dropdown-content card card-compact w-80 p-2 shadow text-primary-content">
-                <div class="chat chat-end">
-                    <div class="chat-image avatar">
-                        <div class="w-10 rounded-full">
-                          <img src="{{asset('/img/user.png')}}" />
-                        </div>
-                      </div>
-                      <div class="chat-bubble chat-bubble-success">
-                        Olá {{$user->name}}!
-                      </div>
-                </div>
-                <div class="chat chat-end">
-                    <div class="chat-image avatar">
-                        <div class="w-10 rounded-full">
-                          <img src="{{asset('/img/user.png')}}" />
-                        </div>
-                      </div>
-                      <div class="chat-bubble chat-bubble-success">
-                        Aqui nesta etapa você deve avaliar a Prestação de Contas do usuário!
-                      </div>
-                </div>
-                <div class="chat chat-end">
-                    <div class="chat-image avatar">
-                        <div class="w-10 rounded-full">
-                          <img src="{{asset('/img/user.png')}}" />
-                        </div>
-                      </div>
-                      <div class="chat-bubble chat-bubble-success">
-                        Para isso analise se os comprovantes emitidos são válidos e se ocorreu alguma edição na AV, assim como em suas rotas.
-                      </div>
-                </div>
-                <div class="chat chat-end">
-                    <div class="chat-image avatar">
-                        <div class="w-10 rounded-full">
-                          <img src="{{asset('/img/user.png')}}" />
-                        </div>
-                      </div>
-                      <div class="chat-bubble chat-bubble-success">
-                        Na opção "Ver documento AV" é possível verificar a AV em seu estado inicial.
-                      </div>
-                </div>
-
-            </ul>
-          </div>
+        
     </div>
     
 </div>
@@ -76,27 +98,10 @@
         </ion-icon> <strong>E-mail do usuário: </strong> 
         @foreach($users as $u)
                 @if ($u->id == $av->user_id)
-                    {{ $u->email }}
+                    {{ $u->username }}
                 @endif
         @endforeach
         </p>  
-        
-            <div >
-                <label for="my-modal-3" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="layers-outline" size="large"></ion-icon>Histórico</label>
-                <label for="my-modal-4" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="cube-outline" size="large"></ion-icon>Dados atuais da AV</label>
-                <label for="my-modal-5" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="analytics-outline" size="large"></ion-icon>FLUXO</label>
-                
-                <br><br>
-
-                <label for="my-modal-6" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="bed-outline" size="large"></ion-icon>Reservas de hotel</label>
-                <label for="my-modal-7" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="car-outline" size="large"></ion-icon>Reservas de transporte</label>
-                <label for="my-modal-8" class="btn btn-sm" style="padding-bottom: 30px"><ion-icon name="cash-outline" size="large"></ion-icon>Adiantamentos</label>
-                <label for="my-modal-9" class="btn btn-sm btn-warning"> Ver Documento AV</label>
-
-                
-                <br><br>
-                
-            </div>
             <div class="divider"></div> 
         
 
@@ -136,7 +141,7 @@
                             {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
                             
                         </td>
-                        <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
+                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
         
                         <td> 
                             @if($rota->isAereo == 1)
@@ -154,7 +159,7 @@
                             {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
                         </td>
         
-                        <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
+                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
                         <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
                         <td> 
                             {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
@@ -303,7 +308,7 @@
                     </ion-icon> <strong>E-mail do usuário: </strong> 
                     @foreach($users as $u)
                             @if ($u->id == $av->user_id)
-                                {{ $u->email }}
+                                {{ $u->username }}
                             @endif
                     @endforeach
                     </p>     
@@ -419,7 +424,7 @@
                                 <div class="badge badge-error gap-2">Avalia pedido</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 border-2 border-black">
+                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
                             @if($av->isRealizadoReserva == 1)
                                 <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
                                     <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
@@ -494,7 +499,7 @@
                                 <div class="badge badge-warning gap-2">Realiza PC</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
+                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 border-2 border-black">
                             @if($av->isFinanceiroAprovouPC == 1)
                                 <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
                                     <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
@@ -724,6 +729,53 @@
                 </table>
             </div>
         </div>
+    </div>
+
+    <div class="dropdown dropdown-top dropdown-end">
+        <label tabindex="0" class="btn" style="position: fixed; bottom: 20px; right: 20px;"><ion-icon name="cash-outline" size="large"></ion-icon>Ajuda</label>
+        <ul tabindex="0" class="dropdown-content card card-compact w-80 p-2 shadow text-primary-content" style="position: fixed; bottom: 70px; right: 20px;">
+            <div class="chat chat-end">
+                <div class="chat-image avatar">
+                    <div class="w-10 rounded-full">
+                      <img src="{{asset('/img/user.png')}}" />
+                    </div>
+                  </div>
+                  <div class="chat-bubble chat-bubble-success">
+                    Olá {{$user->name}}!
+                  </div>
+            </div>
+            <div class="chat chat-end">
+                <div class="chat-image avatar">
+                    <div class="w-10 rounded-full">
+                      <img src="{{asset('/img/user.png')}}" />
+                    </div>
+                  </div>
+                  <div class="chat-bubble chat-bubble-success">
+                    Aqui nesta etapa você deve avaliar a Prestação de Contas do usuário!
+                  </div>
+            </div>
+            <div class="chat chat-end">
+                <div class="chat-image avatar">
+                    <div class="w-10 rounded-full">
+                      <img src="{{asset('/img/user.png')}}" />
+                    </div>
+                  </div>
+                  <div class="chat-bubble chat-bubble-success">
+                    Para isso analise se os comprovantes emitidos são válidos e se ocorreu alguma edição na AV, assim como em suas rotas.
+                  </div>
+            </div>
+            <div class="chat chat-end">
+                <div class="chat-image avatar">
+                    <div class="w-10 rounded-full">
+                      <img src="{{asset('/img/user.png')}}" />
+                    </div>
+                  </div>
+                  <div class="chat-bubble chat-bubble-success">
+                    Na opção "Ver AV inicial" no menu FINANCEIRO é possível verificar a AV em seu estado inicial.
+                  </div>
+            </div>
+    
+        </ul>
     </div>
     
 @endsection

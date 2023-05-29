@@ -853,7 +853,7 @@
                                 {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
                                 
                             </td>
-                            <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
+                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
             
                             <td> 
                                 @if($rota->isAereo == 1)
@@ -871,7 +871,7 @@
                                 {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
                             </td>
             
-                            <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
+                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
                             <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
                             <td> 
                                 {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}

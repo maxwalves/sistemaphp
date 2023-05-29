@@ -27,9 +27,7 @@
             @break
             @endif
         @endfor
-        @if(count($avs)==0 && $search)
-            <p>Não foi possível encontrar nenhuma AV correspondente com {{ $search }}! <a href="/">Ver todos!</a></p>
-        @elseif(count($avs)==0)
+        @if(count($avs)==0)
             <p>Não há autorizações de viagens vinculadas ao seu usuário!</p> 
         @elseif(count($avs)==1)
         @endif       

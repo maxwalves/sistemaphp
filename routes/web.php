@@ -101,8 +101,6 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::put('/rotaspc/update/{id}', [ControladorRota::class, 'update'])->middleware('auth');
     Route::put('/avspc/concluir/{id}', [ControladorAv::class, 'concluir'])->middleware('auth');
 
-    Route::put('/avs/salvarCalculoRotaPc/', [ControladorAv::class, 'salvarCalculoRotaPc'])->middleware('auth');
-
     Route::get('/avs/relatorio-pdf/{id}', [RelatorioController::class, 'gerarRelatorioPDF']);
     Route::get('/avs/relatorio/{id}', [RelatorioController::class, 'abrirPagina']);
     Route::post('/avs/gravarComprovante', [ControladorAv::class,'gravarComprovante'])->middleware('auth');

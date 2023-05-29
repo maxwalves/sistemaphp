@@ -92,7 +92,7 @@
                 </ion-icon> <strong>E-mail do usuário: </strong> 
                 @foreach($users as $u)
                         @if ($u->id == $av->user_id)
-                            {{ $u->email }}
+                            {{ $u->username }}
                         @endif
                 @endforeach
                 </p>  
@@ -378,7 +378,7 @@
                     </ion-icon> <strong>E-mail do usuário: </strong> 
                     @foreach($users as $u)
                             @if ($u->id == $av->user_id)
-                                {{ $u->email }}
+                                {{ $u->username }}
                             @endif
                     @endforeach
                     </p>     
@@ -814,7 +814,7 @@
                                 {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
                                 
                             </td>
-                            <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
+                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
             
                             <td> 
                                 @if($rota->isAereo == 1)
@@ -832,12 +832,25 @@
                                 {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
                             </td>
             
-                            <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
+                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
                             <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
                             <td> 
                                 {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
                                 {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                                {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
+                                @if($rota->isVeiculoProprio == 1)
+                                {{"Veículo próprio: "}} <br>
+                                @foreach ($veiculosProprios as $v)
+
+                                    @if($v->id == $rota->veiculoProprio_id)
+                                        {{$v->modelo . '-' . $v->placa}}
+                                    @endif
+                                    
+                                @endforeach
+                                
+                                @if(count($veiculosProprios) == 0)
+                                    {{"Não encontrado"}}
+                                @endif
+                            @endif
                                 {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                                 {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                             </td>
@@ -972,7 +985,7 @@
                     }
             });
             $('#minhaTabela6').DataTable({
-                    scrollY: 100,
+                    scrollY: 200,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

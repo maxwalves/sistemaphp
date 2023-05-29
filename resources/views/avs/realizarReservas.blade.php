@@ -23,7 +23,7 @@
     </ion-icon> <strong>E-mail do usuário: </strong> 
     @foreach($users as $u)
             @if ($u->id == $av->user_id)
-                {{ $u->email }}
+                {{ $u->username }}
             @endif
     @endforeach
     </p>  

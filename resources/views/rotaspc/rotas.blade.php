@@ -2,14 +2,23 @@
 
 @section('title', 'Dashboard')
 @section('content')
+
+<style>
+    @media (max-width: 600px) {
+      div {
+        flex-direction: column;
+      }
+    }
+  </style>
+
 <div style="padding-left: 50px, padding-right: 50px" class="container">
     <div class="row justify-content-between" style="padding-left: 5%">
-        <div class="btn-group">
+        <div style="display: flex; justify-content: space-between;">
             <div class="col-4" >
-                <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-ghost" style="width: 200px"> Voltar!</a>
+                <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-ghost" style="width: 180px"> Voltar!</a>
             </div>
             <div class="col-4" >
-                <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 200px"> + CADASTRAR ROTA</a>
+                <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 180px"> + CADASTRAR ROTA</a>
             </div>
 
             <form action="/avspc/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
@@ -18,16 +27,22 @@
                 <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
                 <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
                 <div id="btSalvarRota">
-                    <input style="font-size: 16px" type="submit" class="btn btn-active btn-secondary" value="Calcular diárias">
+                    <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-secondary" value="Calcular diárias">
                 </div>
             </form>
 
 
         </div>
-        <div class="col-4">
-            <label for="idav" > <strong>AV nº </strong> </label>
-            <input style="width: 50px; font-size: 16px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
-            <h2> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
+        <div class="col-12 col-xl-4">
+            <label for="idav" style="font-size: 24px; color: green"> <strong>AV nº </strong> </label>
+            <input style="width: 50px; font-size: 24px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
+            <h2 style="font-size: 24px"> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
+            <h2 style="font-size: 24px"> <strong>Valor adiantamento em reais: <span style="color: green"> R${{ $av->valorReais + $av->valorExtraReais }},00 </span></strong> </h2>
+            <h2 style="font-size: 24px"> <strong>Valor adiantamento em dólar: <span style="color: green"> ${{ $av->valorDolar + $av->valorExtraDolar }},00 </span></strong> </h2>
+        </div>
+        <div class="col-12 col-xl-4">
+            <br>
+            <h2 style="font-size: 20px; color: red"> <strong> Após editar as rotas, pressione "Calcular Diárias"!</strong> </h2>
         </div>
     </div>
     
@@ -70,7 +85,7 @@
                     {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
                     
                 </td>
-                <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
+                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
 
                 <td> 
                     @if($rota->isAereo == 1)
@@ -88,7 +103,7 @@
                     {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
                 </td>
 
-                <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
+                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
                 <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
                 <td> 
                     {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}

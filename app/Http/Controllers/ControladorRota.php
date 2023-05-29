@@ -7,6 +7,8 @@ use App\Models\Av;
 use App\Models\VeiculoParanacidade;
 use App\Models\VeiculoProprio;
 use Illuminate\Http\Request;
+use DateTimeZone;
+use DateTime;
 
 class ControladorRota extends Controller
 {
@@ -32,8 +34,9 @@ class ControladorRota extends Controller
         $user = auth()->user();
         $av = Av::findOrFail($id);//Busca a AV com base no ID
         $rotas = $av->rotas;//Busca as rotas da AV
+        $veiculosProprios = VeiculoProprio::all();
 
-        return view('rotas.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user]);
+        return view('rotas.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user, 'veiculosProprios' => $veiculosProprios]);
     }
 
     public function rotaspc($id)//Id da AV
@@ -139,6 +142,10 @@ class ControladorRota extends Controller
             $regras += ['selecaoCidadeDestinoNacional' => 'required'];
 
             //Setar os campos para viagem nacional
+            $timezone = new DateTimeZone('America/Sao_Paulo');
+            $rota->dataHoraSaida = new DateTime('now', $timezone);
+            $rota->dataHoraChegada = new DateTime('now', $timezone);
+            
             $rota->dataHoraSaida = $request->dataHoraSaidaNacional;
             $rota->dataHoraChegada = $request->dataHoraChegadaNacional;
 

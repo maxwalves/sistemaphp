@@ -3,14 +3,22 @@
 @section('title', 'Dashboard')
 @section('content')
 
+<style>
+    @media (max-width: 600px) {
+      div {
+        flex-direction: column;
+      }
+    }
+  </style>
+
 <div style="padding-left: 50px, padding-right: 50px" class="container">
     <div class="row justify-content-between" style="padding-left: 5%">
-        <div class="btn-group">
+        <div style="display: flex; justify-content: space-between;">
             <div class="col-4" >
-                <a href="/avs/avs/" type="submit" class="btn btn-active btn-ghost" style="width: 200px"> Voltar!</a>
+                <a href="/avs/avs/" type="submit" class="btn btn-active btn-ghost" style="width: 180px"> Voltar!</a>
             </div>
             <div class="col-4" >
-                <a href="/rotas/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 200px"> + CADASTRAR ROTA</a>
+                <a href="/rotas/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 180px"> + CADASTRAR ROTA</a>
             </div>
 
             <form action="/avs/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
@@ -18,7 +26,7 @@
                 @method('PUT')
                 <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
                 <div id="btSalvarRota">
-                    <input style="font-size: 16px" type="submit" class="btn btn-active btn-secondary" value="Calcular diárias">
+                    <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-secondary" value="Calcular diárias">
                 </div>
             </form>
             
@@ -69,7 +77,7 @@
                     {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
                     
                 </td>
-                <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
+                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
 
                 <td> 
                     @if($rota->isAereo == 1)
@@ -87,12 +95,25 @@
                     {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
                 </td>
 
-                <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
+                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
                 <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
                 <td> 
                     {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
                     {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                    {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
+                    @if($rota->isVeiculoProprio == 1)
+                        {{"Veículo próprio: "}} <br>
+                        @foreach ($veiculosProprios as $v)
+
+                            @if($v->id == $rota->veiculoProprio_id)
+                                {{$v->modelo . '-' . $v->placa}}
+                            @endif
+                            
+                        @endforeach
+                        
+                        @if(count($veiculosProprios) == 0)
+                            {{"Não encontrado"}}
+                        @endif
+                    @endif
                     {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                     {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                 </td>

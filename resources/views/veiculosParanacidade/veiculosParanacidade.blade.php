@@ -16,6 +16,7 @@
                 <th>Placa</th>
                 <th>Ativo?</th>
                 <th>Observação</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -24,14 +25,14 @@
                 <td> {{$veiculoParanacidade->marca}} </td>
                 <td> {{$veiculoParanacidade->modelo}} </td>
                 <td> {{$veiculoParanacidade->placa}} </td>
-                <td> {{ $veiculoParanacidade->isAtivo == "1" ? "Sim" : "Não"}} </td>
+                <td> {{$veiculoParanacidade->isAtivo == "1" ? "Sim" : "Não"}} </td>
                 <td> {{$veiculoParanacidade->observacao}} </td>
                 <td> 
-                    <a href="/veiculosParanacidade/edit/{{ $veiculoParanacidade->id }}" class="btn btn-info btn-sm edit-btn"> <ion-icon name="create-outline"></ion-icon> Editar</a> 
+                    <a href="/veiculosParanacidade/edit/{{ $veiculoParanacidade->id }}" class="btn btn-success btn-sm"> <ion-icon name="create-outline"></ion-icon> Editar</a> 
                     <form action="/veiculosParanacidade/{{ $veiculoParanacidade->id }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm delete-btn"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
+                        <button type="submit" class="btn btn-error btn-sm"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
                     </form>
                 </td>
             </tr>

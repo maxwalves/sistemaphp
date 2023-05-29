@@ -95,7 +95,7 @@
                 </ion-icon> <strong>E-mail do usuário: </strong> 
                 @foreach($users as $u)
                         @if ($u->id == $av->user_id)
-                            {{ $u->email }}
+                            {{ $u->username }}
                         @endif
                 @endforeach
                 </p>  
@@ -394,7 +394,7 @@
                     </ion-icon> <strong>E-mail do usuário: </strong> 
                     @foreach($users as $u)
                             @if ($u->id == $av->user_id)
-                                {{ $u->email }}
+                                {{ $u->username }}
                             @endif
                     @endforeach
                     </p>     
@@ -838,7 +838,6 @@
                 <table id="tabelaRota" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Número</th>
                             <th>Tipo</th>
                             <th>Cidade de saída</th>
                             <th>Data/Hora de saída</th>
@@ -851,7 +850,6 @@
                     <tbody>
                         @foreach($av->rotas as $rota)
                         <tr>
-                            <td> {{$rota->id}} </td>
                             <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
                             <td> 
                                 @if($rota->isAereo == 1)
@@ -869,7 +867,7 @@
                                 {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
                                 
                             </td>
-                            <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
+                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
             
                             <td> 
                                 @if($rota->isAereo == 1)
@@ -887,7 +885,7 @@
                                 {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
                             </td>
             
-                            <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
+                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
                             <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
                             <td> 
                                 {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}

@@ -25,7 +25,7 @@
         </ion-icon> <strong>E-mail do usuário: </strong> 
         @foreach($users as $u)
                 @if ($u->id == $av->user_id)
-                    {{ $u->email }}
+                    {{ $u->username }}
                 @endif
         @endforeach
         </p>  
@@ -46,7 +46,6 @@
             <table id="tabelaRota" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Número</th>
                         <th>Tipo</th>
                         <th>Cidade de saída</th>
                         <th>Data/Hora de saída</th>
@@ -59,7 +58,6 @@
                 <tbody>
                     @foreach($av->rotas as $rota)
                     <tr>
-                        <td> {{$rota->id}} </td>
                         <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
                         <td> 
                             @if($rota->isAereo == 1)
@@ -77,7 +75,7 @@
                             {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
                             
                         </td>
-                        <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraSaida)) }} </td>
+                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
         
                         <td> 
                             @if($rota->isAereo == 1)
@@ -95,12 +93,25 @@
                             {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
                         </td>
         
-                        <td> {{ date('d/m/Y H:m', strtotime($rota->dataHoraChegada)) }} </td>
+                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
                         <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
                         <td> 
                             {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
                             {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                            {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
+                            @if($rota->isVeiculoProprio == 1)
+                                {{"Veículo próprio: "}} <br>
+                                @foreach ($veiculosProprios as $v)
+
+                                    @if($v->id == $rota->veiculoProprio_id)
+                                        {{$v->modelo . '-' . $v->placa}}
+                                    @endif
+                                    
+                                @endforeach
+                                
+                                @if(count($veiculosProprios) == 0)
+                                    {{"Não encontrado"}}
+                                @endif
+                            @endif
                             {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                             {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                         </td>
@@ -211,12 +222,27 @@
                     </ion-icon> <strong>E-mail do usuário: </strong> 
                     @foreach($users as $u)
                             @if ($u->id == $av->user_id)
-                                {{ $u->email }}
+                                {{ $u->username }}
                             @endif
                     @endforeach
                     </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="calendar-outline"></ion-icon> <strong>Data de criação: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="flag-outline"></ion-icon> <strong>Objetivo:</strong> {{ isset($objetivo->nomeObjetivo) ? $objetivo->nomeObjetivo : $av->outroObjetivo }} </p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="flag-outline">
+                    </ion-icon> <strong>Objetivo:</strong> 
+
+                    @for($i = 0; $i < count($objetivos); $i++)
+
+                        @if ($av->objetivo_id == $objetivos[$i]->id )
+                                {{$objetivos[$i]->nomeObjetivo}}     
+                        @endif
+    
+                    @endfor
+
+                    @if (isset($av->outroObjetivo))
+                            {{$av->outroObjetivo }} 
+                    @endif
+
+                </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="alert-circle-outline"></ion-icon> <strong>Prioridade:</strong> {{ $av->prioridade }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="pricetag-outline"></ion-icon> <strong>Comentário:</strong> {{ $av->comentario }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Status:</strong>  {{ $av->status }} </p>
