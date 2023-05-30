@@ -38,7 +38,6 @@
                         </p>
                         <p><strong>Prioridade:</strong> {{ $av->prioridade }} </p>
                         <p><strong>Comentário:</strong> {{ $av->comentario }} </p>
-                        <p><strong>Status:</strong>  {{ $av->status }} </p>
                         
                     </div>
                     

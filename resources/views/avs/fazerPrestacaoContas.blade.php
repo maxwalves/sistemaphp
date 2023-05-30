@@ -107,142 +107,83 @@
                     style="width: 150px"> Editar Rotas</a> 
                 
             </div>
-            <div class="divider"></div> 
-        
-
-        <div class="col-md-12 offset-md-0">
-            <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
-            <table id="tabelaRota" class="display nowrap" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Número</th>
-                        <th>Tipo</th>
-                        <th>Cidade de saída</th>
-                        <th>Data/Hora de saída</th>
-                        <th>Cidade de chegada</th>
-                        <th>Data/Hora de chegada</th>
-                        <th>Hotel?</th>
-                        <th>Tipo de transporte</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($av->rotas as $rota)
-                    <tr>
-                        <td> {{$rota->id}} </td>
-                        <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
-                        <td> 
-                            @if($rota->isAereo == 1)
-                                <img src="{{asset('/img/aviaosubindo.png')}}" style="width: 40px" >
-                            @endif
-        
-                            @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
-                            @endif
-        
-                            @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
-                            @endif
-        
-                            {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
-                            
-                        </td>
-                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-        
-                        <td> 
-                            @if($rota->isAereo == 1)
-                                <img src="{{asset('/img/aviaodescendo.png')}}" style="width: 40px" >
-                            @endif
-        
-                            @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
-                            @endif
-        
-                            @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
-                            @endif
-        
-                            {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
-                        </td>
-        
-                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                        <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
-                        <td> 
-                            {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
-                            {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                            {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
-                            {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
-                            {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            
-        </div>
 
         <div class="divider"></div> 
 
         <div class="col-3">
             <label for="my-modal-10" class="btn btn-active btn-success btn-sm" style="padding-bottom: 30px; width:150px"><ion-icon name="add-circle-outline" size="large"></ion-icon>Adicionar</label>
         </div>
-        <div class="col-md-6 offset-md-0">
-            <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
-            <table id="minhaTabela5" class="display nowrap" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Descrição</th>
-                        <th>Valor em reais</th>
-                        <th>Valor em dólar</th>
-                        <th>Anexo</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($comprovantes as $comp)
+        <div class="row">
+            <div class="col-12 col-xl-6">
+                <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
+                <table id="minhaTabela5" class="display nowrap" style="width:100%">
+                    <thead>
                         <tr>
-                            <td> {{$comp->descricao}} </td>
-                            <td> R${{$comp->valorReais}},00 </td>
-                            <td> ${{$comp->valorDolar}},00 </td>
-                        
-                            <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
-                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                            
-                            <td>
-                                <form action="/avs/deletarComprovante/{{ $comp->id }}/{{ $av->id }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-active btn-accent btn-sm"
-                                    style="width: 110px" > Deletar</button>
-                                </form>
-                            </td>
+                            <th>Descrição</th>
+                            <th>Valor em reais</th>
+                            <th>Valor em dólar</th>
+                            <th>Anexo</th>
+                            <th>Ações</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($comprovantes as $comp)
+                            <tr>
+                                <td> {{$comp->descricao}} </td>
+                                <td> R${{$comp->valorReais}},00 </td>
+                                <td> ${{$comp->valorDolar}},00 </td>
+                            
+                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
+                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                
+                                <td>
+                                    <form action="/avs/deletarComprovante/{{ $comp->id }}/{{ $av->id }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-active btn-accent btn-sm"
+                                        style="width: 110px" > Deletar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-xl-6">
+                <form action="/avs/usuarioEnviarPrestacaoContas" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                        <div class="form-group">
+                            <label for="contatos" class="control-label">Contatos:</label><br>
+                            <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos"
+                            id="contatos" placeholder="Contatos" style="width: 400px; height: 100px"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="atividades" class="control-label">Atividades:</label><br>
+                            <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades"
+                            id="atividades" placeholder="Atividades" style="width: 400px; height: 100px"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="conclusoes" class="control-label">Conclusões:</label><br>
+                            <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes"
+                            id="conclusoes" placeholder="Conclusões" style="width: 400px; height: 100px"></textarea>
+                        </div>
+                
+                        <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                        <label for="comentario">Enviar AV para aprovação do Financeiro: </label>
+                        <br>
+                        <textarea type="text" class="textarea textarea-bordered h-24" 
+                            name="comentario" style="width: 200px"
+                            id="comentario" placeholder="Comentário"></textarea>
+    
+                        <button type="submit" class="btn btn-active btn-success">Enviar AV</button>
+                </form>
+            </div>
         </div>
-
         <div class="divider"></div> 
 
-        <div class="flex flex-row">
-            <form action="/avs/usuarioEnviarPrestacaoContas" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                    <label for="comentario">Enviar AV para aprovação do Financeiro: </label>
-                    <br>
-                    <textarea type="text" class="textarea textarea-bordered h-24" 
-                        name="comentario" style="width: 200px"
-                        id="comentario" placeholder="Comentário"></textarea>
-
-                    <button type="submit" class="btn btn-active btn-success">Enviar AV</button>
-            </form>
-            
-        </div>
-
     </div>
-
     
-
     <input type="checkbox" id="my-modal-3" class="modal-toggle" />
 
     <div class="modal">
@@ -928,7 +869,7 @@
             });
 
             $('#minhaTabela5').DataTable({
-                    scrollY: 200,
+                    scrollY: 300,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

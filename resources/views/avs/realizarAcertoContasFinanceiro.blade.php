@@ -36,6 +36,9 @@
                     <li>
                         <label for="my-modal-10" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Trajeto</label>
                     </li>
+                    <li>
+                        <label for="my-modal-13" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Relatório</label>
+                    </li>
                   </ul>
               </div>
           </li>
@@ -951,6 +954,36 @@
                                 @endforeach
                             </tbody>
                         </table>
+
+            </div>
+        </div>
+    </div>
+
+    <input type="checkbox" id="my-modal-13" class="modal-toggle" />
+
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-1xl">
+            <div class="modal-content">
+                <label for="my-modal-13" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <br>
+                
+                <h1 style="font-size: 24px"><strong>Relatório:</strong></h1>
+
+                    <div class="form-group">
+                        <label for="contatos" class="control-label">Contatos:</label><br>
+                        <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos"
+                        id="contatos" placeholder="Contatos" style="width: 400px; height: 100px" disabled>{{$av->contatos}}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="atividades" class="control-label">Atividades:</label><br>
+                        <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades"
+                        id="atividades" placeholder="Atividades" style="width: 400px; height: 100px" disabled>{{$av->atividades}}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="conclusoes" class="control-label">Conclusões:</label><br>
+                        <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes"
+                        id="conclusoes" placeholder="Conclusões" style="width: 400px; height: 100px" disabled>{{$av->conclusoes}}</textarea>
+                    </div>
 
             </div>
         </div>

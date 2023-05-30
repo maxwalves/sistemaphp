@@ -415,13 +415,13 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
         
-        //if($userAv->id != $user->id){//Se  o usuário não for você
+        if($userAv->id != $user->id){//Se  o usuário não for você
             if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
                     && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true 
                     && $av["isGestorAprovouPC"]==true&& $av["isAcertoContasRealizado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
             }
-        //}
+        }
 
         if($possoEditar == true){
             return view('avs.realizarAcertoContasFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
@@ -593,11 +593,14 @@ class ControladorAv extends Controller
             }
         }
 
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true 
+        && $av["isAprovadoFinanceiro"]==true  && $av["isReservadoVeiculoParanacidade"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
 
             foreach($av->rotas as $rota){//Percorre todas as rotas da AV
-                if($rota["isVeiculoEmpresa"]==1){//Se a viage tiver veículo da empresa
-                    $possoEditar = true;
+                if($rota["isVeiculoEmpresa"]==1){//Se a viagem tiver veículo da empresa
+                    //if( $av->user_id != $user->id){//Verifica se não é vc mesmo
+                        $possoEditar = true;
+                    //}
                 }
             }
         }
@@ -1318,7 +1321,6 @@ class ControladorAv extends Controller
             $users = User::all();
             foreach($users as $u){
                 try {
-                    dd($u->username);
                     if($u->hasPermissionTo($permission)){
                         Mail::to($u->username)
                         ->send(new EnvioFinanceiroToAdmFrota($av->user_id, $u->id));
@@ -1350,7 +1352,10 @@ class ControladorAv extends Controller
         
         $dados = array(
             "isPrestacaoContasRealizada" => 1,
-            "status" => "Aguardando aprovação da Prestação de Contas pelo Financeiro"
+            "status" => "Aguardando aprovação da Prestação de Contas pelo Financeiro",
+            "contatos" => $request->get('contatos'),
+            "atividades" => $request->get('atividades'),
+            "conclusoes" => $request->get('conclusoes')
         );
 
         Av::findOrFail($av->id)->update($dados);
@@ -2683,7 +2688,7 @@ class ControladorAv extends Controller
 
         $avsFiltradas = [];
         foreach($users as $uf){//Verifica todos os usuários
-            //if($uf->id != $user->id){//Se  o usuário não for você
+            if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
                     if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
                     && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==true 
@@ -2692,7 +2697,7 @@ class ControladorAv extends Controller
                         array_push($avsFiltradas, $avAtual);
                     }
                 }
-            //}
+            }
         }
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();
