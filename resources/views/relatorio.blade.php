@@ -40,7 +40,7 @@
                         <p><strong>Comentário:</strong> {{ $av->comentario }} </p>
                         
                     </div>
-                    
+                    <br>
                     <h2 >Dados bancários:</h2>
                     
                     <div style="border: 1px solid black; padding-left:10px">
@@ -51,7 +51,7 @@
                         <p><strong>Pix:</strong> {{ $av->pix }} </p>
                         
                     </div>
-                    <br><br><br><br>
+                    <br><br><br><br><br>
 
                     <h2 >Adiantamentos:</h2>
                     <div style="border: 1px solid black; padding-left:10px">

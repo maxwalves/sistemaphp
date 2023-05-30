@@ -118,10 +118,12 @@
                         </div>
 
                         <div class="form-group">
+                            
                             <label for="selecaoEstadoOrigem" class="control-label">Digite o nome do estado/província origem:</label>
                             <br>
                                 <input class="input input-bordered input-primary w-full max-w-xs {{ $errors->has('selecaoEstadoOrigem') ? 'is-invalid' :''}}" type="text"
                                 id="selecaoEstadoOrigem" name="selecaoEstadoOrigem">
+                                <h3 style="color: brown"> Obs: Caso não possua Estado/Província, preencha com o nome da cidade.</h3>
 
                                 @if ($errors->has('selecaoEstadoOrigem'))
                                 <div class="invalid-feedback">
@@ -207,12 +209,13 @@
                         </div>
 
                         <div class="form-group">
+                            
                             <label for="selecaoEstadoDestinoInternacional" class="control-label">Digite o nome do estado/província destino:</label>
                             <br>
 
                                 <input class="input input-bordered input-primary w-full max-w-xs {{ $errors->has('selecaoEstadoDestinoInternacional') ? 'is-invalid' :''}}" type="text"
                                 id="selecaoEstadoDestinoInternacional" name="selecaoEstadoDestinoInternacional">
-            
+                                <h3 style="color: brown"> Obs: Caso não possua Estado/Província, preencha com o nome da cidade.</h3>
                                 @if ($errors->has('selecaoEstadoDestinoInternacional'))
                                 <div class="invalid-feedback">
                                     {{ $errors->first('selecaoEstadoDestinoInternacional') }}

@@ -165,7 +165,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Histórico</h3>
                 <table id="minhaTabela" class="display nowrap">

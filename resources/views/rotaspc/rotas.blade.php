@@ -53,7 +53,6 @@
     <table id="tabelaRota" class="display nowrap" style="width:100%">
         <thead>
             <tr>
-                <th>Número</th>
                 <th>Tipo</th>
                 <th>Cidade de saída</th>
                 <th>Data/Hora de saída</th>
@@ -67,7 +66,6 @@
         <tbody>
             @foreach($rotas as $rota)
             <tr>
-                <td> {{$rota->id}} </td>
                 <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
                 <td> 
                     @if($rota->isAereo == 1)

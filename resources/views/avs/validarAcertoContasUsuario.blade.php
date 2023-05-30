@@ -151,11 +151,11 @@
                               
                             <div class="stat">
                                 <div class="stat-title">Valor em dólar</div>
-                                <div class="stat-value text-primary">$ {{$valorAcertoContasDolar}}</div>
+                                <div class="stat-value text-primary">$ {{$av->valorDolar}}</div>
                             </div>
                             <div class="stat">
                                   <div class="stat-title">Valor extra em dólar</div>
-                                  <div class="stat-value text-primary">$ {{$av->valorExtraDolar}}</div>
+                                  <div class="stat-value text-primary">$ {{$valorAcertoContasDolar}}</div>
                             </div>
                             
                         </div>
@@ -174,12 +174,13 @@
                               
                             <div class="stat">
                                 <div class="stat-title">Valor em dólar</div>
-                                <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar-$valorAcertoContasDolar}}</div>
+                                <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
                             </div>
                             <div class="stat">
                                   <div class="stat-title">Valor extra em dólar</div>
-                                  <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar-$av->valorExtraDolar}}</div>
+                                  <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -284,7 +285,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Aqui nesta etapa você deve avaliar a Prestação de Contas do usuário!
+                    Aqui nesta etapa você deve avaliar o Acerto de Contas efetuado pelo Financeiro!
                   </div>
             </div>
             <div class="chat chat-end">
@@ -294,7 +295,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Para isso analise se os comprovantes emitidos são válidos e se ocorreu alguma edição na AV, assim como em suas rotas.
+                    Para isso, analise os documentos comprobatórios e o cálculo realizado!
                   </div>
             </div>
             <div class="chat chat-end">
@@ -304,7 +305,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Na opção "Ver documento AV" é possível verificar a AV em seu estado inicial.
+                    Se tiver algo errado, volte a AV para o financeiro para correção!
                   </div>
             </div>
     
@@ -1043,7 +1044,7 @@
                     }
             });
             $('#minhaTabela6').DataTable({
-                    scrollY: 100,
+                    scrollY: 200,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

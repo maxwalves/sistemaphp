@@ -151,11 +151,11 @@
                               
                             <div class="stat">
                                 <div class="stat-title">Valor em dólar</div>
-                                <div class="stat-value text-primary">$ {{$valorAcertoContasDolar}}</div>
+                                <div class="stat-value text-primary">$ {{$av->valorDolar}}</div>
                             </div>
                             <div class="stat">
                                   <div class="stat-title">Valor extra em dólar</div>
-                                  <div class="stat-value text-primary">$ {{$av->valorExtraDolar}}</div>
+                                  <div class="stat-value text-primary">$ {{$valorAcertoContasDolar}}</div>
                             </div>
                             
                         </div>
@@ -174,11 +174,11 @@
                               
                             <div class="stat">
                                 <div class="stat-title">Valor em dólar</div>
-                                <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar-$valorAcertoContasDolar}}</div>
+                                <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
                             </div>
                             <div class="stat">
                                   <div class="stat-title">Valor extra em dólar</div>
-                                  <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar-$av->valorExtraDolar}}</div>
+                                  <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
                             </div>
                             
                         </div>

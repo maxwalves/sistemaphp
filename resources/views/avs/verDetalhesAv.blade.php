@@ -137,47 +137,48 @@
                             <br><br>
                             <p><strong> <span style="color: green">B:</span> Informado na prestação de contas</strong></p>
                             <div class="stats shadow">
-                
+              
                                 <div class="stat">
                                     <div class="stat-title">Valor em Reais</div>
                                     <div class="stat-value text-primary">R$ {{$av->valorReais}}</div>
                                 </div>
                                 <div class="stat">
-                                    <div class="stat-title">Valor extra em Reais</div>
-                                    <div class="stat-value text-primary">R$ {{$valorAcertoContasReal}}</div>
+                                      <div class="stat-title">Valor extra em Reais</div>
+                                      <div class="stat-value text-primary">R$ {{$valorAcertoContasReal}}</div>
                                 </div>
-                                
+                                  
                                 <div class="stat">
                                     <div class="stat-title">Valor em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$valorAcertoContasDolar}}</div>
+                                    <div class="stat-value text-primary">$ {{$av->valorDolar}}</div>
                                 </div>
                                 <div class="stat">
-                                    <div class="stat-title">Valor extra em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$av->valorExtraDolar}}</div>
+                                      <div class="stat-title">Valor extra em dólar</div>
+                                      <div class="stat-value text-primary">$ {{$valorAcertoContasDolar}}</div>
                                 </div>
                                 
                             </div>
                             <br><br>
                             <p><strong> <span style="color: red">A</span> - <span style="color: green">B</span>: Acerto de contas:</strong></p>
                             <div class="stats shadow">
-                
+              
                                 <div class="stat">
                                     <div class="stat-title">Valor em Reais</div>
                                     <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais-$av->valorReais}}</div>
                                 </div>
                                 <div class="stat">
-                                    <div class="stat-title">Valor extra em Reais</div>
-                                    <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais-$valorAcertoContasReal}}</div>
+                                      <div class="stat-title">Valor extra em Reais</div>
+                                      <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais-$valorAcertoContasReal}}</div>
                                 </div>
-                                
+                                  
                                 <div class="stat">
                                     <div class="stat-title">Valor em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar-$valorAcertoContasDolar}}</div>
+                                    <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
                                 </div>
                                 <div class="stat">
-                                    <div class="stat-title">Valor extra em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar-$av->valorExtraDolar}}</div>
+                                      <div class="stat-title">Valor extra em dólar</div>
+                                      <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
