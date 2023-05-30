@@ -133,7 +133,7 @@
                                 <li class="nav-item">
                                 <a class="btn btn-active btn-success rounded-none" href="/avs/prestacaoContasUsuario">Prestação de contas</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" hidden>
                                 <a class="btn btn-active btn-success rounded-none" href="#">Relatórios gerenciais</a>
                                 </li>
                                 @can('aprov-avs-gestor', $user)

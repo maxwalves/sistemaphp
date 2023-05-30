@@ -284,7 +284,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Aqui nesta etapa você deve avaliar a Prestação de Contas do usuário!
+                    Aqui nesta etapa você pode verificar o status da sua AV!
                   </div>
             </div>
             <div class="chat chat-end">
@@ -294,7 +294,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Para isso analise se os comprovantes emitidos são válidos e se ocorreu alguma edição na AV, assim como em suas rotas.
+                    No menu é possível ver informações importantes, como o histórico e o fluxo da AV.
                   </div>
             </div>
             <div class="chat chat-end">
@@ -304,7 +304,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Na opção "Ver documento AV" é possível verificar a AV em seu estado inicial.
+                    No menu também é possível verificar as reservas e o financeiro.
                   </div>
             </div>
     
