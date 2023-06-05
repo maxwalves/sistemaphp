@@ -76,38 +76,50 @@
                     @endif
             </div>
             
-            <div class="form-group">
-                <label for="banco" class="control-label">Banco</label><br>
-                <input type="number" class="input input-bordered input-secondary w-full max-w-xs" name="banco"
-                id="banco" placeholder="Banco" value="{{$av->banco}}"> 
-            </div>
-
-            <div class="form-group">
-                <label for="agencia" class="control-label">Agência</label><br>
-                <div class="input-group">
-                    <input type="number" class="input input-bordered input-secondary w-full max-w-xs" name="agencia"
-                    id="agencia" placeholder="Agência" value="{{$av->agencia}}">
+            <div class="mb-3">
+                <label for="banco" class="form-label">Banco</label>
+                <div class="input-group mb-3">   
+                    <input type="text" class="form-control" name="banco"
+                    id="banco" placeholder="Banco" value="{{$av->banco}}">
+                    <span class="input-group-text" id="basic-addon2">Ex: Banco do Brasil</span>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="conta" class="control-label">Conta</label><br>
-                <input type="number" class="input input-bordered input-secondary w-full max-w-xs" name="conta"
-                id="conta" placeholder="Conta" value="{{$av->conta}}">
+            <div class="mb-3">
+                <label for="agencia" class="form-label">Agência</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="agencia"
+                        id="agencia" placeholder="Agência" value="{{$av->agencia}}">
+                    <span class="input-group-text" id="basic-addon2">Ex: 1234-X</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="pix" class="control-label">Pix</label><br>
-                <input type="number" class="input input-bordered input-secondary w-full max-w-xs" name="pix"
-                    id="pix" placeholder="Pix" value="{{$av->pix}}">
+            <div class="mb-3">
+                <label for="conta" class="form-label">Conta</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="conta"
+                    id="conta" placeholder="Conta" value="{{$av->conta}}">
+                    <span class="input-group-text" id="basic-addon2">Ex: 12345-X</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="comentario" class="control-label">Comentários</label><br>
-                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="comentario"
-                    id="comentario" placeholder="Comentário" value="{{$av->comentario}}">
+            <div class="mb-3">
+                <label for="pix" class="form-label">Pix</label><br>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="pix"
+                        id="pix" placeholder="Pix" value="{{$av->pix}}">
+                    <span class="input-group-text" id="basic-addon2">Chave pix</span>
+                </div>
             </div>
 
+            <div class="mb-3">
+                <label for="comentario" class="form-label">Comentários</label><br>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="comentario"
+                        id="comentario" placeholder="Comentário" value="{{$av->comentario}}">
+                    <span class="input-group-text" id="basic-addon2">Opcional</span>
+                </div>
+            </div>
 
 
             <input type="submit" class="btn btn-primary" value="Salvar">
@@ -166,15 +178,6 @@
         $(function(){
         //Se o campo de outro objetivo for vazio, ativa o campo de seleção de objetivo e desabilita o de outro objetivo
             
-            if(document.getElementById("isVeiculoProprio").value == "1"){
-                document.getElementById("selecaoVeiculo").hidden = false;
-                document.getElementById("temVeiculoEmpresa").hidden = true;
-            }else{//Se o campo de outro objetivo tiver algo, faz o contrário
-                document.getElementById("selecaoVeiculo").hidden = true;
-            }
-
-
-
             if(document.getElementById("outroObjetivo").value == ""){
                 ativarCampoObjetivoInicial();
             }else{//Se o campo de outro objetivo tiver algo, faz o contrário

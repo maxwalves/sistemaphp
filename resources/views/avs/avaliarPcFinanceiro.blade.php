@@ -195,8 +195,8 @@
                     @foreach($comprovantes as $comp)
                         <tr>
                             <td> {{$comp->descricao}} </td>
-                            <td> R${{$comp->valorReais}},00 </td>
-                            <td> ${{$comp->valorDolar}},00 </td>
+                            <td> R${{$comp->valorReais}} </td>
+                            <td> ${{$comp->valorDolar}} </td>
                         
                             <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
                                 target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
@@ -357,7 +357,8 @@
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }},00</p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> R$ {{ $av->valorExtraDolar }},00</p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
-                    
+                    <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}" 
+                        target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
                     
                 </div>
 

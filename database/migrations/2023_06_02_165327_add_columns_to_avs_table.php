@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('historico_pcs', function (Blueprint $table) {
-            $table->float('valorExtraReais')->nullable();
-            $table->float('valorExtraDolar')->nullable();
+        Schema::table('avs', function (Blueprint $table) {
+            $table->string('autorizacao')->nullable();
         });
     }
 
@@ -22,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('historico_pcs', function (Blueprint $table) {
+        Schema::table('avs', function (Blueprint $table) {
             //
         });
     }

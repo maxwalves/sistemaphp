@@ -148,12 +148,12 @@
                                 @endcan
                                 @can('aprov-avs-secretaria', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent bg-info rounded-none" href="/avs/autSecretaria">Autorizações de AV pendentes Secretaria</a>
+                                        <a class="btn btn-active btn-accent bg-info rounded-none" href="/avs/autSecretaria">Autorizações de AV pendentes CAD</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autFinanceiro">Autorizações de AV pendentes Financeiro</a>
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autFinanceiro">Autorizações de AV pendentes CFI</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-frota', $user)
@@ -163,7 +163,7 @@
                                 @endcan
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcFinanceiro">Prestações de contas pendentes Financeiro</a>
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcFinanceiro">Prestações de contas pendentes CFI</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-gestor', $user)

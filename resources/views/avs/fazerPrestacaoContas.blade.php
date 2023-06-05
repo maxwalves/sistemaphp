@@ -130,8 +130,8 @@
                         @foreach($comprovantes as $comp)
                             <tr>
                                 <td> {{$comp->descricao}} </td>
-                                <td> R${{$comp->valorReais}},00 </td>
-                                <td> ${{$comp->valorDolar}},00 </td>
+                                <td> R${{$comp->valorReais}}</td>
+                                <td> ${{$comp->valorDolar}}</td>
                             
                                 <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
                                     target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
@@ -692,9 +692,9 @@
                         <label for="descricao">Descrição</label><br>
                         <input type="text" id="descricao" name="descricao" class="input input-bordered input-secondary w-full max-w-xs"><br>
                         <label for="valorReais">Valor em reais utilizado: </label><br>
-                        <input type="number" id="valorReais" name="valorReais" class="input input-bordered input-secondary w-full max-w-xs"><br>
+                        <input type="text" id="valorReais" name="valorReais" class="input input-bordered input-secondary w-full max-w-xs"><br>
                         <label for="valorDolar">Valor em dólar utilizado: </label><br>
-                        <input type="number" id="valorDolar" name="valorDolar" class="input input-bordered input-secondary w-full max-w-xs">
+                        <input type="text" id="valorDolar" name="valorDolar" class="input input-bordered input-secondary w-full max-w-xs">
                         <br><br>
                         <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
                 </form>

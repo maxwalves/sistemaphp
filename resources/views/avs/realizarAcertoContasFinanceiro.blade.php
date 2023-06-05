@@ -205,7 +205,7 @@
                                         <td> {{$hist->comentario}} </td>
                                         <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}" 
                                             target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                                        @if($hist->comentario != "Adiantamento realizado - valor inicial")
+                                            @if($hist->comentario != "Adiantamento realizado - valor inicial" && $hist->comentario != "Acerto de contas")
                                             <td>
                                                 <form action="/avs/deletarComprovanteAcertoContas/{{ $hist->id }}/{{ $av->id }}" method="POST">
                                                     @csrf
@@ -300,7 +300,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Aqui nesta etapa você deve avaliar a Prestação de Contas do usuário!
+                    Aqui nesta etapa você deve realizar o Acerto de Contas do usuário!
                   </div>
             </div>
             <div class="chat chat-end">
@@ -310,7 +310,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Para isso analise se os comprovantes emitidos são válidos e se ocorreu alguma edição na AV, assim como em suas rotas.
+                    Para isso verifique o cálculo realizado, a AV inicial e a prestação de contas fornecida pelo usuário.
                   </div>
             </div>
             <div class="chat chat-end">
@@ -320,7 +320,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Na opção "Ver documento AV" é possível verificar a AV em seu estado inicial.
+                    O resultado deverá ser pago/cobrado do usuário.
                   </div>
             </div>
     
@@ -443,7 +443,8 @@
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }},00</p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> R$ {{ $av->valorExtraDolar }},00</p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
-                    
+                    <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}" 
+                        target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
                     
                 </div>
 

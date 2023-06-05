@@ -343,12 +343,13 @@
 
                 <h1 class="text-lg font-bold">Adiantamentos:</h1>
                 <div class="stats stats-vertical shadow">
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$ {{ $av->valorReais }},00</p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> R$ {{ $av->valorDolar }},00</p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }},00</p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> R$ {{ $av->valorExtraDolar }},00</p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$ {{ $av->valorReais }}</p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> R$ {{ $av->valorDolar }}</p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> R$ {{ $av->valorExtraDolar }}</p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
-                    
+                    <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}" 
+                        target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
                     
                 </div>
 
@@ -557,7 +558,6 @@
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>IdRota</th>
                             <th>Rota</th>
                             <th>Anexo</th>
                         </tr>
@@ -568,14 +568,6 @@
                             <tr>
                                 <td> {{$anexoHotel->descricao}} </td>
                                 
-                                <td>
-                                    @for($i = 0; $i < count($av->rotas); $i++)
-
-                                        @if($anexoHotel->rota_id == $av->rotas[$i]->id)
-                                            {{$av->rotas[$i]->id}}
-                                        @endif
-                                    @endfor
-                                </td>    
                                 <td>
                                     @for($i = 0; $i < count($av->rotas); $i++)
 
@@ -616,7 +608,6 @@
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>IdRota</th>
                             <th>Rota</th>
                             <th>Anexo</th>
                         </tr>
@@ -627,14 +618,6 @@
                                 <tr>
                                     <td> {{$anexoTransporte->descricao}} </td>
                                     
-                                    <td>
-                                        @for($i = 0; $i < count($av->rotas); $i++)
-
-                                            @if($anexoTransporte->rota_id == $av->rotas[$i]->id)
-                                                {{$av->rotas[$i]->id}}
-                                            @endif
-                                        @endfor
-                                    </td>    
                                     <td>
                                         @for($i = 0; $i < count($av->rotas); $i++)
 

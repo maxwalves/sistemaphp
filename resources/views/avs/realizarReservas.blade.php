@@ -51,83 +51,88 @@
         </div>
         <div class="divider"></div> 
 
-        <div class="col-3">
-            <strong>Adicionar Reserva de Hotel</strong> 
-            <label for="my-modal-3" class="btn btn-active btn-success"><ion-icon name="add-circle-outline" size="large"></ion-icon></label>
-        </div>
-        <div class="col-md-6 offset-md-0">
-            <h1 style="font-size: 24px"><strong>Reserva de hotel: </strong></h1>
-            <table id="minhaTabela1" class="display nowrap" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Descrição</th>
-                        <th>Anexo</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($anexos as $anexo)
-                    @if($anexo->anexoHotel !=null)
-                        <tr>
-                            <td> {{$anexo->descricao}} </td>
-                        
-                            <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexo->anexoHotel) }}" 
-                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                            
-                            <td>
-                                <form action="/avs/deletarAnexoHotel/{{ $anexo->id }}/{{ $rota->id }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-active btn-accent btn-sm"
-                                    style="width: 110px" > Deletar</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endif
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+        @if($rota->isReservaHotel == true)
+            <div class="col-3">
+                <strong>Adicionar Reserva de Hotel</strong> 
+                <label for="my-modal-3" class="btn btn-active btn-success"><ion-icon name="add-circle-outline" size="large"></ion-icon></label>
+            </div>
 
-        <div class="col-3">
-            <strong>Adicionar Reserva de Transporte</strong>
-            <label for="my-modal-4" class="btn btn-active btn-success"><ion-icon name="add-circle-outline" size="large"></ion-icon></label>
-        </div>
-        <div class="col-md-6 offset-md-0">
-            <h1 style="font-size: 24px"><strong>Reserva de transporte: </strong></h1>
-            <table id="minhaTabela2" class="display nowrap" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Número</th>
-                        <th>Anexo</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($anexos as $anexo)
-                    @if($anexo->anexoTransporte !=null)
+            <div class="col-md-6 offset-md-0">
+                <h1 style="font-size: 24px"><strong>Reserva de hotel: </strong></h1>
+                <table id="minhaTabela1" class="display nowrap" style="width:100%">
+                    <thead>
                         <tr>
-                            <td> {{$anexo->descricao}} </td>
-                            
-                            
-                            <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexo->anexoTransporte) }}" 
-                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                            
-                            <td>   
-                                <form action="/avs/deletarAnexoTransporte/{{ $anexo->id }}/{{ $rota->id }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-active btn-accent btn-sm"
-                                    style="width: 110px" > Deletar</button>
-                                </form>
-                            </td>   
+                            <th>Descrição</th>
+                            <th>Anexo</th>
+                            <th>Ações</th>
                         </tr>
-                    @endif
-                    @endforeach
-                </tbody>
-            </table>
-            
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach($anexos as $anexo)
+                        @if($anexo->anexoHotel !=null)
+                            <tr>
+                                <td> {{$anexo->descricao}} </td>
+                            
+                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexo->anexoHotel) }}" 
+                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                
+                                <td>
+                                    <form action="/avs/deletarAnexoHotel/{{ $anexo->id }}/{{ $rota->id }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-active btn-accent btn-sm"
+                                        style="width: 110px" > Deletar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
+        @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1 || $rota->isAereo ==1)
+            <div class="col-3">
+                <strong>Adicionar Reserva de Transporte</strong>
+                <label for="my-modal-4" class="btn btn-active btn-success"><ion-icon name="add-circle-outline" size="large"></ion-icon></label>
+            </div>
+            <div class="col-md-6 offset-md-0">
+                <h1 style="font-size: 24px"><strong>Reserva de transporte: </strong></h1>
+                <table id="minhaTabela2" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Anexo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($anexos as $anexo)
+                        @if($anexo->anexoTransporte !=null)
+                            <tr>
+                                <td> {{$anexo->descricao}} </td>
+                                
+                                
+                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexo->anexoTransporte) }}" 
+                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                
+                                <td>   
+                                    <form action="/avs/deletarAnexoTransporte/{{ $anexo->id }}/{{ $rota->id }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-active btn-accent btn-sm"
+                                        style="width: 110px" > Deletar</button>
+                                    </form>
+                                </td>   
+                            </tr>
+                        @endif
+                        @endforeach
+                    </tbody>
+                </table>
+                
+            </div>
+        @endif
 
         <div class="divider"></div> 
 

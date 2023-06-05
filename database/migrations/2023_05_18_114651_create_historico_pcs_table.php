@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('historico_pcs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('valorReais')->nullable();
-            $table->integer('valorDolar')->nullable();
+            $table->float('valorReais')->nullable();
+            $table->float('valorDolar')->nullable();
             $table->string('ocorrencia')->nullable();
             $table->string('comentario')->nullable();
             $table->string('anexoRelatorio')->nullable();

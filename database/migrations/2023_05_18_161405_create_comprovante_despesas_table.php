@@ -15,8 +15,8 @@ return new class extends Migration
             $table->increments('id');
             $table->string('anexoDespesa')->nullable();
             $table->string('descricao')->nullable();
-            $table->integer('valorReais')->nullable();
-            $table->integer('valorDolar')->nullable();
+            $table->float('valorReais')->nullable();
+            $table->float('valorDolar')->nullable();
             $table->dateTime('dataOcorrencia');
 
             //Referencia a tabela de AV

@@ -22,15 +22,6 @@ return new class extends Migration
             $table->boolean('isFinanceiroAprovouPC')->default(false);
             $table->boolean('isGestorAprovouPC')->default(false);
             $table->boolean('isAcertoContasRealizado')->default(false);
-
-            $table->foreignId('usuario_gestor')->nullable()->constrained('users');
-            $table->foreignId('usuario_diretoria')->nullable()->constrained('users');
-            $table->foreignId('usuario_secretaria')->nullable()->constrained('users');
-            $table->foreignId('usuario_financeiro')->nullable()->constrained('users');
-            $table->foreignId('usuario_frota')->nullable()->constrained('users');
-            $table->foreignId('usuario_financeiro_pc')->nullable()->constrained('users');
-            $table->foreignId('usuario_gestor_pc')->nullable()->constrained('users');
-            $table->foreignId('usuario_fin_ac')->nullable()->constrained('users');
         });
     }
 

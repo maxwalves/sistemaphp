@@ -20,6 +20,7 @@
         <thead>
             <tr>
                 <th style="width: 50px">Número</th>
+                <th>Nome funcionário</th>
                 <th>Objetivo</th>
                 <th>Rota</th>
                 <th>Data criação</th>
@@ -33,6 +34,14 @@
             <tr>
                 <td scropt="row">{{ $av->id }}</td>
                 
+                <td>
+                    @foreach($users as $u)
+                        @if ($u->id == $av->user_id)
+                                {{$u->name}}     
+                        @endif
+                    @endforeach
+                </td>
+
                 <td>
                     @for($i = 0; $i < count($objetivos); $i++)
 

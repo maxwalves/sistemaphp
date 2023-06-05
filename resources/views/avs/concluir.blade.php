@@ -74,51 +74,32 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="isVeiculoProprio" class="control-label">Você vai utilizar veículo próprio?</label>
-                        <br>
-                            <select class="select select-bordered w-full max-w-xs" 
-                                id="isVeiculoProprio" name="isVeiculoProprio" onChange="ativaCampo()" disabled>
-                                <option value="0" name="0" {{ $av->isVeiculoProprio == "0" ? "selected='selected'" : ""}}> Não</option>
-                                <option value="1" name="1" {{ $av->isVeiculoProprio == "1" ? "selected='selected'" : ""}}> Sim</option>
-                            </select>
-                    </div>
-
-                    <div class="form-group" id="temVeiculoEmpresa">
-                        <label for="isVeiculoEmpresa" class="control-label" required>Você vai utilizar veículo do Paranacidade?</label>
-                        <br>
-                            <select class="select select-bordered w-full max-w-xs" 
-                                id="isVeiculoEmpresa" name="isVeiculoEmpresa" disabled>
-                                <option value="0" name="0" {{ $av->isVeiculoEmpresa == "0" ? "selected='selected'" : ""}}> Não</option>
-                                <option value="1" name="1" {{ $av->isVeiculoEmpresa == "1" ? "selected='selected'" : ""}}> Sim</option>
-                            </select>
-                    </div>
                 </div>
                 <div class="col-4" >
 
                     <div class="form-group">
                         <label for="banco" class="control-label">Banco</label>
-                        <input type="number" class="form-control" name="banco"
+                        <input type="text" class="form-control" name="banco"
                         id="banco" placeholder="Banco" value="{{$av->banco}}" disabled> 
                     </div>
 
                     <div class="form-group">
                         <label for="agencia" class="control-label">Agência</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" name="agencia"
+                            <input type="text" class="form-control" name="agencia"
                             id="agencia" placeholder="Agência" value="{{$av->agencia}}" disabled>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="conta" class="control-label">Conta</label>
-                        <input type="number" class="form-control" name="conta"
+                        <input type="text" class="form-control" name="conta"
                         id="conta" placeholder="Conta" value="{{$av->conta}}" disabled>
                     </div>
 
                     <div class="form-group">
                         <label for="pix" class="control-label">Pix</label>
-                        <input type="number" class="form-control" name="pix"
+                        <input type="text" class="form-control" name="pix"
                             id="pix" placeholder="Pix" value="{{$av->pix}}" disabled>
                     </div>
 

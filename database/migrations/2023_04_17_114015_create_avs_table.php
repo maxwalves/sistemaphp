@@ -15,16 +15,16 @@ return new class extends Migration
             $table->increments('id');
             $table->dateTime('dataCriacao');//É setado automaticamente no Back-end
             $table->string('prioridade')->nullable();
-            $table->integer('banco')->nullable();
-            $table->integer('agencia')->nullable();
-            $table->integer('conta')->nullable();
+            $table->string('banco')->nullable();
+            $table->string('agencia')->nullable();
+            $table->string('conta')->nullable();
             $table->string('pix')->nullable();
             $table->string('comentario')->nullable();
             $table->string('status');//É setado automaticamente no Back-end
 
             //Campos que serão preenchidos após a criação das rotas
-            $table->integer('valorExtraReais')->nullable();
-            $table->integer('valorExtraDolar')->nullable();
+            $table->float('valorExtraReais')->nullable();
+            $table->float('valorExtraDolar')->nullable();
             $table->string('justificativaValorExtra')->nullable();
             
             //Campos que serão preenchidos após a viagem
@@ -52,8 +52,8 @@ return new class extends Migration
             $table->integer('objetivo_id')->unsigned()->nullable();
             $table->foreign('objetivo_id')->references('id')->on('objetivos');
 
-            $table->integer('valorReais')->nullable();
-            $table->integer('valorDolar')->nullable();
+            $table->float('valorReais')->nullable();
+            $table->float('valorDolar')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

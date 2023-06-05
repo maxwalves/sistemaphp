@@ -244,10 +244,10 @@
 
                         <br>
 
-                        <div class="form-group"> 
+                        <div class="form-group">
                             <div id="dataHoraChegadaInternacional" class="input-append date">
                                 <label for="dataHoraChegadaInternacional" class="control-label">Data/Hora de chegada: </label>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaInternacional" style="border-width: 1px; border-color: black"
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime" name="dataHoraChegadaInternacional" style="border-width: 1px; border-color: black"
                                     id="dataHoraChegadaInternacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaInternacional') ? 'is-invalid' :''}}">
 
                                 @if ($errors->has('dataHoraChegadaInternacional'))
@@ -270,7 +270,7 @@
                 <br>    
 
                 <div class="row justify-content-center">
-                    <div class="col-5">
+                    <div class="col-12 col-xl-5">
                         <h3 style="color: forestgreen"> <ion-icon name="bus-outline"></ion-icon> VIAGEM NACIONAL </h3>
                         <br>   
                         <h4 style="color: darkolivegreen"> Origem: </h4>
@@ -306,7 +306,8 @@
 
                         <br>
 
-                        <div class="form-group"> 
+                        <div class="form-group">
+                            
                             <div id="dataHoraSaidaNacional" class="input-append date">
                                 <label for="dataHoraSaidaNacional" class="control-label">Data/Hora de saída: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional" style="border-width: 1px; border-color: black"
@@ -318,6 +319,7 @@
                                 </div>
                                 @endif
                             </div>
+                            <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de saída!</div>
                         </div>
 
                         <div>
@@ -327,7 +329,7 @@
                     </div>
 
                         
-                    <div class="col-5">    
+                    <div class="col-12 col-xl-5">    
                         <br><br>
                         <h4 style="color: darkolivegreen"> Destino: </h4>
                         <div class="form-group">
@@ -375,6 +377,7 @@
                                 </div>
                                 @endif
                             </div>
+                            <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de chegada!</div>
                         </div>
 
                         <div>
@@ -382,6 +385,46 @@
                             class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoNacional()">
                         </div>
 
+                    </div>
+
+                </div>
+                <div class="divider"></div> 
+                @if(count( $av->rotas ) == 0 )
+                    <div class="row justify-content-center">
+                        <div class="col-10">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" 
+                                style="height: 20px; width: 40px" onChange="exibeCamposVolta()">
+                                <label class="form-check-label" for="flexSwitchCheckDefault" style="padding-left: 10px">O itinerário de volta será igual ao de ida?</label>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <br><br>
+
+                <div class="row justify-content-center" id="isViagemVoltaIgualIda">
+                    <div class="col-12 col-xl-5">
+                        <div class="form-group"> 
+                            <div id="dataHoraSaidaVoltaNacionalDiv" class="input-append date">
+                                <label for="dataHoraSaidaVoltaNacional" class="control-label">Data/Hora de saída na volta: </label>
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaVoltaNacional" style="border-width: 1px; border-color: black"
+                                    id="dataHoraSaidaVoltaNacional" placeholder="Data/Hora de chegada">
+
+                            </div>
+                            <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de saída na volta!</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-xl-5">
+                        <div class="form-group"> 
+                            <div id="dataHoraChegadaVoltaNacionalDiv" class="input-append date">
+                                <label for="dataHoraChegadaVoltaNacional" class="control-label">Data/Hora prevista de chegada na volta: </label>
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaVoltaNacional" style="border-width: 1px; border-color: black"
+                                    id="dataHoraChegadaVoltaNacional" placeholder="Data/Hora de chegada" >
+
+                            </div>
+                            <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de chegada na volta!</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -687,6 +730,15 @@
             popularEstadoDestinoNacional();
         }
 
+        function exibeCamposVolta(){
+            if(document.getElementById("isViagemVoltaIgualIda").hidden == false){
+                document.getElementById("isViagemVoltaIgualIda").hidden = true;
+            }
+            else{
+                document.getElementById("isViagemVoltaIgualIda").hidden = false;
+            }
+        }
+
                 //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
         $(function(){
             
@@ -694,6 +746,7 @@
             document.getElementById("isNacional").hidden = true;
             document.getElementById("isInternacional").hidden = true;
             document.getElementById("btSalvarRota").hidden = true;
+            document.getElementById("isViagemVoltaIgualIda").hidden = true;
         })
     </script>
 @endsection

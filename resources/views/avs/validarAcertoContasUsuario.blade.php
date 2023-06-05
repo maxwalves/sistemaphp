@@ -186,12 +186,17 @@
                 </div>
                 <div class="box box-40">
                     <div >
+                        <h2 style="color: red">Insira o comprovante de pagamento do acerto de contas caso necessário:</h2><br>
+                        <div class="col-3">
+                            <label for="my-modal-11" class="btn btn-active btn-success btn-sm" style="padding-bottom: 30px; width:150px"><ion-icon name="add-circle-outline" size="large"></ion-icon>Adicionar</label>
+                        </div>
                         <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
                         <table id="minhaTabela6" class="display nowrap" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Descrição</th>
                                     <th>Anexo</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -200,6 +205,16 @@
                                         <td> {{$hist->comentario}} </td>
                                         <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}" 
                                             target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                            @if($hist->comentario != "Adiantamento realizado - valor inicial" && $hist->comentario != "Acerto de contas")
+                                                <td>
+                                                    <form action="/avs/deletarComprovanteAcertoContasUsuario/{{ $hist->id }}/{{ $av->id }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-active btn-accent btn-sm"
+                                                        style="width: 110px" > Deletar</button>
+                                                    </form>
+                                                </td>
+                                            @endif
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -428,7 +443,8 @@
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }},00</p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> R$ {{ $av->valorExtraDolar }},00</p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
-                    
+                    <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}" 
+                        target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
                     
                 </div>
 
@@ -794,7 +810,7 @@
                                 name="comentario" style="width: 200px"
                                 id="comentario" placeholder="Comentário"></textarea>
         
-                            <button type="submit" class="btn btn-active btn-success">Aprovar PC</button>
+                            <button type="submit" class="btn btn-active btn-success">Finalizar PC</button>
                     </form>
         
                     <form action="/avs/usuarioReprovarAcertoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
@@ -889,6 +905,24 @@
                     </tbody>
                 </table>
 
+            </div>
+        </div>
+    </div>
+
+    <input type="checkbox" id="my-modal-11" class="modal-toggle" />
+
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-1xl">
+            <div class="modal-content">
+                <label for="my-modal-11" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <br>
+                <form action="/avs/gravarComprovanteAcertoContasUsuario" method="POST" enctype="multipart/form-data">
+                    @csrf
+                        <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
+                        <input type="text" hidden="true" id="avId" name="avId" value="{{ $av->id }}">
+                        <br><br>
+                        <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
+                </form>
             </div>
         </div>
     </div>

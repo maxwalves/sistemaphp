@@ -55,13 +55,13 @@
 
                     <h2 >Adiantamentos:</h2>
                     <div style="border: 1px solid black; padding-left:10px">
-                        <p><strong>Valor em reais:</strong> R$ {{ $av->valorReais }},00</p>
-                        <p><strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }},00</p>
-                        <p><strong>Valor TOTAL reais:</strong> R$ {{ $av->valorReais + $av->valorExtraReais }},00</p>
+                        <p><strong>Valor em reais:</strong> R$ {{ $av->valorReais }}</p>
+                        <p><strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
+                        <p><strong>Valor TOTAL reais:</strong> R$ {{ $av->valorReais + $av->valorExtraReais }}</p>
 
-                        <p><strong>Valor em dolar:</strong> $ {{ $av->valorDolar }},00</p>
-                        <p><strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }},00</p>
-                        <p><strong>Valor TOTAL dólar:</strong> $ {{ $av->valorDolar + $av->valorExtraDolar }},00</p>
+                        <p><strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
+                        <p><strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
+                        <p><strong>Valor TOTAL dólar:</strong> $ {{ $av->valorDolar + $av->valorExtraDolar }}</p>
                         <p><strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
                         
                     </div>

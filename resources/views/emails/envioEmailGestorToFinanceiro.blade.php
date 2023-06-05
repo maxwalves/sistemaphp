@@ -82,12 +82,12 @@
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="left" class="esd-block-text">
-                                                                                        <h1 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Olá {{ $userSecretaria->name }} !</h1>
+                                                                                        <h1 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Olá {{ $financeiro->name }} !</h1>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="left" class="esd-block-text es-p10t">
-                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Existe uma nova Autorização de Viagem do usuário {{ $user->name }} que precisa da avaliação da CAD - Coordenadoria Administrativa.</p>
+                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Existe uma Autorização de Viagem do usuário {{ $user->name }} pendente para emissão de Adiantamento de Viagem pelo Financeiro.</p>
 
                                                                                         <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o Sistema de viagens para verificar a pendência: <a href="http://10.51.10.16/login">Sistema de Viagens</a>  </p>
                                                                                     </td>

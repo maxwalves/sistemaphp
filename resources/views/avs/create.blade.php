@@ -74,37 +74,51 @@
                     </div>
                     @endif
             </div>
-
-            <div class="form-group">
-                <label for="banco" class="control-label">Banco</label><br>
-                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="banco"
-                id="banco" placeholder="Banco">
+            <div class="mb-3">
+                <label for="banco" class="form-label">Banco</label>
+                <div class="input-group mb-3">   
+                    <input type="text" class="form-control" name="banco"
+                    id="banco" placeholder="Banco">
+                    <span class="input-group-text" id="basic-addon2">Ex: Banco do Brasil</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="agencia" class="control-label">Agência</label><br>
-                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="agencia"
-                    id="agencia" placeholder="Agência">
-                
+            <div class="mb-3">
+                <label for="agencia" class="form-label">Agência</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="agencia"
+                        id="agencia" placeholder="Agência">
+                    <span class="input-group-text" id="basic-addon2">Ex: 1234-X</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="conta" class="control-label">Conta</label><br>
-                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="conta"
-                id="conta" placeholder="Conta">
+            <div class="mb-3">
+                <label for="conta" class="form-label">Conta</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="conta"
+                    id="conta" placeholder="Conta">
+                    <span class="input-group-text" id="basic-addon2">Ex: 12345-X</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="pix" class="control-label">Pix</label><br>
-                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="pix"
-                    id="pix" placeholder="Pix">
+            <div class="mb-3">
+                <label for="pix" class="form-label">Pix</label><br>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="pix"
+                        id="pix" placeholder="Pix">
+                    <span class="input-group-text" id="basic-addon2">Chave pix</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="comentario" class="control-label">Comentários</label><br>
-                <input type="text" class="input input-bordered input-secondary w-full max-w-xs" name="comentario"
-                    id="comentario" placeholder="Comentário">
+            <div class="mb-3">
+                <label for="comentario" class="form-label">Comentários</label><br>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="comentario"
+                        id="comentario" placeholder="Comentário">
+                    <span class="input-group-text" id="basic-addon2">Opcional</span>
+                </div>
             </div>
+            <input type="file" id="arquivo1" style="height: 150px" name="arquivo1" class="form-control form-control-lg">
 
             <br>
 
@@ -116,6 +130,7 @@
         </form>
 
     </div>
+
     
 @endsection
 
@@ -125,22 +140,6 @@
 {{-- Para implementação futura de AJAX --}} 
 @section('javascript')
     <script type="text/javascript">
-
-        function desativarCampo(){
-            var isVeiculoProprio = document.getElementById("isVeiculoProprio")
-            var selecaoVeiculo = document.getElementById("selecaoVeiculo")
-
-            if(isVeiculoProprio.value=="1") {//Se for veículo próprio
-                document.getElementById("veiculoEmpresa").hidden = true;
-                document.getElementById("selecaoVeiculo").hidden = false;
-                document.getElementById("veiculoProprio_id").value = "";
-                
-            } else if(isVeiculoProprio.value=="0"){
-                document.getElementById("veiculoEmpresa").hidden = false;
-                document.getElementById("selecaoVeiculo").hidden = true;
-                document.getElementById("isVeiculoEmpresa").value="0";
-            }
-        }
 
         function desativarCampoObjetivo(){
             var seletor = document.getElementById("flexSwitchCheckDefault")
@@ -169,6 +168,7 @@
                 //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
         $(function(){
             document.getElementById("outroObjetivoCampo").hidden = true;
+            
         })
     </script>
 @endsection

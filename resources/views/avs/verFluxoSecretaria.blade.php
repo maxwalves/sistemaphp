@@ -46,7 +46,6 @@
             <table id="tabelaRota" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Número</th>
                         <th>Tipo</th>
                         <th>Cidade de saída</th>
                         <th>Data/Hora de saída</th>
@@ -60,7 +59,6 @@
                 <tbody>
                     @foreach($av->rotas as $rota)
                     <tr>
-                        <td> {{$rota->id}} </td>
                         <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
                         <td> 
                             @if($rota->isAereo == 1)
@@ -118,10 +116,12 @@
                             {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                             {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                         </td>
-                        <td>
-                            <a href="/avs/realizarReservas/{{ $rota->id }}" class="btn btn-active btn-success"
-                                > Gerenciar Reservas</a> 
-                        </td>
+                        @if($rota->isReservaHotel == true || $rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1 || $rota->isAereo ==1)
+                            <td>
+                                <a href="/avs/realizarReservas/{{ $rota->id }}" class="btn btn-active btn-success"
+                                    > Gerenciar Reservas</a> 
+                            </td>
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>
@@ -271,12 +271,13 @@
 
                 <h1 class="text-lg font-bold">Adiantamentos:</h1>
                 <div class="stats stats-vertical shadow">
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$ {{ $av->valorReais }},00</p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> R$ {{ $av->valorDolar }},00</p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }},00</p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> R$ {{ $av->valorExtraDolar }},00</p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$ {{ $av->valorReais }}</p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> R$ {{ $av->valorDolar }}</p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> R$ {{ $av->valorExtraDolar }}</p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
-                    
+                    <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}" 
+                        target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
                     
                 </div>
 
@@ -338,7 +339,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    -
+                                    3
                                 </span>
                             @endif
                             <span>
@@ -346,7 +347,7 @@
                                 <div class="badge badge-error gap-2">Avalia pedido</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 border-2 border-black">
+                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 border">
                             @if($av->isRealizadoReserva == 1)
                                 <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
                                     <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
@@ -357,7 +358,7 @@
                                 </span>
                             @endif
                             <span>
-                                <h3 class="font-medium leading-tight">Secretaria:</h3>
+                                <h3 class="font-medium leading-tight">CAD - Coordenadoria Administrativa:</h3>
                                 <div class="badge badge-outline">Realiza reservas</div>
                             </span>
                         </li>
@@ -368,29 +369,15 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    5
+                                    4
                                 </span>
                             @endif
                             <span>
-                                <h3 class="font-medium leading-tight">Financeiro:</h3>
+                                <h3 class="font-medium leading-tight">CFI - Coordenadoria Financeira:</h3>
                                 <div class="badge badge-outline">Adiantamento</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isReservadoVeiculoParanacidade == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    6
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Administração:</h3>
-                                <div class="badge badge-error gap-2">Reserva de veículo</div>
-                            </span>
-                        </li>
+                        
                     </ol>
                 </div>
                 <div class="divider"></div> 
@@ -400,7 +387,7 @@
                     <ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0">
                         <li class="flex items-center text-blue-600 dark:text-blue-500 space-x-2.5">
                             <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-gray-400">
-                                7
+                                5
                             </span>
                             <span>
                                 <h3 class="font-medium leading-tight">Viagem</h3>
@@ -413,7 +400,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    8
+                                    6
                                 </span>
                             @endif
                             <span>
@@ -428,7 +415,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    9
+                                    7
                                 </span>
                             @endif
                             <span>
@@ -443,7 +430,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    10
+                                    8
                                 </span>
                             @endif
                             <span>
@@ -458,7 +445,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    11
+                                    9
                                 </span>
                             @endif
                             <span>

@@ -82,14 +82,14 @@
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="left" class="esd-block-text">
-                                                                                        <h1 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Olá {{ $userSecretaria->name }} !</h1>
+                                                                                        <h1 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Olá {{ $user->name }} !</h1>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="left" class="esd-block-text es-p10t">
-                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Existe uma nova Autorização de Viagem do usuário {{ $user->name }} que precisa da avaliação da CAD - Coordenadoria Administrativa.</p>
+                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">A secretaria realizou as reservas pendentes na sua Autorização de Viagem.</p>
 
-                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o Sistema de viagens para verificar a pendência: <a href="http://10.51.10.16/login">Sistema de Viagens</a>  </p>
+                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o Sistema de viagens para verificar as reservas: <a href="http://10.51.10.16/login">Sistema de Viagens</a>  </p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>

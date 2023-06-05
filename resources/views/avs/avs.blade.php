@@ -87,13 +87,19 @@
                             </form>
                         </div>
                     @else
-                    @if($av->isUsuarioAprovaAcertoContas == 0 && $av->status != 'Aguardando prestação de contas do usuário' && $av->status != 'Acerto de Contas realizado, aguardando validação do usuário'
-                    && $av->status != 'PC reprovada pelo usuário, pendente de validação pelo Financeiro' && $av->status != 'Aguardando prestação de contas do usuário - reprovado gestor'
-                    && $av->status != 'Aguardando nova prestação de contas do usuário - reprovado pelo Financeiro' && $av->status != 'Aguardando acerto de contas pelo financeiro')
-                        <label for="my-modal" data-av="{{ json_encode($av) }}" class="btn btn-active btn-warning btn-sm">Voltar AV e editar</label>
-                    @endif
-                    <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                        style="width: 110px"> Ver</a> 
+                        @if($av->isUsuarioAprovaAcertoContas == 0 && $av->status != 'Aguardando prestação de contas do usuário' && $av->status != 'Acerto de Contas realizado, aguardando validação do usuário'
+                        && $av->status != 'PC reprovada pelo usuário, pendente de validação pelo Financeiro' && $av->status != 'Aguardando prestação de contas do usuário - reprovado gestor'
+                        && $av->status != 'Aguardando nova prestação de contas do usuário - reprovado pelo Financeiro' && $av->status != 'Aguardando acerto de contas pelo financeiro')
+                            <label for="my-modal" data-av="{{ json_encode($av) }}" class="btn btn-active btn-warning btn-sm">Voltar AV</label>
+
+                            <a href="/avs/cancelarAv/{{ $av->id }}" class="btn btn-active btn-error btn-sm"
+                                style="width: 110px"> Cancelar AV</a>
+
+                            <a href="/rotas/rotasEditData/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                                style="width: 110px"> Mudar data</a>
+                        @endif
+                        <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                            style="width: 110px"> Ver</a> 
                         @if($av->isAcertoContasRealizado == 1 && $av->isUsuarioAprovaAcertoContas != 1)
                             <a href="/avs/validarAcertoContasUsuario/{{ $av->id }}" class="btn btn-success btn-sm"
                             style="width: 110px"> Validar PC</a>

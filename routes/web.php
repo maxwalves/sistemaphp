@@ -119,13 +119,16 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::get('/avs/acertoContasFinanceiro', [ControladorAv::class, 'acertoContasFinanceiro'])->middleware('auth');
     Route::get('/avs/realizarAcertoContasFinanceiro/{id}', [ControladorAv::class, 'realizarAcertoContasFinanceiro'])->middleware('auth');
     Route::post('/avs/gravarComprovanteAcertoContas', [ControladorAv::class,'gravarComprovanteAcertoContas'])->middleware('auth');
+    Route::post('/avs/gravarComprovanteAcertoContasUsuario', [ControladorAv::class,'gravarComprovanteAcertoContasUsuario'])->middleware('auth');
     Route::delete('/avs/deletarComprovanteAcertoContas/{id}/{avId}', [ControladorAv::class, 'deletarComprovanteAcertoContas'])->middleware('auth');
+    Route::delete('/avs/deletarComprovanteAcertoContasUsuario/{id}/{avId}', [ControladorAv::class, 'deletarComprovanteAcertoContasUsuario'])->middleware('auth');
     Route::put('/avs/financeiroRealizaAcertoContas', [ControladorAv::class, 'financeiroRealizaAcertoContas'])->middleware('auth');
 
     Route::get('/avs/validarAcertoContasUsuario/{id}', [ControladorAv::class, 'validarAcertoContasUsuario'])->middleware('auth');
     Route::put('/avs/usuarioAprovarAcertoContas', [ControladorAv::class, 'usuarioAprovarAcertoContas'])->middleware('auth');
     Route::put('/avs/usuarioReprovarAcertoContas', [ControladorAv::class, 'usuarioReprovarAcertoContas'])->middleware('auth');
 
+    Route::get('/avs/cancelarAv/{id}', [ControladorAv::class, 'cancelarAv'])->middleware('auth');
 
     //---------------------------------------------------------------- TESTES
     Route::get('/contact', function () {
@@ -167,11 +170,14 @@ Route::middleware(['assinatura.termo'])->group(function () {
 
     // ROTAS PARA ROTAS
     Route::get('/rotas/rotas/{id}', [ControladorRota::class, 'rotas'])->middleware('auth');
+    Route::get('/rotas/rotasEditData/{id}', [ControladorRota::class, 'rotasEditData'])->middleware('auth');
     Route::get('/rotas/create/{id}', [ControladorRota::class, 'create'])->middleware('auth');
     Route::get('/rotas/{id}', [ControladorRota::class, 'show'])->middleware('auth');
     Route::delete('/rotas/{id}', [ControladorRota::class, 'destroy'])->middleware('auth');
     Route::get('/rotas/edit/{id}', [ControladorRota::class, 'edit'])->middleware('auth');
+    Route::get('/rotas/editNovaData/{id}', [ControladorRota::class, 'editNovaData'])->middleware('auth');
     Route::put('/rotas/update/{id}', [ControladorRota::class, 'update'])->middleware('auth');
+    Route::put('/rotas/updateData/{id}', [ControladorRota::class, 'updateData'])->middleware('auth');
     Route::post('/rotas', [ControladorRota::class,'store'])->middleware('auth');
 
 

@@ -36,7 +36,21 @@ class ControladorRota extends Controller
         $rotas = $av->rotas;//Busca as rotas da AV
         $veiculosProprios = VeiculoProprio::all();
 
+        if($av->isEnviadoUsuario = true){
+            return redirect('/avs/avs/')->with('msg', 'Você não tem autorização para editar uma rota de AV que já foi enviada!');
+        }
+
         return view('rotas.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user, 'veiculosProprios' => $veiculosProprios]);
+    }
+
+    public function rotasEditData($id)//Id da AV
+    {
+        $user = auth()->user();
+        $av = Av::findOrFail($id);//Busca a AV com base no ID
+        $rotas = $av->rotas;//Busca as rotas da AV
+        $veiculosProprios = VeiculoProprio::all();
+
+        return view('rotas.rotasEditData', ['rotas' => $rotas, 'av' => $av, 'user'=> $user, 'veiculosProprios' => $veiculosProprios]);
     }
 
     public function rotaspc($id)//Id da AV
@@ -198,6 +212,56 @@ class ControladorRota extends Controller
     
         $rota->save();
 
+        if($request->get('isViagemInternacional')=="0"){
+            if($request->get('dataHoraSaidaVoltaNacional')!=null){
+                $rota2 = new Rota();
+                $rota2->isViagemInternacional = false;
+
+                $timezone = new DateTimeZone('America/Sao_Paulo');
+                $rota2->dataHoraSaida = new DateTime('now', $timezone);
+                $rota2->dataHoraChegada = new DateTime('now', $timezone);
+                $rota2->dataHoraSaida = $request->get('dataHoraSaidaVoltaNacional');
+                $rota2->dataHoraChegada = $request->get('dataHoraChegadaVoltaNacional');
+
+
+                //Recupera o value do campo e decompõe em um JSON para obter o name
+                $objetoTransformar = str_replace("'", "\"", $request->get('selecaoEstadoOrigemNacional'));
+                $obj = json_decode($objetoTransformar, true);
+                try {
+                    $rota2->estadoDestinoNacional = $obj['name'];
+                } catch (\Throwable $th) {}//Tenta recuperar o valor, se não der certo a validação vai avisar o usuário
+                
+
+                //Recupera o value do campo e decompõe em um JSON para obter o name
+                $objetoTransformar2 = str_replace("'", "\"", $request->get('selecaoEstadoDestinoNacional'));
+                $obj2 = json_decode($objetoTransformar2, true);
+                try {
+                    $rota2->estadoOrigemNacional = $obj2['name'];
+                } catch (\Throwable $th) {}//Tenta recuperar o valor, se não der certo a validação vai avisar o usuário
+
+                $rota2->cidadeOrigemNacional = $request->selecaoCidadeDestinoNacional;
+                $rota2->cidadeDestinoNacional = $request->selecaoCidadeOrigemNacional;
+                $rota2->isReservaHotel = false;
+
+                if($request->get('tipoTransporte')==0){
+                    $rota2->isOnibusLeito = 1;
+                } else if($request->get('tipoTransporte')==1){
+                    $rota2->isOnibusConvencional = 1;
+                } else if($request->get('tipoTransporte')==2){
+                    $rota2->isVeiculoProprio = 1;
+                } else if($request->get('tipoTransporte')==3){
+                    $rota2->isVeiculoEmpresa = 1;
+                } else if($request->get('tipoTransporte')==4){
+                    $rota2->isAereo = 1;
+                }
+
+                $rota2->av_id = $request->idav;
+                $rota2->veiculoProprio_id = $request->veiculoProprio_id;
+
+                $rota2->save();
+            }
+        }
+
         if($request->isPc=="sim"){
             return redirect('/rotaspc/rotas/' . $request->idav )->with('msg', 'Rota criada com sucesso!');
         }
@@ -247,13 +311,30 @@ class ControladorRota extends Controller
                 $av = $a;
             }
         }
-        if($av == null){
-            return redirect('/rotas/rotas/' . $idAv)->with('msg', 'Você não tem autorização para editar uma rota de AV de outro usuário!');
+        if($av == null || $av->isEnviadoUsuario = true){
+            return redirect('/avs/avs/')->with('msg', 'Você não tem autorização para editar uma rota de AV de outro usuário!');
         }
 
         $veiculosProprios = $user->veiculosProprios;
 
         return view('rotas.editRota', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
+    }
+
+    public function editNovaData($id)
+    {
+        $rota = Rota::findOrFail($id);
+        $idAv = $rota->av_id;
+
+        $user = auth()->user();
+        $avs = $user->avs;
+        $av = null;
+        foreach ($avs as $a){
+            if ($a->id == $idAv){
+                $av = $a;
+            }
+        }
+
+        return view('rotas.editNovaData', ['rota' => $rota, 'av' => $av, 'user'=> $user]);
     }
 
     public function editRotaPc($id)
@@ -421,5 +502,30 @@ class ControladorRota extends Controller
         else{
             return redirect('/rotas/rotas/' . $request->idav )->with('msg', 'Rota editada com sucesso!');
         }
+    }
+
+    public function updateData(Request $request)
+    {
+        $dados = array(
+            "dataHoraSaida" => "",
+            "dataHoraChegada" => ""
+        );
+
+        if($request->get('isViagemInternacional')=="1")
+        {
+            //Setar os campos para viagem internacional
+            $dados["dataHoraSaida"] = $request->dataHoraSaidaInternacional;
+            $dados["dataHoraChegada"] = $request->dataHoraChegadaInternacional;
+        }
+        else if($request->get('isViagemInternacional')=="0"){
+           
+            //Setar os campos para viagem nacional
+            $dados["dataHoraSaida"] = $request->dataHoraSaidaNacional;
+            $dados["dataHoraChegada"] = $request->dataHoraChegadaNacional;
+        }
+        $rota = Rota::findOrFail($request->id);
+        $rota->update($dados);
+
+        return redirect('/rotas/rotasEditData/' . $rota->av_id)->with('msg', 'Data editada com sucesso!');
     }
 }
