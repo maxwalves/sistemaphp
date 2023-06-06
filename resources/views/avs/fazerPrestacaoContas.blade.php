@@ -114,7 +114,7 @@
             <label for="my-modal-10" class="btn btn-active btn-success btn-sm" style="padding-bottom: 30px; width:150px"><ion-icon name="add-circle-outline" size="large"></ion-icon>Adicionar</label>
         </div>
         <div class="row">
-            <div class="col-12 col-xl-6">
+            <div class="col-12 col-xl-8">
                 <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
                 <table id="minhaTabela5" class="display nowrap" style="width:100%">
                     <thead>
@@ -149,7 +149,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-12 col-xl-6">
+            <div class="col-12 col-xl-4">
                 <form action="/avs/usuarioEnviarPrestacaoContas" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
