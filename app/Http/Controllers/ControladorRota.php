@@ -36,7 +36,7 @@ class ControladorRota extends Controller
         $rotas = $av->rotas;//Busca as rotas da AV
         $veiculosProprios = VeiculoProprio::all();
 
-        if($av->isEnviadoUsuario = true){
+        if($av->isEnviadoUsuario == 1){
             return redirect('/avs/avs/')->with('msg', 'Você não tem autorização para editar uma rota de AV que já foi enviada!');
         }
 
