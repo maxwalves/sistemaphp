@@ -237,9 +237,10 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Histórico</h3>
+                <h3>-</h3>
                 <table id="minhaTabela" class="display nowrap">
                     <!-- head -->
                     <thead>
@@ -282,7 +283,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-2xl">
             <div class="modal-content">
-                <label for="my-modal-4" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-4" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Dados</h3>
 
@@ -362,7 +363,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-5" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-5" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Fases</h3>
                 <br>
@@ -551,7 +552,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Reserva de hotel</h3>
                 <table id="minhaTabela1" class="display nowrap" style="width:100%">
@@ -600,7 +601,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Reservas de transporte</h3>
                 
@@ -651,7 +652,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Adiantamentos realizados</h3>
 
@@ -683,7 +684,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h1 style="font-size: 24px"><strong>Documento AV gerado: </strong></h1>
                 <table id="minhaTabela4" class="display nowrap" style="width:100%">
@@ -760,7 +761,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-1xl">
             <div class="modal-content">
-                <label for="my-modal-13" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-13" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 
                 <h1 style="font-size: 24px"><strong>Relatório:</strong></h1>

@@ -205,7 +205,8 @@
                                         <td> {{$hist->comentario}} </td>
                                         <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}" 
                                             target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                                            @if($hist->comentario != "Adiantamento realizado - valor inicial" && $hist->comentario != "Acerto de contas")
+                                            @if($hist->comentario != "Adiantamento realizado - valor inicial" && $hist->comentario != "Acerto de contas"
+                                            && $hist->comentario != "Comprovante Acerto de Contas Financeiro")
                                                 <td>
                                                     <form action="/avs/deletarComprovanteAcertoContasUsuario/{{ $hist->id }}/{{ $av->id }}" method="POST">
                                                         @csrf

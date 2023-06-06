@@ -113,7 +113,6 @@
             <table id="tabelaRota" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Número</th>
                         <th>Tipo</th>
                         <th>Cidade de saída</th>
                         <th>Data/Hora de saída</th>
@@ -126,7 +125,6 @@
                 <tbody>
                     @foreach($av->rotas as $rota)
                     <tr>
-                        <td> {{$rota->id}} </td>
                         <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
                         <td> 
                             @if($rota->isAereo == 1)
@@ -246,7 +244,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Histórico</h3>
                 <table id="minhaTabela" class="display nowrap">
@@ -560,7 +558,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Reserva de hotel</h3>
                 <table id="minhaTabela1" class="display nowrap" style="width:100%">
@@ -618,7 +616,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Reservas de transporte</h3>
                 
@@ -678,7 +676,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Adiantamentos realizados</h3>
 
@@ -710,7 +708,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h1 style="font-size: 24px"><strong>Documento AV gerado: </strong></h1>
                 <table id="minhaTabela4" class="display nowrap" style="width:100%">

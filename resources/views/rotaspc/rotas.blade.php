@@ -26,9 +26,7 @@
                 @method('PUT')
                 <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
                 <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
-                <div id="btSalvarRota">
-                    <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-secondary" value="Calcular diárias">
-                </div>
+                
             </form>
 
 
@@ -37,11 +35,13 @@
             <label for="idav" style="font-size: 24px; color: green"> <strong>AV nº </strong> </label>
             <input style="width: 50px; font-size: 24px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
             <h2 style="font-size: 24px"> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
-            <h2 style="font-size: 24px"> <strong>Valor adiantamento em reais: <span style="color: green"> R${{ $av->valorReais + $av->valorExtraReais }},00 </span></strong> </h2>
-            <h2 style="font-size: 24px"> <strong>Valor adiantamento em dólar: <span style="color: green"> ${{ $av->valorDolar + $av->valorExtraDolar }},00 </span></strong> </h2>
+            <h2 style="font-size: 24px"> <strong>Valor adiantamento em reais: <span style="color: green"> R${{ $av->valorReais + $av->valorExtraReais }} </span></strong> </h2>
+            <h2 style="font-size: 24px"> <strong>Valor adiantamento em dólar: <span style="color: green"> ${{ $av->valorDolar + $av->valorExtraDolar }} </span></strong> </h2>
+        </div>
+        <div id="btSalvarRota">
+            <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-warning" value="Calcular diárias">
         </div>
         <div class="col-12 col-xl-4">
-            <br>
             <h2 style="font-size: 20px; color: red"> <strong> Após editar as rotas, pressione "Calcular Diárias"!</strong> </h2>
         </div>
     </div>
