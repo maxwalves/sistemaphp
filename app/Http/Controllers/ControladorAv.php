@@ -750,7 +750,7 @@ class ControladorAv extends Controller
 
         $fileName = $anexoRota->anexoHotel;
         
-        $filePath = public_path('AVs\\' . $userAv->name . '\\' . $av->id . '\\') . $fileName;
+        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/') . $fileName;
         //dd($filePath);
         if (file_exists($filePath)) {
             //dd($filePath);
@@ -769,7 +769,7 @@ class ControladorAv extends Controller
         $anexoRota = AnexoRota::findOrFail($id);
 
         $fileName = $anexoRota->anexoTransporte;
-        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '\\') . $fileName;
+        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/') . $fileName;
 
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -788,7 +788,7 @@ class ControladorAv extends Controller
 
         $fileName = $anexoFin->anexoFinanceiro;
         
-        $filePath = public_path('AVs\\' . $userAv->name . '\\' . $av->id . '\\adiantamentos' . '\\') . $fileName;
+        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/') . $fileName;
         
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -806,7 +806,7 @@ class ControladorAv extends Controller
 
         $fileName = $comprovante->anexoDespesa;
         
-        $filePath = public_path('AVs\\' . $userAv->name . '\\' . $av->id . '\\comprovantesDespesa' . '\\') . $fileName;
+        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/') . $fileName;
         
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -824,7 +824,7 @@ class ControladorAv extends Controller
 
         $fileName = $historicoPc->anexoRelatorio;
         
-        $filePath = public_path('AVs\\' . $userAv->name . '\\' . $av->id . '\\resumo' . '\\') . $fileName;
+        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/') . $fileName;
         
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -842,7 +842,7 @@ class ControladorAv extends Controller
 
         $fileName = $historicoPc->anexoRelatorio;
         
-        $filePath = public_path('AVs\\' . $userAv->name . '\\' . $av->id . '\\resumo' . '\\') . $fileName;
+        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/') . $fileName;
         
         if (file_exists($filePath)) {
             unlink($filePath);
