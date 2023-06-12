@@ -60,7 +60,7 @@
                             <select class="select select-bordered w-full max-w-xs {{ $errors->has('isViagemInternacional') ? 'is-invalid' :''}}" 
                                 id="isViagemInternacional" name="isViagemInternacional" onChange="gerenciaNacionalInternacional()" >
                                 <option value="" name=""> Selecione</option>
-                                <option value="0" name="0"> Não</option>
+                                <option value="0" name="0" {{ $isOrigemNacional == true ? "selected='selected'" : ""}}> Não</option>
                                 <option value="1" name="1" > Sim</option>
                             </select>
 
@@ -247,7 +247,7 @@
                         <div class="form-group">
                             <div id="dataHoraChegadaInternacional" class="input-append date">
                                 <label for="dataHoraChegadaInternacional" class="control-label">Data/Hora de chegada: </label>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime" name="dataHoraChegadaInternacional" style="border-width: 1px; border-color: black"
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaInternacional" style="border-width: 1px; border-color: black"
                                     id="dataHoraChegadaInternacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaInternacional') ? 'is-invalid' :''}}">
 
                                 @if ($errors->has('dataHoraChegadaInternacional'))
@@ -257,7 +257,6 @@
                                 @endif
                             </div>
                         </div>
-                    
 
                     </div>
                 </div>
@@ -277,9 +276,12 @@
                         <div class="form-group">
                             <label for="selecaoEstadoOrigemNacional" class="control-label">Selecione o estado origem:</label>
                             <br>
+                            
                                 <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoEstadoOrigemNacional') ? 'is-invalid' :''}}" 
                                     id="selecaoEstadoOrigemNacional" name="selecaoEstadoOrigemNacional" onChange="carregarCidadesOrigemNacional()">
-
+                                    @if($ultimaRotaSetada !=null)
+                                        <option value="{{ $ultimaRotaSetada->estadoDestinoNacional}}" selected></option>
+                                    @endif
                                 </select>
             
                                 @if ($errors->has('selecaoEstadoOrigemNacional'))
@@ -294,7 +296,9 @@
                             <br>
                                 <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoCidadeOrigemNacional') ? 'is-invalid' :''}}" 
                                     id="selecaoCidadeOrigemNacional" name="selecaoCidadeOrigemNacional" >
-
+                                    @if($ultimaRotaSetada !=null)
+                                        <option value="{{ $ultimaRotaSetada->cidadeDestinoNacional}}" selected></option>
+                                    @endif
                                 </select>
             
                                 @if ($errors->has('selecaoCidadeOrigemNacional'))
@@ -335,6 +339,7 @@
                         <div class="form-group">
                             <label for="selecaoEstadoDestinoNacional" class="control-label">Selecione o estado destino</label>
                             <br>
+                                
                                 <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoEstadoDestinoNacional') ? 'is-invalid' :''}}" 
                                     id="selecaoEstadoDestinoNacional" name="selecaoEstadoDestinoNacional" onChange="carregarCidadesDestinoNacional()">
 
@@ -351,10 +356,13 @@
                         <div class="form-group">
                             <label for="selecaoCidadeDestinoNacional" class="control-label">Selecione a cidade destino</label>
                             <br>
+                                <input type="text" id="cidadeOrigemGeral" name="cidadeOrigemGeral" value="{{ $rotaOriginal->cidadeOrigemNacional }}" hidden="true">
+
                                 <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoCidadeDestinoNacional') ? 'is-invalid' :''}}" 
-                                    id="selecaoCidadeDestinoNacional" name="selecaoCidadeDestinoNacional" >
+                                    id="selecaoCidadeDestinoNacional" name="selecaoCidadeDestinoNacional" onChange="verificaSeCidadeOrigem()">
 
                                 </select>
+                                
             
                                 @if ($errors->has('selecaoCidadeDestinoNacional'))
                                 <div class="invalid-feedback">
@@ -435,7 +443,7 @@
                                             
                     <div>
                         <div id="camposFinais" hidden="true">
-                            <div class="form-group" >
+                            <div class="form-group" id="campoHotel">
                                 <label for="isReservaHotel" class="control-label">Você vai precisar de reserva de hotel no destino?</label>
                                 <br>
                                     <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('isReservaHotel') ? 'is-invalid' :''}}" 
@@ -457,11 +465,20 @@
                                 <br>
                                     <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('tipoTransporte') ? 'is-invalid' :''}}" 
                                         id="tipoTransporte" name="tipoTransporte" onChange="ativarCampo()">
-                                        <option value="0" name="0"> Onibus Leito</option>
-                                        <option value="1" name="1" > Onibus convencional</option>
-                                        <option value="2" name="2" > Veículo próprio</option>
-                                        <option value="3" name="3" > Veículo do Paranacidade</option>
-                                        <option value="4" name="4" > Avião</option>
+                                        
+                                        @if($ultimaRotaSetada !=null)
+                                            <option value="0" name="0" {{ $ultimaRotaSetada->isOnibusLeito == "1" ? "selected='selected'" : ""}}> Onibus Leito</option>
+                                            <option value="1" name="1" {{ $ultimaRotaSetada->isOnibusConvencional == "1" ? "selected='selected'" : ""}}> Onibus convencional</option>
+                                            <option value="2" name="2" {{ $ultimaRotaSetada->isVeiculoProprio == "1" ? "selected='selected'" : ""}}> Veículo próprio</option>
+                                            <option value="3" name="3" {{ $ultimaRotaSetada->isVeiculoEmpresa == "1" ? "selected='selected'" : ""}}> Veículo do Paranacidade</option>
+                                            <option value="4" name="4" {{ $ultimaRotaSetada->isAereo == "1" ? "selected='selected'" : ""}}> Avião</option>
+                                        @else
+                                            <option value="0" name="0"> Onibus Leito</option>
+                                            <option value="1" name="1" > Onibus convencional</option>
+                                            <option value="2" name="2" > Veículo próprio</option>
+                                            <option value="3" name="3" > Veículo do Paranacidade</option>
+                                            <option value="4" name="4" > Avião</option>
+                                        @endif
                                     </select>
                 
                                     @if ($errors->has('tipoTransporte'))
@@ -559,6 +576,18 @@
             }
         }
 
+        function verificaSeCidadeOrigem(){
+            var cidadeDestino = document.getElementById("selecaoCidadeDestinoNacional");
+            var cidadeOrigemGeral = document.getElementById("cidadeOrigemGeral");
+
+            if(cidadeDestino.value == cidadeOrigemGeral.value){
+                document.getElementById("campoHotel").hidden = true;
+            }
+            else{
+                document.getElementById("campoHotel").hidden = false;
+            }
+        }
+
         function carregarPaises(){
 
             $.getJSON('/countries', function(data){
@@ -579,6 +608,9 @@
         function popularEstadoOrigemNacional(){
 
             var idPais = 30;
+
+            var nomeEstado = document.getElementById("selecaoEstadoOrigemNacional").value;
+            $("#selecaoEstadoOrigemNacional").html('');
             
             $.getJSON('/states', function(data){
                 
@@ -587,12 +619,21 @@
 
                 for(i=0; i<data.length; i++){
                     if(data[i].country_id == idPais ){
+                        if(data[i].name == nomeEstado){
+                            var valor = "{'id':'" + data[i].id + "', 'name':'" + data[i].name + "'}";
 
-                        var valor = "{'id':'" + data[i].id + "', 'name':'" + data[i].name + "'}";
+                            opcao = '<option value="' + valor + '" selected>' + data[i].name + '</option>';
 
-                        opcao = '<option value="' + valor + '">' + data[i].name + '</option>';
+                            $('#selecaoEstadoOrigemNacional').append(opcao);
+                            carregarCidadesOrigemNacional();
+                        }
+                        else{
+                            var valor = "{'id':'" + data[i].id + "', 'name':'" + data[i].name + "'}";
 
-                        $('#selecaoEstadoOrigemNacional').append(opcao);
+                            opcao = '<option value="' + valor + '">' + data[i].name + '</option>';
+
+                            $('#selecaoEstadoOrigemNacional').append(opcao);
+                        }
                     }
                 }
             });
@@ -625,6 +666,8 @@
             document.getElementById("selecaoEstadoOrigemNacional").disabled = false;
             document.getElementById("selecaoCidadeOrigemNacional").disabled = false; 
 
+            var nomeCidade = document.getElementById("selecaoCidadeOrigemNacional").value;
+
             var idEstado = document.getElementById("selecaoEstadoOrigemNacional").value;//Recebe o valur como String
             var resultado = idEstado.replace(/'/g, "\"");//Adiciona as aspas para deixar no formato JSON
             var objeto = JSON.parse(resultado);//Transforma em JSON
@@ -637,7 +680,11 @@
                 
                 for(i=0; i<data.length; i++){
 
-                    if(data[i].state_id == objeto.id ){
+                    if(data[i].name == nomeCidade){
+                            opcao = '<option value="' + data[i].name + '" selected>' + data[i].name + '</option>';
+                            $('#selecaoCidadeOrigemNacional').append(opcao);
+                    }
+                    else{
                         opcao = '<option value="' + data[i].name + '">' + data[i].name + '</option>';
                         $('#selecaoCidadeOrigemNacional').append(opcao);
                     }
@@ -741,12 +788,26 @@
 
                 //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
         $(function(){
-            
+            var isViagemInternacional = document.getElementById("isViagemInternacional");
+
             carregarPaises();
             document.getElementById("isNacional").hidden = true;
             document.getElementById("isInternacional").hidden = true;
             document.getElementById("btSalvarRota").hidden = true;
             document.getElementById("isViagemVoltaIgualIda").hidden = true;
+
+            if(isViagemInternacional.value=="0"){
+                document.getElementById("isNacional").hidden = false;
+                gerenciaNacionalInternacional();
+            }
+            else if(isViagemInternacional.value=="1"){
+                document.getElementById("isInternacional").hidden = false;
+                gerenciaNacionalInternacional();
+            }
+            else{
+                document.getElementById("isNacional").hidden = true;
+                document.getElementById("isInternacional").hidden = true;
+            }
         })
     </script>
 @endsection

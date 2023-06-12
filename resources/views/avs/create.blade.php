@@ -17,7 +17,7 @@
                 <label for="objetivo_id" class="control-label" required>Qual é o Objetivo da viagem? (selecione)</label>
                 <br>
                     <select class="select select-bordered w-full max-w-xs {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
-                        id="objetivo_id" name="objetivo_id">
+                        id="objetivo_id" name="objetivo_id" onChange="verificarObjetivoViagem()">
                         <option value="" name=""> Selecione</option>
                         @for($i = 0; $i < count($objetivos); $i++)
                             <div>
@@ -32,6 +32,41 @@
                         {{ $errors->first('objetivo_id') }}
                     </div>
                     @endif
+            </div>
+
+            <div id="autorizacaoComissao">
+                <h1>Lista de medições pendentes</h1>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Nome do município</th>
+                            <th>Número do projeto</th>
+                            <th>Número do lote</th>
+                            <th>Número da medição</th>
+                            <th>Tipo medição</th>
+                            <th>Valor da medição</th>
+                            <th>Descrição do componente</th>
+                            <th>Selecione</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($filtro as $item)
+                        <tr>
+                            <td> {{ $item->nome_municipio }} </td>
+                            <td> {{ $item->numero_projeto }} </td>
+                            <td> {{ $item->numero_lote }} </td>
+                            <td> {{ $item->numero }} </td>
+                            <td> {{ $item->tipo_medicao }} </td>
+                            <td>R$ {{ number_format($item->valor_medicao_sam, 2, ',', '.') }}</td>
+                            <td> {{ $item->descricao_componente }} </td>
+                            <td> 
+                                <input type="radio" name="radioBt" id="radioBt" class="radio radio-error" value="{{ $item->id }}"/>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                
             </div>
 
             <div class="form-group " id="outroObjetivoCampo">
@@ -49,7 +84,7 @@
                 @endif
             </div>
 
-            <div class="form-check form-switch">
+            <div class="form-check form-switch" id="selecOutroObj">
                 <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" 
                 style="height: 20px; width: 40px" onChange="desativarCampoObjetivo()">
                 <label class="form-check-label" for="flexSwitchCheckDefault" style="padding-left: 10px">Não achei o objetivo que desejo na lista!</label>
@@ -156,8 +191,19 @@
                 document.getElementById("isSelecionado").value = "0";
             }
         }
-
-
+        
+        function verificarObjetivoViagem(){
+            var objetivo = document.getElementById("objetivo_id");
+            
+            if(objetivo.value == 3){
+                document.getElementById("autorizacaoComissao").hidden = false;
+                document.getElementById("selecOutroObj").hidden = true;
+            }
+            else{
+                document.getElementById("autorizacaoComissao").hidden = true;
+                document.getElementById("selecOutroObj").hidden = false;
+            }
+        }
 
         $.ajaxSetup({
             headers: {
@@ -168,7 +214,7 @@
                 //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
         $(function(){
             document.getElementById("outroObjetivoCampo").hidden = true;
-            
+            document.getElementById("autorizacaoComissao").hidden = true;
         })
     </script>
 @endsection

@@ -70,7 +70,17 @@ class ControladorAv extends Controller
 
         $objetivos = Objetivo::all();
         $veiculosParanacidade = VeiculoParanacidade::all(); // Fazer filtro para apresentar somentes os ativos
-        return view('avs.create', ['objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'veiculosParanacidade' => $veiculosParanacidade, 'user'=> $user]);
+
+        $url = 'https://portaldosmunicipios.pr.gov.br/api/v1/medicao?status=27';
+        $json = file_get_contents($url);
+        $data = json_decode($json);
+        $filtro = [];
+        foreach ($data as $item) {
+            if ($item->nome_supervisor === $user->name) { //  para teste 'Fernanda Espindola de Oliveira'
+                array_push($filtro, $item);
+            }
+        }
+        return view('avs.create', ['objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'veiculosParanacidade' => $veiculosParanacidade, 'user'=> $user, 'filtro' => $filtro]);
     }
 
     public function verFluxo($id){
@@ -602,8 +612,7 @@ class ControladorAv extends Controller
             }
         }
 
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true 
-        && $av["isAprovadoFinanceiro"]==true  && $av["isReservadoVeiculoParanacidade"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isReservadoVeiculoParanacidade"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
 
             foreach($av->rotas as $rota){//Percorre todas as rotas da AV
                 if($rota["isVeiculoEmpresa"]==1){//Se a viagem tiver veículo da empresa
@@ -626,6 +635,8 @@ class ControladorAv extends Controller
     public function escolherVeiculo($rota, $veiculo){
 
         $rota = Rota::findOrFail($rota);
+        $av = Av::findOrFail($rota->av_id);
+        $rotas = $av->rotas;
         if($veiculo !=0){
             $veiculoParanacidade = VeiculoParanacidade::findOrFail($veiculo);
 
@@ -639,7 +650,10 @@ class ControladorAv extends Controller
             );
         }
 
-        $rota->update($dados);
+        foreach($rotas as $r){
+            $r->update($dados);
+        }
+
         return redirect('/avs/verFluxoAdmFrota/' . $rota->av_id)->with('msg', 'Veículo escolhido!');
 
     }
@@ -671,7 +685,7 @@ class ControladorAv extends Controller
             }
         }
 
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isAprovadoFinanceiro"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
             if( $av->user_id != $user->id){//Verifica se não é vc mesmo
                 $possoEditar = true;
             }
@@ -1271,7 +1285,7 @@ class ControladorAv extends Controller
         else if($av->isAprovadoFinanceiro == 1){
             $dados = array(
                 "isRealizadoReserva" => 1,
-                "status" => "Aguardando realização da viagem"
+                "status" => "Aguardando prestação de contas do usuário"
             );
         }
         
@@ -2029,6 +2043,24 @@ class ControladorAv extends Controller
         $av->status = "Aguardando envio para o Gestor";
         $av->outroObjetivo = $request->outroObjetivo;
 
+        $idArray = $request->radioBt;
+        if($av->objetivo_id == 3 && $idArray == null){
+            return redirect('/avs/avs/' . $av->id)->with('msg', 'Não é possível criar uma AV de medição se não existir autorização da comissão!');
+        }
+
+        $url = 'https://portaldosmunicipios.pr.gov.br/api/v1/medicao?status=27';
+        $json = file_get_contents($url);
+        $data = json_decode($json);
+        foreach ($data as $item) {
+            if ($item->id == $idArray) {
+                $av->nome_municipio = $item->nome_municipio;
+                $av->municipio_id = $item->municipio_id;
+                $av->numero_projeto = $item->numero_projeto;
+                $av->numero_lote = $item->numero_lote;
+                $av->numero_medicao = $item->numero;
+            }
+        }
+
         if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
         {
             $requestFile = $request->arquivo1;
@@ -2329,15 +2361,12 @@ class ControladorAv extends Controller
 
                 if($i+1 >= sizeof($rotas)-1){//Se estou na última rota
                     if($diaSaidaRota2==$diaChegadaRota2){// Se a viagem da rota 2 durar um dia
-                        if($horaSaidaRota2 < 12 && $horaChegadaRota2 >=19){
+
+                        if($horaChegadaRota2 >=19){
                             if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $diariaTotal;}
                             if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $diariaTotal;}
                         }
-                        else if($horaSaidaRota2 >=13 && $horaChegadaRota2 >=19){
-                            if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
-                            if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
-                        } 
-                        else if($horaSaidaRota2 < 12 && $horaChegadaRota2 >= 13 && $horaChegadaRota2 < 19){
+                        else if($horaChegadaRota2 >= 13 && $horaChegadaRota2 < 19){
                             if($rotas[$i]->isViagemInternacional ==0) {$valorReais += $meiaDiaria;}
                             if($rotas[$i]->isViagemInternacional ==1) {$valorDolar += $meiaDiaria;}
                         }

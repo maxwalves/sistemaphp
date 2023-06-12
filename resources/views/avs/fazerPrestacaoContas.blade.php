@@ -189,7 +189,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h3 class="text-lg font-bold" style="padding-left: 10%">Histórico</h3>
                 <table id="minhaTabela" class="display nowrap">
@@ -278,6 +278,10 @@
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="alert-circle-outline"></ion-icon> <strong>Prioridade:</strong> {{ $av->prioridade }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="pricetag-outline"></ion-icon> <strong>Comentário:</strong> {{ $av->comentario }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Status:</strong>  {{ $av->status }} </p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Nome do município da medição:</strong>  {{ $av->nome_municipio }} </p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número do projeto:</strong>  {{ $av->numero_projeto }} </p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número do lote:</strong>  {{ $av->numero_lote }} </p>
+                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número da medição:</strong>  {{ $av->numero_medicao }} </p>
                     
                 </div>
                 <br>
@@ -300,7 +304,10 @@
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }},00</p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> R$ {{ $av->valorExtraDolar }},00</p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
-                    
+                    @if($av->autorizacao != null)
+                        <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}" 
+                            target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
+                    @endif
                     
                 </div>
 
@@ -362,7 +369,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    -
+                                    3
                                 </span>
                             @endif
                             <span>
@@ -371,7 +378,7 @@
                             </span>
                         </li>
                         <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isRealizadoReserva == 1)
+                            @if($av->isRealizadoReserva == 1 && $av->isReservadoVeiculoParanacidade == 1)
                                 <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
                                     <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                                 </span>
@@ -381,7 +388,7 @@
                                 </span>
                             @endif
                             <span>
-                                <h3 class="font-medium leading-tight">Secretaria:</h3>
+                                <h3 class="font-medium leading-tight">CAD - Coordenadoria Administrativa:</h3>
                                 <div class="badge badge-outline">Realiza reservas</div>
                             </span>
                         </li>
@@ -392,29 +399,15 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    5
+                                    4
                                 </span>
                             @endif
                             <span>
-                                <h3 class="font-medium leading-tight">Financeiro:</h3>
+                                <h3 class="font-medium leading-tight">CFI - Coordenadoria Financeira:</h3>
                                 <div class="badge badge-outline">Adiantamento</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isReservadoVeiculoParanacidade == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    6
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Administração:</h3>
-                                <div class="badge badge-error gap-2">Reserva de veículo</div>
-                            </span>
-                        </li>
+                        
                     </ol>
                 </div>
                 <div class="divider"></div> 
@@ -707,7 +700,7 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-11" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-11" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
                 
@@ -880,7 +873,7 @@
             });
 
             $('#minhaTabela6').DataTable({
-                    scrollY: 200,
+                    scrollY: 250,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

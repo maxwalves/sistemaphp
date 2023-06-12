@@ -74,7 +74,7 @@
                                 <label for="dataHoraSaidaNacional" class="control-label">Data/Hora de saída: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional"
                                     id="dataHoraSaidaNacional" placeholder="Data/Hora de saída" 
-                                    value="{{ $rota->isViagemInternacional == '0' ? $rota->dataHoraSaida : ''}}" min = "{{$rota->dataHoraSaida}}">
+                                    value="{{ $rota->isViagemInternacional == '0' ? $rota->dataHoraSaida : ''}}" >
                             </div>
                         </div>
 
@@ -89,7 +89,7 @@
                                 <label for="dataHoraChegadaNacional" class="control-label">Data/Hora de chegada: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaNacional"
                                     id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada" 
-                                    value="{{ $rota->isViagemInternacional == '0' ? $rota->dataHoraChegada : ''}}" min = "{{$rota->dataHoraChegada}}">
+                                    value="{{ $rota->isViagemInternacional == '0' ? $rota->dataHoraChegada : ''}}" >
                             </div>
                         </div>
 

@@ -75,10 +75,26 @@ class ControladorRota extends Controller
         if($av == null){
             return redirect('/avs/avs')->with('msg', 'Você não tem autorização para criar uma rota de AV de outro usuário!');
         }
+        $rotas = $av->rotas;
 
+        $isOrigemNacional = null;
+        $rotaOriginal = null;
+        $ultimaRotaSetada = null;
+        for($i = 0; $i < count($rotas); $i++){
+            if($i == 0){
+                $rotaOriginal = $rotas[$i];
+                if($rotas[$i]->isViagemInternacional == false){
+                    $isOrigemNacional = true;
+                }
+            }
+            if($i == count($rotas)-1){
+                $ultimaRotaSetada = $rotas[$i];
+            }
+        }
         $veiculosProprios = $user->veiculosProprios;
         
-        return view('rotas.createRota', ['veiculosProprios' => $veiculosProprios, 'av' => $av, 'user'=> $user]);
+        return view('rotas.createRota', ['veiculosProprios' => $veiculosProprios, 'av' => $av, 'user'=> $user, 'isOrigemNacional' => $isOrigemNacional, 
+        'rotaOriginal' => $rotaOriginal, 'ultimaRotaSetada' => $ultimaRotaSetada]);
     }
 
     public function createpc($id)//Id da AV
@@ -311,7 +327,7 @@ class ControladorRota extends Controller
                 $av = $a;
             }
         }
-        if($av == null || $av->isEnviadoUsuario = true){
+        if($av->isEnviadoUsuario == 1){
             return redirect('/avs/avs/')->with('msg', 'Você não tem autorização para editar uma rota de AV de outro usuário!');
         }
 
@@ -523,8 +539,123 @@ class ControladorRota extends Controller
             $dados["dataHoraSaida"] = $request->dataHoraSaidaNacional;
             $dados["dataHoraChegada"] = $request->dataHoraChegadaNacional;
         }
+
         $rota = Rota::findOrFail($request->id);
+        
+        $av = Av::findOrFail($rota->av_id);
+        $rotas = $av->rotas;
+
+        //Vamos tratar os casos de atualização, verificando quando não pode e atualizar em cascata as datas modificadas
+
+        $date1 = new DateTime($rota->dataHoraSaida);//Data de saída atual
+        $diaSaida1 = $date1->format('d');
+        $mesSaida1 = $date1->format('m');
+
+        $date2 = new DateTime($dados["dataHoraSaida"]);//Data de saída a ser atualizado
+        $diaSaida2 = $date2->format('d');
+        $mesSaida2 = $date2->format('m');
+        
+        $date3 = new DateTime($rota->dataHoraChegada);//Data de saída atual
+        $diaSaida3 = $date3->format('d');
+        $mesSaida3 = $date3->format('m');
+
+        $date4 = new DateTime($dados["dataHoraChegada"]);//Data de saída a ser atualizado
+        $diaSaida4 = $date4->format('d');
+        $mesSaida4= $date4->format('m');
+
+        $diferencaDiaSaida = $diaSaida2-$diaSaida1;
+        $diferencaDiaChegada = $diaSaida4-$diaSaida3;
+
+        $indiceRotaAtual = 0;
+        for($i=0;$i<count($rotas);$i++){ //Percorre todas as rotas da AV
+            if($rotas[$i]->id == $rota->id){ // Se a rota do índice for igual a rota atual
+                if($i>0){
+                    $dateAnterior = new DateTime($rotas[$i - 1]->dataHoraSaida);
+                    $diaDateAnterior = $dateAnterior->format('d');
+                    $mesDateAnterior= $dateAnterior->format('m');
+
+                    if($diaSaida2 < $diaDateAnterior){
+                        return redirect('/rotas/rotasEditData/' . $rota->av_id)->with('msg', 'Não é possível salvar a data anterior a última rota!');
+                    }
+                }
+                $indiceRotaAtual = $i;
+             }
+        }
+
         $rota->update($dados);
+
+        if($diferencaDiaSaida > 0 && $diferencaDiaChegada > 0){
+            if($diferencaDiaSaida == $diferencaDiaChegada){
+                for($i=$indiceRotaAtual + 1;$i<count($rotas);$i++){
+
+                    $dateNewSaida = new DateTime($rotas[$i]->dataHoraSaida);
+                    $dateNewSaida->modify('+' . $diferencaDiaSaida . ' day');
+                    $rotas[$i]->dataHoraSaida = $dateNewSaida;
+    
+                    $dateNewChegada = new DateTime($rotas[$i]->dataHoraChegada);
+                    $dateNewChegada->modify('+' . $diferencaDiaChegada .' day');
+                    $rotas[$i]->dataHoraChegada = $dateNewChegada;
+    
+                    $dados["dataHoraSaida"] = $rotas[$i]->dataHoraSaida;
+                    $dados["dataHoraChegada"] = $rotas[$i]->dataHoraChegada;
+
+                    $rotas[$i]->update($dados);
+                }
+            }
+            else if($diferencaDiaChegada>$diferencaDiaSaida){ // Se a diferença do dia da chegada for maior que o dia de saída
+
+                for($i=$indiceRotaAtual + 1;$i<count($rotas);$i++){
+                    $dateNewSaida = new DateTime($rotas[$i]->dataHoraSaida);
+                    $dateNewSaida->modify('+' . $diferencaDiaChegada . ' day');
+                    $rotas[$i]->dataHoraSaida = $dateNewSaida;
+
+                    $dateNewChegada = new DateTime($rotas[$i]->dataHoraChegada);
+                    $dateNewChegada->modify('+' . $diferencaDiaChegada .' day');
+                    $rotas[$i]->dataHoraChegada = $dateNewChegada;
+
+                    $dados["dataHoraSaida"] = $rotas[$i]->dataHoraSaida;
+                    $dados["dataHoraChegada"] = $rotas[$i]->dataHoraChegada;
+
+                    $rotas[$i]->update($dados);
+                }
+            }
+        }
+        else if($diferencaDiaChegada < 0 && $diferencaDiaSaida < 0){
+            if($diferencaDiaSaida == $diferencaDiaChegada){
+                for($i=$indiceRotaAtual + 1;$i<count($rotas);$i++){
+
+                    $dateNewSaida = new DateTime($rotas[$i]->dataHoraSaida);
+                    $dateNewSaida->modify('-' . $diferencaDiaSaida . ' day');
+                    $rotas[$i]->dataHoraSaida = $dateNewSaida;
+    
+                    $dateNewChegada = new DateTime($rotas[$i]->dataHoraChegada);
+                    $dateNewChegada->modify('-' . $diferencaDiaChegada .' day');
+                    $rotas[$i]->dataHoraChegada = $dateNewChegada;
+    
+                    $dados["dataHoraSaida"] = $rotas[$i]->dataHoraSaida;
+                    $dados["dataHoraChegada"] = $rotas[$i]->dataHoraChegada;
+
+                    $rotas[$i]->update($dados);
+                }
+            } 
+            else if($diferencaDiaChegada<$diferencaDiaSaida){
+                for($i=$indiceRotaAtual + 1;$i<count($rotas);$i++){
+
+                    $dateNewSaida = new DateTime($rotas[$i]->dataHoraSaida);
+                    $dateNewSaida->modify('-' . $diferencaDiaChegada . ' day');
+                    $rotas[$i]->dataHoraSaida = $dateNewSaida;
+
+                    $dateNewChegada = new DateTime($rotas[$i]->dataHoraChegada);
+                    $dateNewChegada->modify('-' . $diferencaDiaChegada .' day');
+                    $rotas[$i]->dataHoraChegada = $dateNewChegada;
+
+                    $dados["dataHoraSaida"] = $rotas[$i]->dataHoraSaida;
+                    $dados["dataHoraChegada"] = $rotas[$i]->dataHoraChegada;
+
+                    $rotas[$i]->update($dados);
+                }
+            }
+        }
 
         return redirect('/rotas/rotasEditData/' . $rota->av_id)->with('msg', 'Data editada com sucesso!');
     }

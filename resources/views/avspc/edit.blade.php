@@ -134,18 +134,6 @@
 @section('javascript')
     <script type="text/javascript">
 
-
-        function ativaCampo(){
-            if(document.getElementById("isVeiculoProprio").value == "1"){
-                document.getElementById("selecaoVeiculo").hidden = false;
-                document.getElementById("temVeiculoEmpresa").hidden = true;
-                document.getElementById("isVeiculoEmpresa").value = 0;
-            }else if(document.getElementById("isVeiculoProprio").value == "0"){//Se o campo de outro objetivo tiver algo, faz o contrário
-                document.getElementById("selecaoVeiculo").hidden = true;
-                document.getElementById("temVeiculoEmpresa").hidden = false;
-            }
-        }
-
         function desativarCampoObjetivo(){
             var seletor = document.getElementById("flexSwitchCheckDefault")
 
@@ -177,15 +165,6 @@
                 //Assim que a tela carrega, aciona automaticamente essas funções ------------------------
         $(function(){
         //Se o campo de outro objetivo for vazio, ativa o campo de seleção de objetivo e desabilita o de outro objetivo
-            
-            if(document.getElementById("isVeiculoProprio").value == "1"){
-                document.getElementById("selecaoVeiculo").hidden = false;
-                document.getElementById("temVeiculoEmpresa").hidden = true;
-            }else{//Se o campo de outro objetivo tiver algo, faz o contrário
-                document.getElementById("selecaoVeiculo").hidden = true;
-            }
-
-
 
             if(document.getElementById("outroObjetivo").value == ""){
                 ativarCampoObjetivoInicial();

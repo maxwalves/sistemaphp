@@ -20,17 +20,8 @@
             <div class="col-4" >
                 <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 180px"> + CADASTRAR ROTA</a>
             </div>
-
-            <form action="/avspc/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
-                <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
-                
-            </form>
-
-
         </div>
+            
         <div class="col-12 col-xl-4">
             <label for="idav" style="font-size: 24px; color: green"> <strong>AV nº </strong> </label>
             <input style="width: 50px; font-size: 24px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
@@ -38,9 +29,17 @@
             <h2 style="font-size: 24px"> <strong>Valor adiantamento em reais: <span style="color: green"> R${{ $av->valorReais + $av->valorExtraReais }} </span></strong> </h2>
             <h2 style="font-size: 24px"> <strong>Valor adiantamento em dólar: <span style="color: green"> ${{ $av->valorDolar + $av->valorExtraDolar }} </span></strong> </h2>
         </div>
-        <div id="btSalvarRota">
-            <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-warning" value="Calcular diárias">
-        </div>
+
+        <form action="/avspc/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
+            <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
+            <div id="btSalvarRota">
+                <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-warning" value="Calcular diárias">
+            </div>
+        </form>
+        
         <div class="col-12 col-xl-4">
             <h2 style="font-size: 20px; color: red"> <strong> Após editar as rotas, pressione "Calcular Diárias"!</strong> </h2>
         </div>
