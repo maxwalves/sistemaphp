@@ -256,4 +256,5 @@ Route::middleware(['assinatura.termo'])->group(function () {
         Route::get('/edit/{id}', [ArquivosController::class, 'edit']);
         Route::put('/update/{id}', [ArquivosController::class, 'update']);
         Route::get('/show/{id}', [ArquivosController::class, 'show']);
+        Route::delete('/delete/{id}', [ArquivosController::class, 'destroy']);
 });

@@ -162,6 +162,19 @@ class ArquivosController extends Controller
         $arquivo->texto = str_replace('&nbsp;', ' ', $textoSemTags);
         $arquivo->tipo = $request->tipo;
 
+        $regras = [
+            'nome' => 'required',
+            'tipo' => 'required',
+            'texto' => 'required',
+            'arquivo1' => 'required'
+        ];
+
+        $mensagens = [
+            'required' => 'Este campo não pode estar em branco',
+        ];
+
+        $request->validate($regras, $mensagens);
+
         if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
         {
             $requestFile = $request->arquivo1;
@@ -177,6 +190,15 @@ class ArquivosController extends Controller
         $arquivo->save();
 
         return redirect('/admin')->with('msg', 'Arquivo cadastrado com sucesso!');
+    }
+
+    public function destroy($id)
+    {
+        $arquivo = Arquivo::findOrFail($id);
+        $id = $arquivo->id;
+        $arquivo->delete();
+
+        return redirect('/admin')->with('msg', 'Arquivo excluído com sucesso!');
     }
 
     public function edit($id)

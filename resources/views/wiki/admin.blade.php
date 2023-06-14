@@ -58,6 +58,12 @@
                                                     target="_blank" class="btn btn-active btn-success btn-sm">Acessar PDF</a>
                                             @endif
                                             <a href="edit/{{$resultado->id}}" class="btn btn-active btn-success btn-sm">Editar</a>
+                                            <form action="delete/{{$resultado->id}}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-active btn-accent btn-sm"
+                                                style="width: 110px" > Remover</button>
+                                            </form>
                                         </td>
                                     </tr>
                             @endforeach
@@ -98,6 +104,12 @@
                                                     target="_blank" class="btn btn-active btn-success btn-sm">Acessar PDF</a>
                                             @endif
                                             <a href="edit/{{$resultado->id}}" class="btn btn-active btn-success btn-sm">Editar</a>
+                                            <form action="delete/{{$resultado->id}}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-active btn-accent btn-sm"
+                                                style="width: 110px" > Remover</button>
+                                            </form>
                                         </td>
                                     </tr>
                             @endforeach
