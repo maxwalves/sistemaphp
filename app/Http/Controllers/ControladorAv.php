@@ -2081,6 +2081,7 @@ class ControladorAv extends Controller
         return redirect('/rotas/rotas/' . $av->id)->with('msg', 'AV criada com sucesso!');
         //return view('rotas.createRota', ['av' => $av]);
     }
+    
     public function concluir(Request $request){
         $objetivos = Objetivo::all();
 

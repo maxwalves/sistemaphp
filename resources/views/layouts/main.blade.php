@@ -136,6 +136,7 @@
                                 <li class="nav-item" hidden>
                                 <a class="btn btn-active btn-success rounded-none" href="#">Relatórios gerenciais</a>
                                 </li>
+                                <li><a class="btn btn-active btn-warning rounded-none" href="/wiki">Normas PARANACIDADE</a></li>
                                 @can('aprov-avs-gestor', $user)
                                     <li class="nav-item">
                                         <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autGestor">Autorizações de AV pendentes Gestor</a>

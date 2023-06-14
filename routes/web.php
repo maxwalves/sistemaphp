@@ -12,6 +12,7 @@ use App\Http\Controllers\ControladorRota;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SetorController;
 use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\ArquivosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -237,4 +238,22 @@ Route::middleware(['assinatura.termo'])->group(function () {
         Route::put('/setores/update/{id}', [SetorController::class, 'update'])->middleware('auth');
         Route::post('/setores', [SetorController::class,'store'])->middleware('auth');
 
+
+        Route::get('/wiki', [ArquivosController::class,'index']);
+        Route::get('/pesquisar', [ArquivosController::class, 'pesquisar'])->name('pesquisar');
+        Route::get('/pesquisarAdmin', [ArquivosController::class, 'pesquisarAdmin'])->name('pesquisarAdmin');
+        Route::get('/pesquisarNormas', [ArquivosController::class, 'pesquisarNormas'])->name('pesquisarNormas');
+        Route::get('/pesquisarInstrucoesNormativas', [ArquivosController::class, 'pesquisarInstrucoesNormativas'])->name('pesquisarInstrucoesNormativas');
+        Route::get('/pesquisarLegislacao', [ArquivosController::class, 'pesquisarLegislacao'])->name('pesquisarLegislacao');
+        Route::get('/pesquisarNormasGestao', [ArquivosController::class, 'pesquisarNormasGestao'])->name('pesquisarNormasGestao');
+        Route::get('/normas', [ArquivosController::class, 'acessarNormas']);
+        Route::get('/instrucoesNormativas', [ArquivosController::class, 'acessarInstrucoesNormativas']);
+        Route::get('/legislacao', [ArquivosController::class, 'acessarLegislacao']);
+        Route::get('/normasGestao', [ArquivosController::class, 'acessarNormasGestao']);
+        Route::get('/admin', [ArquivosController::class, 'acessarAdmin']);
+        Route::get('/create', [ArquivosController::class, 'create']);
+        Route::post('/gravarArquivo', [ArquivosController::class,'store']);
+        Route::get('/edit/{id}', [ArquivosController::class, 'edit']);
+        Route::put('/update/{id}', [ArquivosController::class, 'update']);
+        Route::get('/show/{id}', [ArquivosController::class, 'show']);
 });
