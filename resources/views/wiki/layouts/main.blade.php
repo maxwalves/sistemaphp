@@ -47,81 +47,6 @@
     {{-- -------------------------------------------------------------------------------------------------------------------------------------------- --}}
 
     <title>Wiki de Normas - Paranacidade</title>
-	
-	<script type="text/javascript">
-
-            var cookieSalvo = "";
-            function salvaCookieDss(){
-                var todosCookiesString = document.cookie;
-                var todosCookiesArray = todosCookiesString.split("; ");
-                for (i=0;i<todosCookiesArray.length;i++){
-                    var cookieDaVez = todosCookiesArray[i];
-                    if (cookieDaVez.slice(0, 7) == "token=|"){
-                        cookieSalvo = cookieDaVez;
-                    }
-                }
-                checaCookie();
-            }
-            
-            function checaCookie(){
-                if (cookieSalvo == ""){
-                    document.cookie = "token=; expires=Sun, 31 Dec 2023 12:00:00 UTC;SameSite=Lax";
-                    alert("Senha incorreta.");
-                    window.location.replace("/dss/index.htm");
-                }else{
-                    var somenteToken = cookieSalvo.slice(7, 1000);
-                    var parametros = atob(somenteToken);
-                    $.post("/dss/consultaUsuarioLDAP.php",parametros,function(data, status, xhr){
-                        if (xhr.readyState == 4 && status == "success"){
-                            if (data == "NAO LOGADO"){
-                                alert("Senha incorreta.");
-                                document.cookie = "token=; expires=Sun, 31 Dec 2023 12:00:00 UTC;SameSite=Lax";
-                                window.location.replace("/dss/index.htm");
-                            }else if (somenteToken == data){
-                                carregaJsons();
-                            }else{
-                                document.cookie = "token=; expires=Sun, 31 Dec 2023 12:00:00 UTC;SameSite=Lax";
-                                window.location.replace("/dss/index.htm");
-                            }
-                        }
-                    });
-                }
-            }
-            
-            function carregaJsons(){
-                $.get("/dss/usuariosLDAP.php?usuario=TODOS",function(retorno, status, xhr){
-                    if (xhr.readyState == 4 && status == "success"){
-                        usuariosLDAP = JSON.parse(retorno);
-                        checaHabilitacao();
-                    }
-                });
-            }
-
-            var permissoesUsuarioGlobal;
-            function checaHabilitacao(){
-                var somenteToken = cookieSalvo.slice(7, 1000);
-                var parametros = atob(somenteToken);
-                var parametrosArray = parametros.split("&");
-                var usuarioURL = parametrosArray[0];
-                var senhaURL = parametrosArray[1];
-                usuario = usuarioURL.slice(8, 1000);
-                senha = senhaURL.slice(6, 1000);
-                for (let i=0;i<usuariosLDAP.length;i++){
-                    if (usuariosLDAP[i].usuario == usuario){
-                        if (usuariosLDAP[i].desativado == "não"){
-                            permissoesUsuarioGlobal = usuariosLDAP[i];
-                            //continuar daqui
-                        }else{
-                            document.cookie = "token=; expires=Sun, 31 Dec 2023 12:00:00 UTC;SameSite=Lax";
-                            alert("Usuário desativado. Contate administrador.");
-                            window.location.replace("/dss/index.htm");
-                        }
-                    }
-                }
-            }
-            
-	
-	</script>
 
     {{-- -------------------------------------------------------------------------------------------------------------------------------------------- --}}
     </head>
@@ -207,8 +132,5 @@
         @endif
     </body>
 
-    <script>
-        salvaCookieDss();
-    </script>
     
 </html>
