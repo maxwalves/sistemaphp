@@ -356,7 +356,7 @@
                         <div class="form-group">
                             <label for="selecaoCidadeDestinoNacional" class="control-label">Selecione a cidade destino</label>
                             <br>
-                                <input type="text" id="cidadeOrigemGeral" name="cidadeOrigemGeral" value="{{ $rotaOriginal->cidadeOrigemNacional }}" hidden="true">
+                                <input type="text" id="cidadeOrigemGeral" name="cidadeOrigemGeral" value="{{ count($av->rotas) > 0 ? $rotaOriginal->cidadeOrigemNacional : "" }}" hidden="true">
 
                                 <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoCidadeDestinoNacional') ? 'is-invalid' :''}}" 
                                     id="selecaoCidadeDestinoNacional" name="selecaoCidadeDestinoNacional" onChange="verificaSeCidadeOrigem()">
