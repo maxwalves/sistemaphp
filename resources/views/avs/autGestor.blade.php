@@ -8,7 +8,7 @@
     <div class="row justify-content-between">
         
         <div class="col-8">
-            <h4>Minhas autorizações de viagens</h4>
+            <h4>AVs pendentes de autorização:</h4>
         </div>
     </div>
     <br>

@@ -652,9 +652,9 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Reserva de hotel</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reserva de hotel</h3>
                 <table id="minhaTabela1" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
@@ -710,9 +710,9 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Reservas de transporte</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reservas de transporte</h3>
                 
                 <table id="minhaTabela2" class="display nowrap" style="width:100%">
                     <thead>
@@ -770,9 +770,9 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Adiantamentos realizados</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px;">Adiantamentos realizados</h3>
 
                 <table id="minhaTabela3" class="display nowrap" style="width:100%">
                     <thead>
@@ -802,9 +802,9 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-3xl">
             <div class="modal-content">
-                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h1 style="font-size: 24px; padding-left: 10px"><strong>Aprovar prestação de contas: </strong></h1>
+                <h1 style="font-size: 24px; padding-left: 10px; padding-bottom: 20px;"><strong>Aprovar prestação de contas: </strong></h1>
                 <div class="flex flex-row" style="padding-left: 10px">
                     <form action="/avs/usuarioAprovarAcertoContas" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -841,9 +841,9 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-10" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-10" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
+                <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Trajeto: </strong></h1>
                 
                 <table id="tabelaRota" class="display nowrap" style="width:100%">
                     <thead>
@@ -941,28 +941,28 @@
                 <label for="my-modal-12" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                 <br>
                 
-                <h1 style="font-size: 24px"><strong>Comprovantes de despesa:</strong></h1>
-                        <table id="minhaTabela7" class="display nowrap" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Descrição</th>
-                                    <th>Valor reais</th>
-                                    <th>Valor dólar</th>
-                                    <th>Anexo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($comprovantes as $comp)
-                                    <tr>
-                                        <td> {{$comp->descricao}} </td>
-                                        <td> {{$comp->valorReais}} </td>
-                                        <td> {{$comp->valorDolar}} </td>
-                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Comprovantes de despesa:</strong></h1>
+                <table id="minhaTabela7" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Valor reais</th>
+                            <th>Valor dólar</th>
+                            <th>Anexo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($comprovantes as $comp)
+                            <tr>
+                                <td> {{$comp->descricao}} </td>
+                                <td> {{$comp->valorReais}} </td>
+                                <td> {{$comp->valorDolar}} </td>
+                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
+                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
 
             </div>
         </div>
@@ -1011,7 +1011,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
                 });
         });
@@ -1036,7 +1037,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -1047,7 +1049,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -1058,7 +1061,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -1069,7 +1073,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -1080,7 +1085,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
             $('#minhaTabela6').DataTable({
@@ -1090,17 +1096,19 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
             $('#minhaTabela7').DataTable({
-                    scrollY: 100,
+                    scrollY: 200,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
         });

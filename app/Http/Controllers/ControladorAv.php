@@ -168,7 +168,7 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($id);
         $userAv = User::findOrFail($av->user_id);
 
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isVistoDiretoria"]==false){ //Se a av já foi enviada e autorizada pelo Gestor
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isVistoDiretoria"]==false && $av["isCancelado"]==false){ //Se a av já foi enviada e autorizada pelo Gestor
             foreach($av->rotas as $rota){//Percorre todas as rotas da AV
                 if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){//Se a viagem for internacional ou tiver veículo próprio
                     
@@ -215,7 +215,8 @@ class ControladorAv extends Controller
             }
         }
 
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==false && $av["isCancelado"]==false)
+            || ($av["isCancelado"]== true && $av["isRealizadoReserva"]== true)){ //Se a av dele já foi enviada e autorizada pelo Gestor
             $isNecessarioAvaliacaoDiretoria = false;
             $passouPelaDiretoria = false;
             foreach($av->rotas as $rota){//Percorre todas as rotas da AV
@@ -294,8 +295,9 @@ class ControladorAv extends Controller
         }
 
 
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
-        && $av["isPrestacaoContasRealizada"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
+        && $av["isPrestacaoContasRealizada"]==false && $av["isCancelado"]==false) || 
+        ($av["isCancelado"]==true && $av["isAprovadoFinanceiro"]==true)){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
         }
 
@@ -359,8 +361,10 @@ class ControladorAv extends Controller
         }
 
         if($userAv->id != $user->id){
-            if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
-                    && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
+            if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
+                    && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==false && $av["isCancelado"]==false) || 
+                    ($av["isCancelado"]==true && $av["isAprovadoFinanceiro"]==true && $av["isPrestacaoContasRealizada"] == true 
+                    && $av["isFinanceiroAprovouPC"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
             }
         }
@@ -434,9 +438,11 @@ class ControladorAv extends Controller
         }
         
         if($userAv->id != $user->id){//Se  o usuário não for você
-            if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
+            if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
                     && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true 
-                    && $av["isGestorAprovouPC"]==true&& $av["isAcertoContasRealizado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
+                    && $av["isGestorAprovouPC"]==true&& $av["isAcertoContasRealizado"]==false && $av["isCancelado"]==false) || 
+                    ($av["isCancelado"]==true && $av["isAprovadoFinanceiro"]==true && $av["isPrestacaoContasRealizada"] == true 
+                    && $av["isFinanceiroAprovouPC"] == true && $av["isGestorAprovouPC"] == true && $av["isAcertoContasRealizado"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
             }
         }
@@ -512,7 +518,11 @@ class ControladorAv extends Controller
         }
 
 
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
+                    && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true 
+                    && $av["isGestorAprovouPC"]==true&& $av["isAcertoContasRealizado"]==false && $av["isCancelado"]==false) || 
+                    ($av["isCancelado"]==true && $av["isAprovadoFinanceiro"]==true && $av["isPrestacaoContasRealizada"] == true 
+                    && $av["isFinanceiroAprovouPC"] == true && $av["isGestorAprovouPC"] == true && $av["isAcertoContasRealizado"] == true)){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
         }
 
@@ -577,8 +587,11 @@ class ControladorAv extends Controller
         }
 
         if($userAv->id != $user->id){//Se  o usuário não for você
-            if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
-                && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true  && $av["isGestorAprovouPC"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
+            if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
+                && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true  && $av["isGestorAprovouPC"]==false
+                && $av["isCancelado"]==false) || 
+                ($av["isCancelado"]==true && $av["isAprovadoFinanceiro"]==true && $av["isPrestacaoContasRealizada"] == true 
+                && $av["isFinanceiroAprovouPC"] == true && $av["isGestorAprovouPC"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
             }
         }
@@ -612,7 +625,7 @@ class ControladorAv extends Controller
             }
         }
 
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isReservadoVeiculoParanacidade"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isReservadoVeiculoParanacidade"]==false && $av["isCancelado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
 
             foreach($av->rotas as $rota){//Percorre todas as rotas da AV
                 if($rota["isVeiculoEmpresa"]==1){//Se a viagem tiver veículo da empresa
@@ -685,7 +698,7 @@ class ControladorAv extends Controller
             }
         }
 
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isAprovadoFinanceiro"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isAprovadoFinanceiro"]==false && $av["isCancelado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
             if( $av->user_id != $user->id){//Verifica se não é vc mesmo
                 $possoEditar = true;
             }
@@ -1005,7 +1018,8 @@ class ControladorAv extends Controller
         $rotaPertenceAv = false;
         $possoEditar = false;
 
-        if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true  && $av["isRealizadoReserva"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
+        if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true  && $av["isRealizadoReserva"]==false && $av["isCancelado"]==false)
+        || ($av["isCancelado"]== true && $av["isRealizadoReserva"]== true)){ //Se a av dele já foi enviada e autorizada pelo Gestor
             $isNecessarioAvaliacaoDiretoria = false;
             $passouPelaDiretoria = false;
             foreach($av->rotas as $r){//Percorre todas as rotas da AV
@@ -1250,24 +1264,36 @@ class ControladorAv extends Controller
 
         $dados = [];
 
-        $historico = new Historico();
-        $timezone = new DateTimeZone('America/Sao_Paulo');
-        $historico->dataOcorrencia = new DateTime('now', $timezone);
-        $historico->tipoOcorrencia = "Reserva realizada pelo CAD";
-        $historico->comentario = $request->get('comentario');
-        $historico->perfilDonoComentario = "CAD";
-        $historico->usuario_id = $av->user_id;
-        $historico->usuario_comentario_id = $user->id;
-        $historico->av_id = $av->id;
-        $isVeiculoEmpresa = false;
+        if($av["isCancelado"]== false){
+            $historico = new Historico();
+            $timezone = new DateTimeZone('America/Sao_Paulo');
+            $historico->dataOcorrencia = new DateTime('now', $timezone);
+            $historico->tipoOcorrencia = "Reserva realizada pelo CAD";
+            $historico->comentario = $request->get('comentario');
+            $historico->perfilDonoComentario = "CAD";
+            $historico->usuario_id = $av->user_id;
+            $historico->usuario_comentario_id = $user->id;
+            $historico->av_id = $av->id;
+            $isVeiculoEmpresa = false;
 
-        foreach($av->rotas as $r){
-            if($r->isVeiculoEmpresa == 1){
-                $isVeiculoEmpresa = true;
+            foreach($av->rotas as $r){
+                if($r->isVeiculoEmpresa == 1){
+                    $isVeiculoEmpresa = true;
+                }
             }
+        }else if($av["isCancelado"]== true){
+            $historico = new Historico();
+            $timezone = new DateTimeZone('America/Sao_Paulo');
+            $historico->dataOcorrencia = new DateTime('now', $timezone);
+            $historico->tipoOcorrencia = "Cancelamento de Reserva realizado pelo CAD";
+            $historico->comentario = $request->get('comentario');
+            $historico->perfilDonoComentario = "CAD";
+            $historico->usuario_id = $av->user_id;
+            $historico->usuario_comentario_id = $user->id;
+            $historico->av_id = $av->id;
         }
         
-        if($av->isAprovadoFinanceiro == 0){
+        if($av->isAprovadoFinanceiro == 0 && $av["isCancelado"]== false){
             if($isVeiculoEmpresa == true && $av->isReservadoVeiculoParanacidade == false){
                 $dados = array(
                     "isRealizadoReserva" => 1,
@@ -1282,23 +1308,35 @@ class ControladorAv extends Controller
             }
             
         }
-        else if($av->isAprovadoFinanceiro == 1){
+        else if($av->isAprovadoFinanceiro == 1 && $av["isCancelado"]== false){
             $dados = array(
                 "isRealizadoReserva" => 1,
                 "status" => "Aguardando prestação de contas do usuário"
             );
         }
-        
+        else if($av["isCancelado"]== true && $av["isRealizadoReserva"]== true && $av["isAprovadoFinanceiro"]== true){
+            $dados = array(
+                "status" => "AV Cancelada - Aguardando prestação de contas do usuário"
+            );
+        }
+        else if($av["isCancelado"]== true && $av["isRealizadoReserva"]== true && $av["isAprovadoFinanceiro"]== false){
+            $dados = array(
+                "status" => "AV Cancelada (Reservas canceladas pela CAD)",
+                "isRealizadoCancelamentoReserva" => 1
+            );
+        }
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
-        $userAv = User::findOrFail($av->user_id);
-        try {
-                Mail::to($userAv->username)
-                ->send(new EnvioSecretariaToUsuario($userAv->id));
-               
-        } catch (\Throwable $th) {
+        if($av["isCancelado"]== false){
+            $userAv = User::findOrFail($av->user_id);
+            try {
+                    Mail::to($userAv->username)
+                    ->send(new EnvioSecretariaToUsuario($userAv->id));
+                
+            } catch (\Throwable $th) {
+            }
         }
 
         return redirect('/avs/autSecretaria')->with('msg', 'AV aprovada pelo CAD!');
@@ -1404,18 +1442,24 @@ class ControladorAv extends Controller
             }
         }
 
-        if($isVeiculoEmpresa == true && $av->isReservadoVeiculoParanacidade == false){
+        if($av->isRealizadoReserva == false){
+            $dados = array(
+                "isAprovadoFinanceiro" => 1,
+                "status" => "Aguardando reservas pelo CAD"
+            );
+        }
+        else if($isVeiculoEmpresa == true && $av->isReservadoVeiculoParanacidade == false && $av->isRealizadoReserva == true){
             $dados = array(
                 "isAprovadoFinanceiro" => 1,
                 "status" => "Aguardando reserva de veículo"
             );
         }
-        else{
+        else if($av->isRealizadoReserva == true){
             $dados = array(
                 "isAprovadoFinanceiro" => 1,
                 "status" => "Aguardando prestação de contas do usuário"
             );
-        }   
+        }
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
@@ -1446,13 +1490,24 @@ class ControladorAv extends Controller
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
         
-        $dados = array(
-            "isPrestacaoContasRealizada" => 1,
-            "status" => "Aguardando aprovação da Prestação de Contas pelo Financeiro",
-            "contatos" => $request->get('contatos'),
-            "atividades" => $request->get('atividades'),
-            "conclusoes" => $request->get('conclusoes')
-        );
+        if($av->isCancelado == true){
+            $dados = array(
+                "isPrestacaoContasRealizada" => 1,
+                "status" => "AV Cancelada - Aguardando aprovação da Prestação de Contas pelo Financeiro",
+                "contatos" => $request->get('contatos'),
+                "atividades" => $request->get('atividades'),
+                "conclusoes" => $request->get('conclusoes')
+            );
+        }
+        else{
+            $dados = array(
+                "isPrestacaoContasRealizada" => 1,
+                "status" => "Aguardando aprovação da Prestação de Contas pelo Financeiro",
+                "contatos" => $request->get('contatos'),
+                "atividades" => $request->get('atividades'),
+                "conclusoes" => $request->get('conclusoes')
+            );
+        }
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
@@ -1527,10 +1582,18 @@ class ControladorAv extends Controller
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
         
-        $dados = array(
-            "isFinanceiroAprovouPC" => 1,
-            "status" => "Aguardando aprovação da prestação de contas pelo Gestor"
-        );
+        if($av->isCancelado == true){
+            $dados = array(
+                "isFinanceiroAprovouPC" => 1,
+                "status" => "AV Cancelada - Aguardando aprovação da prestação de contas pelo Gestor"
+            );
+        }
+        else{
+            $dados = array(
+                "isFinanceiroAprovouPC" => 1,
+                "status" => "Aguardando aprovação da prestação de contas pelo Gestor"
+            );
+        }
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
@@ -1672,10 +1735,18 @@ class ControladorAv extends Controller
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
         
-        $dados = array(
-            "isUsuarioAprovaAcertoContas" => 1,
-            "status" => "Acerto de Contas aprovado pelo usuário - AV finalizada"
-        );
+        if($av->isCancelado == true){
+            $dados = array(
+                "isUsuarioAprovaAcertoContas" => 1,
+                "status" => "AV Cancelada - Acerto de Contas aprovado pelo usuário - AV finalizada"
+            );
+        }
+        else{
+            $dados = array(
+                "isUsuarioAprovaAcertoContas" => 1,
+                "status" => "Acerto de Contas aprovado pelo usuário - AV finalizada"
+            );
+        }
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
@@ -1774,10 +1845,19 @@ class ControladorAv extends Controller
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
         
-        $dados = array(
-            "isGestorAprovouPC" => 1,
-            "status" => "Aguardando acerto de contas pelo financeiro"
-        );
+        if($av->isCancelado == true){
+            $dados = array(
+                "isGestorAprovouPC" => 1,
+                "status" => "AV Cancelada - Aguardando acerto de contas pelo financeiro"
+            );
+        }
+        else{
+            $dados = array(
+                "isGestorAprovouPC" => 1,
+                "status" => "Aguardando acerto de contas pelo financeiro"
+            );
+        }
+        
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
@@ -2009,7 +2089,10 @@ class ControladorAv extends Controller
     {
         $regras = [
             'objetivo_id' => 'required',
-            'prioridade' => 'required'
+            'prioridade' => 'required',
+            'banco' => 'required',
+            'agencia' => 'required',
+            'conta' => 'required'
         ];
 
         $mensagens = [
@@ -2649,7 +2732,7 @@ class ControladorAv extends Controller
         $avsFiltradas = [];
         foreach($usersFiltrados as $uf){//Verifica todos os usuários encontrados
             foreach($uf->avs as $av){//Percorre todas as Avs do usuário encontrado
-                if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==false){ //Se a av dele já foi enviada, mas ainda não autorizada, adiciona ao array de avs filtradas
+                if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==false && $av["isCancelado"]==false){ //Se a av dele já foi enviada, mas ainda não autorizada, adiciona ao array de avs filtradas
                     
                     array_push($avsFiltradas, $av);
                 }
@@ -2669,7 +2752,7 @@ class ControladorAv extends Controller
         foreach($users as $uf){//Verifica todos os usuários
             if($uf->id != $user->id){
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isVistoDiretoria"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isVistoDiretoria"]==false && $avAtual["isCancelado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
                         foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
                             if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){//Se a viagem for internacional ou tiver veículo próprio
                                 array_push($avsFiltradas, $avAtual);
@@ -2694,7 +2777,8 @@ class ControladorAv extends Controller
         foreach($users as $uf){//Verifica todos os usuários
             if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                    if(($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==false && $avAtual["isCancelado"]==false) 
+                    || ($avAtual["isCancelado"]== true && $avAtual["isRealizadoReserva"]== true && $avAtual["isRealizadoCancelamentoReserva"]== false)){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
                         $isNecessarioAvaliacaoDiretoria = false;
                         $passouPelaDiretoria = false;
                         foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
@@ -2728,8 +2812,9 @@ class ControladorAv extends Controller
         foreach($users as $uf){//Verifica todos os usuários
             if($uf->id == $user->id){//Se o usuário for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true 
-                    && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isPrestacaoContasRealizada"]==false){
+                    if(($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true 
+                    && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isPrestacaoContasRealizada"]==false && $avAtual["isCancelado"]==false) || 
+                    ($avAtual["isCancelado"]==true && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isPrestacaoContasRealizada"] == false)){
                         $isVeiculoEmpresa = false;
                         foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
                             if($rota["isVeiculoEmpresa"]==1){//Se a viagem tiver veículo da empresa
@@ -2761,7 +2846,8 @@ class ControladorAv extends Controller
         foreach($users as $uf){//Verifica todos os usuários
             if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isReservadoVeiculoParanacidade"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isReservadoVeiculoParanacidade"]==false
+                    && $avAtual["isCancelado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
 
                         foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
                             if($rota["isVeiculoEmpresa"]==1){//Se a viagem tiver veículo da empresa
@@ -2799,7 +2885,8 @@ class ControladorAv extends Controller
         foreach($users as $uf){//Verifica todos os usuários
             if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isAprovadoFinanceiro"]==false ){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isAprovadoFinanceiro"]==false 
+                    && $avAtual["isCancelado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
 
                         array_push($avsFiltradas, $avAtual);
                     }
@@ -2820,8 +2907,10 @@ class ControladorAv extends Controller
         foreach($users as $uf){//Verifica todos os usuários
             if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
-                    && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                    if(($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
+                    && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==false && $avAtual["isCancelado"]==false) || 
+                    ($avAtual["isCancelado"]==true && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isPrestacaoContasRealizada"] == true 
+                    && $avAtual["isFinanceiroAprovouPC"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
 
                         array_push($avsFiltradas, $avAtual);
                     }
@@ -2842,9 +2931,11 @@ class ControladorAv extends Controller
         foreach($users as $uf){//Verifica todos os usuários
             if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
+                    if(($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
                     && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==true 
-                    && $avAtual["isGestorAprovouPC"]==true&& $avAtual["isAcertoContasRealizado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                    && $avAtual["isGestorAprovouPC"]==true&& $avAtual["isAcertoContasRealizado"]==false && $avAtual["isCancelado"]==false) || 
+                    ($avAtual["isCancelado"]==true && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isPrestacaoContasRealizada"] == true 
+                    && $avAtual["isFinanceiroAprovouPC"] == true && $avAtual["isGestorAprovouPC"] == true && $avAtual["isAcertoContasRealizado"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
                         
                         array_push($avsFiltradas, $avAtual);
                     }
@@ -2879,8 +2970,11 @@ class ControladorAv extends Controller
         $avsFiltradas = [];
         foreach($usersFiltrados as $uf){//Verifica todos os usuários
             foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
-                && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==true  && $avAtual["isGestorAprovouPC"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                if(($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
+                && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==true  && $avAtual["isGestorAprovouPC"]==false
+                && $avAtual["isCancelado"]==false) || 
+                ($avAtual["isCancelado"]==true && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isPrestacaoContasRealizada"] == true 
+                && $avAtual["isFinanceiroAprovouPC"] == true && $avAtual["isGestorAprovouPC"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
 
                     array_push($avsFiltradas, $avAtual);
                 }
@@ -2934,5 +3028,65 @@ class ControladorAv extends Controller
         else{
             return redirect('/avs/avs')->with('msg', 'Av editado com sucesso!');
         }
+    }
+
+    public function marcarComoCancelado(Request $request)
+    {
+
+        $user = auth()->user();
+        $av = Av::findOrFail($request->id);
+
+        if($av->isRealizadoReserva == true && $av->isAprovadoFinanceiro == false){
+            $dados = array(
+                "isCancelado" => 1,
+                "status" => "AV Cancelada - Pendente de cancelamento de reservas pelo CAD",
+                "valorExtraReais" => 0,
+                "valorExtraDolar" => 0,
+                "valorReais" => 0,
+                "valorDolar" => 0
+            );
+        }
+        else if($av->isAprovadoFinanceiro == true && $av->isRealizadoReserva == false){
+            $dados = array(
+                "isCancelado" => 1,
+                "status" => "AV Cancelada - Pendente de prestação de contas pelo usuário",
+                "valorExtraReais" => 0,
+                "valorExtraDolar" => 0,
+                "valorReais" => 0,
+                "valorDolar" => 0
+            );
+        }
+        else if($av->isAprovadoFinanceiro == true && $av->isRealizadoReserva == false){
+            $dados = array(
+                "isCancelado" => 1,
+                "status" => "AV Cancelada - Pendente de prestação de contas pelo usuário e de cancelamento de reservas pelo CAD",
+                "valorExtraReais" => 0,
+                "valorExtraDolar" => 0,
+                "valorReais" => 0,
+                "valorDolar" => 0
+            );
+        }
+
+        $historico = new Historico();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
+        $historico->tipoOcorrencia = "AV Cancelada pelo usuário: " . $user->name;
+        $historico->comentario = "Cancelamento de AV";
+        $historico->perfilDonoComentario = "Usuário";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+
+        //No caso do CFI, if($av->isCancelado && $av->isAprovadoFinanceiro), listar para o CFI
+        //Neste caso, também deverá ser mostrado na página de prestação de contas. 
+        //Aqui quando for cancelado, deverão ser zeradas as rotas, de modo a não ser necessário pagar diária de alimentação
+        //Além disso, deverá ser setado que quando uma AV foi cancelada, não exiba o campo de edição de AV e Rota na página de Prestação de Contas
+        // Lá, o usuário deverá preencher as informações sobre o motivo do cancelamento e envia. Quando chegar no Acerto de Contas
+
+        $av->update($dados);
+        $historico->save();
+
+        return redirect('/avs/avs')->with('msg', 'Av cancelada com sucesso!');
+        
     }
 }

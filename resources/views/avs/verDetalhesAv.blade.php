@@ -319,7 +319,7 @@
             <div class="modal-content">
                 <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Histórico</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Histórico</h3>
                 <table id="minhaTabela" class="display nowrap">
                     <!-- head -->
                     <thead>
@@ -406,10 +406,12 @@
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="alert-circle-outline"></ion-icon> <strong>Prioridade AV:</strong> {{ $av->prioridade }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="pricetag-outline"></ion-icon> <strong>Comentário:</strong> {{ $av->comentario }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Status:</strong>  {{ $av->status }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Nome do município da medição:</strong>  {{ $av->nome_municipio }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número do projeto:</strong>  {{ $av->numero_projeto }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número do lote:</strong>  {{ $av->numero_lote }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número da medição:</strong>  {{ $av->numero_medicao }} </p>
+                    @if ($av->objetivo_id == 3)
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Nome do município da medição:</strong>  {{ $av->nome_municipio }} </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número do projeto:</strong>  {{ $av->numero_projeto }} </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número do lote:</strong>  {{ $av->numero_lote }} </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número da medição:</strong>  {{ $av->numero_medicao }} </p>
+                    @endif
                 </div>
                 <br>
                 <h1 class="text-lg font-bold">Dados bancários:</h1>
@@ -623,7 +625,7 @@
             <div class="modal-content">
                 <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Reserva de hotel</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reserva de hotel</h3>
                 <table id="minhaTabela1" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
@@ -681,7 +683,7 @@
             <div class="modal-content">
                 <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Reservas de transporte</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reservas de transporte</h3>
                 
                 <table id="minhaTabela2" class="display nowrap" style="width:100%">
                     <thead>
@@ -739,11 +741,11 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Adiantamentos realizados</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Adiantamentos realizados</h3>
 
-                <table id="minhaTabela3" class="display nowrap" style="width:100%">
+                <table id="minhaTabela3" class="display nowrap" style="width:100%;">
                     <thead>
                         <tr>
                             <th>Descrição</th>
@@ -773,7 +775,7 @@
             <div class="modal-content">
                 <label for="my-modal-10" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
+                <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Trajeto: </strong></h1>
                 
                 <table id="tabelaRota" class="display nowrap" style="width:100%">
                     <thead>
@@ -863,10 +865,10 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-12" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-12" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 
-                <h1 style="font-size: 24px"><strong>Comprovantes de despesa:</strong></h1>
+                <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Comprovantes de despesa:</strong></h1>
                         <table id="minhaTabela7" class="display nowrap" style="width:100%">
                             <thead>
                                 <tr>
@@ -938,7 +940,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
                 });
         });
@@ -963,7 +966,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -974,7 +978,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -985,7 +990,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -996,7 +1002,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -1007,7 +1014,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
             $('#minhaTabela6').DataTable({
@@ -1017,7 +1025,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
             $('#minhaTabela7').DataTable({
@@ -1027,7 +1036,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
         });

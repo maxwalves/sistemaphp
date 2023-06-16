@@ -7,6 +7,14 @@
     <div class="col-3">
         <a href="/avs/autSecretaria" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
     </div>
+    <div class="col-6">
+        @if($av->isCancelado == 1 && $av->isRealizadoReserva == 1)
+            <div class="alert alert-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                <span><strong>A AV Atual foi cancelada pelo usuário. Verifique as reservas e realize os devidos cancelamentos.</strong></span>
+            </div>
+        @endif
+    </div>
 </div>
 <div id="av-create-container" class="container">
     
@@ -34,9 +42,6 @@
                 <label for="my-modal-3" class="btn">Histórico</label>
                 <label for="my-modal-4" class="btn">Dados da AV</label>
                 <label for="my-modal-5" class="btn">FLUXO</label>
-                
-                <br>
-                
             </div>
             <div class="divider"></div> 
         
@@ -141,21 +146,26 @@
                     <textarea type="text" class="textarea textarea-bordered h-24" 
                         name="comentario" style="width: 200px"
                         id="comentario" placeholder="Comentário"></textarea>
-
-                    <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
+                    @if($av->isCancelado == 0)
+                        <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
+                    @else
+                        <button type="submit" class="btn btn-active btn-success">Finalizar AV</button>
+                    @endif
             </form>
             
-            <form action="/avs/secretariaReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
-                @csrf
-                @method('PUT')
-                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                    <label for="comentario">Voltar AV para o usuário: </label>
-                    <br>
-                    <textarea type="text" class="textarea textarea-bordered h-24" 
-                        name="comentario" style="width: 200px"
-                        id="comentario" placeholder="Comentário"></textarea>
-                    <button type="submit" class="btn btn-active btn-error">Reprovar AV</button>
-            </form>
+            @if($av->isCancelado == 0)
+                <form action="/avs/secretariaReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
+                    @csrf
+                    @method('PUT')
+                        <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                        <label for="comentario">Voltar AV para o usuário: </label>
+                        <br>
+                        <textarea type="text" class="textarea textarea-bordered h-24" 
+                            name="comentario" style="width: 200px"
+                            id="comentario" placeholder="Comentário"></textarea>
+                        <button type="submit" class="btn btn-active btn-error">Reprovar AV</button>
+                </form>
+            @endif
         </div>
 
     </div>
@@ -254,11 +264,12 @@
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="alert-circle-outline"></ion-icon> <strong>Prioridade:</strong> {{ $av->prioridade }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="pricetag-outline"></ion-icon> <strong>Comentário:</strong> {{ $av->comentario }} </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Status:</strong>  {{ $av->status }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Nome do município da medição:</strong>  {{ $av->nome_municipio }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número do projeto:</strong>  {{ $av->numero_projeto }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número do lote:</strong>  {{ $av->numero_lote }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número da medição:</strong>  {{ $av->numero_medicao }} </p>
-                    
+                    @if ($av->objetivo_id == 3)
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Nome do município da medição:</strong>  {{ $av->nome_municipio }} </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número do projeto:</strong>  {{ $av->numero_projeto }} </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número do lote:</strong>  {{ $av->numero_lote }} </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Número da medição:</strong>  {{ $av->numero_medicao }} </p>
+                    @endif
                 </div>
                 <br>
                 <h1 class="text-lg font-bold">Dados bancários:</h1>
@@ -479,7 +490,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
                 });
         });

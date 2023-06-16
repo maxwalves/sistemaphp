@@ -48,6 +48,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::delete('/avs/{id}', [ControladorAv::class, 'destroy'])->middleware('auth');
     Route::get('/avs/edit/{id}', [ControladorAv::class, 'edit'])->middleware('auth');
     Route::put('/avs/update/{id}', [ControladorAv::class, 'update'])->middleware('auth');
+    Route::put('/avs/marcarComoCancelado/{id}', [ControladorAv::class, 'marcarComoCancelado'])->middleware('auth');
     Route::put('/avs/enviarGestor/{id}', [ControladorAv::class, 'enviarGestor'])->middleware('auth');
     Route::put('/avs/concluir/{id}', [ControladorAv::class, 'concluir'])->middleware('auth');
     Route::get('/avs/fluxo/{id}', [ControladorAv::class, 'verFluxo'])->middleware('auth');

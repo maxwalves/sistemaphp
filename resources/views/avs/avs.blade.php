@@ -71,7 +71,7 @@
                 <td> {{$av->prioridade}} </td>
                 <td> {{$av->status}} </td>
                 <td> 
-                    @if($av->isEnviadoUsuario == 0)
+                    @if($av->isEnviadoUsuario == 0 && $av->isCancelado == 0)
                         <div class="opcoesGerenciarAv">
                             <a href="/avs/edit/{{ $av->id }}" class="btn btn-success btn-sm"
                                 style="width: 110px">  Editar</a>
@@ -87,17 +87,18 @@
                             </form>
                         </div>
                     @else
-                        @if($av->isUsuarioAprovaAcertoContas == 0 && $av->status != 'Aguardando prestação de contas do usuário' && $av->status != 'Acerto de Contas realizado, aguardando validação do usuário'
-                        && $av->status != 'PC reprovada pelo usuário, pendente de validação pelo Financeiro' && $av->status != 'Aguardando prestação de contas do usuário - reprovado gestor'
-                        && $av->status != 'Aguardando nova prestação de contas do usuário - reprovado pelo Financeiro' && $av->status != 'Aguardando acerto de contas pelo financeiro'
-                        && $av->status != 'Aguardando aprovação da Prestação de Contas pelo Financeiro')
+
+                        @if($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0 && $av->isCancelado == 0)
                             <label for="my-modal" data-av="{{ json_encode($av) }}" class="btn btn-active btn-warning btn-sm">Voltar AV</label>
+                            <a href="/rotas/rotasEditData/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                                style="width: 110px"> Mudar data</a>
+                        @endif
+
+                        @if($av->isEnviadoUsuario == 1 && $av->isAcertoContasRealizado == 0 && $av->isCancelado == 0)
 
                             <a href="/avs/cancelarAv/{{ $av->id }}" class="btn btn-active btn-error btn-sm"
                                 style="width: 110px"> Cancelar AV</a>
-
-                            <a href="/rotas/rotasEditData/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                                style="width: 110px"> Mudar data</a>
+                            
                         @endif
                         <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
                             style="width: 110px"> Ver</a> 
@@ -156,12 +157,14 @@
         $(document).ready(function(){
             $('#minhaTabela').DataTable({
                     scrollY: 500,
+                    orderFixed: [0, 'desc'],
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
                 });
         });

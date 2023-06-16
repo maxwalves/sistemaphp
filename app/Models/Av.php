@@ -63,7 +63,9 @@ class Av extends Model
         'isVistoDiretoria',
         'isReservadoVeiculoParanacidade',
         'isUsuarioAprovaAcertoContas',
-        'autorizacao'
+        'autorizacao',
+        'isCancelado',
+        'isRealizadoCancelamentoReserva'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio', 'deleted_at'];

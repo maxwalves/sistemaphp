@@ -32,14 +32,6 @@ return new class extends Migration
             $table->string('atividades')->nullable();
             $table->string('conclusoes')->nullable();
 
-            //Veículo Próprio--------------------------------------------------
-            $table->boolean('isVeiculoProprioAutorizado')->nullable();
-            $table->dateTime('dataAutorizacaoVeiculoProprio')->nullable();
-            $table->string('assinaturaDiretoriaExecutiva')->nullable();
-
-            $table->bigInteger('usuarioDiretoriaExecutiva')->unsigned()->nullable();
-            $table->foreign('usuarioDiretoriaExecutiva')->references('id')->on('users');// Vai referenciar o usuário da Diretoria Executiva
-
             $table->string('outroObjetivo')->nullable();
 
             //------------------------------------------------------------------

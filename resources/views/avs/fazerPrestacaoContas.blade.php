@@ -99,29 +99,46 @@
                 @endif
         @endforeach
         </p>  
-        
-            <div >
-                <a href="/avspc/edit/{{ $av->id }}" class="btn btn-success btn-sm"
-                    style="width: 110px">  Editar AV</a>
-                <a href="/rotaspc/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                    style="width: 150px"> Editar Rotas</a> 
-                
-            </div>
+            @if($av["isCancelado"]==false)
+                <div >
+                    <a href="/avspc/edit/{{ $av->id }}" class="btn btn-success btn-sm"
+                        style="width: 110px">  Editar AV</a>
+                    <a href="/rotaspc/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                        style="width: 150px"> Editar Rotas</a> 
+                    
+                </div>
+            @endif
 
         <div class="divider"></div> 
-
-        <div class="col-3">
-            <label for="my-modal-10" class="btn btn-active btn-success btn-sm" style="padding-bottom: 30px; width:150px"><ion-icon name="add-circle-outline" size="large"></ion-icon>Adicionar</label>
+        <div class="row">
+            <div class="col-3">
+                <label for="my-modal-10" class="btn btn-active btn-success btn-sm" style="padding-bottom: 30px; width:150px"><ion-icon name="add-circle-outline" size="large"></ion-icon>Adicionar</label>
+            </div>
+            @if($av->isCancelado == true)
+                <div class="col-8">
+                    <div class="alert alert-warning">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        <span>A AV está cancelada. Justifique o cancelamento no campo de comentário. Se necessário, anexo um arquivo!</span>
+                    </div>
+                </div>
+            @endif
         </div>
+        
         <div class="row">
             <div class="col-12 col-xl-8">
-                <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
+                @if($av["isCancelado"]==false)
+                    <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
+                @else
+                    <h1 style="font-size: 24px"><strong>Comprovante de cancelamento: </strong></h1>
+                @endif
                 <table id="minhaTabela5" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>Valor em reais</th>
-                            <th>Valor em dólar</th>
+                            @if($av["isCancelado"]==false)
+                                <th>Valor em reais</th>
+                                <th>Valor em dólar</th>
+                            @endif
                             <th>Anexo</th>
                             <th>Ações</th>
                         </tr>
@@ -130,9 +147,10 @@
                         @foreach($comprovantes as $comp)
                             <tr>
                                 <td> {{$comp->descricao}} </td>
-                                <td> R${{$comp->valorReais}}</td>
-                                <td> ${{$comp->valorDolar}}</td>
-                            
+                                @if($av["isCancelado"]==false)
+                                    <td> R${{$comp->valorReais}}</td>
+                                    <td> ${{$comp->valorDolar}}</td>
+                                @endif
                                 <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
                                     target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
                                 
@@ -153,22 +171,25 @@
                 <form action="/avs/usuarioEnviarPrestacaoContas" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                        <div class="form-group">
-                            <label for="contatos" class="control-label">Contatos:</label><br>
-                            <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos"
-                            id="contatos" placeholder="Contatos" style="width: 400px; height: 100px"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="atividades" class="control-label">Atividades:</label><br>
-                            <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades"
-                            id="atividades" placeholder="Atividades" style="width: 400px; height: 100px"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="conclusoes" class="control-label">Conclusões:</label><br>
-                            <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes"
-                            id="conclusoes" placeholder="Conclusões" style="width: 400px; height: 100px"></textarea>
-                        </div>
-                
+
+                        @if($av["isCancelado"]==false)
+                            <div class="form-group">
+                                <label for="contatos" class="control-label">Contatos:</label><br>
+                                <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos"
+                                id="contatos" placeholder="Contatos" style="width: 400px; height: 100px"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="atividades" class="control-label">Atividades:</label><br>
+                                <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades"
+                                id="atividades" placeholder="Atividades" style="width: 400px; height: 100px"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="conclusoes" class="control-label">Conclusões:</label><br>
+                                <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes"
+                                id="conclusoes" placeholder="Conclusões" style="width: 400px; height: 100px"></textarea>
+                            </div>
+                        @endif
+
                         <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
                         <label for="comentario">Enviar AV para aprovação do Financeiro: </label>
                         <br>
@@ -684,10 +705,12 @@
                         <br><br>
                         <label for="descricao">Descrição</label><br>
                         <input type="text" id="descricao" name="descricao" class="input input-bordered input-secondary w-full max-w-xs"><br>
-                        <label for="valorReais">Valor em reais utilizado: </label><br>
-                        <input type="text" id="valorReais" name="valorReais" class="input input-bordered input-secondary w-full max-w-xs"><br>
-                        <label for="valorDolar">Valor em dólar utilizado: </label><br>
-                        <input type="text" id="valorDolar" name="valorDolar" class="input input-bordered input-secondary w-full max-w-xs">
+                        @if($av["isCancelado"]==false)
+                            <label for="valorReais">Valor em reais utilizado: </label><br>
+                            <input type="text" id="valorReais" name="valorReais" class="input input-bordered input-secondary w-full max-w-xs"><br>
+                            <label for="valorDolar">Valor em dólar utilizado: </label><br>
+                            <input type="text" id="valorDolar" name="valorDolar" class="input input-bordered input-secondary w-full max-w-xs">
+                        @endif
                         <br><br>
                         <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
                 </form>
@@ -799,7 +822,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
                 });
         });
@@ -824,7 +848,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -835,7 +860,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -846,7 +872,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -857,7 +884,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -868,7 +896,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
 
@@ -879,7 +908,8 @@
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                        "search": "Pesquisar"
                     }
             });
         });

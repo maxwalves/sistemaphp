@@ -112,27 +112,45 @@
             <div class="mb-3">
                 <label for="banco" class="form-label">Banco</label>
                 <div class="input-group mb-3">   
-                    <input type="text" class="form-control" name="banco"
+                    <input type="text" class="form-control  {{ $errors->has('banco') ? 'is-invalid' :''}}" name="banco"
                     id="banco" placeholder="Banco">
                     <span class="input-group-text" id="basic-addon2">Ex: Banco do Brasil</span>
+
+                    @if ($errors->has('banco'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('banco') }}
+                    </div>
+                    @endif
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="agencia" class="form-label">Agência</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="agencia"
+                    <input type="text" class="form-control  {{ $errors->has('agencia') ? 'is-invalid' :''}}" name="agencia"
                         id="agencia" placeholder="Agência">
                     <span class="input-group-text" id="basic-addon2">Ex: 1234-X</span>
+
+                    @if ($errors->has('agencia'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('agencia') }}
+                    </div>
+                    @endif
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="conta" class="form-label">Conta</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="conta"
+                    <input type="text" class="form-control  {{ $errors->has('conta') ? 'is-invalid' :''}}" name="conta"
                     id="conta" placeholder="Conta">
                     <span class="input-group-text" id="basic-addon2">Ex: 12345-X</span>
+
+                    @if ($errors->has('conta'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('conta') }}
+                    </div>
+                    @endif
                 </div>
             </div>
 

@@ -127,6 +127,8 @@
                         <input type="text" class="form-control" name="justificativaValorExtra"
                             id="justificativaValorExtra" placeholder="Justificativa" value="{{$av->justificativaValorExtra}}">
                     </div>
+                    <a href="#" class="btn btn-active btn-warning btn-sm">Calcular</a>
+                    <br><br>
                     <div>
                         <input type="submit" class="btn btn-active btn-primary btn-lg" value="Salvar e enviar para o Gestor">
                     </div>
