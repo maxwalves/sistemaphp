@@ -1,4 +1,3 @@
--- Active: 1687180215980@@127.0.0.1@3306@sistema
 @extends('layouts.main')
 
 @section('title', 'Editando: ' . $av->id)
