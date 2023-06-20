@@ -4,11 +4,10 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
     
     content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './vendor/laravel/jetstream/**/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
-    ],
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
+      ],
 
     theme: {
         extend: {
@@ -18,7 +17,7 @@ module.exports = {
         },
     },
 
-    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
+    plugins: [require("daisyui")],
 
     daisyui: {
         styled: true,
@@ -28,6 +27,6 @@ module.exports = {
         logs: true,
         rtl: false,
         prefix: "",
-        darkTheme: "lemonade",
+        darkTheme: "dark",
       },
 };
