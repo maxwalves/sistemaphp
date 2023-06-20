@@ -42,6 +42,12 @@
                 <label for="my-modal-3" class="btn">Histórico</label>
                 <label for="my-modal-4" class="btn">Dados da AV</label>
                 <label for="my-modal-5" class="btn">FLUXO</label>
+                @foreach($av->rotas as $r)
+                    @if($r->isVeiculoEmpresa == true)
+                        <label for="my-modal-6" data-rota="{{ $r->id }}" class="btn btn-active btn-success">Alocar veículo</label>
+                    @endif
+                    @break
+                @endforeach
             </div>
             <div class="divider"></div> 
         
@@ -58,6 +64,12 @@
                         <th>Data/Hora de chegada</th>
                         <th>Hotel?</th>
                         <th>Tipo de transporte</th>
+                        @foreach($av->rotas as $r)
+                            @if($r->isVeiculoEmpresa == true)
+                            <th>Veículo alocado</th>
+                            @endif
+                            @break
+                        @endforeach
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -121,6 +133,17 @@
                             {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                             {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                         </td>
+                        
+                        @if($rota->isVeiculoEmpresa == true)
+                            @foreach($veiculosParanacidade as $v)
+                                @if($rota->veiculoParanacidade_id == $v->id)
+                                <td>
+                                    {{ $v->modelo }} ({{ $v->placa }})
+                                </td>
+                                @endif
+                            @endforeach
+                        @endif
+                        
                         @if($rota->isReservaHotel == true || $rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1 || $rota->isAereo ==1)
                             <td>
                                 <a href="/avs/realizarReservas/{{ $rota->id }}" class="btn btn-active btn-success"
@@ -475,12 +498,64 @@
             </div>
         </div>
     </div>
+
+    <input type="checkbox" id="my-modal-6" class="modal-toggle" />
+
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-1xl">
+            <div class="modal-content">
+                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <br>
+                <h3 class="text-lg font-bold" style="padding-left: 10%">Selecione um veículo:</h3>
+                <div class="form-group" style="padding-left: 20px" id="selecaoVeiculoParanacidade">
+                    <label for="veiculoParanacidade_id" class="control-label" required>Selecione o veículo do Paranacidade?</label>
+                    <br>
+                        <select class="select select-bordered w-full max-w-xs" 
+                            id="veiculoParanacidade_id" name="veiculoParanacidade_id">
+                            <option value="-" name="-"> Selecione</option>
+                            <option value="0" name="0"> Nenhum</option>
+                            @for($i = 0; $i < count($veiculosParanacidade); $i++)
+                                <div>
+                                    <option value="{{ $veiculosParanacidade[$i]->id }}" 
+                                        name="{{ $veiculosParanacidade[$i]->id }}"> {{ $veiculosParanacidade[$i] ->modelo }}. Placa: {{ $veiculosParanacidade[$i] ->placa }} </option>
+                                </div>
+                            @endfor
+                        </select>
+                        <br><br>
+                        <a class="btn btn-warning btn-sm" id="btn-submit-modal"
+                        style="width: 200px">  Vincular veículo</a>
+                </div>
+            </div>
+        </div>
+    </div>
     
 @endsection
 
 {{-- Para implementação futura de AJAX --}} 
 @section('javascript')
     <script type="text/javascript">
+
+        $(function() {
+                const modal = document.querySelector('.modal');
+                const avLabels = document.querySelectorAll('.btn[data-rota]');
+                
+                avLabels.forEach(function(avLabel) {
+                    avLabel.addEventListener('click', function() {
+                    const rota = this.getAttribute('data-rota');
+                    
+                        $('#btn-submit-modal').click(function() {
+                            
+                            var veiculo = document.getElementById("veiculoParanacidade_id").value;
+                            if(veiculo != '-'){
+                                window.location.href = '/avs/escolherVeiculo/' + rota + '/' + veiculo;
+                            }
+                            else{
+                                alert("Escolha um veículo!");
+                            }
+                        });
+                    });
+                });
+        });
 
         $(document).ready(function(){
             $('#minhaTabela').DataTable({

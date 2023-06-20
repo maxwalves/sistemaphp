@@ -89,43 +89,12 @@
         <p>Você não tem autorizações de viagens para avaliar</p>
     @endif
     
-    <input type="checkbox" id="my-modal" class="modal-toggle" />
-    <div class="modal">
-        <div class="modal-box">
-            <h3 class="font-bold text-lg"></h3>
-            <p class="py-4"></p>
-            <div class="modal-action">
-            
-            <a class="btn btn-error btn-sm" id="btn-submit-modal"
-                style="width: 200px">  Voltar AV e editar</a>
-            
-            <label for="my-modal" class="btn btn-success btn-sm" style="width: 100px">Não</label>
-            </div>
-        </div>
-    </div>
-    
 </div>
 
 @endsection
 
 @section('javascript')
     <script type="text/javascript">
-
-        $(function(){
-            const modal = document.querySelector('.modal');
-            const avLabel = document.querySelector('.btn[data-av]');
-            const av = JSON.parse(avLabel.getAttribute('data-av'));
-
-            avLabel.addEventListener('click', () => {
-                modal.querySelector('h3').textContent = `Você tem certeza que deseja voltar a AV ${av.id} ?`;
-                modal.querySelector('p').textContent = `Após ela retornar ao estado inicial, a Autorização de Viagem terá que passar todas as etapas novamente!`;
-                modal.querySelector('a').textContent = `Voltar AV ${av.id} e editar`;
-            });
-
-            $('#btn-submit-modal').click(function() {
-                window.location.href = '/avs/voltarAv/' + av.id;
-            });
-        })
 
         $(document).ready(function(){
             $('#minhaTabela').DataTable({

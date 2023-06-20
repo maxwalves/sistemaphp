@@ -172,7 +172,20 @@
                     @csrf
                     @method('PUT')
 
+                    
                         @if($av["isCancelado"]==false)
+
+                            @foreach($av->rotas as $r)
+                                @if($r->isVeiculoProprio == true)
+                                    <div class="form-group">
+                                        <label for="qtdKmVeiculoProprio" class="control-label">Quantidade de Km com Veículo Próprio:</label><br>
+                                        <input type="number" class="form-control" name="qtdKmVeiculoProprio"
+                                        id="qtdKmVeiculoProprio" placeholder="Qtd Km" style="width: 400px">
+                                    </div>
+                                    @break
+                                @endif
+                            @endforeach
+                            
                             <div class="form-group">
                                 <label for="contatos" class="control-label">Contatos:</label><br>
                                 <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos"
@@ -212,7 +225,7 @@
             <div class="modal-content">
                 <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Histórico</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px;">Histórico</h3>
                 <table id="minhaTabela" class="display nowrap">
                     <!-- head -->
                     <thead>
@@ -516,9 +529,9 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Reserva de hotel</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px;">Reservas de hotel</h3>
                 <table id="minhaTabela1" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
@@ -574,9 +587,9 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Reservas de transporte</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px;">Reservas de transporte</h3>
                 
                 <table id="minhaTabela2" class="display nowrap" style="width:100%">
                     <thead>
@@ -634,9 +647,9 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Adiantamentos realizados</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Adiantamentos realizados</h3>
 
                 <table id="minhaTabela3" class="display nowrap" style="width:100%">
                     <thead>
@@ -666,9 +679,9 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h1 style="font-size: 24px"><strong>Documento AV gerado: </strong></h1>
+                <h1 style="font-size: 24px; padding-bottom: 20px;"><strong>Documento AV gerado: </strong></h1>
                 <table id="minhaTabela4" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
@@ -725,7 +738,7 @@
             <div class="modal-content">
                 <label for="my-modal-11" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
+                <h1 style="font-size: 24px; padding-bottom: 20px;"><strong>Trajeto: </strong></h1>
                 
                 <table id="minhaTabela6" class="display nowrap" style="width:100%">
                     <thead>

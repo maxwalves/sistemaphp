@@ -104,6 +104,11 @@
                     {{ $u->username }}
                 @endif
         @endforeach
+        @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+            <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+            </ion-icon> <strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}
+        @endif
+
         </p>  
             <div class="divider"></div> 
         
@@ -165,7 +170,20 @@
                         <td> 
                             {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
                             {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                            {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
+                            @if($rota->isVeiculoProprio == 1)
+                                {{"Veículo próprio: "}} <br>
+                                @foreach ($veiculosProprios as $v)
+
+                                    @if($v->id == $rota->veiculoProprio_id)
+                                        {{$v->modelo . '-' . $v->placa}}
+                                    @endif
+                                    
+                                @endforeach
+                                
+                                @if(count($veiculosProprios) == 0)
+                                    {{"Não encontrado"}}
+                                @endif
+                            @endif
                             {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                             {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                         </td>
@@ -425,7 +443,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    -
+                                    3
                                 </span>
                             @endif
                             <span>
@@ -444,7 +462,7 @@
                                 </span>
                             @endif
                             <span>
-                                <h3 class="font-medium leading-tight">Secretaria:</h3>
+                                <h3 class="font-medium leading-tight">CAD - Coordenadoria Administrativa:</h3>
                                 <div class="badge badge-outline">Realiza reservas</div>
                             </span>
                         </li>
@@ -455,29 +473,15 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    5
+                                    4
                                 </span>
                             @endif
                             <span>
-                                <h3 class="font-medium leading-tight">Financeiro:</h3>
+                                <h3 class="font-medium leading-tight">CFI - Coordenadoria Financeira:</h3>
                                 <div class="badge badge-outline">Adiantamento</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isReservadoVeiculoParanacidade == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    6
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Administração:</h3>
-                                <div class="badge badge-error gap-2">Reserva de veículo</div>
-                            </span>
-                        </li>
+                        
                     </ol>
                 </div>
                 <div class="divider"></div> 

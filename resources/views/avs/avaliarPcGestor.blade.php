@@ -1,3 +1,4 @@
+-- Active: 1687180215980@@127.0.0.1@3306@sistema
 @extends('layouts.main')
 
 @section('title', 'Editando: ' . $av->id)
@@ -95,6 +96,10 @@
                 @endif
         @endforeach
         </p>  
+        @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+            <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+            </ion-icon> <strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}
+        @endif
 
             <div class="divider"></div> 
         
@@ -158,7 +163,20 @@
                         <td> 
                             {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
                             {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                            {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
+                            @if($rota->isVeiculoProprio == 1)
+                                {{"Veículo próprio: "}} <br>
+                                @foreach ($veiculosProprios as $v)
+
+                                    @if($v->id == $rota->veiculoProprio_id)
+                                        {{$v->modelo . '-' . $v->placa}}
+                                    @endif
+                                    
+                                @endforeach
+                                
+                                @if(count($veiculosProprios) == 0)
+                                    {{"Não encontrado"}}
+                                @endif
+                            @endif
                             {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                             {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                         </td>

@@ -152,12 +152,16 @@
                         </div>
 
                         <br>
+                        <?php
+                            $minDate = date('Y-m-d\TH:i', strtotime('+2 days'));
+                        ?>
 
                         <div class="form-group"> 
                             <div id="dataHoraSaidaInternacional" class="input-append date" >
                                 <label for="dataHoraSaidaInternacional" class="control-label">Data/Hora de saída: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaInternacional" style="border-width: 1px; border-color: black"
-                                    id="dataHoraSaidaInternacional" placeholder="Data/Hora de saída" class="{{ $errors->has('dataHoraSaidaInternacional') ? 'is-invalid' :''}}">
+                                    id="dataHoraSaidaInternacional" placeholder="Data/Hora de saída" class="{{ $errors->has('dataHoraSaidaInternacional') ? 'is-invalid' :''}}"
+                                    min="{{ $minDate }}">
 
                                 @if ($errors->has('dataHoraSaidaInternacional'))
                                 <div class="invalid-feedback">
@@ -243,12 +247,16 @@
                         </div>
 
                         <br>
+                        <?php
+                            $minDate = date('Y-m-d\TH:i', strtotime('+2 days'));
+                        ?>
 
                         <div class="form-group">
                             <div id="dataHoraChegadaInternacional" class="input-append date">
                                 <label for="dataHoraChegadaInternacional" class="control-label">Data/Hora de chegada: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaInternacional" style="border-width: 1px; border-color: black"
-                                    id="dataHoraChegadaInternacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaInternacional') ? 'is-invalid' :''}}">
+                                    id="dataHoraChegadaInternacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaInternacional') ? 'is-invalid' :''}}"
+                                    min="{{ $minDate }}">
 
                                 @if ($errors->has('dataHoraChegadaInternacional'))
                                 <div class="invalid-feedback">
@@ -310,12 +318,17 @@
 
                         <br>
 
+                        <?php
+                            $minDate = date('Y-m-d\TH:i', strtotime('+2 days'));
+                        ?>
+
                         <div class="form-group">
-                            
+
                             <div id="dataHoraSaidaNacional" class="input-append date">
                                 <label for="dataHoraSaidaNacional" class="control-label">Data/Hora de saída: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional" style="border-width: 1px; border-color: black"
-                                    id="dataHoraSaidaNacional" placeholder="Data/Hora de saída" class="{{ $errors->has('dataHoraSaidaNacional') ? 'is-invalid' :''}}">
+                                    id="dataHoraSaidaNacional" placeholder="Data/Hora de saída" class="{{ $errors->has('dataHoraSaidaNacional') ? 'is-invalid' :''}}"
+                                    min="{{ $minDate }}">
 
                                 @if ($errors->has('dataHoraSaidaNacional'))
                                 <div class="invalid-feedback">
@@ -377,7 +390,8 @@
                             <div id="dataHoraChegadaNacional" class="input-append date">
                                 <label for="dataHoraChegadaNacional" class="control-label">Data/Hora de chegada: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaNacional" style="border-width: 1px; border-color: black"
-                                    id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaNacional') ? 'is-invalid' :''}}">
+                                    id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaNacional') ? 'is-invalid' :''}}"
+                                    min="{{ $minDate }}">
 
                                 @if ($errors->has('dataHoraChegadaNacional'))
                                 <div class="invalid-feedback">
@@ -409,14 +423,16 @@
                     </div>
                 @endif
                 <br><br>
-
+                <?php
+                    $minDate = date('Y-m-d\TH:i', strtotime('+2 days'));
+                ?>
                 <div class="row justify-content-center" id="isViagemVoltaIgualIda">
                     <div class="col-12 col-xl-5">
                         <div class="form-group"> 
                             <div id="dataHoraSaidaVoltaNacionalDiv" class="input-append date">
                                 <label for="dataHoraSaidaVoltaNacional" class="control-label">Data/Hora de saída na volta: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaVoltaNacional" style="border-width: 1px; border-color: black"
-                                    id="dataHoraSaidaVoltaNacional" placeholder="Data/Hora de chegada">
+                                    id="dataHoraSaidaVoltaNacional" placeholder="Data/Hora de chegada" min="{{ $minDate }}">
 
                             </div>
                             <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de saída na volta!</div>
@@ -428,7 +444,7 @@
                             <div id="dataHoraChegadaVoltaNacionalDiv" class="input-append date">
                                 <label for="dataHoraChegadaVoltaNacional" class="control-label">Data/Hora prevista de chegada na volta: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaVoltaNacional" style="border-width: 1px; border-color: black"
-                                    id="dataHoraChegadaVoltaNacional" placeholder="Data/Hora de chegada" >
+                                    id="dataHoraChegadaVoltaNacional" placeholder="Data/Hora de chegada" min="{{ $minDate }}">
 
                             </div>
                             <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de chegada na volta!</div>

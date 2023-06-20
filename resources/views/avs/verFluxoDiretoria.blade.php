@@ -54,6 +54,12 @@
                         <th>Data/Hora de chegada</th>
                         <th>Hotel?</th>
                         <th>Tipo de transporte</th>
+                        @foreach($av->rotas as $rota)
+                                @if($rota->isVeiculoEmpresa == 1)
+                                    <th>Veículo</th>
+                                    @break
+                                @endif
+                        @endforeach
                     </tr>
                 </thead>
                 <tbody>
@@ -117,6 +123,19 @@
                             {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                             {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                         </td>
+                        @if($rota->isVeiculoEmpresa == 1)
+                        @foreach($veiculosParanacidade as $v)
+                                @if($rota->veiculoParanacidade_id == $v->id)
+                                    <td>
+                                        {{ $v->modelo }} ({{ $v->placa }})
+                                    </td>
+                                @else
+                                    <td>
+                                        A definir
+                                    </td>
+                                @endif
+                        @endforeach
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>
