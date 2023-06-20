@@ -9,10 +9,12 @@
 
         <link rel="shortcut icon" type="imagex/png" href="{{asset('/img/aviao.png')}}">
 
-        <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
-
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <style>
+            @font-face {
+              font-family: 'Roboto';
+              src: url('{{ asset('Roboto/Roboto-Regular.ttf') }}') format('truetype');
+            }
+        </style>
         
         <!-- CSS Bootstrap -->
         <script src="{{asset('/js/bootstrap.bundle.min.js')}}"></script>
@@ -20,21 +22,19 @@
 
         <link href="{{asset('DataTables/datatables.min.css')}}" rel="stylesheet"/>
         <script src="{{asset('DataTables/datatables.min.js')}}"></script>
-        
-        <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css" />
-        <script src="https://cdn.tailwindcss.com"></script>
 
         <!-- CSS da aplicação -->
 
         <link rel="stylesheet" href="{{asset('/css/styles.css')}}">
         <script src="{{asset('/js/scripts.js')}}"></script>
         <link href="{{asset('/css/headers.css')}}" rel="stylesheet">
-        <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/headers/">
-        <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
+
         <link href="{{asset('/css/sidebars.css')}}" rel="stylesheet">
         <script src="{{asset('/js/sidebars.js')}}"></script>
 
-        {{-- Tailwind CSS - Flowbite --}}
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js"></script>
 
