@@ -6,7 +6,7 @@
 
 <div >
     <h1 class="tituloSistema">Legislação</h1>
-    <div class="container">
+    <div>
         <div class="input-group mb-3">
 
             <form action="{{ route('pesquisarLegislacao') }}" method="GET" enctype="multipart/form-data" class="input-group mb-3">
