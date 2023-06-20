@@ -109,7 +109,7 @@
 
         $(document).ready(function(){
             $('#minhaTabela').DataTable({
-                    scrollY: 200,
+                    scrollY: 400,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",
