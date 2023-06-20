@@ -41,7 +41,7 @@
     @endif
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <li><a class="btn btn-success btn-lg" href="/users/sincronizarGerentes">Sincronizar gerentes</a></li>
+            <a class="btn btn-success btn-lg" href="/users/sincronizarGerentes">Sincronizar gerentes</a>
         </div>
     </div>
     

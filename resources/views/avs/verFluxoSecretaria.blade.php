@@ -64,11 +64,11 @@
                         <th>Data/Hora de chegada</th>
                         <th>Hotel?</th>
                         <th>Tipo de transporte</th>
-                        @foreach($av->rotas as $r)
-                            @if($r->isVeiculoEmpresa == true)
-                            <th>Veículo alocado</th>
-                            @endif
-                            @break
+                        @foreach($av->rotas as $rota)
+                                @if($rota->isVeiculoEmpresa == 1)
+                                    <th>Veículo</th>
+                                    @break
+                                @endif
                         @endforeach
                         <th>Ações</th>
                     </tr>
@@ -133,23 +133,27 @@
                             {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                             {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                         </td>
-                        
-                        @if($rota->isVeiculoEmpresa == true)
+                        @if($rota->isVeiculoEmpresa == 1)
                             @foreach($veiculosParanacidade as $v)
-                                @if($rota->veiculoParanacidade_id == $v->id)
-                                <td>
-                                    {{ $v->modelo }} ({{ $v->placa }})
-                                </td>
-                                @endif
+                                    @if($rota->veiculoParanacidade_id == $v->id)
+                                        <td>
+                                            {{ $v->modelo }} ({{ $v->placa }})
+                                        </td>
+                                    @else
+                                        <td>
+                                            A definir
+                                        </td>
+                                    @endif
                             @endforeach
                         @endif
                         
-                        @if($rota->isReservaHotel == true || $rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1 || $rota->isAereo ==1)
-                            <td>
-                                <a href="/avs/realizarReservas/{{ $rota->id }}" class="btn btn-active btn-success"
-                                    > Gerenciar Reservas</a> 
-                            </td>
-                        @endif
+                        <td>
+                            @if($rota->isReservaHotel == true || $rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1 || $rota->isAereo ==1)
+                                
+                                    <a href="/avs/realizarReservas/{{ $rota->id }}" class="btn btn-active btn-success"
+                                        > Gerenciar Reservas</a> 
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
