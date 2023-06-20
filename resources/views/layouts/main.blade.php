@@ -21,7 +21,8 @@
         <link href="{{asset('DataTables/datatables.min.css')}}" rel="stylesheet"/>
         <script src="{{asset('DataTables/datatables.min.js')}}"></script>
         
-        @vite('resources/css/app.css')
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.tailwindcss.com"></script>
 
         <!-- CSS da aplicação -->
 
@@ -36,10 +37,11 @@
         {{-- Tailwind CSS - Flowbite --}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js"></script>
-                
+
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <link rel="stylesheet" href="{{asset('/css/styles.css')}}">
+                
             
     </head>
     <body  >
