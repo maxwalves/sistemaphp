@@ -94,7 +94,8 @@
                                 style="width: 110px"> Mudar data</a>
                         @endif
 
-                        @if($av->isEnviadoUsuario == 1 && $av->isAcertoContasRealizado == 0 && $av->isCancelado == 0)
+                        @if($av->isEnviadoUsuario == 1 && $av->isAcertoContasRealizado == 0 && $av->isFinanceiroAprovouPC ==0 
+                            && $av->isGestorAprovouPC == 0 && $av->isCancelado == 0)
 
                             <a href="/avs/cancelarAv/{{ $av->id }}" class="btn btn-active btn-error btn-sm"
                                 style="width: 110px"> Cancelar AV</a>
