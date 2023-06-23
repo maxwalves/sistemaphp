@@ -190,6 +190,113 @@
                         </div>
                         
                     </div>
+
+                    <div  >
+        
+                        
+                            <div class="stat-title">Controle de diárias: </div>
+                                Mês saída: {{$mesSaidaRota1}} 
+                                Mês chegada: {{$mesChegadaRota2}} <br>
+                                <ul class="steps">
+                                    @if($mesSaidaRota1 != $mesChegadaRota2)
+
+                                        @php
+                                            $data = "$anoSaidaRota1-$mesSaidaRota1-$diaSaidaRota1";
+                                            $ultimoDiaMes = date('t', strtotime($data));
+                                        @endphp
+
+                                        @for($i = $diaSaidaRota1; $i <= $ultimoDiaMes; $i++)
+                                            <li class="step step-primary" data-content="{{$i}}">
+                                                @if($i == $diaSaidaRota1)
+                                                    <div class="badge badge-outline">Hora saída: {{$horaSaidaRota1}}:{{$minutoSaidaRota1}}</div>
+                                                @endif
+                                                @if($i == $diaChegadaRota1)
+                                                    <div class="badge badge-outline">Hora chegada: {{$horaChegadaRota1}}:{{$minutoChegadaRota1}}</div>
+                                                @endif
+                                                @if($i == $diaChegadaRota2)
+                                                    <div class="badge badge-outline">Hora chegada: {{$horaChegadaRota2}}:{{$minutoChegadaRota2}}</div>
+                                                @endif
+                                                @if($i == $diaSaidaRota2)
+                                                    <div class="badge badge-outline">Hora saída: {{$horaSaidaRota2}}:{{$minutoSaidaRota2}}</div>
+                                                @endif
+                                                <div >
+                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 < 12 )
+                                                        <div class="badge badge-accent">Diária Inteira: {{$diariaTotal}}</div>
+                                                    @endif
+                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 >= 13 && $minutoSaidaRota1 > 1)
+                                                        <div class="badge badge-secondary">Meia Diária: {{$meiaDiaria}}</div>
+                                                    @endif
+                                                    @if($i !=  $diaSaidaRota1 && $i !=  $diaChegadaRota2)
+                                                        <div class="badge badge-accent">Diária Inteira: {{$diariaTotal}}</div>    
+                                                    @endif
+                                                </div>
+                                            </li>
+                                        @endfor
+                                        @for($i = 1; $i <= $diaChegadaRota2; $i++)
+                                            <li class="step step-primary" data-content="{{$i}}">
+                                                @if($i == $diaSaidaRota2)
+                                                    <div class="badge badge-outline">Hora saída: {{$horaSaidaRota2}}:{{$minutoSaidaRota2}}</div>
+                                                @endif
+                                                @if($i == $diaChegadaRota2)
+                                                    <div class="badge badge-outline">Hora chegada: {{$horaChegadaRota2}}:{{$minutoChegadaRota2}}</div>
+                                                @endif
+                                                <div >
+                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 < 12 )
+                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>
+                                                    @endif
+                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 >= 13 && $minutoSaidaRota1 > 1)
+                                                        <div class="badge badge-secondary">Meia Diária: R${{$meiaDiaria}}</div>
+                                                    @endif
+                                                    @if($i !=  $diaSaidaRota1 && $i !=  $diaChegadaRota2)
+                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>    
+                                                    @endif
+
+                                                    @if($i ==  $diaChegadaRota2 && $horaChegadaRota2 >= 13 && $horaChegadaRota2 <19)
+                                                        <div class="badge badge-secondary">Meia Diária: R${{$meiaDiaria}}</div>
+                                                    @endif
+                                                    @if($i ==  $diaChegadaRota2 && $horaChegadaRota2 >=19)
+                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>    
+                                                    @endif
+                                                </div>
+                                            </li>
+                                        @endfor
+                                    @else
+                                        @for($i = $diaSaidaRota1; $i <= $diaChegadaRota2; $i++)
+                                            <li class="step step-primary" data-content="{{sprintf('%d', $i)}}">
+                                                @if($i == $diaSaidaRota1)
+                                                    <div class="badge badge-outline">Hora saída: {{$horaSaidaRota1}}:{{$minutoSaidaRota1}}</div>
+                                                @endif
+                                                @if($i == $diaSaidaRota2)
+                                                    <div class="badge badge-outline">Hora saída: {{$horaSaidaRota2}}:{{$minutoSaidaRota2}}</div>
+                                                @endif
+                                                @if($i == $diaChegadaRota2)
+                                                    <div class="badge badge-outline">Hora chegada: {{$horaChegadaRota2}}:{{$minutoChegadaRota2}}</div>
+                                                @endif
+
+                                                <div >
+                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 < 12 )
+                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>
+                                                    @endif
+                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 >= 13 && $minutoSaidaRota1 > 1)
+                                                        <div class="badge badge-secondary">Meia Diária: R${{$meiaDiaria}}</div>
+                                                    @endif
+                                                    @if($i !=  $diaSaidaRota1 && $i !=  $diaChegadaRota2)
+                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>    
+                                                    @endif`
+
+                                                    @if($i ==  $diaChegadaRota2 && $horaChegadaRota2 >= 13 && $horaChegadaRota2 <19)
+                                                        <div class="badge badge-secondary">Meia Diária: R${{$meiaDiaria}}</div>
+                                                    @endif
+                                                    @if($i ==  $diaChegadaRota2 && $horaChegadaRota2 >=19)
+                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>    
+                                                    @endif
+                                                
+                                                </div>
+                                            </li>
+                                        @endfor
+                                    @endif
+                                </ul>
+                        
                 </div>
             </div>
         </form>

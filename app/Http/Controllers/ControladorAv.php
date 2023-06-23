@@ -2516,19 +2516,23 @@ class ControladorAv extends Controller
                 $mesSaidaRota1 = $dataHoraSaidaRota1->format('m');
                 $diaSaidaRota1 = $dataHoraSaidaRota1->format('d');
                 $horaSaidaRota1 = $dataHoraSaidaRota1->format('H');
+                $minutoSaidaRota1 = $dataHoraSaidaRota1->format('i');
 
                 $mesChegadaRota1 = $dataHoraChegadaRota1->format('m');
                 $diaChegadaRota1 = $dataHoraChegadaRota1->format('d');
                 $horaChegadaRota1 = $dataHoraChegadaRota1->format('H');
+                $minutoChegadaRota1 = $dataHoraChegadaRota1->format('i');
 
                 //DATAS ROTA 2
                 $mesSaidaRota2 = $dataHoraSaidaRota2->format('m');
                 $diaSaidaRota2 = $dataHoraSaidaRota2->format('d');
                 $horaSaidaRota2 = $dataHoraSaidaRota2->format('H');
+                $minutoSaidaRota2 = $dataHoraSaidaRota2->format('i');
 
                 $mesChegadaRota2 = $dataHoraChegadaRota2->format('m');
                 $diaChegadaRota2 = $dataHoraChegadaRota2->format('d');
                 $horaChegadaRota2 = $dataHoraChegadaRota2->format('H');
+                $minutoChegadaRota2 = $dataHoraChegadaRota2->format('i');
                     
                 //CÁLCULOS:
 
@@ -2687,7 +2691,13 @@ class ControladorAv extends Controller
             return redirect('/rotaspc/rotas/' . $request->id )->with('msg', 'Cálculo salvo!');
         }
         else{
-            return view('avs.concluir', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
+            return view('avs.concluir', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas,
+            'anoSaidaRota1' => $anoSaidaRota1, 'mesSaidaRota1' => $mesSaidaRota1, 'diaSaidaRota1' => $diaSaidaRota1, 'horaSaidaRota1' => $horaSaidaRota1,
+            'mesChegadaRota1' => $mesChegadaRota1, 'diaChegadaRota1' => $diaChegadaRota1, 'horaChegadaRota1' => $horaChegadaRota1,
+            'mesSaidaRota2' => $mesSaidaRota2, 'diaSaidaRota2' => $diaSaidaRota2, 'horaSaidaRota2' => $horaSaidaRota2,
+            'mesChegadaRota2' => $mesChegadaRota2, 'diaChegadaRota2' => $diaChegadaRota2, 'horaChegadaRota2' => $horaChegadaRota2,
+            'minutoSaidaRota1' => $minutoSaidaRota1, 'minutoChegadaRota1' => $minutoChegadaRota1, 'minutoSaidaRota2' => $minutoSaidaRota2,
+            'minutoChegadaRota2' => $minutoChegadaRota2, 'diariaTotal' => $diariaTotal, 'meiaDiaria' => $meiaDiaria]);
         }
     }
 
