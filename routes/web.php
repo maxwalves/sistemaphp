@@ -59,6 +59,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::put('/avs/gestorAprovarAv', [ControladorAv::class, 'gestorAprovarAv'])->middleware('auth');
     Route::put('/avs/gestorReprovarAv', [ControladorAv::class, 'gestorReprovarAv'])->middleware('auth');
     Route::get('/avs/verDetalhesAv/{id}', [ControladorAv::class, 'verDetalhesAv'])->middleware('auth');
+    Route::get('/avs/verDetalhesAvGerenciar/{id}', [ControladorAv::class, 'verDetalhesAvGerenciar'])->middleware('auth');
 
     Route::get('/avs/autDiretoria', [ControladorAv::class, 'autDiretoria'])->middleware('auth');
     Route::get('/avs/verFluxoDiretoria/{id}', [ControladorAv::class, 'verFluxoDiretoria'])->middleware('auth');
@@ -91,7 +92,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
 
     Route::get('/avs/prestacaoContasUsuario', [ControladorAv::class, 'prestacaoContasUsuario'])->middleware('auth');
     Route::get('/avs/fazerPrestacaoContas/{id}', [ControladorAv::class, 'fazerPrestacaoContas'])->middleware('auth');
-
+    Route::get('/avs/gerenciarAvs', [ControladorAv::class, 'gerenciarAvs'])->middleware('auth');
 
     //Prestação de contas
     Route::get('/avspc/edit/{id}', [ControladorAv::class, 'editAvPc'])->middleware('auth');
@@ -213,6 +214,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
         // ROTAS PARA ADM USERS
     Route::get('/users/users', [UsersController::class, 'users'])->middleware('auth');
     Route::get('/users/sincronizarGerentes', [UsersController::class, 'sincronizarGerentes'])->middleware('auth');
+    Route::get('/users/sincronizarSetores', [UsersController::class, 'sincronizarSetores'])->middleware('auth');
     Route::get('/users/create', [UsersController::class, 'create'])->middleware('auth');
     Route::get('/users/{id}', [UsersController::class, 'show'])->middleware('auth');
     Route::delete('/users/{id}', [UsersController::class, 'destroy'])->middleware('auth');

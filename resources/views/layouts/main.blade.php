@@ -41,6 +41,7 @@
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <link rel="stylesheet" href="{{asset('/css/styles.css')}}">
+        <script src="{{asset('/js/moment.js')}}"></script>
                 
             
     </head>
@@ -174,6 +175,31 @@
                                     </li>
                                 @endcan
 
+                                @php
+                                    use Spatie\Permission\Models\Permission;
+                                    $permission1 = Permission::where('name', 'aprov avs diretoria')->first();
+                                    $permission2 = Permission::where('name', 'aprov avs secretaria')->first();
+                                    $permission3 = Permission::where('name', 'aprov avs gestor')->first();   
+                                @endphp
+                                
+                                @can('aprov-avs-financeiro', $user)
+                                    <li class="nav-item">
+                                        <a class="btn btn-active btn-error rounded-none" style="border-width: 2px; border-color: black" href="/avs/gerenciarAvs">GERENCIAR</a>
+                                    </li>
+                                @elseif($user->hasPermissionTo($permission1))
+                                    <li class="nav-item">
+                                        <a class="btn btn-active btn-error rounded-none" style="border-width: 2px; border-color: black" href="/avs/gerenciarAvs">GERENCIAR</a>
+                                    </li>
+                                @elseif($user->hasPermissionTo($permission2))
+                                    <li class="nav-item">
+                                        <a class="btn btn-active btn-error rounded-none" style="border-width: 2px; border-color: black" href="/avs/gerenciarAvs">GERENCIAR</a>
+                                    </li>
+                                @elseif($user->hasPermissionTo($permission3))
+                                    <li class="nav-item">
+                                        <a class="btn btn-active btn-error rounded-none" style="border-width: 2px; border-color: black" href="/avs/gerenciarAvs">GERENCIAR</a>
+                                    </li>
+                                @endcan
+
                             </ul>
                         </div>
                     </div>
@@ -188,6 +214,13 @@
                         <div class="col-4">
                             <div class="alert alert-info shadow-lg" style="width: 70%">
                                 <p > {{ session('msg') }} </p>    
+                            </div>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="col-4">
+                            <div class="alert alert-error shadow-lg" style="width: 70%">
+                                <p > {{ session('error') }} </p>    
                             </div>
                         </div>
                     @endif

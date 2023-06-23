@@ -7,8 +7,18 @@
     
     <div class="row justify-content-between">
         
-        <div class="col-8">
+        <div class="col-4">
             <h4>Minhas autorizações de viagens</h4>
+        </div>
+        <div class="col-4">
+            <p>Escritórios visíveis:</p>
+            <div class="badge badge-outline" id="escCuritiba" name="escCuritiba" {{$isFinanceiroCuritiba == false ? "hidden='true'" : ""}}>Curitiba</div>
+            <div class="badge badge-outline" id="escCascavel" name="escCascavel" {{$temFinanceiroCascavel == true ? "hidden='true'" : ""}}>Cascavel</div>
+            <div class="badge badge-outline" id="escMaringa" name="escMaringa" {{$temFinanceiroMaringa == true ? "hidden='true'" : ""}}>Maringá</div>
+            <div class="badge badge-outline" id="escFrancisco" name="escFrancisco" {{$temFinanceiroFrancisco == true ? "hidden='true'" : ""}}>Francisco Beltrão</div>
+            <div class="badge badge-outline" id="escGuarapuava" name="escGuarapuava" {{$temFinanceiroGuarapuava == true ? "hidden='true'" : ""}}>Guarapuava</div>
+            <div class="badge badge-outline" id="escLondrina" name="escLondrina" {{$temFinanceiroLondrina == true ? "hidden='true'" : ""}}>Londrina</div>
+            <div class="badge badge-outline" id="escPontaGrossa" name="escPontaGrossa" {{$temFinanceiroPontaGrossa == true ? "hidden='true'" : ""}}>Ponta Grossa</div>
         </div>
     </div>
     <br>
@@ -140,6 +150,7 @@
                     }
                 });
         });
+
 
     </script>
 @endsection

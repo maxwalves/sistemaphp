@@ -14,6 +14,7 @@
                 <th>Nome</th>
                 <th>E-mail</th>
                 <th>Gerente</th>
+                <th>Setor</th>
                 <th>Departamento</th>
                 <th>Número</th>
                 <th>Ações</th>
@@ -26,6 +27,7 @@
                 <td> {{$userLinha->name}} </td>
                 <td> {{$userLinha->username}} </td>
                 <td> {{$userLinha->manager}} </td>
+                <td> {{$userLinha->nomeSetor}} </td>
                 <td> {{$userLinha->department}} </td>
                 <td> {{$userLinha->employeeNumber}} </td>
                 <td> 
@@ -40,8 +42,11 @@
     <p>Você ainda não tem usuários, <a href="/users/create"> Criar novo usuário</a></p>
     @endif
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-12 col-xl-4">
             <a class="btn btn-success btn-lg" href="/users/sincronizarGerentes">Sincronizar gerentes</a>
+        </div>
+        <div class="col-12 col-xl-4">
+            <a class="btn btn-success btn-lg" href="/users/sincronizarSetores">Sincronizar setores</a>
         </div>
     </div>
     

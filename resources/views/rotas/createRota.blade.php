@@ -289,6 +289,8 @@
                                     id="selecaoEstadoOrigemNacional" name="selecaoEstadoOrigemNacional" onChange="carregarCidadesOrigemNacional()">
                                     @if($ultimaRotaSetada !=null)
                                         <option value="{{ $ultimaRotaSetada->estadoDestinoNacional}}" selected></option>
+                                    @else
+                                        <option value="Paraná" selected></option>
                                     @endif
                                 </select>
             
@@ -306,6 +308,8 @@
                                     id="selecaoCidadeOrigemNacional" name="selecaoCidadeOrigemNacional" >
                                     @if($ultimaRotaSetada !=null)
                                         <option value="{{ $ultimaRotaSetada->cidadeDestinoNacional}}" selected></option>
+                                    @else
+                                        <option value="Curitiba" selected></option>
                                     @endif
                                 </select>
             
@@ -684,7 +688,7 @@
 
             var nomeCidade = document.getElementById("selecaoCidadeOrigemNacional").value;
 
-            var idEstado = document.getElementById("selecaoEstadoOrigemNacional").value;//Recebe o valur como String
+            var idEstado = document.getElementById("selecaoEstadoOrigemNacional").value;//Recebe o valor como String
             var resultado = idEstado.replace(/'/g, "\"");//Adiciona as aspas para deixar no formato JSON
             var objeto = JSON.parse(resultado);//Transforma em JSON
             
@@ -696,13 +700,15 @@
                 
                 for(i=0; i<data.length; i++){
 
-                    if(data[i].name == nomeCidade){
-                            opcao = '<option value="' + data[i].name + '" selected>' + data[i].name + '</option>';
+                    if(data[i].state_id == objeto.id ){
+                        if(data[i].name == nomeCidade){
+                                opcao = '<option value="' + data[i].name + '" selected>' + data[i].name + '</option>';
+                                $('#selecaoCidadeOrigemNacional').append(opcao);
+                        }
+                        else{
+                            opcao = '<option value="' + data[i].name + '">' + data[i].name + '</option>';
                             $('#selecaoCidadeOrigemNacional').append(opcao);
-                    }
-                    else{
-                        opcao = '<option value="' + data[i].name + '">' + data[i].name + '</option>';
-                        $('#selecaoCidadeOrigemNacional').append(opcao);
+                        }
                     }
                 }
             });

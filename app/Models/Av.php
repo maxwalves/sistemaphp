@@ -66,7 +66,8 @@ class Av extends Model
         'autorizacao',
         'isCancelado',
         'isRealizadoCancelamentoReserva',
-        'qtdKmVeiculoProprio'
+        'qtdKmVeiculoProprio',
+        'isDiaria'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio', 'deleted_at'];

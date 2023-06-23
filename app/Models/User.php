@@ -40,7 +40,8 @@ class User extends Authenticatable implements LdapAuthenticatable
         'manager',
         'department',
         'employeeNumber',
-        'dataAssinaturaTermo'
+        'dataAssinaturaTermo',
+        'nomeSetor'
     ];
 
     /**

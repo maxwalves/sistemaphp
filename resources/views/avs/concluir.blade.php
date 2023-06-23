@@ -68,10 +68,21 @@
                     <div class="form-group" id="outroObjetivo">
                         <label for="outro" class="control-label">Você seleciou um outro objetivo: </label>
                         <div class="input-group">
-                            <input type="text" class="form-control {{ $errors->has('outroObjetivo') ? 'is-invalid' :''}}" 
+                            <input type="text" class="form-control" 
                             name="outroObjetivo" disabled
                             id="outroObjetivo" placeholder="Outro" value="{{$av->outroObjetivo}}">
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="isDiaria" class="control-label" >Vai precisar de diária de alimentação?</label>
+                        <br>
+                            <select class="select select-bordered w-full max-w-xs" 
+                                id="isDiaria" name="isDiaria" disabled>
+                                <option value="" name=""> Selecione</option>
+                                <option value="Sim" name="Alta" {{ $av->isDiaria == true ? "selected='selected'" : ""}}> Sim</option>
+                                <option value="Não" name="Média" {{ $av->isDiaria == false ? "selected='selected'" : ""}}> Não</option>
+                            </select>
                     </div>
 
                 </div>

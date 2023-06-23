@@ -121,6 +121,48 @@ class UsersController extends Controller
 
     }
 
+    public function sincronizarSetores()
+    {
+        $user = auth()->user();
+
+        $users = User::all();
+
+        foreach ($users as $u) {
+            $manager = $u->manager;
+            
+            // Extrair o nome do setor usando expressão regular
+            preg_match('/OU=([^,]+)/', $manager, $matches);
+            
+            if (isset($matches[1])) {
+                $setor = $matches[1];
+                
+                // Atribuir o nome do setor ao campo $user->setor
+                $data = array(
+                    "nomeSetor"=> $setor
+                );
+                $u->update($data);
+            }
+        }
+
+        foreach ($users as $u) {
+            $managerDN = $u->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+            // Dividir a string em partes usando o caractere de vírgula como delimitador
+            $parts = explode(',', $managerDN);
+
+            // Extrair o nome do gerente da primeira parte
+            $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+            $u->manager =$managerName;
+        }
+        foreach ($users as $key => $u) {
+            if (is_null($u->employeeNumber)) {
+                unset($users[$key]);
+            }
+        }
+
+        return view('users.users', ['users' => $users, 'user'=> $user]);
+    }
+
     public function create()
     {
         $user = auth()->user();

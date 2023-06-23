@@ -39,7 +39,6 @@
                         </p>
                         <p><strong>Prioridade:</strong> {{ $av->prioridade }} </p>
                         <p><strong>Comentário:</strong> {{ $av->comentario }} </p>
-                        <p><strong>Status:</strong>  {{ $av->status }} </p>
                         
                     </div>
                     
@@ -55,7 +54,7 @@
                     </div>
                     <br><br><br><br>
 
-                    <h2 >Adiantamentos:</h2>
+                    <h2 >Pagamento realizado no acerto de contas:</h2>
                     <div style="border: 1px solid black; padding-left:10px">
                         <p><strong>Valor em reais:</strong> R$ {{ $av->valorReais }}</p>
                         <p><strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
