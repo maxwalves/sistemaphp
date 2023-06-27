@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('avs', function (Blueprint $table) {
             $table->increments('id');
             $table->dateTime('dataCriacao');//É setado automaticamente no Back-end
-            $table->string('prioridade')->nullable();
             $table->string('banco')->nullable();
             $table->string('agencia')->nullable();
             $table->string('conta')->nullable();

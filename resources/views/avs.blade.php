@@ -13,7 +13,6 @@
                     <thead>
                         <th>Código</th>
                         <th>Data de Criação</th>
-                        <th>Prioridade</th>
                         <th>Status</th>
                         <th>Ações</th>
                     </thead>
@@ -54,17 +53,6 @@
                             <div class="input-group">
                                 <select class="form-control" id="objetivos">
 
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="prioridade" class="control-label">Qual é a Prioridade da sua viagem? (selecione)</label>
-                            <div class="input-group">
-                                <select class="form-control" id="prioridade">
-                                    <option value="Alta"> Alta</option>
-                                    <option value="Média"> Média</option>
-                                    <option value="Baixa"> Baixa</option>
                                 </select>
                             </div>
                         </div>
@@ -147,7 +135,6 @@
         function novaAv() {
             $('#id').val('');
             $('#dataCriacao').val('');
-            $('#prioridade').val('');
             $('#banco').val('');
             $('#agencia').val('');
             $('#conta').val('');
@@ -172,7 +159,6 @@
             var linha = "<tr>" +
                     "<td>" + av.id + "</td>" +
                     "<td>" + date('d/m/Y', strtotime(av.dataCriacao)) + "</td>" +
-                    "<td>" + av.prioridade + "</td>" +
                     "<td>" + av.status + "</td>" +
                     "<td>" +
                         '<button class="btn btn-xs btn-primary" onclick="editar('+ av.id +')"> Editar </button>' +
@@ -186,7 +172,6 @@
             //Implementar essa parte na API de Avs **************************** TODO ****************************
             $.getJSON('api/avs/' + id, function(data){
                 $('#id').val(data.id);
-                $('#prioridade').val(data.prioridade);
                 $('#banco').val(data.banco);
                 $('#agencia').val(data.agencia);
                 $('#conta').val(data.conta);
@@ -233,7 +218,6 @@
         function criarAv(){
             av = { 
                 dataCriacao: $('#dataCriacao').val(), 
-                prioridade: $('#prioridade').val(), 
                 banco: $('#banco').val(), 
                 agencia: $('#agencia').val(), 
                 conta: $('#conta').val(), 
@@ -255,7 +239,6 @@
         function salvarAv(){
             av = { 
                 dataCriacao: $('#dataCriacao').val(), 
-                prioridade: $('#prioridade').val(), 
                 banco: $('#banco').val(), 
                 agencia: $('#agencia').val(), 
                 conta: $('#conta').val(), 
@@ -280,7 +263,6 @@
                     if(e){
                         e[0].cells[0].textContent = av.id;
                         e[0].cells[1].textContent = av.dataCriacao;
-                        e[0].cells[2].textContent = av.prioridade;
                         e[0].cells[3].textContent = av.status;
                     }
 

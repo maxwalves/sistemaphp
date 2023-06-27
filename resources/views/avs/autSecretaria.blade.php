@@ -24,7 +24,6 @@
                 <th>Objetivo</th>
                 <th>Rota</th>
                 <th>Data criação</th>
-                <th>Prioridade</th>
                 <th>Status</th>
                 <th>Ações</th>
             </tr>
@@ -72,7 +71,6 @@
                 </td>
 
                 <td> <a> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </a></td>
-                <td> {{$av->prioridade}} </td>
                 <td> {{$av->status}} </td>
                 <td> 
                     @if($av->isCancelado == true)

@@ -218,11 +218,6 @@
 
                 <div class="col-4" >
 
-                    <div class="form-group">
-                        <label for="prioridade" class="control-label">Qual é a Prioridade da sua viagem?</label>
-                        <input type="text" class="form-control" id="prioridade" name="prioridade" value="{{ $av->prioridade}}" disabled>
-                    </div>
-
                     <div class="form-group" id="nomeObjetivo" >
                         <label for="objetivo_id" class="control-label">Objetivo da viagem:</label>
                         <br>

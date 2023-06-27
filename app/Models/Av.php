@@ -19,7 +19,6 @@ class Av extends Model
     protected $fillable = [
         'id',
         'dataCriacao',
-        'prioridade',
         'banco',
         'agencia',
         'conta',

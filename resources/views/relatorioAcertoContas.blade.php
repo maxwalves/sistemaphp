@@ -37,7 +37,6 @@
                         @endif
 
                         </p>
-                        <p><strong>Prioridade:</strong> {{ $av->prioridade }} </p>
                         <p><strong>Comentário:</strong> {{ $av->comentario }} </p>
                         
                     </div>

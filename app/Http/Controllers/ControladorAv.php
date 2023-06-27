@@ -2238,7 +2238,6 @@ class ControladorAv extends Controller
     {
         $regras = [
             'objetivo_id' => 'required',
-            'prioridade' => 'required',
             'isDiaria' => 'required',
             'banco' => 'required',
             'agencia' => 'required',
@@ -2264,8 +2263,6 @@ class ControladorAv extends Controller
         }
 
         $request->validate($regras, $mensagens);
-        
-        $av->prioridade = $request->prioridade;
         
         $av->isDiaria = $request->isDiaria == "Sim" ? true : false;
         
@@ -3548,7 +3545,6 @@ class ControladorAv extends Controller
         $regras = [
             'objetivo_id' => 'required',
             'outroObjetivo' => 'required',
-            'prioridade' => 'required',
             'isDiaria' => 'required'
         ];
 

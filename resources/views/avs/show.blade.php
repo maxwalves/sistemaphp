@@ -11,7 +11,6 @@
             <div id="info-container" class="col-6">
                 <p class="av-data"><ion-icon name="calendar-outline"></ion-icon> Data de criação: {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </p>
                 <p class="av-owner"><ion-icon name="flag-outline"></ion-icon> Objetivo: {{ isset($objetivo->nomeObjetivo) ? $objetivo->nomeObjetivo : $av->outroObjetivo }}</p>
-                <p class="av-owner"><ion-icon name="alert-circle-outline"></ion-icon> Prioridade: {{ $av->prioridade }}</p>
                 <p class="av-owner"><ion-icon name="business-outline"></ion-icon> Banco: {{ $av->banco }}</p>
                 <p class="av-owner"><ion-icon name="home-outline"></ion-icon> Agência: {{ $av->agencia }}</p>
                 <p class="av-owner"><ion-icon name="wallet-outline"></ion-icon> Conta: {{ $av->conta }}</p>
@@ -27,7 +26,6 @@
             <div id="info-container" class="col-6">
                 <p class="av-data"><ion-icon name="calendar-outline"></ion-icon> Data de criação: {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </p>
                 <p class="av-owner"><ion-icon name="flag-outline"></ion-icon> Objetivo: {{ isset($objetivo->nomeObjetivo) ? $objetivo->nomeObjetivo : $av->outroObjetivo }}</p>
-                <p class="av-owner"><ion-icon name="alert-circle-outline"></ion-icon> Prioridade: {{ $av->prioridade }}</p>
                 <p class="av-owner"><ion-icon name="business-outline"></ion-icon> Banco: {{ $av->banco }}</p>
                 <p class="av-owner"><ion-icon name="home-outline"></ion-icon> Agência: {{ $av->agencia }}</p>
                 <p class="av-owner"><ion-icon name="wallet-outline"></ion-icon> Conta: {{ $av->conta }}</p>

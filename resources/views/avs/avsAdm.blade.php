@@ -51,17 +51,6 @@
                         </td>
                 </div>
                 <div class="col-12 col-xl-4">
-                        <td style="padding-left: 10px"><strong>Prioridade:</strong></td>
-                        <td>
-                            <select id="prio" name="prio">
-                                <option value="Todos">Todos</option>
-                                <option value="Alta">Alta</option>
-                                <option value="Média">Média</option>
-                                <option value="Baixa">Baixa</option>
-                            </select>
-                        </td>
-                </div>
-                <div class="col-12 col-xl-4">
                         <td style="padding-left: 10px"><strong>Usuário:</strong></td>
                         <td>
                             <select id="userField" name="userField">
@@ -111,7 +100,6 @@
                 <th>Objetivo</th>
                 <th>Rota</th>
                 <th>Data AV</th>
-                <th>Prioridade</th>
                 <th>Data viagem</th>
                 <th>Data retorno</th>
                 <th>Valor total em reais</th>
@@ -167,7 +155,6 @@
                 </td>
 
                 <td> <a> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </a></td>
-                <td> {{$av->prioridade}} </td>
                 <td>
                         {{ date('d/m/Y h:m', strtotime($av->rotas[0]->dataHoraSaida)) }}
                 </td>

@@ -92,23 +92,7 @@
             <input type="boolean" id="isSelecionado" name="isSelecionado" value="0" hidden="true">
             <br>
             <br>
-            <div class="form-group">
-                <label for="prioridade" class="control-label" required>Qual é a Prioridade da sua viagem? (selecione)</label>
-                <br>
-                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('prioridade') ? 'is-invalid' :''}}" 
-                        id="prioridade" name="prioridade">
-                        <option value="" name=""> Selecione</option>
-                        <option value="Alta" name="Alta"> Alta</option>
-                        <option value="Média" name="Média"> Média</option>
-                        <option value="Baixa" name="Baixa"> Baixa</option>
-                    </select>
-
-                    @if ($errors->has('prioridade'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('prioridade') }}
-                    </div>
-                    @endif
-            </div>
+    
             <div class="form-group">
                 <label for="isDiaria" class="control-label" required>Vai precisar de diária de alimentação? (selecione)</label>
                 <br>

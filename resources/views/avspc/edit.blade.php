@@ -59,23 +59,6 @@
             <input type="boolean" id="isSelecionado" name="isSelecionado" value="0" hidden="true">
             <br>
             <br>
-
-            <div class="form-group">
-                <label for="prioridade" class="control-label">Qual é a Prioridade da sua viagem? (selecione)</label><br>
-                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('prioridade') ? 'is-invalid' :''}}" 
-                        id="prioridade" name="prioridade">
-                        <option value="" name=""> Selecione</option>
-                        <option value="Alta" {{ $av->prioridade == "Alta" ? "selected='selected'" : ""}} name="Alta"> Alta</option>
-                        <option value="Média" {{ $av->prioridade == "Média" ? "selected='selected'" : ""}} name="Média"> Média</option>
-                        <option value="Baixa" {{ $av->prioridade == "Baixa" ? "selected='selected'" : ""}} name="Baixa"> Baixa</option>
-                    </select>
-
-                    @if ($errors->has('prioridade'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('prioridade') }}
-                    </div>
-                    @endif
-            </div>
             
             <div class="mb-3">
                 <label for="banco" class="form-label">Banco</label>
