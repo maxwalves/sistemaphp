@@ -31,6 +31,179 @@
   </div>
 </div>
 
+<div class="container"> 
+    <div class="stat-title">Controle de diárias:
+    </div>
+        Mês saída: {{$mesSaidaInicial}} 
+        Mês chegada: {{$mesChegadaFinal}} <br>
+        <ul class="steps">
+
+            @if($mesSaidaInicial != $mesChegadaFinal)
+
+                @php
+                    $data = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
+                    $ultimoDiaMes = date('t', strtotime($data));
+                    $j=0;
+                @endphp
+                @for($i = $arrayDiasValores[0]['dia']; $i <= $ultimoDiaMes; $i++)
+                    <li class="step step-primary" data-content="{{$i}}">
+                        @if($i == $diaSaidaInicial)
+                            <div class="badge badge-outline">Hora saída: {{$horaSaidaInicial}}:{{$minutoSaidaInicial}}</div>
+                        @endif
+                        @if($i == $diaChegadaInicial)
+                            <div class="badge badge-outline">Hora chegada: {{$horaSaidaInicial}}:{{$minutoSaidaInicial}}</div>
+                        @endif
+                        @if($i == $diaChegadaFinal)
+                            <div class="badge badge-outline">Hora chegada: {{$horaChegadaFinal}}:{{$minutoChegadaFinal}}</div>
+                        @endif
+                        @if($i == $diaSaidaFinal)
+                            <div class="badge badge-outline">Hora saída: {{$horaSaidaFinal}}:{{$minutoSaidaFinal}}</div>
+                        @endif
+                        <div {{$mostrarValor == false ? "hidden='true'" : ""}}>
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
+                            @endif
+                        </div>
+                        <div {{$mostrarValor == true ? "hidden='true'" : ""}}>
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira</div>
+                            @endif
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária</div>
+                            @endif
+                            @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira</div>    
+                            @endif
+                        </div>
+                    </li>
+                    @php
+                        $j++;
+                    @endphp
+                @endfor
+                @for($i = 1; $i <= $diaChegadaFinal; $i++)
+                    <li class="step step-primary" data-content="{{$i}}">
+                        @if($i == $diaSaidaFinal)
+                            <div class="badge badge-outline">Hora saída: {{$horaSaidaFinal}}:{{$minutoSaidaFinal}}</div>
+                        @endif
+                        @if($i == $diaChegadaFinal)
+                            <div class="badge badge-outline">Hora chegada: {{$horaChegadaFinal}}:{{$minutoChegadaFinal}}</div>
+                        @endif
+                        <div {{$mostrarValor == false ? "hidden='true'" : ""}}>
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
+                            @endif
+
+                            @if($i ==  $diaChegadaFinal && $horaChegadaFinal >= 13 && $horaChegadaFinal <19)
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i ==  $diaChegadaFinal && $horaChegadaFinal >=19)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
+                            @endif
+                        </div>
+                        <div {{$mostrarValor == true ? "hidden='true'" : ""}}>
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira</div>
+                            @endif
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária</div>
+                            @endif
+                            @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira</div>    
+                            @endif
+
+                            @if($i ==  $diaChegadaFinal && $horaChegadaFinal >= 13 && $horaChegadaFinal <19)
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária</div>
+                            @endif
+                            @if($i ==  $diaChegadaFinal && $horaChegadaFinal >=19)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira</div>    
+                            @endif
+                        </div>
+                    </li>
+                    @php
+                        $j++;
+                    @endphp
+                @endfor
+            @else
+                    @php
+                        $j=0;
+                    @endphp
+                @for($i = $arrayDiasValores[0]['dia']; $i <= $diaChegadaFinal; $i++)
+                    
+                    <li class="step step-primary" data-content="{{sprintf('%d', $i)}}">
+                        @if($i == $diaSaidaInicial)
+                            <div class="badge badge-outline">Hora saída: {{$horaSaidaInicial}}:{{$minutoSaidaInicial}}</div>
+                        @endif
+                        @if($i == $diaChegadaInicial)
+                            <div class="badge badge-outline">Hora chegada: {{$horaChegadaInicial}}:{{$minutoChegadaInicial}}</div>
+                        @endif
+                        @if($i == $diaSaidaFinal)
+                            <div class="badge badge-outline">Hora saída: {{$horaSaidaFinal}}:{{$minutoSaidaFinal}}</div>
+                        @endif
+                        @if($i == $diaChegadaFinal)
+                            <div class="badge badge-outline">Hora chegada: {{$horaChegadaFinal}}:{{$minutoChegadaFinal}}</div>
+                        @endif
+
+                        <div {{$mostrarValor == false ? "hidden='true'" : ""}}>
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if(($i ==  $diaSaidaInicial && $horaSaidaInicial > 13) || ($i ==  $diaSaidaInicial && $horaSaidaInicial == 13 && $minutoSaidaInicial >= 1))
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
+                            @endif
+
+                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <19) || 
+                            ($i ==  $diaChegadaFinal && $horaChegadaFinal == 13 && $minutoChegadaFinal >= 1 && $horaChegadaFinal <19))
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal >19) || ($horaChegadaFinal ==19 && $minutoChegadaFinal >= 1))
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
+                            @endif
+                        
+                        </div>
+                        <div {{$mostrarValor == true ? "hidden='true'" : ""}}>
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira</div>
+                            @endif
+                            @if(($i ==  $diaSaidaInicial && $horaSaidaInicial > 13) || ($i ==  $diaSaidaInicial && $horaSaidaInicial == 13 && $minutoSaidaInicial >= 1))
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária</div>
+                            @endif
+                            @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira</div>    
+                            @endif
+
+                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <19) || 
+                            ($i ==  $diaChegadaFinal && $horaChegadaFinal == 13 && $minutoChegadaFinal >= 1 && $horaChegadaFinal <19))
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária</div>
+                            @endif
+                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal >19) || ($horaChegadaFinal ==19 && $minutoChegadaFinal >= 1))
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira</div>    
+                            @endif
+                        
+                        </div>
+                    </li>
+                    @php
+                        $j++;
+                    @endphp
+                @endfor
+            @endif
+        </ul>
+</div>
+<br>
 <div id="av-create-container" class="container">
         <div class="col-4">
             <label for="idav" > <strong>AV nº </strong> </label>
@@ -191,112 +364,7 @@
                         
                     </div>
 
-                    <div  >
-        
-                        
-                            <div class="stat-title">Controle de diárias: </div>
-                                Mês saída: {{$mesSaidaRota1}} 
-                                Mês chegada: {{$mesChegadaRota2}} <br>
-                                <ul class="steps">
-                                    @if($mesSaidaRota1 != $mesChegadaRota2)
-
-                                        @php
-                                            $data = "$anoSaidaRota1-$mesSaidaRota1-$diaSaidaRota1";
-                                            $ultimoDiaMes = date('t', strtotime($data));
-                                        @endphp
-
-                                        @for($i = $diaSaidaRota1; $i <= $ultimoDiaMes; $i++)
-                                            <li class="step step-primary" data-content="{{$i}}">
-                                                @if($i == $diaSaidaRota1)
-                                                    <div class="badge badge-outline">Hora saída: {{$horaSaidaRota1}}:{{$minutoSaidaRota1}}</div>
-                                                @endif
-                                                @if($i == $diaChegadaRota1)
-                                                    <div class="badge badge-outline">Hora chegada: {{$horaChegadaRota1}}:{{$minutoChegadaRota1}}</div>
-                                                @endif
-                                                @if($i == $diaChegadaRota2)
-                                                    <div class="badge badge-outline">Hora chegada: {{$horaChegadaRota2}}:{{$minutoChegadaRota2}}</div>
-                                                @endif
-                                                @if($i == $diaSaidaRota2)
-                                                    <div class="badge badge-outline">Hora saída: {{$horaSaidaRota2}}:{{$minutoSaidaRota2}}</div>
-                                                @endif
-                                                <div >
-                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 < 12 )
-                                                        <div class="badge badge-accent">Diária Inteira: {{$diariaTotal}}</div>
-                                                    @endif
-                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 >= 13 && $minutoSaidaRota1 > 1)
-                                                        <div class="badge badge-secondary">Meia Diária: {{$meiaDiaria}}</div>
-                                                    @endif
-                                                    @if($i !=  $diaSaidaRota1 && $i !=  $diaChegadaRota2)
-                                                        <div class="badge badge-accent">Diária Inteira: {{$diariaTotal}}</div>    
-                                                    @endif
-                                                </div>
-                                            </li>
-                                        @endfor
-                                        @for($i = 1; $i <= $diaChegadaRota2; $i++)
-                                            <li class="step step-primary" data-content="{{$i}}">
-                                                @if($i == $diaSaidaRota2)
-                                                    <div class="badge badge-outline">Hora saída: {{$horaSaidaRota2}}:{{$minutoSaidaRota2}}</div>
-                                                @endif
-                                                @if($i == $diaChegadaRota2)
-                                                    <div class="badge badge-outline">Hora chegada: {{$horaChegadaRota2}}:{{$minutoChegadaRota2}}</div>
-                                                @endif
-                                                <div >
-                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 < 12 )
-                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>
-                                                    @endif
-                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 >= 13 && $minutoSaidaRota1 > 1)
-                                                        <div class="badge badge-secondary">Meia Diária: R${{$meiaDiaria}}</div>
-                                                    @endif
-                                                    @if($i !=  $diaSaidaRota1 && $i !=  $diaChegadaRota2)
-                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>    
-                                                    @endif
-
-                                                    @if($i ==  $diaChegadaRota2 && $horaChegadaRota2 >= 13 && $horaChegadaRota2 <19)
-                                                        <div class="badge badge-secondary">Meia Diária: R${{$meiaDiaria}}</div>
-                                                    @endif
-                                                    @if($i ==  $diaChegadaRota2 && $horaChegadaRota2 >=19)
-                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>    
-                                                    @endif
-                                                </div>
-                                            </li>
-                                        @endfor
-                                    @else
-                                        @for($i = $diaSaidaRota1; $i <= $diaChegadaRota2; $i++)
-                                            <li class="step step-primary" data-content="{{sprintf('%d', $i)}}">
-                                                @if($i == $diaSaidaRota1)
-                                                    <div class="badge badge-outline">Hora saída: {{$horaSaidaRota1}}:{{$minutoSaidaRota1}}</div>
-                                                @endif
-                                                @if($i == $diaSaidaRota2)
-                                                    <div class="badge badge-outline">Hora saída: {{$horaSaidaRota2}}:{{$minutoSaidaRota2}}</div>
-                                                @endif
-                                                @if($i == $diaChegadaRota2)
-                                                    <div class="badge badge-outline">Hora chegada: {{$horaChegadaRota2}}:{{$minutoChegadaRota2}}</div>
-                                                @endif
-
-                                                <div >
-                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 < 12 )
-                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>
-                                                    @endif
-                                                    @if($i ==  $diaSaidaRota1 && $horaSaidaRota1 >= 13 && $minutoSaidaRota1 > 1)
-                                                        <div class="badge badge-secondary">Meia Diária: R${{$meiaDiaria}}</div>
-                                                    @endif
-                                                    @if($i !=  $diaSaidaRota1 && $i !=  $diaChegadaRota2)
-                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>    
-                                                    @endif`
-
-                                                    @if($i ==  $diaChegadaRota2 && $horaChegadaRota2 >= 13 && $horaChegadaRota2 <19)
-                                                        <div class="badge badge-secondary">Meia Diária: R${{$meiaDiaria}}</div>
-                                                    @endif
-                                                    @if($i ==  $diaChegadaRota2 && $horaChegadaRota2 >=19)
-                                                        <div class="badge badge-accent">Diária Inteira: R${{$diariaTotal}}</div>    
-                                                    @endif
-                                                
-                                                </div>
-                                            </li>
-                                        @endfor
-                                    @endif
-                                </ul>
-                        
+                    
                 </div>
             </div>
         </form>
