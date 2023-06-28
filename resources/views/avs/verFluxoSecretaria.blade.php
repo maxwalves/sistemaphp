@@ -526,10 +526,21 @@
                             <option value="-" name="-"> Selecione</option>
                             <option value="0" name="0"> Nenhum</option>
                             @for($i = 0; $i < count($veiculosParanacidade); $i++)
-                                <div>
-                                    <option value="{{ $veiculosParanacidade[$i]->id }}" 
-                                        name="{{ $veiculosParanacidade[$i]->id }}"> {{ $veiculosParanacidade[$i] ->modelo }}. Placa: {{ $veiculosParanacidade[$i] ->placa }} </option>
-                                </div>
+                                @if($veiculosParanacidade[$i]->codigoRegional == $userAv->department)
+                                    <div>
+                                        <option value="{{ $veiculosParanacidade[$i]->id }}" 
+                                            name="{{ $veiculosParanacidade[$i]->id }}"> {{ $veiculosParanacidade[$i]->modelo }}. Placa: {{ $veiculosParanacidade[$i]->placa }} </option>
+                                    </div>
+                                @endif
+                                
+                                @if($veiculosParanacidade[$i]->codigoRegional == "CWB" 
+                                && $userAv->department != "ERCSC" && $userAv->department != "ERMGA" && $userAv->department != "ERFCB"
+                                && $userAv->department != "ERGUA" && $userAv->department != "ERLDA" && $userAv->department != "ERPTG")
+                                    <div>
+                                        <option value="{{ $veiculosParanacidade[$i]->id }}" 
+                                            name="{{ $veiculosParanacidade[$i]->id }}"> {{ $veiculosParanacidade[$i]->modelo }}. Placa: {{ $veiculosParanacidade[$i]->placa }} </option>
+                                    </div>
+                                @endif
                             @endfor
                         </select>
                         <br><br>

@@ -113,91 +113,134 @@
     <div id="av-create-container" class="container">
             <div class="containerAcertoContas">
                 @if($av->isPrestacaoContasRealizada==1)
-                    <div class="box box-40">
-                        <div class="col-md-12 offset-md-0">
-                            <h1 style="font-size: 24px"><strong>Acerto de contas: </strong></h1>
-                            <br>
-                            <p><strong> <span style="color: red">A:</span> Recebido antes da viagem</strong></p>
-                            <div class="stats shadow">
-                  
-                                <div class="stat">
-                                  <div class="stat-title">Valor em Reais</div>
-                                  <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais}}</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-title">Valor extra em Reais</div>
-                                    <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais}}</div>
-                                  </div>
-                                @if($valorRecebido->valorDolar > 0)
-                                    <div class="stat">
-                                    <div class="stat-title">Valor em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar}}</div>
-                                    </div>
-                                @endif
-                                @if($valorRecebido->valorExtraDolar > 0)
-                                    <div class="stat">
-                                        <div class="stat-title">Valor extra em dólar</div>
-                                        <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar}}</div>
-                                    </div>
-                                @endif
+                <div class="box box-40">
+                    <div class="col-md-12 offset-md-0">
+                        <h1 style="font-size: 24px"><strong>Acerto de contas: </strong></h1>
+                        <br>
+                        <p><strong> <span style="color: red">A:</span> Recebido antes da viagem</strong></p>
+                        <div class="stats shadow">
+              
+                            <div class="stat">
+                              <div class="stat-title">Valor em Reais</div>
+                              <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais}}</div>
                             </div>
-                            <br><br>
-                            <p><strong> <span style="color: green">B:</span> Informado na prestação de contas</strong></p>
-                            <div class="stats shadow">
-                  
+                            <div class="stat">
+                                <div class="stat-title">Valor extra em Reais</div>
+                                <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais != null ? $valorRecebido->valorExtraReais : 0}}</div>
+                              </div>
+                            @if($av->valorDeducaoReais > 0)
                                 <div class="stat">
-                                    <div class="stat-title">Valor em Reais</div>
-                                    <div class="stat-value text-primary">R$ {{$av->valorReais}} {{ $av->isAprovadoCarroDiretoriaExecutiva == true ? '+ R$ ' . $av->qtdKmVeiculoProprio * 0.49 : ""}} </div>
+                                    <div class="stat-title">Dedução em Reais</div>
+                                    <div class="stat-value text-primary">- R$ {{$av->valorDeducaoReais}}</div>
                                 </div>
-                                <div class="stat">
-                                      <div class="stat-title">Valor extra em Reais</div>
-                                      <div class="stat-value text-primary">R$ {{$valorAcertoContasReal}}</div>
-                                </div>
-                                @if($av->valorDolar > 0)
-                                    <div class="stat">
-                                        <div class="stat-title">Valor em dólar</div>
-                                        <div class="stat-value text-primary">$ {{$av->valorDolar}}</div>
-                                    </div>
-                                @endif
-                                @if($valorAcertoContasDolar > 0)
-                                    <div class="stat">
-                                        <div class="stat-title">Valor extra em dólar</div>
-                                        <div class="stat-value text-primary">$ {{$valorAcertoContasDolar}}</div>
-                                    </div>
-                                @endif
+                            @endif
+                            @if($av->valorDeducaoDolar > 0)
+                            <div class="stat">
+                                <div class="stat-title">Dedução em dólar</div>
+                                <div class="stat-value text-primary">$ {{$av->valorDeducaoDolar}}</div>
                             </div>
-                            <br><br>
-                            <p><strong> <span style="color: red">A</span> - <span style="color: green">B</span>: Acerto de contas:</strong></p>
-                            <div class="stats shadow">
-                                @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                                    <div class="stat">
-                                        <div class="stat-title">Valor em Reais</div>
-                                        <div class="stat-value text-primary">R$ {{($valorRecebido->valorReais-$av->valorReais) - ($av->qtdKmVeiculoProprio * 0.49)}}</div>
-                                    </div>
-                                @else
-                                    <div class="stat">
-                                        <div class="stat-title">Valor em Reais</div>
-                                        <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais-$av->valorReais}}</div>
-                                    </div>
-                                @endif
-                                
+                            @endif
+                            @if($valorRecebido->valorDolar > 0)
                                 <div class="stat">
-                                      <div class="stat-title">Valor extra em Reais</div>
-                                      <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais-$valorAcertoContasReal}}</div>
+                                <div class="stat-title">Valor em dólar</div>
+                                <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar}}</div>
                                 </div>
-                                  
+                            @endif
+                            @if($valorRecebido->valorExtraDolar > 0)
+                                <div class="stat">
+                                    <div class="stat-title">Valor extra em dólar</div>
+                                    <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar}}</div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="stats shadow bg-yellow-500">
+                            <div class="stat">
+                                <div class="stat-title">Resultado em Reais</div>
+                                <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais + $valorRecebido->valorExtraReais - $av->valorDeducaoReais}}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-title">Resultado em Dólar</div>
+                                <div class="stat-value text-primary">R$ {{$valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar}}</div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <p><strong> <span style="color: green">B:</span> Informado na prestação de contas</strong></p>
+                        <div class="stats shadow">
+              
+                            <div class="stat">
+                                <div class="stat-title">Valor em Reais</div>
+                                <div class="stat-value text-primary">R$ {{$av->valorReais}} {{ $av->isAprovadoCarroDiretoriaExecutiva == true ? '+ R$ ' . $av->qtdKmVeiculoProprio * 0.49 : ""}} </div>
+                            </div>
+                            <div class="stat">
+                                  <div class="stat-title">Valor extra em Reais</div>
+                                  <div class="stat-value text-primary">R$ {{$valorAcertoContasReal}}</div>
+                            </div>
+                            @if($av->valorDeducaoReais > 0)
+                                <div class="stat">
+                                    <div class="stat-title">Dedução em Reais</div>
+                                    <div class="stat-value text-primary">- R$ {{$av->valorDeducaoReais}}</div>
+                                </div>
+                            @endif
+                            @if($av->valorDeducaoDolar > 0)
+                                <div class="stat">
+                                    <div class="stat-title">Dedução em dólar</div>
+                                    <div class="stat-value text-primary">$ {{$av->valorDeducaoDolar}}</div>
+                                </div>
+                            @endif
+                            @if($av->valorDolar > 0)
                                 <div class="stat">
                                     <div class="stat-title">Valor em dólar</div>
-                                    <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
+                                    <div class="stat-value text-primary">$ {{$av->valorDolar}}</div>
                                 </div>
+                            @endif
+                            @if($valorAcertoContasDolar > 0)
                                 <div class="stat">
-                                      <div class="stat-title">Valor extra em dólar</div>
-                                      <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
+                                    <div class="stat-title">Valor extra em dólar</div>
+                                    <div class="stat-value text-primary">$ {{$valorAcertoContasDolar}}</div>
                                 </div>
-                                
+                            @endif
+                        </div>
+                        <div class="stats shadow bg-yellow-500">
+                            <div class="stat">
+                                <div class="stat-title">Resultado em Reais</div>
+                                <div class="stat-value text-primary">R$ {{$av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais}}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-title">Resultado em Dólar</div>
+                                <div class="stat-value text-primary">R$ {{$av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <p><strong> <span style="color: red">A</span> - <span style="color: green">B</span>: Acerto de contas:</strong></p>
+                        <div class="stats shadow bg-green-500">
+                            @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                <div class="stat">
+                                    <div class="stat-title" style="color: black">Valor em Reais</div>
+                                    <div class="stat-value text-gray-950">R$ {{($valorRecebido->valorReais-$av->valorReais) - ($av->qtdKmVeiculoProprio * 0.49)}}</div>
+                                </div>
+                            @else
+                                <div class="stat">
+                                    <div class="stat-title" style="color: black">Valor em Reais</div>
+                                    <div class="stat-value text-gray-950">R$ {{$valorRecebido->valorReais-$av->valorReais}}</div>
+                                </div>
+                            @endif
+                            
+                            <div class="stat">
+                                  <div class="stat-title" style="color: black">Valor extra em Reais</div>
+                                  <div class="stat-value text-gray-950">R$ {{$valorRecebido->valorExtraReais-$valorAcertoContasReal}}</div>
+                            </div>
+                              
+                            <div class="stat">
+                                <div class="stat-title" style="color: black">Valor em dólar</div>
+                                <div class="stat-value text-gray-950">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
+                            </div>
+                            <div class="stat">
+                                  <div class="stat-title" style="color: black">Valor extra em dólar</div>
+                                  <div class="stat-value text-gray-950">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
                             </div>
                         </div>
                     </div>
+                </div>
                 @endif
                 <div class="box box-40">
                     <div >
