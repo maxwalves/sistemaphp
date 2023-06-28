@@ -40,6 +40,27 @@
                     </select>
             </div>
 
+            <div class="form-group" id="selecaoRegional">
+                <label for="codigoRegional" class="control-label" required>O veículo pertence a qual regional? (selecione)</label>
+                <br>
+                    <select class="form-control {{ $errors->has('isAtivo') ? 'is-invalid' :''}}" 
+                        id="codigoRegional" name="codigoRegional">
+                        <option value="CWB" name="Curitiba" {{ $veiculoParanacidade->codigoRegional == "CWB" ? "selected='selected'" : ""}}> Curitiba</option>
+                        <option value="ERCSC" name="ERCSC" {{ $veiculoParanacidade->codigoRegional == "ERCSC" ? "selected='selected'" : ""}}> Cascavel</option>
+                        <option value="ERMGA" name="ERMGA" {{ $veiculoParanacidade->codigoRegional == "ERMGA" ? "selected='selected'" : ""}}> Maringá</option>
+                        <option value="ERFCB" name="ERFCB" {{ $veiculoParanacidade->codigoRegional == "ERFCB" ? "selected='selected'" : ""}}> Francisco Beltrão</option>
+                        <option value="ERGUA" name="ERGUA" {{ $veiculoParanacidade->codigoRegional == "ERGUA" ? "selected='selected'" : ""}}> Guarapuava</option>
+                        <option value="ERLDA" name="ERLDA" {{ $veiculoParanacidade->codigoRegional == "ERLDA" ? "selected='selected'" : ""}}> Londrina</option>
+                        <option value="ERPTG" name="ERPTG" {{ $veiculoParanacidade->codigoRegional == "ERPTG" ? "selected='selected'" : ""}}> Ponta Grossa</option>
+                    </select>
+
+                    @if ($errors->has('codigoRegional'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('codigoRegional') }}
+                    </div>
+                    @endif
+            </div>
+
             <div class="form-group">
                 <label for="observacao" class="control-label">Observação: </label>
                 <input type="observacao" class="form-control" name="observacao"
