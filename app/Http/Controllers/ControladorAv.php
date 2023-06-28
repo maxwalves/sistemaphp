@@ -3805,7 +3805,8 @@ class ControladorAv extends Controller
                 "valorExtraReais" => 0,
                 "valorExtraDolar" => 0,
                 "valorReais" => 0,
-                "valorDolar" => 0
+                "valorDolar" => 0,
+                'justificativaCancelamento' => $request->justificativa
             );
         }
         else if($av->isAprovadoFinanceiro == true && $av->isRealizadoReserva == false){
@@ -3815,7 +3816,8 @@ class ControladorAv extends Controller
                 "valorExtraReais" => 0,
                 "valorExtraDolar" => 0,
                 "valorReais" => 0,
-                "valorDolar" => 0
+                "valorDolar" => 0,
+                'justificativaCancelamento' => $request->justificativa
             );
         }
         else if($av->isAprovadoFinanceiro == true && $av->isRealizadoReserva == true){
@@ -3825,7 +3827,8 @@ class ControladorAv extends Controller
                 "valorExtraReais" => 0,
                 "valorExtraDolar" => 0,
                 "valorReais" => 0,
-                "valorDolar" => 0
+                "valorDolar" => 0,
+                'justificativaCancelamento' => $request->justificativa
             ); 
         }
         else{
@@ -3835,7 +3838,8 @@ class ControladorAv extends Controller
                 "valorExtraReais" => 0,
                 "valorExtraDolar" => 0,
                 "valorReais" => 0,
-                "valorDolar" => 0
+                "valorDolar" => 0,
+                'justificativaCancelamento' => $request->justificativa
             ); 
         }
 

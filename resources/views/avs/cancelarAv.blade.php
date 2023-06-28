@@ -28,7 +28,11 @@
                 <form action="/avs/marcarComoCancelado/{{ $av->id }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-
+                    <div class="form-group">
+                        <label for="justificativa" class="control-label">Justificativa:</label><br>
+                        <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="justificativa"
+                        id="justificativa" placeholder="Justificativa" style="width: 400px; height: 100px"></textarea>
+                    </div>
                     <button type="submit" class="btn btn-active btn-accent btn-sm"> Cancelar AV</button>
                 </form>
                 <br>

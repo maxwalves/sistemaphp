@@ -68,7 +68,8 @@ class Av extends Model
         'qtdKmVeiculoProprio',
         'isDiaria',
         'valorDeducaoReais',
-        'valorDeducaoDolar'
+        'valorDeducaoDolar',
+        'justificativaCancelamento'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio', 'deleted_at'];
