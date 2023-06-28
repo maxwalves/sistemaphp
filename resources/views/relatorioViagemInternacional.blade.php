@@ -5,8 +5,7 @@
     </head>
     <body>
         <h1 style="text-align:center">PARANACIDADE</h1>
-        <h1 style="text-align:center">Acerto de Contas</h1>
-        <h1 style="text-align:center">Autorização de Viagem Nr {{ $av->id}}</h1>
+        <h1 style="text-align:center">Autorização de Viagem Internacional Nr {{ $av->id}}</h1>
 
         <main>
             <div >
@@ -40,7 +39,7 @@
                         <p><strong>Comentário:</strong> {{ $av->comentario }} </p>
                         
                     </div>
-                    
+                    <br>
                     <h2 >Dados bancários:</h2>
                     
                     <div style="border: 1px solid black; padding-left:10px">
@@ -51,9 +50,9 @@
                         <p><strong>Pix:</strong> {{ $av->pix }} </p>
                         
                     </div>
-                    <br><br><br><br>
+                    <br><br><br><br><br><br><br>
 
-                    <h2 >Pagamento realizado no acerto de contas:</h2>
+                    <h2 >Adiantamentos:</h2>
                     <div style="border: 1px solid black; padding-left:10px">
                         <p><strong>Valor em reais:</strong> R$ {{ $av->valorReais }}</p>
                         <p><strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
@@ -63,7 +62,7 @@
                         <p><strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
                         <p><strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
                         <p><strong>Dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
-                        <p><strong>Valor TOTAL dólar:</strong> $ {{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar }}</p>
+                        <p><strong>Valor TOTAL dólar:</strong> $ {{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</p>
                         <p><strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
                         
                     </div>
@@ -193,79 +192,6 @@
                     </tbody>
                 </table>
             </div>
-            <h2 >Resultado:</h2>
-                    <div style="border: 1px solid black; padding-left:10px">
-
-                        <div class="stats shadow">
-              
-                            <div class="stat">
-                                <div class="stat-title">
-                                    <p>
-                                        @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                                            @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )<0)
-                                                Valor que o usuário deve receber em reais
-                                            @endif
-                                        @else
-                                            @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
-                                                Valor que o usuário deve receber em reais
-                                            @endif
-                                        @endif
-                                        
-                                        @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
-                                            Valor que o usuário deve pagar em reais
-                                        @endif
-                                    </p>
-                                </div>
-
-
-                                @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                                    @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) <0))
-                                        <div class="stat-value text-green-500">
-                                                R$ {{($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) * (-1)}}
-                                        </div>
-                                    @endif
-                                @else
-                                    @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
-                                        <div class="stat-value text-green-500">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal)) * (-1)}}
-                                        </div>
-                                    @endif
-                                @endif
-                                
-
-                                @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
-                                    <div class="stat-value text-error">
-                                            R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))}}
-                                    </div>
-                                @endif
-                                
-                            </div>
-                            <div class="stat">
-                                <div class="stat-title">
-                                    <p>
-                                        @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))<0)
-                                            Valor que o usuário deve receber em dólar
-                                        @endif
-                                        @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))>0)
-                                            Valor que o usuário deve pagar em dólar
-                                        @endif
-                                    </p>
-                                </div>
-                                @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))<0)
-                                    <div class="stat-value text-green-500">
-                                            
-                                            $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar)) * (-1)}}
-                                    </div>
-                                @endif
-                                @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))>0)
-                                    <div class="stat-value text-error">
-                                            $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))}}
-                                    </div>
-                                @endif
-                            </div>
-                            
-                        </div>
-                    </div>
         </main>
         
     </body>

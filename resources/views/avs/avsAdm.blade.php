@@ -156,10 +156,14 @@
 
                 <td> <a> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </a></td>
                 <td>
-                        {{ date('d/m/Y h:m', strtotime($av->rotas[0]->dataHoraSaida)) }}
+                    @if(isset($av->rotas[0]))
+                        {{ date('d/m/Y H:i', strtotime($av->rotas[0]->dataHoraSaida)) }}
+                    @endif
                 </td>
                 <td>  
+                    @if(isset($av->rotas[count($av->rotas)-1]))
                         {{ date('d/m/Y h:m', strtotime($av->rotas[count($av->rotas)-1]->dataHoraSaida)) }}
+                    @endif
                 </td>
                 <td>
                         R$ {{number_format($av->valorReais + $av->valorExtraReais, 2, ',', '.')}}
@@ -263,29 +267,6 @@
                         $('#totalValueDolarPagina').html(totalFormattedDolar);
                     },
                 });
-        });
-
-        $(document).ready(function () {
-            var minEl = $('#prio');
-        
-            // Custom range filtering function
-            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                var min = minEl.val();
-                var age = data[6] || 0; // use data for the age column
-
-                if (min == age || min == "Todos"){
-                    return true;
-                }
-        
-                return false;
-            });
-        
-            var table = $('#minhaTabela').DataTable();
-        
-            // Changes to the inputs will trigger a redraw to update the table
-            minEl.on('input', function () {
-                table.draw();
-            });
         });
 
         $(document).ready(function () {

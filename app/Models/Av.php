@@ -66,7 +66,9 @@ class Av extends Model
         'isCancelado',
         'isRealizadoCancelamentoReserva',
         'qtdKmVeiculoProprio',
-        'isDiaria'
+        'isDiaria',
+        'valorDeducaoReais',
+        'valorDeducaoDolar'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio', 'deleted_at'];
@@ -85,6 +87,11 @@ class Av extends Model
     public function rotas()
     {
         return $this->hasMany('App\Models\Rota');
+    }
+
+    public function medicoes()
+    {
+        return $this->hasMany('App\Models\Medicao');
     }
 
     public function anexosFinanceiro()

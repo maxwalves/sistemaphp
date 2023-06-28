@@ -31,7 +31,7 @@
             <div class="form-group" id="veiculoAtivo">
                 <label for="isAtivo" class="control-label" required>O veículo está em condições de circulação? (selecione)</label>
                 <br>
-                    <select class="custom-select {{ $errors->has('isAtivo') ? 'is-invalid' :''}}" 
+                    <select class="form-control {{ $errors->has('isAtivo') ? 'is-invalid' :''}}" 
                         id="isAtivo" name="isAtivo">
                         <option value="0" name="0"> Não</option>
                         <option value="1" name="1"> Sim</option>
@@ -40,6 +40,27 @@
                     @if ($errors->has('isAtivo'))
                     <div class="invalid-feedback">
                         {{ $errors->first('isAtivo') }}
+                    </div>
+                    @endif
+            </div>
+
+            <div class="form-group" id="selecaoRegional">
+                <label for="codigoRegional" class="control-label" required>O veículo pertence a qual regional? (selecione)</label>
+                <br>
+                    <select class="form-control {{ $errors->has('isAtivo') ? 'is-invalid' :''}}" 
+                        id="codigoRegional" name="codigoRegional">
+                        <option value="CWB" name="Curitiba"> Curitiba</option>
+                        <option value="ERCSC" name="ERCSC"> Cascavel</option>
+                        <option value="ERMGA" name="ERMGA"> Maringá</option>
+                        <option value="ERFCB" name="ERFCB"> Francisco Beltrão</option>
+                        <option value="ERGUA" name="ERGUA"> Guarapuava</option>
+                        <option value="ERLDA" name="ERLDA"> Londrina</option>
+                        <option value="ERPTG" name="ERPTG"> Ponta Grossa</option>
+                    </select>
+
+                    @if ($errors->has('codigoRegional'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('codigoRegional') }}
                     </div>
                     @endif
             </div>

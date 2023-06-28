@@ -12,11 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('avs', function (Blueprint $table) {
-            $table->string('nome_municipio')->nullable();
-            $table->integer('municipio_id')->nullable();
-            $table->integer('numero_projeto')->nullable();
-            $table->integer('numero_lote')->nullable();
-            $table->integer('numero_medicao')->nullable();
+            $table->float('valorDeducaoReais')->nullable();
+            $table->float('valorDeducaoDolar')->nullable();
         });
     }
 

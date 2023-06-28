@@ -22,12 +22,60 @@
             </div>
         </div>
             
-        <div class="col-12 col-xl-4">
+        <div class="col-12 col-xl-6">
             <label for="idav" style="font-size: 24px; color: green"> <strong>AV nº </strong> </label>
             <input style="width: 50px; font-size: 24px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
             <h2 style="font-size: 24px"> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
-            <h2 style="font-size: 24px"> <strong>Valor adiantamento em reais: <span style="color: green"> R${{ $av->valorReais + $av->valorExtraReais }} </span></strong> </h2>
-            <h2 style="font-size: 24px"> <strong>Valor adiantamento em dólar: <span style="color: green"> ${{ $av->valorDolar + $av->valorExtraDolar }} </span></strong> </h2>
+            <table class="table table-striped">
+                <tr>
+                    <td>
+                        <strong style="font-size: 18px">Valor adiantamento em reais: </strong>
+                    </td>
+                    <td>
+                        <h2 style="font-size: 18px"> <strong><span style="color: green"> R${{ $av->valorReais}} + Extra: {{$av->valorExtraReais != null ? $av->valorExtraReais : 0 }} </span></strong> </h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong style="font-size: 18px">Valor adiantamento em dólar:  </strong>
+                    </td>
+                    <td>
+                        <h2 style="font-size: 18px"> <strong><span style="color: green"> ${{ $av->valorDolar}} + Extra: {{$av->valorExtraDolar  != null ? $av->valorExtraDolar : 0}} </span></strong> </h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong style="font-size: 18px">Valor dedução em reais:  </strong>
+                    </td>
+                    <td>
+                        <h2 style="font-size: 18px"> <strong> <span style="color: green"> R${{ $av->valorDeducaoReais != null ? $av->valorDeducaoReais : 0 }} </span></strong> </h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong style="font-size: 18px">Valor dedução em dólar:  </strong>
+                    </td>
+                    <td>
+                        <h2 style="font-size: 18px"> <strong> <span style="color: green"> ${{ $av->valorDeducaoDolar != null ? $av->valorDeducaoDolar : 0 }} </span></strong> </h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong style="font-size: 18px">Saldo em reais:  </strong>
+                    </td>
+                    <td>
+                        <h2 style="font-size: 18px"> <strong><span style="color: green"> R${{ $av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais }} </span></strong> </h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong style="font-size: 18px">Saldo em dólar: </strong>
+                    </td>
+                    <td>
+                        <h2 style="font-size: 18px"> <strong> <span style="color: green"> ${{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar }} </span></strong> </h2>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <form action="/avspc/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">

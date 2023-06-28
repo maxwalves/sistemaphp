@@ -17,7 +17,8 @@ class VeiculoParanacidade extends Model
         'modelo',
         'placa',
         'isAtivo',
-        'observacao'
+        'observacao',
+        'codigoRegional'
     ];
 
     protected $dates = ['deleted_at'];

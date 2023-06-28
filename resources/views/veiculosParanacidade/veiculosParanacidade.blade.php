@@ -16,6 +16,7 @@
                 <th>Placa</th>
                 <th>Ativo?</th>
                 <th>Observação</th>
+                <th>Regional</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -27,6 +28,7 @@
                 <td> {{$veiculoParanacidade->placa}} </td>
                 <td> {{$veiculoParanacidade->isAtivo == "1" ? "Sim" : "Não"}} </td>
                 <td> {{$veiculoParanacidade->observacao}} </td>
+                <td> {{$veiculoParanacidade->codigoRegional}} </td>
                 <td> 
                     <a href="/veiculosParanacidade/edit/{{ $veiculoParanacidade->id }}" class="btn btn-success btn-sm"> <ion-icon name="create-outline"></ion-icon> Editar</a> 
                     <form action="/veiculosParanacidade/{{ $veiculoParanacidade->id }}" method="POST">

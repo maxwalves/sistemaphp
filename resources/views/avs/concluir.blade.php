@@ -31,6 +31,169 @@
   </div>
 </div>
 
+<br>
+<div >
+        <div class="col-4">
+            <label for="idav" > <strong>AV nº </strong> </label>
+            <input style="width: 50px; font-size: 16px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
+            <h2> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
+        </div>
+        <form action="/avs/enviarGestor/{{ $av->id }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            
+            <div class="row justify-content-start" style="padding-left: 5%">
+
+                <div class="col-12 col-md-4" >
+
+                    <div class="form-group" id="nomeObjetivo" >
+                        <label for="objetivo_id" class="control-label">Objetivo da viagem:</label>
+                        <br>
+                            <select class="form-control" 
+                                id="objetivo_id" name="objetivo_id" disabled>
+                                <option value="" name=""> Selecione</option>
+                                @for($i = 0; $i < count($objetivos); $i++)
+                                    <div>
+                                        <option value="{{ $objetivos[$i]->id }}" {{ $av->objetivo_id == $objetivos[$i]->id ? "selected='selected'" : ""}}
+                                            name="{{ $objetivos[$i]->id }}"> {{ $objetivos[$i] ->nomeObjetivo }} </option>
+                                    </div>
+                                @endfor
+                            </select>
+                    </div>
+
+                    <div class="form-group" id="outroObjetivo">
+                        <label for="outro" class="control-label">Você seleciou um outro objetivo: </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" 
+                            name="outroObjetivo" disabled
+                            id="outroObjetivo" placeholder="Outro" value="{{$av->outroObjetivo}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="banco" class="control-label">Banco</label>
+                        <input type="text" class="form-control" name="banco"
+                        id="banco" placeholder="Banco" value="{{$av->banco}}" disabled> 
+                    </div>
+
+                    <div class="form-group">
+                        <label for="agencia" class="control-label">Agência</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="agencia"
+                            id="agencia" placeholder="Agência" value="{{$av->agencia}}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="conta" class="control-label">Conta</label>
+                        <input type="text" class="form-control" name="conta"
+                        id="conta" placeholder="Conta" value="{{$av->conta}}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pix" class="control-label">Pix</label>
+                        <input type="text" class="form-control" name="pix"
+                            id="pix" placeholder="Pix" value="{{$av->pix}}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comentario" class="control-label">Comentários</label>
+                        <input type="text" class="form-control" name="comentario"
+                            id="comentario" placeholder="Comentário" value="{{$av->comentario}}" disabled>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4" >
+                    <div class="form-group">
+                        <label for="valorExtraReais" class="control-label">Você vai precisar de valor extra em reais?</label>
+                        <input type="number" class="form-control" name="valorExtraReais" onblur="calcular()"
+                            id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="valorExtraDolar" class="control-label">Você vai precisar de valor extra em dólar?</label>
+                        <input type="number" class="form-control" name="valorExtraDolar" onblur="calcular()"
+                            id="valorExtraDolar" placeholder="Valor Extra em dólar" value="{{$av->valorExtraDolar}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="valorDeducaoReais" class="control-label">Vai ter deduções em reais?</label>
+                        <input type="number" class="form-control bg-yellow-300" name="valorDeducaoReais" onblur="calcular()"
+                            id="valorDeducaoReais" placeholder="Valor da dedução em reais">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="valorDeducaoDolar" class="control-label">Vai ter deduções em dólar?</label>
+                        <input type="number" class="form-control bg-yellow-300" name="valorDeducaoDolar" onblur="calcular()"
+                            id="valorDeducaoDolar" placeholder="Valor da dedução em dólar">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="justificativaValorExtra" class="control-label">Justificativas</label>
+                        <input type="text" class="form-control" name="justificativaValorExtra"
+                            id="justificativaValorExtra" placeholder="Justificativa" value="{{$av->justificativaValorExtra}}">
+                    </div>
+                    
+                </div>
+                <div class="col-12 col-md-4" style="padding-top: 20px">
+                    <a href="#" class="btn btn-active bg-orange-600 btn-lg">Calcular</a>
+                    <br><br>
+                    <div>
+                        <input type="submit" class="btn btn-active btn-primary btn-lg" value="Enviar para o Gestor">
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-start" style="padding-left: 5%">
+
+                <div class="col-11" >
+                    <div class="stats shadow" >
+        
+                        <div class="stat" >
+                        <div class="stat-title">Diárias de alimentação em reais: </div>
+                        <div class="stat-value text-secondary" id="valorReais" data-value="{{$av->valorReais}}">R$ {{$av->valorReais}}</div>
+                        </div>
+                
+                        <div class="stat">
+                        <div class="stat-figure text-secondary">
+                            <div class="avatar">
+                              <div class="w-16 rounded-full">
+                                <img src="/img/real.png">
+                              </div>
+                            </div>
+                        </div>
+                        <div class="stat-title">Total após cálculos em reais:</div>
+                        
+                        <div class="stat-value text-primary" id="result1"> R$ </div>
+                        </div>
+                        
+                    </div>
+                    <div class="stats shadow" >
+        
+                        <div class="stat">
+                            <div class="stat-title">Diárias de alimentação em dólar:</div>
+                            <div class="stat-value text-secondary" id="valorDolar" data-value="{{$av->valorDolar}}">$ {{$av->valorDolar}}</div>
+                        </div>
+                        
+                        <div class="stat">
+                        <div class="stat-figure text-secondary">
+                            <div class="avatar">
+                              <div class="w-16 rounded-full">
+                                <img src="/img/dolar.png">
+                              </div>
+                            </div>
+                        </div>
+                        <div class="stat-title">Total após cálculos em dólar:</div>
+                        
+                        <div class="stat-value text-primary" id="result2"> $ </div>
+                        </div>
+                        
+                    </div>
+
+                    
+                </div>
+            </div>
+        </form>
+
+</div>
 <div class="container"> 
     <div class="stat-title">Controle de diárias:
     </div>
@@ -166,11 +329,12 @@
                                 <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
                             @endif
 
-                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <19) || 
+                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <=19 && $minutoChegadaFinal == 0) || 
+                            ($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <19) ||
                             ($i ==  $diaChegadaFinal && $horaChegadaFinal == 13 && $minutoChegadaFinal >= 1 && $horaChegadaFinal <19))
                                 <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
                             @endif
-                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal >19) || ($horaChegadaFinal ==19 && $minutoChegadaFinal >= 1))
+                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal >19) || ($i ==  $diaChegadaFinal && $horaChegadaFinal ==19 && $minutoChegadaFinal >= 1))
                                 <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
                             @endif
                         
@@ -203,168 +367,6 @@
             @endif
         </ul>
 </div>
-<br>
-<div id="av-create-container" class="container">
-        <div class="col-4">
-            <label for="idav" > <strong>AV nº </strong> </label>
-            <input style="width: 50px; font-size: 16px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
-            <h2> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
-        </div>
-        <form action="/avs/enviarGestor/{{ $av->id }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-            
-            <div class="row justify-content-start" style="padding-left: 5%">
-
-                <div class="col-4" >
-
-                    <div class="form-group" id="nomeObjetivo" >
-                        <label for="objetivo_id" class="control-label">Objetivo da viagem:</label>
-                        <br>
-                            <select class="select select-bordered w-full max-w-xs" 
-                                id="objetivo_id" name="objetivo_id" disabled>
-                                <option value="" name=""> Selecione</option>
-                                @for($i = 0; $i < count($objetivos); $i++)
-                                    <div>
-                                        <option value="{{ $objetivos[$i]->id }}" {{ $av->objetivo_id == $objetivos[$i]->id ? "selected='selected'" : ""}}
-                                            name="{{ $objetivos[$i]->id }}"> {{ $objetivos[$i] ->nomeObjetivo }} </option>
-                                    </div>
-                                @endfor
-                            </select>
-                    </div>
-
-                    <div class="form-group" id="outroObjetivo">
-                        <label for="outro" class="control-label">Você seleciou um outro objetivo: </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" 
-                            name="outroObjetivo" disabled
-                            id="outroObjetivo" placeholder="Outro" value="{{$av->outroObjetivo}}">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="isDiaria" class="control-label" >Vai precisar de diária de alimentação?</label>
-                        <br>
-                            <select class="select select-bordered w-full max-w-xs" 
-                                id="isDiaria" name="isDiaria" disabled>
-                                <option value="" name=""> Selecione</option>
-                                <option value="Sim" name="Alta" {{ $av->isDiaria == true ? "selected='selected'" : ""}}> Sim</option>
-                                <option value="Não" name="Média" {{ $av->isDiaria == false ? "selected='selected'" : ""}}> Não</option>
-                            </select>
-                    </div>
-
-                </div>
-                <div class="col-4" >
-
-                    <div class="form-group">
-                        <label for="banco" class="control-label">Banco</label>
-                        <input type="text" class="form-control" name="banco"
-                        id="banco" placeholder="Banco" value="{{$av->banco}}" disabled> 
-                    </div>
-
-                    <div class="form-group">
-                        <label for="agencia" class="control-label">Agência</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="agencia"
-                            id="agencia" placeholder="Agência" value="{{$av->agencia}}" disabled>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="conta" class="control-label">Conta</label>
-                        <input type="text" class="form-control" name="conta"
-                        id="conta" placeholder="Conta" value="{{$av->conta}}" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="pix" class="control-label">Pix</label>
-                        <input type="text" class="form-control" name="pix"
-                            id="pix" placeholder="Pix" value="{{$av->pix}}" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="comentario" class="control-label">Comentários</label>
-                        <input type="text" class="form-control" name="comentario"
-                            id="comentario" placeholder="Comentário" value="{{$av->comentario}}" disabled>
-                    </div>
-                </div>
-                <div class="col-4" >
-                    <div class="form-group">
-                        <label for="valorExtraReais" class="control-label">Você vai precisar de valor extra em reais?</label>
-                        <input type="number" class="form-control" name="valorExtraReais" onblur="calcular()"
-                            id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="valorExtraDolar" class="control-label">Você vai precisar de valor extra em dólar?</label>
-                        <input type="number" class="form-control" name="valorExtraDolar" onblur="calcular()"
-                            id="valorExtraDolar" placeholder="Valor Extra em dólar" value="{{$av->valorExtraDolar}}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="justificativaValorExtra" class="control-label">Justificativa para o valor extra</label>
-                        <input type="text" class="form-control" name="justificativaValorExtra"
-                            id="justificativaValorExtra" placeholder="Justificativa" value="{{$av->justificativaValorExtra}}">
-                    </div>
-                    <a href="#" class="btn btn-active btn-warning btn-sm">Calcular</a>
-                    <br><br>
-                    <div>
-                        <input type="submit" class="btn btn-active btn-primary btn-lg" value="Salvar e enviar para o Gestor">
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-start" style="padding-left: 5%">
-
-                <div class="col-11" >
-                    <div class="stats shadow" >
-        
-                        <div class="stat" >
-                        <div class="stat-title">Diárias de alimentação em reais: </div>
-                        <div class="stat-value text-secondary" id="valorReais" data-value="{{$av->valorReais}}">R$ {{$av->valorReais}}</div>
-                        </div>
-                
-                        <div class="stat">
-                        <div class="stat-figure text-secondary">
-                            <div class="avatar">
-                              <div class="w-16 rounded-full">
-                                <img src="/img/real.png">
-                              </div>
-                            </div>
-                        </div>
-                        <div class="stat-title">Total com valor extra em reais:</div>
-                        
-                        <div class="stat-value text-primary" id="result1"> R$ </div>
-                        </div>
-                        
-                    </div>
-                    <div class="stats shadow" >
-        
-                        <div class="stat">
-                            <div class="stat-title">Diárias de alimentação em dólar:</div>
-                            <div class="stat-value text-secondary" id="valorDolar" data-value="{{$av->valorDolar}}">$ {{$av->valorDolar}}</div>
-                        </div>
-                        
-                        <div class="stat">
-                        <div class="stat-figure text-secondary">
-                            <div class="avatar">
-                              <div class="w-16 rounded-full">
-                                <img src="/img/dolar.png">
-                              </div>
-                            </div>
-                        </div>
-                        <div class="stat-title">Total com valor extra em dólar:</div>
-                        
-                        <div class="stat-value text-primary" id="result2"> $ </div>
-                        </div>
-                        
-                    </div>
-
-                    
-                </div>
-            </div>
-        </form>
-
-    </div>
     
 @endsection
 
@@ -411,18 +413,25 @@
             var valor2 = parseFloat(document.getElementById("valorDolar").getAttribute('data-value'));
             var valor3 = parseFloat(document.getElementById('valorExtraReais').value);
             var valor4 = parseFloat(document.getElementById('valorExtraDolar').value);
+            var valor5 = parseFloat(document.getElementById('valorDeducaoReais').value);
+            var valor6 = parseFloat(document.getElementById('valorDeducaoDolar').value);
            
-            if(document.getElementById('valorExtraReais').value != ""){
-                var somaReais = valor1 + valor3;
-            } else{
-                var somaReais = 0;
+            if(document.getElementById('valorExtraReais').value == ""){
+                valor3 = 0;
+            }
+            if(document.getElementById('valorExtraDolar').value == ""){
+                valor4 = 0;
+            }
+            if(document.getElementById('valorDeducaoReais').value == ""){
+                valor5 = 0;
+            }
+            if(document.getElementById('valorDeducaoDolar').value == ""){
+                valor6 = 0;
             }
             
-            if(document.getElementById('valorExtraDolar').value != ""){
-                var somaDolar = valor2 + valor4;
-            } else{
-                var somaDolar = 0;
-            }
+            var somaReais = valor1 + valor3 - valor5;
+
+            var somaDolar = valor2 + valor4 - valor6;
 
             document.getElementById('result1').innerHTML = "R$ " + somaReais;
             document.getElementById('result2').innerHTML = "$ " + somaDolar;

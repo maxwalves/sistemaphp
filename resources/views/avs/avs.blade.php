@@ -92,7 +92,8 @@
                                 style="width: 110px"> Mudar data</a>
                         @endif
 
-                        @if($av->isEnviadoUsuario == 1 && $av->isAcertoContasRealizado == 0 && $av->isPrestacaoContasRealizada == 0 && $av->isCancelado == 0)
+                        @if($av->isEnviadoUsuario == 1 && $av->isAcertoContasRealizado == 0 && $av->isPrestacaoContasRealizada == 0 && $av->isCancelado == 0 
+                        && $av->status != "AV Internacional cadastrada no sistema")
 
                             <a href="/avs/cancelarAv/{{ $av->id }}" class="btn btn-active btn-error btn-sm"
                                 style="width: 110px"> Cancelar AV</a>

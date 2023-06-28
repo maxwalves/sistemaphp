@@ -35,6 +35,7 @@ class ControladorVeiculoParanacidade extends Controller
             'marca' => 'required',
             'modelo' => 'required',
             'placa' => 'required',
+            'codigoRegional' => 'required',
         ];
         $mensagens = [
             'required' => 'Este campo não pode estar em branco',
@@ -47,6 +48,7 @@ class ControladorVeiculoParanacidade extends Controller
         $veiculosParanacidade->modelo = $request->modelo;
         $veiculosParanacidade->placa = $request->placa;
         $veiculosParanacidade->isAtivo = $request->isAtivo;
+        $veiculosParanacidade->codigoRegional = $request->codigoRegional;
         $veiculosParanacidade->observacao = $request->observacao;
     
         $veiculosParanacidade->save();
