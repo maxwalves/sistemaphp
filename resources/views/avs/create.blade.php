@@ -141,22 +141,6 @@
             <br>
             <br>
     
-            <div class="form-group col-md-6 offset-md-3">
-                <label for="isDiaria" class="control-label" required>Vai precisar de diária de alimentação? (selecione)</label>
-                <br>
-                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('isDiaria') ? 'is-invalid' :''}}" 
-                        id="isDiaria" name="isDiaria">
-                        <option value="" name=""> Selecione</option>
-                        <option value="Sim" name="Alta"> Sim</option>
-                        <option value="Não" name="Média"> Não</option>
-                    </select>
-
-                    @if ($errors->has('isDiaria'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('isDiaria') }}
-                    </div>
-                    @endif
-            </div>
             <div class="mb-3 col-md-6 offset-md-3">
                 <label for="banco" class="form-label">Banco</label>
                 <div class="input-group mb-3">   

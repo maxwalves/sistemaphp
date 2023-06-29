@@ -328,6 +328,7 @@ class ControladorAv extends Controller
         $usersFiltrados = [];
         $possoEditar = false;
         $veiculosProprios = $user->veiculosProprios;
+        $veiculosParanacidade = VeiculoParanacidade::all();
         $anexosFinanceiro = [];
         $anexosRotas = [];
         $comprovantesAll = ComprovanteDespesa::all();
@@ -387,7 +388,7 @@ class ControladorAv extends Controller
             return view('avs.fazerPrestacaoContas', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes,
-            'medicoesFiltradas' => $medicoesFiltradas]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'veiculosParanacidade' => $veiculosParanacidade]);
         }
         else{
             return redirect('avs/autFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -1505,6 +1506,16 @@ class ControladorAv extends Controller
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
 
+        $regras = [
+            'comentario' => 'required'
+        ];
+
+        $mensagens = [
+            'required' => 'Este campo não pode estar em branco',
+        ];
+
+        $request->validate($regras, $mensagens);
+
         $dados = array(
             "isEnviadoUsuario" => 0,
             "isAprovadoGestor" => 0,
@@ -1513,7 +1524,7 @@ class ControladorAv extends Controller
             "isVistoDiretoria" =>0,
             "isAprovadoCarroDiretoriaExecutiva" =>0,
             "isAprovadoViagemInternacional" =>0,
-            "status" => "Aguardando envio para o Gestor"
+            "status" => "Aguardando envio para o Gestor - Reprovado Gestor"
         );
 
         Av::findOrFail($av->id)->update($dados);
@@ -1640,6 +1651,16 @@ class ControladorAv extends Controller
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
 
+        $regras = [
+            'comentario' => 'required'
+        ];
+
+        $mensagens = [
+            'required' => 'Este campo não pode estar em branco',
+        ];
+
+        $request->validate($regras, $mensagens);
+
         $dados = array(
             "isEnviadoUsuario" => 0,
             "isAprovadoGestor" => 0,
@@ -1648,7 +1669,7 @@ class ControladorAv extends Controller
             "isVistoDiretoria" =>0,
             "isAprovadoCarroDiretoriaExecutiva" =>0,
             "isAprovadoViagemInternacional" =>0,
-            "status" => "Aguardando envio para o Gestor"
+            "status" => "Aguardando envio para o Gestor - Reprovado CAD"
         );
 
         Av::findOrFail($av->id)->update($dados);
@@ -1770,6 +1791,19 @@ class ControladorAv extends Controller
         $comprovantesFiltrados = [];
         $somaDespesasReal = 0;
         $somaDespesasDolar = 0;
+
+        $regras = [
+            'contatos' => 'required',
+            'atividades' => 'required',
+            'conclusoes' => 'required',
+        ];
+
+        $mensagens = [
+            'required' => 'Este campo não pode estar em branco',
+        ];
+
+        $request->validate($regras, $mensagens);
+
         foreach($comprovantes as $c){
             if($c->av_id == $av->id){
                 array_push($comprovantesFiltrados, $c);
@@ -1839,6 +1873,16 @@ class ControladorAv extends Controller
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
 
+        $regras = [
+            'comentario' => 'required'
+        ];
+
+        $mensagens = [
+            'required' => 'Este campo não pode estar em branco',
+        ];
+
+        $request->validate($regras, $mensagens);
+
         $dados = array(
             "isEnviadoUsuario" => 0,
             "isAprovadoGestor" => 0,
@@ -1847,7 +1891,7 @@ class ControladorAv extends Controller
             "isVistoDiretoria" =>0,
             "isAprovadoCarroDiretoriaExecutiva" =>0,
             "isAprovadoViagemInternacional" =>0,
-            "status" => "Aguardando envio para o Gestor"
+            "status" => "Aguardando envio para o Gestor - Reprovado CFI"
         );
 
         Av::findOrFail($av->id)->update($dados);
@@ -2073,6 +2117,16 @@ class ControladorAv extends Controller
         $historico->usuario_id = $av->user_id;
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
+
+        $regras = [
+            'comentario' => 'required'
+        ];
+
+        $mensagens = [
+            'required' => 'Este campo não pode estar em branco',
+        ];
+
+        $request->validate($regras, $mensagens);
         
         $dados = array(
             "isAcertoContasRealizado" => 0,
@@ -2114,6 +2168,16 @@ class ControladorAv extends Controller
         $historico->usuario_id = $av->user_id;
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
+
+        $regras = [
+            'comentario' => 'required'
+        ];
+
+        $mensagens = [
+            'required' => 'Este campo não pode estar em branco',
+        ];
+
+        $request->validate($regras, $mensagens);
 
         $dados = array(
             "isPrestacaoContasRealizada" => 0,
@@ -2197,6 +2261,16 @@ class ControladorAv extends Controller
         $historico->usuario_id = $av->user_id;
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
+
+        $regras = [
+            'comentario' => 'required'
+        ];
+
+        $mensagens = [
+            'required' => 'Este campo não pode estar em branco',
+        ];
+
+        $request->validate($regras, $mensagens);
 
         $dados = array(
             "isPrestacaoContasRealizada" => 0,
@@ -2406,7 +2480,6 @@ class ControladorAv extends Controller
     {
         $regras = [
             'objetivo_id' => 'required',
-            'isDiaria' => 'required',
             'banco' => 'required',
             'agencia' => 'required',
             'conta' => 'required'
@@ -2432,7 +2505,7 @@ class ControladorAv extends Controller
 
         $request->validate($regras, $mensagens);
         
-        $av->isDiaria = $request->isDiaria == "Sim" ? true : false;
+        $av->isDiaria = true;
         
         $timezone = new DateTimeZone('America/Sao_Paulo');
         $av->dataCriacao = new DateTime('now', $timezone);
@@ -3752,8 +3825,7 @@ class ControladorAv extends Controller
 
         $regras = [
             'objetivo_id' => 'required',
-            'outroObjetivo' => 'required',
-            'isDiaria' => 'required'
+            'outroObjetivo' => 'required'
         ];
 
         if($request->get('isVeiculoProprio')=="1"){ // Se for veículo próprio, adiciona validação de campo

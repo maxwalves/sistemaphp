@@ -513,7 +513,31 @@ class ControladorRota extends Controller
         Rota::findOrFail($request->id)->update($dados);
 
         if($request->isPc=="sim"){
-            return redirect('/rotaspc/rotas/' . $request->idav )->with('msg', 'Rota editada com sucesso!');
+            //return redirect('/rotaspc/rotas/' . $request->idav )->with('msg', 'Rota editada com sucesso!');
+            $avId = $request->idav;
+            $isPc = true;
+
+            // Construir o HTML do formulário oculto
+            $formHtml = '
+                <form id="redirectForm" action="/avspc/concluir/' . $request->idav . '" method="POST">
+                    <input type="hidden" name="avId" value="' . $avId . '">
+                    <input type="hidden" name="isPc" value="sim">
+                    ' . csrf_field() . '
+                    <input type="hidden" name="_method" value="PUT">
+                </form>
+            ';
+
+            // Construir o JavaScript para fazer o submit automático do formulário
+            $scriptHtml = '
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        document.getElementById("redirectForm").submit();
+                    });
+                </script>
+            ';
+
+            // Retornar o HTML completo
+            return $formHtml . $scriptHtml;
         }
         else{
             return redirect('/rotas/rotas/' . $request->idav )->with('msg', 'Rota editada com sucesso!');

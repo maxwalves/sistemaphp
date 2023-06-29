@@ -111,6 +111,9 @@
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
                     </ion-icon> <strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}} x R$ 0.49 = R$ ({{$av->qtdKmVeiculoProprio * 0.49}})
                 @endif
+                @if ($errors->has('comentario'))
+                    <p style="color: red"> <strong>É necessário realizar um comentário no caso de reprovação de Prestação de Contas!</strong></p>
+                @endif
             </div>
         </div>
     </div>
@@ -164,10 +167,12 @@
                                 <div class="stat-title">Resultado em Reais</div>
                                 <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais + $valorRecebido->valorExtraReais - $av->valorDeducaoReais}}</div>
                             </div>
-                            <div class="stat">
-                                <div class="stat-title">Resultado em Dólar</div>
-                                <div class="stat-value text-primary">R$ {{$valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar}}</div>
-                            </div>
+                            @if(($valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar) > 0)
+                                <div class="stat">
+                                    <div class="stat-title">Resultado em Dólar</div>
+                                    <div class="stat-value text-primary">R$ {{$valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar}}</div>
+                                </div>
+                            @endif
                         </div>
                         <br><br>
                         <p><strong> <span style="color: green">B:</span> Informado na prestação de contas</strong></p>
@@ -211,10 +216,12 @@
                                 <div class="stat-title">Resultado em Reais</div>
                                 <div class="stat-value text-primary">R$ {{$av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais}}</div>
                             </div>
-                            <div class="stat">
-                                <div class="stat-title">Resultado em Dólar</div>
-                                <div class="stat-value text-primary">R$ {{$av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</div>
-                            </div>
+                            @if(($av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar) > 0)
+                                <div class="stat">
+                                    <div class="stat-title">Resultado em Dólar</div>
+                                    <div class="stat-value text-primary">R$ {{$av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</div>
+                                </div>
+                            @endif
                         </div>
                         <br><br>
                         <p><strong> <span style="color: red">A</span> - <span style="color: green">B</span>: Acerto de contas:</strong></p>
@@ -236,14 +243,18 @@
                                   <div class="stat-value text-gray-950">R$ {{$valorRecebido->valorExtraReais-$valorAcertoContasReal}}</div>
                             </div>
                               
-                            <div class="stat">
-                                <div class="stat-title" style="color: black">Valor em dólar</div>
-                                <div class="stat-value text-gray-950">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
-                            </div>
-                            <div class="stat">
-                                  <div class="stat-title" style="color: black">Valor extra em dólar</div>
-                                  <div class="stat-value text-gray-950">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
-                            </div>
+                            @if(($valorRecebido->valorDolar-$av->valorDolar)>0)
+                                <div class="stat">
+                                    <div class="stat-title" style="color: black">Valor em dólar</div>
+                                    <div class="stat-value text-gray-950">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
+                                </div>
+                            @endif
+                            @if(($valorRecebido->valorExtraDolar-$valorAcertoContasDolar)>0)
+                                <div class="stat">
+                                    <div class="stat-title" style="color: black">Valor extra em dólar</div>
+                                    <div class="stat-value text-gray-950">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -879,31 +890,36 @@
             <div class="modal-content">
                 <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                 <br>
-                <h1 style="font-size: 24px; padding-left: 10px"><strong>Enviar AV: </strong></h1>
+                <h1 style="font-size: 24px; padding-left: 10px"><strong>Finalizar Acerto de Contas: </strong></h1>
                 <div class="flex flex-row" style="padding-left: 10px">
                     <form action="/avs/financeiroRealizaAcertoContas" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                             <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                            <label for="comentario">Enviar AV para apreciação do usuário: </label>
+                            <label for="comentario">Enviar para validação do usuário: </label>
                             <br>
                             <textarea type="text" class="textarea textarea-bordered h-24" 
                                 name="comentario" style="width: 200px"
                                 id="comentario" placeholder="Comentário"></textarea>
         
-                            <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
+                            <button type="submit" class="btn btn-active btn-success">Enviar</button>
                     </form>
         
                     <form action="/avs/financeiroReprovaPrestacaoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
                         @csrf
                         @method('PUT')
                             <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                            <label for="comentario">Voltar AV para a prestação de contas do usuário: </label>
+                            <label for="comentario">Voltar para a prestação de contas do usuário: </label>
                             <br>
-                            <textarea type="text" class="textarea textarea-bordered h-24" 
+                            <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
                                 name="comentario" style="width: 200px"
                                 id="comentario" placeholder="Comentário"></textarea>
                             <button type="submit" class="btn btn-active btn-error">Reprovar AV</button>
+                            @if ($errors->has('comentario'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('comentario') }}
+                                    </div>
+                            @endif
                     </form>
                     
                 </div>

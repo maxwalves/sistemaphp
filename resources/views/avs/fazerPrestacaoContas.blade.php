@@ -192,20 +192,39 @@
                             @endforeach
                             
                             <div class="form-group">
-                                <label for="contatos" class="control-label">Contatos:</label><br>
+                                <label for="contatos" class="control-label {{ $errors->has('contatos') ? 'is-invalid' :''}}">* Contatos:</label><br>
                                 <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos"
-                                id="contatos" placeholder="Contatos" style="width: 400px; height: 100px"></textarea>
+                                id="contatos" placeholder="Contatos" style="width: 400px; height: 100px">{{$av->contatos}}</textarea>
+
+                                @if ($errors->has('contatos'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('contatos') }}
+                                    </div>
+                                @endif
                             </div>
                             <div class="form-group">
-                                <label for="atividades" class="control-label">Atividades:</label><br>
+                                <label for="atividades" class="control-label {{ $errors->has('atividades') ? 'is-invalid' :''}}">* Atividades:</label><br>
                                 <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades"
-                                id="atividades" placeholder="Atividades" style="width: 400px; height: 100px"></textarea>
+                                id="atividades" placeholder="Atividades" style="width: 400px; height: 100px">{{$av->atividades}}</textarea>
+
+                                @if ($errors->has('atividades'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('atividades') }}
+                                    </div>
+                                @endif
                             </div>
                             <div class="form-group">
-                                <label for="conclusoes" class="control-label">Conclusões:</label><br>
+                                <label for="conclusoes" class="control-label {{ $errors->has('conclusoes') ? 'is-invalid' :''}}">* Conclusões:</label><br>
                                 <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes"
-                                id="conclusoes" placeholder="Conclusões" style="width: 400px; height: 100px"></textarea>
+                                id="conclusoes" placeholder="Conclusões" style="width: 400px; height: 100px">{{$av->conclusoes}}</textarea>
+
+                                @if ($errors->has('conclusoes'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('conclusoes') }}
+                                    </div>
+                                @endif
                             </div>
+                            <p style="color: red">* Preenchimento obrigatório</p>
                         @endif
 
                         <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
@@ -751,6 +770,12 @@
                             <th>Data/Hora de chegada</th>
                             <th>Hotel?</th>
                             <th>Tipo de transporte</th>
+                            @foreach($av->rotas as $rota)
+                                @if($rota->isVeiculoEmpresa == 1)
+                                    <th>Veículo</th>
+                                    @break
+                                @endif
+                            @endforeach
                         </tr>
                     </thead>
                     <tbody>
@@ -813,6 +838,27 @@
                                 {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                                 {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                             </td>
+                            @php
+                            $achouVeiculo = false;
+                        @endphp
+                        @if($rota->isVeiculoEmpresa == 1)
+                            @foreach($veiculosParanacidade as $v)
+                                    @if($rota->veiculoParanacidade_id == $v->id)
+                                        @php
+                                            $achouVeiculo = true;
+                                        @endphp
+                                    @endif
+                            @endforeach
+                            @if($achouVeiculo == true)
+                                <td>
+                                    {{ $v->modelo }} ({{ $v->placa }})
+                                </td>
+                            @else
+                                <td>
+                                    A definir
+                                </td>
+                            @endif
+                        @endif
                         </tr>
                         @endforeach
                     </tbody>

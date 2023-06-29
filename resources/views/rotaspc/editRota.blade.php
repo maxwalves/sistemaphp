@@ -370,7 +370,7 @@
                     <div>
                         <div id="camposFinais" hidden="true">
                             <div class="form-group" >
-                                <label for="isReservaHotel" class="control-label">Você vai precisar de reserva de hotel?</label>
+                                <label for="isReservaHotel" class="control-label">Você precisou de reserva de hotel?</label>
                                 <br>
                                     <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('isReservaHotel') ? 'is-invalid' :''}}" 
                                         id="isReservaHotel" name="isReservaHotel" >

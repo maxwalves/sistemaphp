@@ -231,7 +231,7 @@
                         name="comentario" style="width: 200px"
                         id="comentario" placeholder="Comentário"></textarea>
 
-                    <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
+                    <button type="submit" class="btn btn-active btn-success">Aprovar PC</button>
             </form>
 
             <form action="/avs/gestorReprovaPrestacaoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
@@ -240,10 +240,15 @@
                     <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
                     <label for="comentario">Voltar AV para a prestação de contas do usuário: </label>
                     <br>
-                    <textarea type="text" class="textarea textarea-bordered h-24" 
+                    <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
                         name="comentario" style="width: 200px"
                         id="comentario" placeholder="Comentário"></textarea>
-                    <button type="submit" class="btn btn-active btn-error">Reprovar AV</button>
+                    <button type="submit" class="btn btn-active btn-error">Reprovar PC</button>
+                    @if ($errors->has('comentario'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('comentario') }}
+                            </div>
+                    @endif
             </form>
             
         </div>

@@ -87,10 +87,6 @@
                 <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-warning" value="Calcular diárias">
             </div>
         </form>
-        
-        <div class="col-12 col-xl-4">
-            <h2 style="font-size: 20px; color: red"> <strong> Após editar as rotas, pressione "Calcular Diárias"!</strong> </h2>
-        </div>
     </div>
     
     <br>

@@ -209,7 +209,7 @@
 
                         // Total over all pages
                         total = api
-                            .column(9)
+                            .column(8)
                             .data()
                             .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
@@ -217,7 +217,7 @@
 
                         // Total over this page
                         pageTotal = api
-                            .column(9, { page: 'current' })
+                            .column(8, { page: 'current' })
                             .data()
                             .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
@@ -244,7 +244,7 @@
 
                         // Total over all pages in dólar
                         totalDolar = api
-                        .column(10)
+                        .column(9)
                         .data()
                         .reduce(function (a, b) {
                             return numericVal(a) + numericVal(b);
@@ -252,7 +252,7 @@
 
                         // Total over this page in dólar
                         pageTotalDolar = api
-                        .column(10, { page: 'current' })
+                        .column(9, { page: 'current' })
                         .data()
                         .reduce(function (a, b) {
                             return numericVal(a) + numericVal(b);
@@ -321,7 +321,7 @@
             // Custom range filtering function
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
                 var data1 = dataInicialFiltro.val();
-                var dataViagem = data[7] || 0; // use data for the age column
+                var dataViagem = data[6] || 0; // use data for the age column
 
                 data1 = moment(data1).format('DD/MM/YYYY H:m');
 
@@ -346,7 +346,7 @@
             // Custom range filtering function
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
                 var data2 = dataFinalFiltro.val();
-                var dataViagem = data[7] || 0; // use data for the age column
+                var dataViagem = data[6] || 0; // use data for the age column
 
                 data2 = moment(data2).format('DD/MM/YYYY H:m');
 
@@ -371,7 +371,7 @@
             // Custom range filtering function
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
                 var data1 = dataInicialFiltro.val();
-                var dataViagem = data[8] || 0; // use data for the age column
+                var dataViagem = data[7] || 0; // use data for the age column
 
                 data1 = moment(data1).format('DD/MM/YYYY H:m');
 
@@ -396,7 +396,7 @@
             // Custom range filtering function
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
                 var data2 = dataFinalFiltro.val();
-                var dataViagem = data[8] || 0; // use data for the age column
+                var dataViagem = data[7] || 0; // use data for the age column
 
                 data2 = moment(data2).format('DD/MM/YYYY H:m');
 

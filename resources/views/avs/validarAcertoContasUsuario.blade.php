@@ -106,6 +106,9 @@
                             {{ $u->username }}
                         @endif
                 @endforeach
+                @if ($errors->has('comentario'))
+                    <p style="color: red"> <strong>É necessário realizar um comentário no caso de reprovação do Acerto de Contas!</strong></p>
+                @endif
                 </p>  
             </div>
         </div>
@@ -899,10 +902,15 @@
                             <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
                             <label for="comentario">Voltar AV para o Financeiro: </label>
                             <br>
-                            <textarea type="text" class="textarea textarea-bordered h-24" 
+                            <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
                                 name="comentario" style="width: 200px"
                                 id="comentario" placeholder="Comentário"></textarea>
-                            <button type="submit" class="btn btn-active btn-error">Reprovar PC</button>
+                            <button type="submit" class="btn btn-active btn-error">Reprovar</button>
+                            @if ($errors->has('comentario'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('comentario') }}
+                                    </div>
+                            @endif
                     </form>
                     
                 </div>

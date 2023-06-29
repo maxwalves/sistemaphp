@@ -112,7 +112,7 @@
 
     <div class="divider"></div> 
 
-    <div id="av-create-container" class="container">
+    <div>
             <div class="containerAcertoContas">
                 @if($av->isPrestacaoContasRealizada==1)
                 <div class="box box-40">
@@ -160,10 +160,12 @@
                                 <div class="stat-title">Resultado em Reais</div>
                                 <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais + $valorRecebido->valorExtraReais - $av->valorDeducaoReais}}</div>
                             </div>
-                            <div class="stat">
-                                <div class="stat-title">Resultado em Dólar</div>
-                                <div class="stat-value text-primary">R$ {{$valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar}}</div>
-                            </div>
+                            @if(($valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar) > 0)
+                                <div class="stat">
+                                    <div class="stat-title">Resultado em Dólar</div>
+                                    <div class="stat-value text-primary">R$ {{$valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar}}</div>
+                                </div>
+                            @endif
                         </div>
                         <br><br>
                         <p><strong> <span style="color: green">B:</span> Informado na prestação de contas</strong></p>
@@ -207,10 +209,12 @@
                                 <div class="stat-title">Resultado em Reais</div>
                                 <div class="stat-value text-primary">R$ {{$av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais}}</div>
                             </div>
-                            <div class="stat">
-                                <div class="stat-title">Resultado em Dólar</div>
-                                <div class="stat-value text-primary">R$ {{$av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</div>
-                            </div>
+                            @if(($av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar) > 0)
+                                <div class="stat">
+                                    <div class="stat-title">Resultado em Dólar</div>
+                                    <div class="stat-value text-primary">R$ {{$av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</div>
+                                </div>
+                            @endif
                         </div>
                         <br><br>
                         <p><strong> <span style="color: red">A</span> - <span style="color: green">B</span>: Acerto de contas:</strong></p>
@@ -232,14 +236,18 @@
                                   <div class="stat-value text-gray-950">R$ {{$valorRecebido->valorExtraReais-$valorAcertoContasReal}}</div>
                             </div>
                               
-                            <div class="stat">
-                                <div class="stat-title" style="color: black">Valor em dólar</div>
-                                <div class="stat-value text-gray-950">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
-                            </div>
-                            <div class="stat">
-                                  <div class="stat-title" style="color: black">Valor extra em dólar</div>
-                                  <div class="stat-value text-gray-950">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
-                            </div>
+                            @if(($valorRecebido->valorDolar-$av->valorDolar)>0)
+                                <div class="stat">
+                                    <div class="stat-title" style="color: black">Valor em dólar</div>
+                                    <div class="stat-value text-gray-950">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
+                                </div>
+                            @endif
+                            @if(($valorRecebido->valorExtraDolar-$valorAcertoContasDolar)>0)
+                                <div class="stat">
+                                    <div class="stat-title" style="color: black">Valor extra em dólar</div>
+                                    <div class="stat-value text-gray-950">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
