@@ -69,7 +69,9 @@ class Av extends Model
         'isDiaria',
         'valorDeducaoReais',
         'valorDeducaoDolar',
-        'justificativaCancelamento'
+        'justificativaCancelamento',
+        'odometroIda',
+        'odometroVolta'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio', 'deleted_at'];

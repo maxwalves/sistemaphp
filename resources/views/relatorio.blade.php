@@ -58,12 +58,12 @@
                         <p><strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
                         <p><strong>Dedução em reais:</strong> R$ {{ $av->valorDeducaoReais }}</p>
                         <p><strong>Valor TOTAL reais:</strong> R$ {{ $av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais }}</p>
-
+{{-- 
                         <p><strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
                         <p><strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
                         <p><strong>Dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
                         <p><strong>Valor TOTAL dólar:</strong> $ {{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</p>
-                        <p><strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
+                        <p><strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p> --}}
                         
                     </div>
                 </div>

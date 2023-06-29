@@ -182,10 +182,26 @@
 
                             @foreach($av->rotas as $r)
                                 @if($r->isVeiculoProprio == true)
+                                    <p style="color: red">DIGITAR APENAS NÚMEROS, SEM PONTOS.</p>
                                     <div class="form-group">
-                                        <label for="qtdKmVeiculoProprio" class="control-label">Quantidade de Km com Veículo Próprio:</label><br>
-                                        <input type="number" class="form-control" name="qtdKmVeiculoProprio"
-                                        id="qtdKmVeiculoProprio" placeholder="Qtd Km" style="width: 400px">
+                                        <label for="odometroIda" class="control-label {{ $errors->has('odometroIda') ? 'is-invalid' :''}}">Odômetro ida:</label><br>
+                                        <input type="number" class="form-control" name="odometroIda"
+                                        id="odometroIda" placeholder="Odômetro ida" style="width: 400px">
+                                        @if ($errors->has('odometroIda'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('odometroIda') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="odometroVolta" class="control-label {{ $errors->has('odometroVolta') ? 'is-invalid' :''}}">Odômetro volta:</label><br>
+                                        <input type="number" class="form-control" name="odometroVolta"
+                                        id="odometroVolta" placeholder="Odômetro volta" style="width: 400px">
+                                        @if ($errors->has('odometroVolta'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('odometroVolta') }}
+                                            </div>
+                                        @endif
                                     </div>
                                     @break
                                 @endif
@@ -380,7 +396,7 @@
                 <br>
                 <div style="padding-left: 10px">
                     <div class="badge badge-warning gap-2">PC = Prestação de Contas</div>
-                    <div class="badge badge-error gap-2">Se carro particular ou viagem internacional</div>
+                    <div class="badge badge-error gap-2">Se carro particular</div>
                 </div>
                 <br>
                 <div style="padding-left: 10px">
@@ -427,7 +443,7 @@
                                 </span>
                             @endif
                             <span>
-                                <h3 class="font-medium leading-tight">Diretoria Executiva:</h3>
+                                <h3 class="font-medium leading-tight">DAF:</h3>
                                 <div class="badge badge-error gap-2">Avalia pedido</div>
                             </span>
                         </li>

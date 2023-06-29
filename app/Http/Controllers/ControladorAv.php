@@ -1377,7 +1377,7 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($request->get('id'));
         $userAv = User::findOrFail($av->user_id);
 
-        $isDiretoria = false;
+        $isVeiculoProprio = false;
         $isInternacional = false;
         $dados = [];
 
@@ -1392,8 +1392,8 @@ class ControladorAv extends Controller
         $historico->av_id = $av->id;
 
         foreach($av->rotas as $rota){
-            if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){
-                $isDiretoria = true;
+            if($rota["isVeiculoProprio"]==1){
+                $isVeiculoProprio = true;
             }
             if($rota["isViagemInternacional"]==1){
                 $isInternacional = true;
@@ -1404,6 +1404,12 @@ class ControladorAv extends Controller
             $dados = array(
                 "isAprovadoGestor" => 1,
                 "status" => "AV Internacional cadastrada no sistema"
+            );
+        }
+        else if($isVeiculoProprio == true){
+            $dados = array(
+                "isAprovadoGestor" => 1,
+                "status" => "Aguardando aprovação da DAF"
             );
         }
         else{
@@ -1802,8 +1808,6 @@ class ControladorAv extends Controller
             'required' => 'Este campo não pode estar em branco',
         ];
 
-        $request->validate($regras, $mensagens);
-
         foreach($comprovantes as $c){
             if($c->av_id == $av->id){
                 array_push($comprovantesFiltrados, $c);
@@ -1835,8 +1839,15 @@ class ControladorAv extends Controller
             );
         }
         if($av->isAprovadoCarroDiretoriaExecutiva == true){
-            $dados += ['qtdKmVeiculoProprio' => $request->get('qtdKmVeiculoProprio'),];
+            $dados += ['odometroIda' => $request->get('odometroIda')];
+            $dados += ['odometroVolta' => $request->get('odometroVolta')];
+            $dados += ['qtdKmVeiculoProprio' => $request->get('odometroVolta') - $request->get('odometroIda')];
+
+            $regras += ['odometroIda' => 'required'];
+            $regras += ['odometroVolta' => 'required'];
         }
+
+        $request->validate($regras, $mensagens);
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
@@ -2302,9 +2313,9 @@ class ControladorAv extends Controller
         $timezone = new DateTimeZone('America/Sao_Paulo');
 
         $historico->dataOcorrencia = new DateTime('now', $timezone);
-        $historico->tipoOcorrencia = "Aprovado pela Diretoria";
+        $historico->tipoOcorrencia = "Aprovado pela DAF";
         $historico->comentario = $request->get('comentario');
-        $historico->perfilDonoComentario = "Diretoria Executiva";
+        $historico->perfilDonoComentario = "DAF";
         $historico->usuario_id = $av->user_id;
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
@@ -2377,7 +2388,7 @@ class ControladorAv extends Controller
         $historico->dataOcorrencia = new DateTime('now', $timezone);
         $historico->tipoOcorrencia = "Reprovado pela Diretoria";
         $historico->comentario = $request->get('comentario');
-        $historico->perfilDonoComentario = "Diretoria Executiva";
+        $historico->perfilDonoComentario = "DAF";
         $historico->usuario_id = $av->user_id;
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;

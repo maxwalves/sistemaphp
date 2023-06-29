@@ -146,7 +146,7 @@
                                 @endcan
                                 @can('aprov-avs-diretoria', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" href="/avs/autDiretoria">Autorizações de AV pendentes Diretoria</a>
+                                        <a class="btn btn-active btn-accent rounded-none" href="/avs/autDiretoria">Autorizações de AV pendentes DAF</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-secretaria', $user)

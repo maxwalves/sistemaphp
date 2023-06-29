@@ -324,7 +324,7 @@
                 var dataViagem = data[6] || 0; // use data for the age column
 
                 data1 = moment(data1).format('DD/MM/YYYY H:m');
-
+                
                 if (isDataMaior(dataViagem, data1) || isDataIgual(dataViagem, data1) || data1 == "Invalid date"){
                     return true;
                 }
@@ -342,14 +342,15 @@
 
         $(document).ready(function () {
             var dataFinalFiltro = $('#dataFinalFiltro1');
-        
+            
             // Custom range filtering function
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                
                 var data2 = dataFinalFiltro.val();
                 var dataViagem = data[6] || 0; // use data for the age column
 
                 data2 = moment(data2).format('DD/MM/YYYY H:m');
-
+                
                 if (isDataMaior(data2, dataViagem) || isDataIgual(data2, dataViagem)  || data2 == "Invalid date"){
                     return true;
                 }

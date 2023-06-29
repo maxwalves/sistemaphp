@@ -64,7 +64,7 @@
                     <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarFrota" class="btn btn-active btn-primary" id="btAdmFrotaPossui">Adm Frota</a>
                 @endif
                 @if ($dados["permission7"] == 'true')
-                    <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarDiretoriaExecutiva" class="btn btn-active btn-primary" id="btDiretoriaExecutivaPossui">Diretoria Executiva</a>
+                    <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarDiretoriaExecutiva" class="btn btn-active btn-primary" id="btDiretoriaExecutivaPossui">DAF</a>
                 @endif
                 
             </div>
@@ -88,7 +88,7 @@
                     <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarFrota" class="btn btn-active btn-secondary" id="btAdmFrotaDisponivel">Adm Frota</a>
                 @endif
                 @if ($dados["permission7"] == 'false')
-                <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarDiretoriaExecutiva" class="btn btn-active btn-secondary" id="btDiretoriaExecutivaDisponivel">Diretoria Executiva</a>
+                <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarDiretoriaExecutiva" class="btn btn-active btn-secondary" id="btDiretoriaExecutivaDisponivel">DAF</a>
                 @endif
                 
             </div>

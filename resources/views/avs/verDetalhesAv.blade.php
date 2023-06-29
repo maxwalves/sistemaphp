@@ -218,7 +218,7 @@
                         </div>
                         <br><br>
                         <p><strong> <span style="color: red">A</span> - <span style="color: green">B</span>: Acerto de contas:</strong></p>
-                        <div class="stats shadow bg-green-500">
+                        <div class="stats shadow">
                             @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                                 <div class="stat">
                                     <div class="stat-title" style="color: black">Valor em Reais</div>
@@ -288,23 +288,29 @@
                                                 @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )<0)
                                                     Valor que o usuário deve receber em reais
                                                 @endif
+                                                @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )>0)
+                                                    Valor que o usuário deve pagar em reais
+                                                @endif
                                             @else
                                                 @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
                                                     Valor que o usuário deve receber em reais
                                                 @endif
-                                            @endif
-                                            
-                                            @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
-                                                Valor que o usuário deve pagar em reais
+                                                @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
+                                                    Valor que o usuário deve pagar em reais
+                                                @endif
                                             @endif
                                         </p>
                                     </div>
     
-    
                                     @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                                         @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) <0))
                                             <div class="stat-value text-green-500">
-                                                    R$ {{($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) * (-1)}}
+                                                    R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
+                                            </div>
+                                        @endif
+                                        @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) >0))
+                                            <div class="stat-value text-error">
+                                                    R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
                                             </div>
                                         @endif
                                     @else
@@ -313,13 +319,11 @@
                                                     R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal)) * (-1)}}
                                             </div>
                                         @endif
-                                    @endif
-                                    
-    
-                                    @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
-                                        <div class="stat-value text-error">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))}}
-                                        </div>
+                                        @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
+                                            <div class="stat-value text-error">
+                                                    R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))}}
+                                            </div>
+                                        @endif
                                     @endif
                                     
                                 </div>
@@ -541,7 +545,7 @@
                 <br>
                 <div style="padding-left: 10px">
                     <div class="badge badge-warning gap-2">PC = Prestação de Contas</div>
-                    <div class="badge badge-error gap-2">Se carro particular ou viagem internacional</div>
+                    <div class="badge badge-error gap-2">Se carro particular</div>
                 </div>
                 <br>
                 <div style="padding-left: 10px">
@@ -588,7 +592,7 @@
                                 </span>
                             @endif
                             <span>
-                                <h3 class="font-medium leading-tight">Diretoria Executiva:</h3>
+                                <h3 class="font-medium leading-tight">DAF:</h3>
                                 <div class="badge badge-error gap-2">Avalia pedido</div>
                             </span>
                         </li>

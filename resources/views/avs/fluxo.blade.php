@@ -63,7 +63,7 @@
         <br>
         <div>
             <div class="badge badge-warning gap-2">PC = Prestação de Contas</div>
-            <div class="badge badge-error gap-2">Apenas se envolver carro particular ou viagem internacional</div>
+            <div class="badge badge-error gap-2">Apenas se envolver carro particular</div>
         </div>
         
         <div class="divider"></div> 
@@ -94,7 +94,7 @@
                         3
                     </span>
                     <span>
-                        <h3 class="font-medium leading-tight">Diretoria Executiva:</h3>
+                        <h3 class="font-medium leading-tight">DAF:</h3>
                         <div class="badge badge-error gap-2">Avalia pedido</div>
                     </span>
                 </li>
