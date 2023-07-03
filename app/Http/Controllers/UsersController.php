@@ -26,7 +26,7 @@ class UsersController extends Controller
     {
         $user = auth()->user();
         $users = User::all();
-        return view('users.users', ['users' => $users, 'user'=> $user]);
+        return redirect('https://sistemas.paranacidade.org.br/dss/');
     }
 
     public function index()
