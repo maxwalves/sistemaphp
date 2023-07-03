@@ -55,14 +55,14 @@
                     <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarGestor" class="btn btn-active btn-primary" id="btGestorPossui">Gestor</a> 
                 @endif
                 @if ($dados["permission4"] == 'true')
-                    <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarSecretaria" class="btn btn-active btn-primary" id="btSecretariaPossui">Secretaria</a> 
+                    <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarSecretaria" class="btn btn-active btn-primary" id="btSecretariaPossui">CAD</a> 
                 @endif
                 @if ($dados["permission5"] == 'true')
-                    <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarFinanceiro" class="btn btn-active btn-primary" id="btAdmFinanceiroPossui">Adm Financeiro</a>
+                    <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarFinanceiro" class="btn btn-active btn-primary" id="btAdmFinanceiroPossui">CFI</a>
                 @endif
-                @if ($dados["permission6"] == 'true')
+                {{-- @if ($dados["permission6"] == 'true')
                     <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarFrota" class="btn btn-active btn-primary" id="btAdmFrotaPossui">Adm Frota</a>
-                @endif
+                @endif --}}
                 @if ($dados["permission7"] == 'true')
                     <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarDiretoriaExecutiva" class="btn btn-active btn-primary" id="btDiretoriaExecutivaPossui">DAF</a>
                 @endif
@@ -79,14 +79,14 @@
                     <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarGestor" class="btn btn-active btn-secondary" id="btGestorDisponivel">Gestor</a>
                 @endif
                 @if ($dados["permission4"] == 'false')
-                    <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarSecretaria" class="btn btn-active btn-secondary" id="btSecretariaDisponivel">Secretaria</a>
+                    <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarSecretaria" class="btn btn-active btn-secondary" id="btSecretariaDisponivel">CAD</a>
                 @endif
                 @if ($dados["permission5"] == 'false')
-                    <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarFinanceiro" class="btn btn-active btn-secondary" id="btAdmFinanceiroDisponivel">Adm Financeiro</a>
+                    <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarFinanceiro" class="btn btn-active btn-secondary" id="btAdmFinanceiroDisponivel">CFI</a>
                 @endif
-                @if ($dados["permission6"] == 'false')
+                {{-- @if ($dados["permission6"] == 'false')
                     <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarFrota" class="btn btn-active btn-secondary" id="btAdmFrotaDisponivel">Adm Frota</a>
-                @endif
+                @endif --}}
                 @if ($dados["permission7"] == 'false')
                 <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarDiretoriaExecutiva" class="btn btn-active btn-secondary" id="btDiretoriaExecutivaDisponivel">DAF</a>
                 @endif
