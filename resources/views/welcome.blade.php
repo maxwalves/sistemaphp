@@ -118,7 +118,7 @@
                         <div class= "card" >
                             <div class="card-body">
                                 <h5 class="card-title"> Parana Urbano III </h5>
-                                <a href="/avs/verDetalhesAv/" class="btn btn-secondary bg-orange-600">Acessar</a>
+                                <a href="/avs/avs/" class="btn btn-secondary bg-orange-600">Acessar</a>
                             </div> 
                         </div>
                     </div>

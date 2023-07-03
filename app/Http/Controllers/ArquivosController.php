@@ -12,13 +12,15 @@ class ArquivosController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $search = null;
 
-        return view('wiki.welcome', ['search' => $search]);
+        return view('wiki.welcome', ['search' => $search, 'user' => $user]);
     }
 
     public function pesquisar(Request $request)
     {
+        $user = auth()->user();
         // Obtenha os dados de pesquisa do $request
         $pesquisa = $request->input('pesquisa');
 
@@ -31,10 +33,11 @@ class ArquivosController extends Controller
 
         //dd($resultados);
         // Retorne a visualização com os resultados da pesquisa
-        return view('wiki.welcome', compact('resultados', 'resultados2'));
+        return view('wiki.welcome', compact('resultados', 'resultados2', 'user'));
     }
     public function pesquisarAdmin(Request $request)
     {
+        $user = auth()->user();
         // Obtenha os dados de pesquisa do $request
         $pesquisa = $request->input('pesquisa');
 
@@ -46,16 +49,18 @@ class ArquivosController extends Controller
         ->get();
 
         // Retorne a visualização com os resultados da pesquisa
-        return view('wiki.admin', compact('resultados', 'resultados2'));
+        return view('wiki.admin', compact('resultados', 'resultados2', 'user'));
     }
 
     public function acessarNormas(){
 
+        $user = auth()->user();
         $resultados = Arquivo::where('tipo', 'Norma')->get();
-        return view('wiki.normas', compact('resultados'));
+        return view('wiki.normas', compact('resultados', 'user'));
     }
     public function pesquisarNormas(Request $request)
     {
+        $user = auth()->user();
         // Obtenha os dados de pesquisa do $request
         $pesquisa = $request->input('pesquisa');
 
@@ -68,17 +73,19 @@ class ArquivosController extends Controller
         ->get();
 
         // Retorne a visualização com os resultados da pesquisa
-        return view('wiki.normas', compact('resultados', 'resultados2'));
+        return view('wiki.normas', compact('resultados', 'resultados2', 'user'));
     }
 
     public function acessarInstrucoesNormativas(){
 
+        $user = auth()->user();
         $resultados = Arquivo::where('tipo', 'Instrução Normativa')->get();
-        return view('wiki.instrucoesNormativas', compact('resultados'));
+        return view('wiki.instrucoesNormativas', compact('resultados', 'user'));
     }
 
     public function pesquisarInstrucoesNormativas(Request $request)
     {
+        $user = auth()->user();
         // Obtenha os dados de pesquisa do $request
         $pesquisa = $request->input('pesquisa');
 
@@ -91,17 +98,19 @@ class ArquivosController extends Controller
         ->get();
 
         // Retorne a visualização com os resultados da pesquisa
-        return view('wiki.instrucoesNormativas', compact('resultados', 'resultados2'));
+        return view('wiki.instrucoesNormativas', compact('resultados', 'resultados2', 'user'));
     }
 
     public function acessarLegislacao(){
 
+        $user = auth()->user();
         $resultados = Arquivo::where('tipo', 'Legislação')->get();
-        return view('wiki.legislacao', compact('resultados'));
+        return view('wiki.legislacao', compact('resultados', 'user'));
     }
 
     public function pesquisarLegislacao(Request $request)
     {
+        $user = auth()->user();
         // Obtenha os dados de pesquisa do $request
         $pesquisa = $request->input('pesquisa');
 
@@ -114,17 +123,19 @@ class ArquivosController extends Controller
         ->get();
 
         // Retorne a visualização com os resultados da pesquisa
-        return view('wiki.legislacao', compact('resultados', 'resultados2'));
+        return view('wiki.legislacao', compact('resultados', 'resultados2', 'user'));
     }
 
     public function acessarNormasGestao(){
 
+        $user = auth()->user();
         $resultados = Arquivo::where('tipo', 'Norma de Gestão')->get();
-        return view('wiki.normasGestao', compact('resultados'));
+        return view('wiki.normasGestao', compact('resultados', 'user'));
     }
 
     public function pesquisarNormasGestao(Request $request)
     {
+        $user = auth()->user();
         // Obtenha os dados de pesquisa do $request
         $pesquisa = $request->input('pesquisa');
 
@@ -137,17 +148,19 @@ class ArquivosController extends Controller
         ->get();
 
         // Retorne a visualização com os resultados da pesquisa
-        return view('wiki.legislacao', compact('resultados', 'resultados2'));
+        return view('wiki.legislacao', compact('resultados', 'resultados2', 'user'));
     }
 
     public function acessarAdmin(){
 
+        $user = auth()->user();
         $resultados = Arquivo::all();
-        return view('wiki.admin', compact('resultados'));
+        return view('wiki.admin', compact('resultados', 'user'));
     }
 
     public function create(){
-        return view('wiki.create');
+        $user = auth()->user();
+        return view('wiki.create', compact('user'));
     }
 
     public function store(Request $request)
@@ -203,13 +216,15 @@ class ArquivosController extends Controller
 
     public function edit($id)
     {
+        $user = auth()->user();
         $arquivo = Arquivo::findOrFail($id);
 
-        return view('wiki.edit', ['arquivo' => $arquivo]);
+        return view('wiki.edit', ['arquivo' => $arquivo, 'user' => $user]);
     }
 
     public function update(Request $request)
     {
+        $user = auth()->user();
         $dados = array(
             "nome" => $request->nome,
             "texto" => "",
@@ -242,9 +257,9 @@ class ArquivosController extends Controller
         return redirect('/admin')->with('msg', 'Arquivo editado com sucesso!');
     }
     public function show($id){
-
+        $user = auth()->user();
         $arquivo = Arquivo::findOrFail($id);
 
-        return view('wiki.show', ['arquivo' => $arquivo]);
+        return view('wiki.show', ['arquivo' => $arquivo, 'user' => $user]);
     }
 }

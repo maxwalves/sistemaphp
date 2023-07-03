@@ -96,9 +96,11 @@
                                 <li class="nav-item">
                                     <a class="btn btn-active btn-success rounded-none" href="/normasGestao">Normas de Gestão</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="btn btn-active btn-success rounded-none" href="/admin">Admin</a>
-                                </li>
+                                @can('aprov-avs-frota', $user)
+                                    <li class="nav-item">
+                                        <a class="btn btn-active btn-success rounded-none" href="/admin">Admin</a>
+                                    </li>
+                                @endcan
                                 
                             </ul>
                         </div>
