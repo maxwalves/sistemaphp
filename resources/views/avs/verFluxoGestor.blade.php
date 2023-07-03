@@ -9,7 +9,6 @@
     </div>
 </div>
 <div id="av-create-container" class="container">
-    
         
         <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong> {{ $av->id }}</h1>
         <h1 style="font-size: 24px"><strong>Status atual:</strong> {{ $av->status }}</h1>

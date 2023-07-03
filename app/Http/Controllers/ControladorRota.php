@@ -683,4 +683,10 @@ class ControladorRota extends Controller
 
         return redirect('/rotas/rotasEditData/' . $rota->av_id)->with('msg', 'Data editada com sucesso!');
     }
+
+    public function getAllRotas()
+    {
+        $rotas = Rota::all();
+        return response(json_encode($rotas, JSON_PRETTY_PRINT), 200)->header('Content-Type', 'application/json');
+    }
 }

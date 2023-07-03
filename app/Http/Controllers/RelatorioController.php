@@ -15,10 +15,15 @@ class RelatorioController extends Controller
     {
         $avs = Av::all();
         $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
         $objetivos = Objetivo::all();
         $historicosTodos = Historico::all();
         $historicos = [];
         $users = User::all();
+        $valorRecebido = $av;
+        $valorReais = 0;
+        $valorAcertoContasReal = 0;
+        $valorAcertoContasDolar = 0;
 
         foreach($historicosTodos as $historico){
             if($historico->av_id == $av->id){
@@ -26,9 +31,13 @@ class RelatorioController extends Controller
             }
         }
 
-        $dompdf = new Dompdf();
+        $options = new Options();
+        $options->set('defaultFont', 'sans-serif');
+        $dompdf = new Dompdf($options);
         
-        $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users')));
+        
+        $dompdf->loadHtml(view('relatorioViagemInternacional', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 
+        'valorRecebido', 'valorReais', 'valorAcertoContasReal', 'valorAcertoContasDolar')));
 
         $dompdf->render();
 

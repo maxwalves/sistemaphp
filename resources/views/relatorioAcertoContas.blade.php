@@ -1,15 +1,35 @@
 <!DOCTYPE html>
 <html>
+    
     <head>
             <title>Relatório PDF</title>
+            <style>
+        
+            table.comBordaSimples {
+                border-collapse: collapse; /* CSS2 */
+                background: #FFFFF0;
+            }
+            
+            table.comBordaSimples td {
+                border: 1px solid black;
+            }
+            
+            table.comBordaSimples th {
+                border: 1px solid black;
+                background: #F0FFF0;
+            }
+        </style>
     </head>
     <body>
-        <h1 style="text-align:center">PARANACIDADE</h1>
-        <h1 style="text-align:center">Acerto de Contas</h1>
-        <h1 style="text-align:center">Autorização de Viagem Nr {{ $av->id}}</h1>
 
         <main>
             <div >
+                <div style="position: relative;">
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/img/header.png'))) }}" alt="Paranacidade" width="100%">
+                    <h1 style="position: absolute; top: 95; right: 20; text-align: right;">
+                        {{ $av->id}}
+                    </h1>
+                </div>
                 <div class="row">
                     
                     <h2 >Dados básicos:</h2>
@@ -151,21 +171,7 @@
                 </div>
             </div>
             <br><br>
-            <style>
-                table.comBordaSimples {
-                    border-collapse: collapse; /* CSS2 */
-                    background: #FFFFF0;
-                }
-                
-                table.comBordaSimples td {
-                    border: 1px solid black;
-                }
-                
-                table.comBordaSimples th {
-                    border: 1px solid black;
-                    background: #F0FFF0;
-                }
-            </style>
+            
             <div class="col-md-8 offset-md-0">
                 <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
                 <table id="tabelaRota" class="comBordaSimples " >

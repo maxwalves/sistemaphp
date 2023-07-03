@@ -16,7 +16,11 @@ use DateTime;
 
 class UsersController extends Controller
 {
-    
+    public function getAllUsers()
+    {
+        $users = User::all();
+        return response(json_encode($users, JSON_PRETTY_PRINT), 200)->header('Content-Type', 'application/json');
+    }
 
     public function index()
     {

@@ -19,6 +19,7 @@ use DateTime;
 use DatePeriod;
 use DateInterval;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Support\Facades\Storage;
 use DateTimeZone;
 use App\Mail\EnvioEmailGestor;
@@ -153,6 +154,7 @@ class ControladorAv extends Controller
         $historicos = [];
         $user = auth()->user();
         $usersFiltrados = [];
+        $usersFiltradosSubordinados = [];
         $possoEditar = false;
 
         $av = Av::findOrFail($id);
@@ -188,7 +190,31 @@ class ControladorAv extends Controller
                 array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
             }
         }
-        foreach ($usersFiltrados as $u){//Percorre todos os usuários do sistema
+        
+        foreach ($users as $u2){//Percorre todos os usuários do sistema
+            $managerDN = $u2->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+            // Dividir a string em partes usando o caractere de vírgula como delimitador
+            $parts = explode(',', $managerDN);
+
+            // Extrair o nome do gerente da primeira parte
+            $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+            
+            foreach($usersFiltrados as $uF){
+                if($managerName == $uF->name && $u2->employeeNumber != null && $uF->id != $u2->id && $uF->id != 92){//Verifica se cada um pertence ao seu time, exceto vc mesmo
+                    array_push($usersFiltradosSubordinados, $u2);//Adiciona ao array filtrado o usuário encontrado
+                }
+            }
+        }
+
+        foreach ($usersFiltrados as $u){//Percorre todos os usuários
+            if($av->user_id == $u->id){//Verifica se o usuário do da AV atual pertence ao meu time
+                if($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0){
+                    $possoEditar = true;
+                }
+            }
+        }
+        foreach ($usersFiltradosSubordinados as $u){//Percorre todos os usuários
             if($av->user_id == $u->id){//Verifica se o usuário do da AV atual pertence ao meu time
                 if($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0){
                     $possoEditar = true;
@@ -1432,6 +1458,10 @@ class ControladorAv extends Controller
                     array_push($historicos, $hist);
                 }
             }
+            $options = new Options();
+            $options->set('defaultFont', 'sans-serif');
+            $dompdf = new Dompdf($options);
+
             $dompdf = new Dompdf();
             $dompdf->loadHtml(view('relatorioViagemInternacional', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv')));
             $dompdf->render();
@@ -1719,6 +1749,10 @@ class ControladorAv extends Controller
                 array_push($historicos, $hist);
             }
         }
+        $options = new Options();
+        $options->set('defaultFont', 'sans-serif');
+        $dompdf = new Dompdf($options);
+
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv')));
         $dompdf->render();
@@ -2026,6 +2060,10 @@ class ControladorAv extends Controller
         }
 
         //----------------------------------------------------------------------------------------------------------
+        $options = new Options();
+        $options->set('defaultFont', 'sans-serif');
+        $dompdf = new Dompdf($options);
+
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 'valorAcertoContasReal', 'valorAcertoContasDolar')));
         $dompdf->render();
@@ -3389,7 +3427,9 @@ class ControladorAv extends Controller
         
         $user = auth()->user();
         $avs = Av::all();
+        $avsTodas = Av::all();
         $users = User::all();
+
         $usersFiltrados = [];
         foreach ($users as $u){//Percorre todos os usuários do sistema
             $managerDN = $u->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
@@ -3416,7 +3456,51 @@ class ControladorAv extends Controller
         }
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();
-        return view('avs.autGestor', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos, 'users' => $users]);
+        return view('avs.autGestor', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos, 'users' => $users, 
+        'avsTodas' => $avsTodas, 'usersFiltrados' => $usersFiltrados]);
+    }
+
+    public function getAvsByUser($id)
+    {
+        $user = User::findOrFail($id);
+        $avs = Av::all();
+        $avsFiltradas = [];
+        foreach($avs as $av){
+            if($av->user_id == $user->id){
+                array_push($avsFiltradas, $av);
+            }
+        }
+        return response(json_encode($avsFiltradas, JSON_PRETTY_PRINT), 200)->header('Content-Type', 'application/json');
+    }
+
+    public function getAvsByManager($id)
+    {
+        $user = User::findOrFail($id);
+        $users = User::all();
+        $usersFiltrados = [];
+        foreach ($users as $u){//Percorre todos os usuários do sistema
+            $managerDN = $u->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+            // Dividir a string em partes usando o caractere de vírgula como delimitador
+            $parts = explode(',', $managerDN);
+
+            // Extrair o nome do gerente da primeira parte
+            $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+            
+            if($managerName == $user->name && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo 
+                array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
+            }
+        }
+        $avsFiltradas = [];
+        foreach($usersFiltrados as $uf){//Verifica todos os usuários encontrados
+            foreach($uf->avs as $av){//Percorre todas as Avs do usuário encontrado
+                if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==false && $av["isCancelado"]==false){ //Se a av dele já foi enviada, mas ainda não autorizada, adiciona ao array de avs filtradas
+                    
+                    array_push($avsFiltradas, $av);
+                }
+            }
+        }
+        return response(json_encode($avsFiltradas, JSON_PRETTY_PRINT), 200)->header('Content-Type', 'application/json');
     }
 
     public function autDiretoria(){

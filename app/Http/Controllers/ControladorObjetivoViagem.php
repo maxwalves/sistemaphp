@@ -7,10 +7,10 @@ use App\Models\Objetivo;
 
 class ControladorObjetivoViagem extends Controller
 {
-    public function indexJson()
+    public function getAllObjetivos()
     {
         $objetivos = Objetivo::all();
-        return json_encode($objetivos);
+        return response(json_encode($objetivos, JSON_PRETTY_PRINT), 200)->header('Content-Type', 'application/json');
     }
 
     public function index()

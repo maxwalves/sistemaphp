@@ -4,13 +4,15 @@
             <title>Relatório PDF</title>
     </head>
     <body>
-        <h1 style="text-align:center">PARANACIDADE</h1>
-        <h1 style="text-align:center">Autorização de Viagem Internacional Nr {{ $av->id}}</h1>
-
         <main>
             <div >
                 <div class="row">
-                    
+                    <div style="position: relative;">
+                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/img/internacional.png'))) }}" alt="Paranacidade" width="100%">
+                        <h1 style="position: absolute; top: 95; right: 20; text-align: right;">
+                            {{ $av->id}}
+                        </h1>
+                    </div>
                     <h2 >Dados básicos:</h2>
                     <div style="border: 1px solid black; padding-left:10px">
 
