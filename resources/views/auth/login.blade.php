@@ -14,7 +14,6 @@
         .clientes-logo {
             width: 250px;
             height: 200px;
-            background-color: white; 
             display:inline-block;
             position: relative;
 
@@ -29,17 +28,15 @@
     </style>
     <x-authentication-card>
         <link rel="shortcut icon" type="imagex/png" href="/img/aviao.png">
+        
         <x-slot name="logo">
             <div class="clientes-logo">
-                <img src="{{asset('/img/1.png')}}" alt="Paranacidade">
+                <img src="{{asset('/img/prcid2.png')}}" alt="Paranacidade">
             </div>
-            <div>
-                <p class="tituloSistema">Sistema de Controle de Viagens</p></li>
-            </div>
+            
             <br>
             
         </x-slot>
-
         <x-validation-errors class="mb-4" />
 
         @if (session('status'))

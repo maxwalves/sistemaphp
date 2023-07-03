@@ -58,20 +58,6 @@
                         <p class="tituloSistema justify-content-center mb-md-0">Sistema de Controle de Viagens</p></li>
                         </ul>
 
-                        <div class="navbarMenu">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-                                @guest
-                                <li class="nav-item">
-                                <a class="nav-link" href="/login">Login</a>
-                                </li>
-                                <li class="nav-item">
-                                <a class="nav-link" href="/register">Registre-se</a>
-                                </li>
-                                @endguest
-                            </ul>
-                        </div>
-
                         <div class="dropdown text-end">
                             <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="{{asset('/img/user.png')}}" alt="mdo" width="42" height="42" class="rounded-circle">
@@ -126,7 +112,7 @@
                         <div class="collapse navbar-collapse" id="navbarsExample09">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                <a class="btn btn-active btn-success rounded-none" href="/">Início</a>
+                                <a class="btn btn-active btn-warning rounded-none" href="/">Voltar</a>
                                 </li>
                                 </li>
                                 <li class="nav-item">
@@ -138,7 +124,6 @@
                                 <li class="nav-item" hidden>
                                 <a class="btn btn-active btn-success rounded-none" href="#">Relatórios gerenciais</a>
                                 </li>
-                                <li><a class="btn btn-active btn-warning rounded-none" href="/wiki">Normas PARANACIDADE</a></li>
                                 @can('aprov-avs-gestor', $user)
                                     <li class="nav-item">
                                         <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autGestor">Autorizações de AV pendentes Gestor</a>

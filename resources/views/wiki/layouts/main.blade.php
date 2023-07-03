@@ -60,7 +60,7 @@
                         </a>
 
                         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <p class="tituloSistema justify-content-center mb-md-0">DSS - Wiki de Normas - Paranacidade</p></li>
+                        <p class="tituloSistema justify-content-center mb-md-0">Sistema de Normas - Paranacidade</p></li>
                         </ul>
                                 
                     </div>
@@ -78,7 +78,7 @@
                         <div class="collapse navbar-collapse" id="navbarsExample09">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
                                 <li class="nav-item">
-                                <a class="btn btn-active btn-warning rounded-none" href="/">Sistema de Viagens</a>
+                                <a class="btn btn-active btn-warning rounded-none" href="/">Voltar</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="btn btn-active btn-success rounded-none" href="/wiki">Início</a>
