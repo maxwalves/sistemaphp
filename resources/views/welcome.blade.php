@@ -128,7 +128,7 @@
                         <div class= "card" >
                             <div class="card-body">
                                 <h5 class="card-title"> DSS </h5>
-                                <a href="/avs/verDetalhesAv/" class="btn btn-primary bg-blue-500">Acessar</a>
+                                <a href="/dss/" class="btn btn-primary bg-blue-500">Acessar</a>
                             </div> 
                         </div>
                     </div>

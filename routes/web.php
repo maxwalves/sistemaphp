@@ -228,6 +228,8 @@ Route::middleware(['assinatura.termo'])->group(function () {
 
     Route::get('/unauthorized', [UsersController::class, 'naoAutorizado'])->middleware('auth');
 
+    Route::get('/dss', [UsersController::class, 'dss'])->middleware('auth');
+
 
         // ROTAS PARA ADM SETORES
         Route::get('/setores/setores', [SetorController::class, 'setores'])->middleware('auth');

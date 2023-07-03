@@ -22,6 +22,13 @@ class UsersController extends Controller
         return response(json_encode($users, JSON_PRETTY_PRINT), 200)->header('Content-Type', 'application/json');
     }
 
+    public function dss()
+    {
+        $user = auth()->user();
+        $users = User::all();
+        return view('users.users', ['users' => $users, 'user'=> $user]);
+    }
+
     public function index()
     {
         $user = auth()->user();
