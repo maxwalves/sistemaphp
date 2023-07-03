@@ -75,6 +75,7 @@
                                     <li><a class="dropdown-item" href="/objetivos/objetivos">Objetivos de viagem</a></li>
                                 @endcan
                                 @can('aprov-avs-frota', $user)
+                                    <li><a class="dropdown-item" href="/objetivos/objetivos">Objetivos de viagem</a></li>
                                     <li><a class="dropdown-item" href="/veiculosParanacidade/veiculosParanacidade">Veículos Paranacidade</a></li>
                                 @endcan
 

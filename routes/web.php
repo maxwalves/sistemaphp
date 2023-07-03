@@ -13,6 +13,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SetorController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\ArquivosController;
+use App\Http\Controllers\DssController;
 
 /*
 |--------------------------------------------------------------------------
@@ -262,4 +263,8 @@ Route::middleware(['assinatura.termo'])->group(function () {
         Route::put('/update/{id}', [ArquivosController::class, 'update']);
         Route::get('/show/{id}', [ArquivosController::class, 'show']);
         Route::delete('/delete/{id}', [ArquivosController::class, 'destroy']);
+
+
+        Route::get('/relatoriosDss/paranaUrbanoIII/', [DssController::class,'paranaUrbanoIII']);
+
 });

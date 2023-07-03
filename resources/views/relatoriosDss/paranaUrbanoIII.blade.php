@@ -56,7 +56,7 @@
                     </a>
 
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <p class="tituloSistema justify-content-center mb-md-0">Sistema Integrado Paranacidade</p></li>
+                    <p class="tituloSistema justify-content-center mb-md-0">Paraná Urbano III</p></li>
                     </ul>
 
                     <div class="dropdown text-end">
@@ -94,50 +94,68 @@
                 </div>
             </div>
         </header>
-        <div class="container">
-            <div class="row">
-                
-                <div class="col-12 col-xl-4">
-                    <div class= "card" >
-                        <div class="card-body">
-                            <h5 class="card-title"> Sistema de Viagens </h5>
-                            <a href="/avs/avs/" class="btn btn-primary">Acessar</a>
-                        </div> 
-                    </div>
+        <nav class="navbar navbar-expand-lg bg-light rounded border" aria-label="Eleventh navbar example">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarsExample09">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                        <a class="btn btn-active btn-warning rounded-none" href="/">Voltar Início</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-active btn-primary rounded-none" href="/avs/avs">Sistema de Viagens</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-active btn-warning rounded-none" href="/wiki">Sistema de Normas</a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="col-12 col-xl-4">
-                    <div class= "card" >
-                        <div class="card-body">
-                            <h5 class="card-title"> Sistema de Normas </h5>
-                            <a href="/wiki/" class="btn btn-warning">Acessar</a>
-                        </div> 
-                    </div>
-                </div>
-                @can('view-users', $user)
-                    <div class="col-12 col-xl-4">
-                        <div class= "card" >
-                            <div class="card-body">
-                                <h5 class="card-title"> Paraná Urbano III </h5>
-                                <a href="/relatoriosDss/paranaUrbanoIII/" class="btn btn-secondary bg-orange-600">Acessar</a>
-                            </div> 
-                        </div>
-                    </div>
-                @endcan
-                @can('view-users', $user)
-                    <div class="col-12 col-xl-4">
-                        <div class= "card" >
-                            <div class="card-body">
-                                <h5 class="card-title"> DSS </h5>
-                                <a href="/dss/" class="btn btn-primary bg-blue-500">Acessar</a>
-                            </div> 
-                        </div>
-                    </div>
-                @endcan
             </div>
+        </nav>
+        <div>
+            <div id="divAba-escopo1">
+				<h4 style="margin-top:25px">Lotes em Execução, Concluído ou Medição Encerrada</h4>
+				<table id="minhaTabela" class="display nowrap">
+					<thead>
+						<tr>
+							<th class="text-center"><small>Município</small></th>
+						</tr>
+					</thead>
+					<tbody id="tabelaEscopo1">
+                        @foreach($municipios as $municipio)
+                        <tr>
+                            <td>
+                                {{$municipio->nomeDSS}}
+                            </td>
+                        </tr>
+                            
+                        @endforeach
+					</tbody>
+				</table>
+			</div>
         </div>
     </main>
 </body>
 </html>
 
+<script type="text/javascript">
 
+    $(document).ready(function(){
+        $('#minhaTabela').DataTable({
+                scrollY: 500,
+                "language": {
+                    "lengthMenu": "Mostrando _MENU_ registros por página",
+                    "zeroRecords": "Nada encontrado",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Nenhum registro disponível",
+                    "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                    "search": "Pesquisar"
+                }
+            });
+    });
+
+</script>
 
