@@ -45,7 +45,9 @@
                                                 <a href="{{ asset('arquivos/' . $resultado->anexo) }}" 
                                                     target="_blank" class="btn btn-active btn-success btn-sm">Acessar PDF</a>
                                             @endif
-                                            <a href="edit/{{$resultado->id}}" class="btn btn-active btn-success btn-sm">Editar</a>
+                                            @can('aprov-avs-frota', $user)
+                                                <a href="edit/{{$resultado->id}}" class="btn btn-active btn-success btn-sm">Editar</a>
+                                            @endcan
                                         </td>
                                     </tr>
                             @endforeach
@@ -85,7 +87,9 @@
                                                 <a href="{{ asset('arquivos/' . $resultado->anexo) }}" 
                                                     target="_blank" class="btn btn-active btn-success btn-sm">Acessar PDF</a>
                                             @endif
-                                            <a href="edit/{{$resultado->id}}" class="btn btn-active btn-success btn-sm">Editar</a>
+                                            @can('aprov-avs-frota', $user)
+                                                <a href="edit/{{$resultado->id}}" class="btn btn-active btn-success btn-sm">Editar</a>
+                                            @endcan
                                         </td>
                                     </tr>
                             @endforeach
