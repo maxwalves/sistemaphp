@@ -6,6 +6,11 @@ use App\Http\Controllers\ControladorAv;
 use App\Http\Controllers\ControladorRota;
 use App\Http\Controllers\ControladorObjetivoViagem;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\ControladorAnos;
+use App\Http\Controllers\ControladorComponentes;
+use App\Http\Controllers\ControladorSubcomponentes;
+use App\Http\Controllers\ControladorCategoriaPeppoa;
+use App\Http\Controllers\ControladorCategoriaPmr;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +35,14 @@ Route::get('/getAllObjetivos',[ControladorObjetivoViagem::class, 'getAllObjetivo
 Route::get('/getAllUsers',[UsersController::class, 'getAllUsers']);
 
 Route::resource('/avs', ControladorAv::class);
+
+Route::resource('/anos', ControladorAnos::class);
+
+Route::resource('/componentes', ControladorComponentes::class);
+
+Route::resource('/subcomponentes', ControladorSubcomponentes::class);
+
+Route::get('/findComponenteById/{id}',[ControladorComponentes::class, 'findComponenteById']);
+
+Route::resource('/categoriasPeppoa', ControladorCategoriaPeppoa::class);
+Route::resource('/categoriasPmr', ControladorCategoriaPmr::class);
