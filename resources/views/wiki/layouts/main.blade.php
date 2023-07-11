@@ -85,17 +85,18 @@
                                     </li>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="btn btn-active btn-success rounded-none" href="/normas">Normas</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="btn btn-active btn-success rounded-none" href="/instrucoesNormativas">Instruções Normativas</a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="btn btn-active btn-success rounded-none" href="/legislacao">Legislação</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="btn btn-active btn-success rounded-none" href="/normasGestao">Normas de Gestão</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-active btn-success rounded-none" href="/instrucoesNormativas">Instruções Normativas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-active btn-success rounded-none" href="/normas">OUTRAS NORMATIVAS</a>
+                                </li>
+                                
                                 @can('aprov-avs-frota', $user)
                                     <li class="nav-item">
                                         <a class="btn btn-active btn-success rounded-none" href="/admin">Admin</a>

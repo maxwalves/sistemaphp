@@ -24,7 +24,6 @@
                         <thead>
                         <tr>
                             <th>Nome arquivo</th>
-                            <th>Data</th>
                             <th>Tipo</th>
                             <th>Trecho</th>
                             <th>Ações</th>
@@ -36,7 +35,6 @@
                             @foreach ($resultados2 as $resultado)
                                     <tr>
                                         <td>{{ $resultado->nome }}</td>
-                                        <td>{{ $resultado->data }}</td>
                                         <td>{{ $resultado->tipo }}</td>
                                         <td>{{ $resultado->trecho }}</td>
                                         <td>
@@ -68,7 +66,6 @@
                         <thead>
                         <tr>
                             <th>Nome arquivo</th>
-                            <th>Data</th>
                             <th>Tipo</th>
                             <th>Ações</th>
                         </tr>
@@ -79,7 +76,6 @@
                             @foreach ($resultados as $resultado)
                                     <tr>
                                         <td>{{ $resultado->nome }}</td>
-                                        <td>{{ date('d/m/Y', strtotime($resultado->data)) }}</td>
                                         <td>{{ $resultado->tipo }}</td>
                                         <td>
                                             <a href="show/{{$resultado->id}}" class="btn btn-active btn-success btn-sm">Ver</a>
