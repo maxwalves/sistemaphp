@@ -44,11 +44,11 @@
                     <thead>
                         <tr>
                             <th>Nome do supervisor</th>
-                            <th>Nome da regional</th>
-                            <th>Nome do município</th>
-                            <th>Número do projeto</th>
-                            <th>Número do lote</th>
-                            <th>Número da medição</th>
+                            <th>Regional</th>
+                            <th>Município</th>
+                            <th>Projeto</th>
+                            <th>Lote</th>
+                            <th>Medição</th>
                             <th>Tipo medição</th>
                             <th>Valor da medição</th>
                             <th>Descrição do componente</th>
@@ -82,13 +82,13 @@
                 <table class="display nowrap" id="minhaTabela">
                     <thead>
                         <tr>
-                            <th>Selecione</th>
+                            <th style="width: 5%">Selecione</th>
                             <th>Nome do supervisor</th>
-                            <th>Nome da regional</th>
-                            <th>Nome do município</th>
-                            <th>Número do projeto</th>
-                            <th>Número do lote</th>
-                            <th>Número da medição</th>
+                            <th>Regional</th>
+                            <th>Município</th>
+                            <th>Projeto</th>
+                            <th>Lote</th>
+                            <th>Medição</th>
                             <th>Tipo medição</th>
                             <th>Valor da medição</th>
                             <th>Descrição do componente</th>
@@ -229,7 +229,6 @@
         $(document).ready(function(){
             $('#minhaTabela').DataTable({
                     scrollY: 500,
-                    orderFixed: [0, 'desc'],
                     scrollX: true,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",

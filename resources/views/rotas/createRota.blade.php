@@ -153,7 +153,7 @@
 
                         <br>
                         <?php
-                            $minDate = date('Y-m-d\TH:i', strtotime('+2 days'));
+                            $minDate = date('Y-m-d\TH:i');
                         ?>
 
                         <div class="form-group"> 
@@ -248,7 +248,7 @@
 
                         <br>
                         <?php
-                            $minDate = date('Y-m-d\TH:i', strtotime('+2 days'));
+                            $minDate = date('Y-m-d\TH:i');
                         ?>
 
                         <div class="form-group">
@@ -309,7 +309,21 @@
                                     @if($ultimaRotaSetada !=null)
                                         <option value="{{ $ultimaRotaSetada->cidadeDestinoNacional}}" selected></option>
                                     @else
-                                        <option value="Curitiba" selected></option>
+                                        @if($user->department == 'ERCSC')
+                                            <option value="Cascavel" selected></option>
+                                        @elseif($user->department == 'ERMGA')
+                                            <option value="Maringá" selected></option>
+                                        @elseif($user->department == 'ERFCB')
+                                            <option value="Francisco Beltrão" selected></option>
+                                        @elseif($user->department == 'ERGUA')
+                                            <option value="Guarapuava" selected></option>
+                                        @elseif($user->department == 'ERLDA')
+                                            <option value="Londrina" selected></option>
+                                        @elseif($user->department == 'ERPTG')
+                                            <option value="Ponta Grossa" selected></option>
+                                        @else
+                                            <option value="Curitiba" selected></option>
+                                        @endif
                                     @endif
                                 </select>
             
@@ -323,7 +337,7 @@
                         <br>
 
                         <?php
-                            $minDate = date('Y-m-d\TH:i', strtotime('+2 days'));
+                            $minDate = date('Y-m-d\TH:i');
                         ?>
 
                         <div class="form-group">
@@ -331,8 +345,9 @@
                             <div id="dataHoraSaidaNacional" class="input-append date">
                                 <label for="dataHoraSaidaNacional" class="control-label">Data/Hora de saída: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional" style="border-width: 1px; border-color: black"
-                                    id="dataHoraSaidaNacional" placeholder="Data/Hora de saída" class="{{ $errors->has('dataHoraSaidaNacional') ? 'is-invalid' :''}}"
-                                    min="{{ $minDate }}">
+                                    id="dataHoraSaidaNacional" placeholder="Data/Hora de saída" 
+                                    class="classeDataHoraSaidaNacional {{ $errors->has('dataHoraSaidaNacional') ? 'is-invalid' :''}}"
+                                    min="{{ $minDate }}" value="{{ $minDate }}" >
 
                                 @if ($errors->has('dataHoraSaidaNacional'))
                                 <div class="invalid-feedback">
@@ -360,7 +375,7 @@
                                 <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoEstadoDestinoNacional') ? 'is-invalid' :''}}" 
                                     id="selecaoEstadoDestinoNacional" name="selecaoEstadoDestinoNacional" onChange="carregarCidadesDestinoNacional()">
 
-
+                                    <option value="Paraná" selected></option>
                                 </select>
             
                                 @if ($errors->has('selecaoEstadoDestinoNacional'))
@@ -394,7 +409,8 @@
                             <div id="dataHoraChegadaNacional" class="input-append date">
                                 <label for="dataHoraChegadaNacional" class="control-label">Data/Hora de chegada: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaNacional" style="border-width: 1px; border-color: black"
-                                    id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaNacional') ? 'is-invalid' :''}}"
+                                    id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada" 
+                                    class="classeDataHoraChegadaNacional {{ $errors->has('dataHoraChegadaNacional') ? 'is-invalid' :''}}"
                                     min="{{ $minDate }}">
 
                                 @if ($errors->has('dataHoraChegadaNacional'))
@@ -428,7 +444,7 @@
                 @endif
                 <br><br>
                 <?php
-                    $minDate = date('Y-m-d\TH:i', strtotime('+2 days'));
+                    $minDate = date('Y-m-d\TH:i');
                 ?>
                 <div class="row justify-content-center" id="isViagemVoltaIgualIda">
                     <div class="col-12 col-xl-5">
@@ -663,6 +679,9 @@
             
             var idPais = 30;
 
+            var nomeEstado = document.getElementById("selecaoEstadoDestinoNacional").value;
+            $("#selecaoEstadoDestinoNacional").html('');
+
             $.getJSON('/states', function(data){
                 
                 opcaoSelecione = '<option value=" "> Selecione </option>';
@@ -670,12 +689,21 @@
 
                 for(i=0; i<data.length; i++){
                     if(data[i].country_id == idPais ){
+                        if(data[i].name == nomeEstado){
+                            var valor = "{'id':'" + data[i].id + "', 'name':'" + data[i].name + "'}";
 
-                        var valor = "{'id':'" + data[i].id + "', 'name':'" + data[i].name + "'}";
+                            opcao = '<option value="' + valor + '" selected>' + data[i].name + '</option>';
 
-                        opcao = '<option value="' + valor + '">' + data[i].name + '</option>';
-                        
-                        $('#selecaoEstadoDestinoNacional').append(opcao);
+                            $('#selecaoEstadoDestinoNacional').append(opcao);
+                            carregarCidadesDestinoNacional();
+                        }
+                        else{
+                            var valor = "{'id':'" + data[i].id + "', 'name':'" + data[i].name + "'}";
+
+                            opcao = '<option value="' + valor + '">' + data[i].name + '</option>';
+                            
+                            $('#selecaoEstadoDestinoNacional').append(opcao);
+                        }
                     }
                 }
             });
@@ -830,6 +858,20 @@
                 document.getElementById("isNacional").hidden = true;
                 document.getElementById("isInternacional").hidden = true;
             }
+
+
+            var dataHoraSaidaNacional = document.getElementById('dataHoraSaidaNacional');
+            dataHoraSaidaNacional.addEventListener('change', function() {
+                var inputDatetimeLocal = document.querySelector('.classeDataHoraSaidaNacional');
+                var inputDatetimeLocal2 = document.querySelector('.classeDataHoraChegadaNacional');
+
+                // Obter o valor do campo datetime-local
+                var valor = inputDatetimeLocal.value;
+  
+                // Definir a data mínima para dataHoraSaidaVoltaNacional com base no valor selecionado em dataHoraSaidaNacional
+                inputDatetimeLocal2.min = valor;
+            });
+            
         })
     </script>
 @endsection

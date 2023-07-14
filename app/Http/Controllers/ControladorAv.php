@@ -2985,18 +2985,20 @@ class ControladorAv extends Controller
                 }
 
                 //Soma o período antes do início de uma nova rota, caso complete meia diária ou total
-                if($horaSaidaRota2 >= 13){
-                    if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                    if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                }
-                else if($horaSaidaRota2 >= 19){
-                    if($isInternacional == false) {$valorReais += $diariaTotal;}
-                    if($isInternacional == true) {$valorDolar += $diariaTotal;}
+                if(!($i+1 >= sizeof($rotas)-1)){//Se não estou na última rota
+                    if($horaSaidaRota2 >= 13){
+                        if($isInternacional == false) {$valorReais += $meiaDiaria;}
+                        if($isInternacional == true) {$valorDolar += $meiaDiaria;}
+                    }
+                    else if($horaSaidaRota2 >= 19){
+                        if($isInternacional == false) {$valorReais += $diariaTotal;}
+                        if($isInternacional == true) {$valorDolar += $diariaTotal;}
+                    }
                 }
                 
                 if($i+1 >= sizeof($rotas)-1){//Se estou na última rota
                     if($diaSaidaRota2==$diaChegadaRota2){// Se a viagem da rota 2 durar um dia
-
+                        
                         if($horaChegadaRota2 >=19){
                             if($isInternacional == false) {$valorReais += $diariaTotal;}
                             if($isInternacional == true) {$valorDolar += $diariaTotal;}
@@ -3005,7 +3007,6 @@ class ControladorAv extends Controller
                             if($isInternacional == false) {$valorReais += $meiaDiaria;}
                             if($isInternacional == true) {$valorDolar += $meiaDiaria;}
                         }
-                        
                     } 
                     else if($diaSaidaRota2!=$diaChegadaRota2){//Se a viagem da rota 2 demorar mais de um dia
     
@@ -3116,14 +3117,16 @@ class ControladorAv extends Controller
                                 }
                             }
                         }
-                        if($dia == $dataSaida2){
-                            if($horaSaidaRota2 >= 13 && $horaSaidaRota2 < 19){
-                                $metade = ($valor/2);
-                                if($acumulado == 0){
-                                    $acumulado = $metade;
-                                }
-                                else{
-                                    $acumulado += $metade;
+                        if(!($i == sizeof($rotas)-2)){
+                            if($dia == $dataSaida2){
+                                if($horaSaidaRota2 >= 13 && $horaSaidaRota2 < 19){
+                                    $metade = ($valor/2);
+                                    if($acumulado == 0){
+                                        $acumulado = $metade;
+                                    }
+                                    else{
+                                        $acumulado += $metade;
+                                    }
                                 }
                             }
                         }
@@ -3216,10 +3219,9 @@ class ControladorAv extends Controller
             'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal,
             'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal,
             'minutoSaidaInicial' => $minutoSaidaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial, 'minutoSaidaFinal' => $minutoSaidaFinal,
-            'minutoChegadaFinal' => $minutoChegadaFinal, 'diariaTotal' => $diariaTotal, 'meiaDiaria' => $meiaDiaria, 'mostrarValor' => $mostrarValor, 'arrayDiasValores' => $arrayDiasValores]);
-
+            'minutoChegadaFinal' => $minutoChegadaFinal, 'diariaTotal' => $diariaTotal, 'meiaDiaria' => $meiaDiaria, 'mostrarValor' => $mostrarValor, 
+            'arrayDiasValores' => $arrayDiasValores, 'isInternacional' => $isInternacional]);
         }
-
     }
 
     public function show($id)

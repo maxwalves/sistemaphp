@@ -292,6 +292,7 @@
                             <div id="dataHoraSaidaNacional" class="input-append date">
                                 <label for="dataHoraSaidaNacional" class="control-label">Data/Hora de saída: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional"
+                                    class="classeDataHoraSaidaNacional"
                                     id="dataHoraSaidaNacional" placeholder="Data/Hora de saída" value="{{ $rota->isViagemInternacional == '0' ? $rota->dataHoraSaida : ''}}">
                             </div>
                         </div>
@@ -341,6 +342,7 @@
                             <div id="dataHoraChegadaNacional" class="input-append date">
                                 <label for="dataHoraChegadaNacional" class="control-label">Data/Hora de chegada: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaNacional"
+                                    class="classeDataHoraChegadaNacional"
                                     id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada" value="{{ $rota->isViagemInternacional == '0' ? $rota->dataHoraChegada : ''}}">
                             </div>
                         </div>
@@ -357,16 +359,9 @@
             <div class="row justify-content-center" style="background-color: lightgrey">
 
                 <div class="col-md-6 offset-md-3">
-                    <div>
 
-                        <div id="btConfirmaRota">
-                            <input type="text" 
-                                class="btn btn-active btn-secondary" value="Confirma dados!" onClick="confirmaDados()">
-                        </div>
-
-                    </div>
                     <div>
-                        <div id="camposFinais" hidden="true">
+                        <div id="camposFinais" >
                             <div class="form-group" >
                                 <label for="isReservaHotel" class="control-label">Você vai precisar de reserva de hotel?</label>
                                 <br>
@@ -464,34 +459,26 @@
 
         function gerenciaNacionalInternacional(){
             var isViagemInternacional = document.getElementById("isViagemInternacional");
-            var botaoConfirmaRota = document.getElementById("btConfirmaRota");
+ 
 
             if(isViagemInternacional.value=="0") {
                 resetarCampoOrigemInternacional();
                 resetarCampoDestinoInternacional();
                 document.getElementById("isNacional").hidden = false;
                 document.getElementById("isInternacional").hidden = true;
-                botaoConfirmaRota.hidden = false;
+
                 popularEstadoOrigemNacional();
                 popularEstadoDestinoNacional();
-                document.getElementById("camposFinais").hidden = true;
-                document.getElementById("btSalvarRota").hidden = true;
             }
             else if(isViagemInternacional.value=="1"){
                 resetarCampoOrigemNacional();
                 resetarCampoDestinoNacional();
                 document.getElementById("isNacional").hidden = true;
                 document.getElementById("isInternacional").hidden = false;
-                botaoConfirmaRota.hidden = false;
-                document.getElementById("camposFinais").hidden = true;
-                document.getElementById("btSalvarRota").hidden = true;
             }
             else{
                 document.getElementById("isNacional").hidden = true;
                 document.getElementById("isInternacional").hidden = true;
-                botaoConfirmaRota.hidden = true;
-                document.getElementById("camposFinais").hidden = true;
-                document.getElementById("btSalvarRota").hidden = true;
             }
         }
 
@@ -756,20 +743,36 @@
             popularEstadoDestinoNacional();
         }
 
-        function confirmaDados(){
-            document.getElementById("camposFinais").hidden = false;
-            document.getElementById("btConfirmaRota").hidden = true;
-            document.getElementById("btSalvarRota").hidden = false;
-        }
-
-                //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
+            //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
         $(function(){
             
             //carregarPaises();
             carregarPaisOrigem();
             carregarPaisDestino();
             gerenciaNacionalInternacional();
-            document.getElementById("btSalvarRota").hidden = true;
+
+            //-------------------------------------------Define a data mínima para a chegada logo no início-------------------------------------------
+            var inputDatetimeLocal = document.querySelector('.classeDataHoraSaidaNacional');
+            var inputDatetimeLocal2 = document.querySelector('.classeDataHoraChegadaNacional');
+
+            // Obter o valor do campo datetime-local
+            var valor = inputDatetimeLocal.value;
+
+            // Definir a data mínima para dataHoraSaidaVoltaNacional com base no valor selecionado em dataHoraSaidaNacional
+            inputDatetimeLocal2.min = valor;
+
+            //-------------------------------------------Monitora dataHoraSaidaNacional e define data mínima para a chegada quando clicado -------------------
+            var dataHoraSaidaNacional = document.getElementById('dataHoraSaidaNacional');
+            dataHoraSaidaNacional.addEventListener('change', function() {
+                var inputDatetimeLocal = document.querySelector('.classeDataHoraSaidaNacional');
+                var inputDatetimeLocal2 = document.querySelector('.classeDataHoraChegadaNacional');
+
+                // Obter o valor do campo datetime-local
+                var valor = inputDatetimeLocal.value;
+  
+                // Definir a data mínima para dataHoraSaidaVoltaNacional com base no valor selecionado em dataHoraSaidaNacional
+                inputDatetimeLocal2.min = valor;
+            });
         })
     </script>
 @endsection

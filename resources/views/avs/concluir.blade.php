@@ -108,12 +108,14 @@
                         <input type="number" class="form-control" name="valorExtraReais" onblur="calcular()"
                             id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}">
                     </div>
-
-                    <div class="form-group">
-                        <label for="valorExtraDolar" class="control-label">Você vai precisar de valor extra em dólar?</label>
-                        <input type="number" class="form-control" name="valorExtraDolar" onblur="calcular()"
-                            id="valorExtraDolar" placeholder="Valor Extra em dólar" value="{{$av->valorExtraDolar}}">
-                    </div>
+                    
+                    @if($isInternacional == true)
+                        <div class="form-group">
+                            <label for="valorExtraDolar" class="control-label">Você vai precisar de valor extra em dólar?</label>
+                            <input type="number" class="form-control" name="valorExtraDolar" onblur="calcular()"
+                                id="valorExtraDolar" placeholder="Valor Extra em dólar" value="{{$av->valorExtraDolar}}">
+                        </div>
+                    @endif
 
                     <div class="form-group">
                         <label for="valorDeducaoReais" class="control-label">Vai ter deduções em reais?</label>
@@ -121,11 +123,13 @@
                             id="valorDeducaoReais" placeholder="Valor da dedução em reais">
                     </div>
 
-                    <div class="form-group">
-                        <label for="valorDeducaoDolar" class="control-label">Vai ter deduções em dólar?</label>
-                        <input type="number" class="form-control bg-yellow-300" name="valorDeducaoDolar" onblur="calcular()"
-                            id="valorDeducaoDolar" placeholder="Valor da dedução em dólar">
-                    </div>
+                    @if($isInternacional == true)
+                        <div class="form-group">
+                            <label for="valorDeducaoDolar" class="control-label">Vai ter deduções em dólar?</label>
+                            <input type="number" class="form-control bg-yellow-300" name="valorDeducaoDolar" onblur="calcular()"
+                                id="valorDeducaoDolar" placeholder="Valor da dedução em dólar">
+                        </div>
+                    @endif
 
                     <div class="form-group">
                         <label for="justificativaValorExtra" class="control-label">Justificativas</label>
@@ -166,27 +170,29 @@
                         </div>
                         
                     </div>
-                    <div class="stats shadow" >
-        
-                        <div class="stat">
-                            <div class="stat-title">Diárias de alimentação em dólar:</div>
-                            <div class="stat-value text-secondary" id="valorDolar" data-value="{{$av->valorDolar}}">$ {{$av->valorDolar}}</div>
-                        </div>
-                        
-                        <div class="stat">
-                        <div class="stat-figure text-secondary">
-                            <div class="avatar">
-                              <div class="w-16 rounded-full">
-                                <img src="/img/dolar.png">
-                              </div>
+                    @if($isInternacional == true)
+                        <div class="stats shadow" >
+            
+                            <div class="stat">
+                                <div class="stat-title">Diárias de alimentação em dólar:</div>
+                                <div class="stat-value text-secondary" id="valorDolar" data-value="{{$av->valorDolar}}">$ {{$av->valorDolar}}</div>
                             </div>
+                            
+                            <div class="stat">
+                            <div class="stat-figure text-secondary">
+                                <div class="avatar">
+                                <div class="w-16 rounded-full">
+                                    <img src="/img/dolar.png">
+                                </div>
+                                </div>
+                            </div>
+                            <div class="stat-title">Total após cálculos em dólar:</div>
+                            
+                            <div class="stat-value text-primary" id="result2"> $ </div>
+                            </div>
+                            
                         </div>
-                        <div class="stat-title">Total após cálculos em dólar:</div>
-                        
-                        <div class="stat-value text-primary" id="result2"> $ </div>
-                        </div>
-                        
-                    </div>
+                    @endif
 
                     
                 </div>
@@ -410,31 +416,31 @@
 
         function calcular(){
             var valor1 = parseFloat(document.getElementById("valorReais").getAttribute('data-value'));
-            var valor2 = parseFloat(document.getElementById("valorDolar").getAttribute('data-value'));
             var valor3 = parseFloat(document.getElementById('valorExtraReais').value);
-            var valor4 = parseFloat(document.getElementById('valorExtraDolar').value);
             var valor5 = parseFloat(document.getElementById('valorDeducaoReais').value);
-            var valor6 = parseFloat(document.getElementById('valorDeducaoDolar').value);
-           
             if(document.getElementById('valorExtraReais').value == ""){
                 valor3 = 0;
-            }
-            if(document.getElementById('valorExtraDolar').value == ""){
-                valor4 = 0;
             }
             if(document.getElementById('valorDeducaoReais').value == ""){
                 valor5 = 0;
             }
-            if(document.getElementById('valorDeducaoDolar').value == ""){
-                valor6 = 0;
-            }
-            
             var somaReais = valor1 + valor3 - valor5;
-
-            var somaDolar = valor2 + valor4 - valor6;
-
             document.getElementById('result1').innerHTML = "R$ " + somaReais;
-            document.getElementById('result2').innerHTML = "$ " + somaDolar;
+
+            try {
+                var valor2 = parseFloat(document.getElementById("valorDolar").getAttribute('data-value'));
+                var valor4 = parseFloat(document.getElementById('valorExtraDolar').value);
+                var valor6 = parseFloat(document.getElementById('valorDeducaoDolar').value);
+                if(document.getElementById('valorExtraDolar').value == ""){
+                    valor4 = 0;
+                }
+                if(document.getElementById('valorDeducaoDolar').value == ""){
+                    valor6 = 0;
+                }
+                var somaDolar = valor2 + valor4 - valor6;
+                document.getElementById('result2').innerHTML = "$ " + somaDolar;
+            } catch (error) {}
+            
         }  
 
         $.ajaxSetup({
@@ -459,13 +465,6 @@
             if(document.getElementById("objetivo_id").value != ""){
                 document.getElementById("nomeObjetivo").hidden = false;
                 document.getElementById("outroObjetivo").hidden = true;//Desabilita o campo de outro objetivo
-            }
-
-            var seletor = document.getElementById("flexSwitchCheckDefault")
-            if(seletor.checked == true) {
-                document.getElementById("isSelecionado").value = "1";
-            } else if(seletor.checked == false){
-                document.getElementById("isSelecionado").value = "0";
             }
             
         })  
