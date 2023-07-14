@@ -74,4 +74,14 @@ class UserPolicy
         }
     }
 
+    public function gerCecr(User $user)
+    {
+        $permission = Permission::where('name', 'ger cecr')->first();
+        try {
+            return $user->hasPermissionTo($permission);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
 }

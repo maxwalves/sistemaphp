@@ -246,6 +246,7 @@ class UsersController extends Controller
         $permission5 = Permission::where('name', 'aprov avs financeiro')->first();
         $permission6 = Permission::where('name', 'aprov avs frota')->first();
         $permission7 = Permission::where('name', 'aprov avs diretoria')->first();
+        $permission8 = Permission::where('name', 'ger cecr')->first();
 
         $dados = [];
 
@@ -285,6 +286,11 @@ class UsersController extends Controller
         } catch (\Throwable $th) {
             $dados += ["permission7"=> "false"];
         }
+        try {
+            $dados += ["permission8"=> ($usuarioEditar->hasPermissionTo($permission8) ? "true" : "false")];
+        } catch (\Throwable $th) {
+            $dados += ["permission8"=> "false"];
+        }
         
         return view('users.editPerfil', ['usuarioEditar' => $usuarioEditar, 'user'=> $user, 'dados' => $dados]);
     }
@@ -301,6 +307,7 @@ class UsersController extends Controller
         $permission5 = Permission::where('name', 'aprov avs financeiro')->first();
         $permission6 = Permission::where('name', 'aprov avs frota')->first();
         $permission7 = Permission::where('name', 'aprov avs diretoria')->first();
+        $permission8 = Permission::where('name', 'ger cecr')->first();
 
         $dados = [];
         
@@ -327,6 +334,10 @@ class UsersController extends Controller
         else if($ordem == 'desativarDiretoriaExecutiva')
         {
             $usuarioEditar->revokePermissionTo($permission7);
+        }
+        else if($ordem == 'desativarGerCecr')
+        {
+            $usuarioEditar->revokePermissionTo($permission8);
         }//----------------------------------------------------------------------------------
         else if($ordem == 'ativarAdmin')
         {
@@ -351,6 +362,10 @@ class UsersController extends Controller
         else if($ordem == 'ativarDiretoriaExecutiva')
         {
             $usuarioEditar->givePermissionTo($permission7);
+        }
+        else if($ordem == 'ativarGerCecr')
+        {
+            $usuarioEditar->givePermissionTo($permission8);
         }
 
         try {
@@ -388,6 +403,11 @@ class UsersController extends Controller
             $dados += ["permission7"=> ($usuarioEditar->hasPermissionTo($permission7) ? "true" : "false")];
         } catch (\Throwable $th) {
             $dados += ["permission7"=> "false"];
+        }
+        try{
+            $dados += ["permission8"=> ($usuarioEditar->hasPermissionTo($permission8) ? "true" : "false")];
+        } catch (\Throwable $th) {
+            $dados += ["permission8"=> "false"];
         }
 
         return view('users.editPerfil', ['usuarioEditar' => $usuarioEditar, 'user'=> $user, 'dados' => $dados]);

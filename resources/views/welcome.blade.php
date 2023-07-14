@@ -113,7 +113,7 @@
                         </div> 
                     </div>
                 </div>
-                @can('view-users', $user)
+                @can('ger-cecr', $user)
                     <div class="col-12 col-xl-4">
                         <div class= "card" >
                             <div class="card-body">

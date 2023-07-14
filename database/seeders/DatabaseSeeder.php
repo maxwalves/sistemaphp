@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $financeiroRole = Role::create(['name' => 'financeiro', 'guard_name' => 'fortify']);
         $frotaRole = Role::create(['name' => 'frota', 'guard_name' => 'fortify']);
         $diretoriaRole = Role::create(['name' => 'diretoria', 'guard_name' => 'fortify']);
+        $gerCecrRole = Role::create(['name' => 'ger cecr', 'guard_name' => 'fortify']);
         
 
         $viewUsersPermission = Permission::create(['name' => 'view users', 'guard_name' => 'fortify']);
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
         $gerenciarAvsPendentesAprovacaoFinanceiro = Permission::create(['name' => 'aprov avs financeiro', 'guard_name' => 'fortify']);
         $gerenciarAvsPendentesReservaFrota = Permission::create(['name' => 'aprov avs frota', 'guard_name' => 'fortify']);
         $gerenciarAvsPendentesDiretoria = Permission::create(['name' => 'aprov avs diretoria', 'guard_name' => 'fortify']);
+        $gerenciarCecr = Permission::create(['name' => 'ger cecr', 'guard_name' => 'fortify']);
 
         $adminRole->givePermissionTo([$viewUsersPermission, $editUsersPermission]);
         $gestorRole->givePermissionTo([$gerenciarAvsPendentesAprovacaoGestor]);
@@ -39,6 +41,7 @@ class DatabaseSeeder extends Seeder
         $financeiroRole->givePermissionTo([$gerenciarAvsPendentesAprovacaoFinanceiro]);
         $frotaRole->givePermissionTo([$gerenciarAvsPendentesReservaFrota]);
         $diretoriaRole->givePermissionTo([$gerenciarAvsPendentesDiretoria]);
+        $gerCecrRole->givePermissionTo([$gerenciarCecr]);
 
         // \App\Models\User::factory(10)->create();
 

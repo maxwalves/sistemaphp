@@ -179,6 +179,9 @@
                         @if ($dados["permission7"] == 'true')
                             <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarDiretoriaExecutiva" class="btn btn-active btn-primary" id="btDiretoriaExecutivaPossui">DAF</a>
                         @endif
+                        @if ($dados["permission8"] == 'true')
+                            <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarGerCecr" class="btn btn-active btn-primary" id="btGerCecrPossui">GER CECR</a>
+                        @endif
                         
                     </div>
                     <div class="divider"></div> 
@@ -202,6 +205,9 @@
                         @endif
                         @if ($dados["permission7"] == 'false')
                         <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarDiretoriaExecutiva" class="btn btn-active btn-secondary" id="btDiretoriaExecutivaDisponivel">DAF</a>
+                        @endif
+                        @if ($dados["permission8"] == 'false')
+                            <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarGerCecr" class="btn btn-active btn-primary" id="btGerCecrDisponivel">GER CECR</a>
                         @endif
                         
                     </div>
