@@ -5,7 +5,7 @@
 
 
 <div >
-    <div class="container">
+    <div >
         <div class="input-group mb-3">
 
             <form action="{{ route('pesquisar') }}" method="GET" enctype="multipart/form-data" class="input-group mb-3">

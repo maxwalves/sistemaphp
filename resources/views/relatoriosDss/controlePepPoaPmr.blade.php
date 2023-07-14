@@ -284,8 +284,7 @@
         };
 
         $.post("/api/pepPoaPmr", pepPoaPmr, function(data){
-        $('#tabelaPepPoaPmr>tbody').empty();
-        carregarPepPoaPmr();
+            filtrarDadosTabela();
 
         });
     }
@@ -353,9 +352,7 @@
             context: this,
             success: function(){
                 console.log('Apagou OK');
-                linhas = $("#tabelaPepPoaPmr>tbody>tr");
-                $('#tabelaPepPoaPmr>tbody').empty();
-                carregarPepPoaPmr();
+                filtrarDadosTabela();
             },
             error: function(error){
                 console.log(error);
