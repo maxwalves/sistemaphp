@@ -76,4 +76,14 @@ class ControladorSubcomponentes extends Controller
         return response('Subcomponente não encontrado', 404);
     }
     
+    public function findSubcomponenteByCodigoComponente($id)
+    {
+        $subcomponente = Subcomponente::all()->where('componente_id', $id);
+        if(isset($subcomponente)) {
+            return json_encode($subcomponente);
+        }
+        else{
+            return response('Subcomponente não encontrado', 404);
+        }
+    }
 }

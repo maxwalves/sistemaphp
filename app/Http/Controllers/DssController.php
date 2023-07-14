@@ -8,7 +8,9 @@ use App\Models\Ano;
 use App\Models\CategoriaPepPoa;
 use App\Models\CategoriaPmr;
 use App\Models\Componente;
+use App\Models\PepPoaPmr;
 use App\Models\Subcomponente;
+use App\Models\AnoPepPoaPmr;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 use DateTimeZone;
@@ -89,7 +91,17 @@ class DssController extends Controller
             return view('relatoriosDss.paranaUrbanoIII', ['user' => $user, 'consultaLotes35' => $consultaLotes35, 
         'consultaLotes45' => $consultaLotes45, 'consultaLotes80' => $consultaLotes80, 'componentesBID' => $componentesBID, 'municipios' => $municipios]);
         }
-        return view('relatoriosDss.paranaUrbanoIII', ['user' => $user]);
+
+        $anos = Ano::all();
+        $componentes = Componente::all();
+        $subcomponentes = Subcomponente::all();
+        $categoriasPeppoa = CategoriaPepPoa::all();
+        $categoriasPmr = CategoriaPmr::all();
+        $pepPoaPmrTodos = PepPoaPmr::all();
+        $anoPepPoaPmrTodos = AnoPepPoaPmr::all();
+
+        return view('relatoriosDss.paranaUrbanoIII', ['user' => $user, 'anos' => $anos, 'componentes' => $componentes, 'subcomponentes' => $subcomponentes,
+         'categoriasPeppoa' => $categoriasPeppoa, 'categoriasPmr' => $categoriasPmr, 'pepPoaPmrTodos' => $pepPoaPmrTodos, 'anoPepPoaPmrTodos' => $anoPepPoaPmrTodos]);
     }
 
     public function parametros()
@@ -100,7 +112,21 @@ class DssController extends Controller
         $subcomponentes = Subcomponente::all();
         $categoriasPeppoa = CategoriaPepPoa::all();
         $categoriasPmr = CategoriaPmr::all();
+        $pepPoaPmrTodos = PepPoaPmr::all();
         return view('relatoriosDss.parametros', ['user' => $user, 'anos' => $anos, 'componentes' => $componentes, 'subcomponentes' => $subcomponentes,
-         'categoriasPeppoa' => $categoriasPeppoa, 'categoriasPmr' => $categoriasPmr]);
+         'categoriasPeppoa' => $categoriasPeppoa, 'categoriasPmr' => $categoriasPmr, 'pepPoaPmrTodos' => $pepPoaPmrTodos]);
+    }
+
+    public function controlePepPoaPmr()
+    {
+        $user = auth()->user();
+        $anos = Ano::all();
+        $componentes = Componente::all();
+        $subcomponentes = Subcomponente::all();
+        $categoriasPeppoa = CategoriaPepPoa::all();
+        $categoriasPmr = CategoriaPmr::all();
+        $pepPoaPmrTodos = PepPoaPmr::all();
+        return view('relatoriosDss.controlePepPoaPmr', ['user' => $user, 'anos' => $anos, 'componentes' => $componentes, 'subcomponentes' => $subcomponentes,
+         'categoriasPeppoa' => $categoriasPeppoa, 'categoriasPmr' => $categoriasPmr, 'pepPoaPmrTodos' => $pepPoaPmrTodos]);
     }
 }

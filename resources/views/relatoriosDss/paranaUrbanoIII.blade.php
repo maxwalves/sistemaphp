@@ -109,6 +109,9 @@
                             <a class="btn btn-active btn-primary rounded-none" href="/relatoriosDss/paranaUrbanoIII/">Gerenciar programa</a>
                         </li>
                         <li class="nav-item">
+                            <a class="btn btn-active btn-primary rounded-none" href="/relatoriosDss/controlePepPoaPmr/">Parâmetros do programa</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="btn btn-active btn-primary rounded-none" href="/relatoriosDss/parametros/">Parâmetros do sistema</a>
                         </li>
                     </ul>
@@ -116,421 +119,545 @@
             </div>
         </nav>
         <br>
+
         <div class="container">
             <div class="row">
-                <div class="col-3">
-                    <select class="form-select" aria-label="Default select example" onChange="mostrarTabelaConformeSelecao()">
+                <div class="col-5">
+                    <select class="form-select" aria-label="Default select example" onChange="habilitarComponenteSelect()"
+                    style="width: 100%" id="anoSelect">
+                        <option selected>Selecione um ano</option>
+                        @foreach($anos->sortBy('ano') as $ano)
+                            <option value="{{$ano->id}}">{{$ano->ano}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container">
+            <div class="row">
+                <div class="col-5">
+                    <select class="form-select" aria-label="Default select example" onChange="mostrarTabelaConformeSelecao()"
+                    style="width: 100%" id="componenteSelect" disabled>
                         <option selected>Selecione um componente</option>
-                        <option value="comp1">COMP 1. MODERNIZAÇÃO DA GESTÃO MUNICIPAL</option>
-                        <option value="comp2">COMP 2. INFRAESTRUTURA</option>
-                        <option value="comp3">COMP 3. FORTALECIMENTO do SFM</option>
+                        @foreach($componentes as $componente)
+                            <option value="{{$componente->id}}">{{$componente->nome}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-5">
+                    <select class="form-select" aria-label="Default select example" onChange="filtrarDadosTabela()"
+                    style="width: 100%" id="subcomponenteSelect" disabled>
+                        <option selected>Selecione um subcomponente</option>
+                        @foreach($subcomponentes as $subcomponente)
+                            <option value="{{$subcomponente->id}}">{{$subcomponente->nome}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
         </div>
        
-        <div id="comp1" class="container" style="display: none">
+        <div id="comp1" class="container">
             <br>
-            <p>
-                   <strong>COMP 1. MODERNIZAÇÃO DA GESTÃO MUNICIPAL</strong> 
-            </p>
             <br>
             <div id="divAba-escopo1">
-				<table class="table table-striped table-hover table-bordered" id="tabela11">
+				<table class="table table-striped table-hover table-bordered" id="tabelaPepPoaPmr">
 					<thead>
 						<tr>
-							<th class="text-center" style="width: 5%"><small>Código PEP-POA</small></th>
-                            <th class="text-center" style="width: 45%"><small>Nome PEP-POA</small></th>
-                            <th class="text-center" style="width: 5%"><small>Código PMR</small></th>
-                            <th class="text-center" style="width: 45%"><small>Nome PMR</small></th>
+							<th class="text-center" style="width: 10%"><small>Código PEP-POA</small></th>
+                            <th class="text-center" style="width: 30%"><small>Nome PEP-POA</small></th>
+                            <th class="text-center" style="width: 10%"><small>Código PMR</small></th>
+                            <th class="text-center" style="width: 30%"><small>Nome PMR</small></th>
+                            <th class="text-center" style="width: 5%"><small>Meta Física BID</small></th>
+                            <th class="text-center" style="width: 5%"><small>Und medida BID</small></th>
+                            <th class="text-center" style="width: 5%"><small>Meta Física PRCID</small></th>
+                            <th class="text-center" style="width: 5%"><small>Und medida PRCID</small></th>
+                            <th class="text-center" style="width: 5%"><small>Meta Fin BID</small></th>
+                            <th class="text-center" style="width: 5%"><small>Meta Fin PRCID</small></th>
+                            <th class="text-center" style="width: 20%"><small>Ações</small></th>
 						</tr>
 					</thead>
 					<tbody>
-
-                        <tr>
-                            <td></td>
-                            <td class="text-center">  
-                               <strong>1.1. 32 municípios com população superior a 50.000 hab.</strong> 
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">010101</td>
-                            <td class="text-center">  
-                                Aprimoramento da gestão tributária financeira
-                            </td>
-                            <td class="text-center">1.1</td>
-                            <td class="text-center">Cadastro Multifinalitário Atualizado  - G1</td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">010102</td>
-                            <td class="text-center">  
-                                Fortalecimento do planejamento e gestão urbana
-                            </td>
-                            <td class="text-center">1.3</td>
-                            <td class="text-center">Plano Diretor Atualizado - G1</td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">010102</td>
-                            <td class="text-center">  
-                                Fortalecimento do planejamento e gestão urbana
-                            </td>
-                            <td class="text-center">1.5</td>
-                            <td class="text-center">Plano Setorial (Saneamento e Mobilidade Urbana) - G1</td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">010103</td>
-                            <td class="text-center">  
-                                Modernização da área de governo eletrônico
-                            </td>
-                            <td class="text-center">1.7</td>
-                            <td class="text-center">Serviços on line (IPTU, ISS, Consulta de Potencial Construtivo) - G1</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">010104</td>
-                            <td class="text-center">  
-                                Capacitção de servidores
-                            </td>
-                            <td class="text-center">1.8</td>
-                            <td class="text-center">Oficinas de Capacitação G1</td>
-                        </tr>
-                        
+                        <tr><td></td><td>Selecione um filtro</td><td></td><td>Selecione um filtro</td><td></td></tr>
 					</tbody>
 				</table>
-                <table class="table table-striped table-hover table-bordered" id="tabela12">
-                    <thead>
-						<tr>
-							<th class="text-center" style="width: 5%"><small>Código PEP-POA</small></th>
-                            <th class="text-center" style="width: 45%"><small>Nome PEP-POA</small></th>
-                            <th class="text-center" style="width: 5%"><small>Código PMR</small></th>
-                            <th class="text-center" style="width: 45%"><small>Nome PMR</small></th>
-						</tr>
-					</thead>
-					<tbody>
-                        <tr>
-                            <td></td>
-                            <td class="text-center">  
-                                <strong>1.2. demais municípios</strong> 
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">010201</td>
-                            <td class="text-center">  
-                                Fortalecimento da gestão tributária
-                            </td>
-                            <td class="text-center">1.2</td>
-                            <td class="text-center">Cadastro Fiscal Atualizado  - G2</td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">010202</td>
-                            <td class="text-center">  
-                                Fortalecimento do planejamento e gestão urbana - até 50 mil habitantes
-                            </td>
-                            <td class="text-center">1.4</td>
-                            <td class="text-center">Plano Diretor Atualizado - G2</td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">010202</td>
-                            <td class="text-center">  
-                                Fortalecimento do planejamento e gestão urbana - até 50 mil habitantes
-                            </td>
-                            <td class="text-center">1.6</td>
-                            <td class="text-center">Plano Setorial (Mobilidade Urbana) - G2</td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">010203</td>
-                            <td class="text-center">  
-                                Capacitação de servidores e conselheiros dos planos diretores
-                            </td>
-                            <td class="text-center">1.9</td>
-                            <td class="text-center">Oficinas de Capacitação  G2</td>
-                        </tr>
-                    </tbody>
-                </table>
 			</div>
         </div>
 
-        <div id="comp2" class="container" style="display: none">
-            <br>
-            <p>
-                   <strong>COMP 2. INFRAESTRUTURA</strong> 
-            </p>
-            <br>
-            <table class="table table-striped table-hover table-bordered" id="tabela21">
-                <thead>
-                    <tr>
-                        <th class="text-center" style="width: 5%"><small>Código PEP-POA</small></th>
-                        <th class="text-center" style="width: 45%"><small>Nome PEP-POA</small></th>
-                        <th class="text-center" style="width: 5%"><small>Código PMR</small></th>
-                        <th class="text-center" style="width: 45%"><small>Nome PMR</small></th>
-                    </tr>
-                </thead>
-                <tbody>
+        {{-- ---------------------------------------------------------------------------------- MODAL GERENCIAR REGISTROS --}}
+        <div class="modal" tabindex="-1" role="dialog" id="dlgRegistros" data-backdrop="static">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form class="form-horizontal" id="formRegistros">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Novo Registro</h5>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="id" class="form-control">
 
-                    <tr>
-                        <td></td>
-                        <td class="text-center">  
-                           <strong>2.1. 32 municípios com população superior a 50.000 hab.</strong>
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                            <div class="row justify-content-md-center">
+                                <div class="col col-lg-6">
+                                    <input type="hidden" id="idAnoPepPoaPmr" class="form-control">
 
-                    <tr>
-                        <td class="text-center">020101</td>
-                        <td class="text-center">  
-                            Desenvolvimento urbano integrado
-                        </td>
-                        <td class="text-center">2.1</td>
-                        <td class="text-center">Pavimentação de Vias Urbanas - G1</td>
-                    </tr>
+                                    <label for="meta_fisica_bid">Meta Física BID: </label>
+                                    <input type="text" class="form-control" id="meta_fisica_bid" name="meta_fisica_bid" placeholder="Ex: 1">
 
-                    <tr>
-                        <td class="text-center">020102</td>
-                        <td class="text-center">  
-                            Mobilidade urbana - acima de 50 mil habitantes
-                        </td>
-                        <td class="text-center">2.3</td>
-                        <td class="text-center">Equipamento Urbano (praça, unidade esportiva, parque e terminal rodoviário) - G1</td>
-                    </tr>
+                                    <label for="und_medida_bid">Unidade de Medida BID: </label>
+                                    <input type="text" class="form-control" id="und_medida_bid" name="und_medida_bid" placeholder="Ex: Km">
 
-                    <tr>
-                        <td class="text-center">020103</td>
-                        <td class="text-center">  
-                            Apoio social integrado - acima de 50 mil habitantes
-                        </td>
-                        <td class="text-center">2.5</td>
-                        <td class="text-center">Unidade básica de Saúde - G1</td>
-                    </tr>
+                                    <label for="meta_fisica_prcid">Meta Física PRCID: </label>
+                                    <input type="text" class="form-control" id="meta_fisica_prcid" name="meta_fisica_prcid" placeholder="Ex: 1">
 
-                    <tr>
-                        <td class="text-center">020104</td>
-                        <td class="text-center">  
-                            Apoio social integrado - acima de 50 mil habitantes
-                        </td>
-                        <td class="text-center">2.7</td>
-                        <td class="text-center">Centro Municipal de Educacao - G1</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">020105</td>
-                        <td class="text-center">  
-                            Esporte e Lazer - acima de 50 mil habitantes
-                        </td>
-                        <td class="text-center">2.3</td>
-                        <td class="text-center">Equipamento Urbano (praça, unidade esportiva, parque e terminal rodoviário) - G1</td>
-                    </tr>
-                    
-                </tbody>
-            </table>
+                                    <label for="und_medida_prcid">Unidade de Medida PRCID: </label>
+                                    <input type="text" class="form-control" id="und_medida_prcid" name="und_medida_prcid" placeholder="Ex: Km">
 
-            <table class="table table-striped table-hover table-bordered" id="tabela22">
-                <thead>
-                    <tr>
-                        <th class="text-center" style="width: 5%"><small>Código PEP-POA</small></th>
-                        <th class="text-center" style="width: 45%"><small>Nome PEP-POA</small></th>
-                        <th class="text-center" style="width: 5%"><small>Código PMR</small></th>
-                        <th class="text-center" style="width: 45%"><small>Nome PMR</small></th>
-                    </tr>
-                </thead>
-                <tbody>
+                                    <label for="meta_fin_bid">Meta Financeira BID: </label>
+                                    <input type="text" class="form-control" id="meta_fin_bid" name="meta_fin_bid" placeholder="Ex: R$1.000.000,00">
 
-                    <tr>
-                        <td></td>
-                        <td class="text-center">  
-                           <strong>2.2. demais municípios</strong>
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                                    <label for="meta_fin_prcid">Meta Financeira PRCID: </label>
+                                    <input type="text" class="form-control" id="meta_fin_prcid" name="meta_fin_prcid" placeholder="Ex: R$1.000.000,00">
 
-                    <tr>
-                        <td class="text-center">020201</td>
-                        <td class="text-center">  
-                            Requalificação urbana
-                        </td>
-                        <td class="text-center">2.2</td>
-                        <td class="text-center">Pavimentação de Vias Urbanas - G2</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">020202</td>
-                        <td class="text-center">  
-                            Mobilidade urbana - até 50 mil habitantes
-                        </td>
-                        <td class="text-center">2.4</td>
-                        <td class="text-center">Equipamento Urbano (praça, unidade esportiva, parque e terminal rodoviário) - G2</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">020203</td>
-                        <td class="text-center">  
-                            Projetos ambientais - até 50 mil habitantes
-                        </td>
-                        <td class="text-center">2.4</td>
-                        <td class="text-center">Equipamento Urbano (praça, unidade esportiva, parque e terminal rodoviário) - G2</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">020204</td>
-                        <td class="text-center">  
-                            Apoio social integrado - até 50 mil habitantes
-                        </td>
-                        <td class="text-center">2.6</td>
-                        <td class="text-center">Unidade básica de Saúde - G2</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">020204</td>
-                        <td class="text-center">  
-                            Apoio social integrado - até 50 mil habitantes
-                        </td>
-                        <td class="text-center">2.8</td>
-                        <td class="text-center">Centro Municipal de Educacao - G2</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">020205</td>
-                        <td class="text-center">  
-                            Esporte e Lazer - até 50 mil habitantes
-                        </td>
-                        <td class="text-center">2.4</td>
-                        <td class="text-center">Equipamento Urbano (praça, unidade esportiva, parque e terminal rodoviário) - G2</td>
-                    </tr>
-                    
-                </tbody>
-            </table>
-        </div>
-
-        <div id="comp3" class="container" style="display: none">
-            <br>
-            <p>
-                   <strong>COMP 3. FORTALECIMENTO do SFM</strong> 
-            </p>
-            <br>
-            <table class="table table-striped table-hover table-bordered" id="tabela31">
-                <thead>
-                    <tr>
-                        <th class="text-center" style="width: 5%"><small>Código PEP-POA</small></th>
-                        <th class="text-center" style="width: 45%"><small>Nome PEP-POA</small></th>
-                        <th class="text-center" style="width: 5%"><small>Código PMR</small></th>
-                        <th class="text-center" style="width: 45%"><small>Nome PMR</small></th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <tr>
-                        <td class="text-center">0301</td>
-                        <td class="text-center">  
-                            Atualização das bases cartográficas urbanas digitais
-                        </td>
-                        <td class="text-center">3.1</td>
-                        <td class="text-center">Bases Cartográficas Urbanas Digitais </td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">0302</td>
-                        <td class="text-center">  
-                            Apoio institucional em gestão urbana ao Projeto PUIII
-                        </td>
-                        <td class="text-center">3.5</td>
-                        <td class="text-center">Sistema de Gestão de Carteira de Projetos</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">0303</td>
-                        <td class="text-center">  
-                            Revisão dos critérios econômicos de elegibilidade
-                        </td>
-                        <td class="text-center">3.5</td>
-                        <td class="text-center">Sistema de Gestão de Carteira de Projetos</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">0304</td>
-                        <td class="text-center">  
-                            Aperfeiçoamento do sistema de classificação de risco municipal
-                        </td>
-                        <td class="text-center">3.3</td>
-                        <td class="text-center">Sistema de Classificação de Riscos dos Municípios</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">0305</td>
-                        <td class="text-center">  
-                            Desenvolvimento de novos mecanismos de financiamento municipal
-                        </td>
-                        <td class="text-center">3.4</td>
-                        <td class="text-center">Novos Mecanismos de Financiamento a Projetos Municipais</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">0306</td>
-                        <td class="text-center">  
-                            Modernização do sistema de gestão de carteira de projetos
-                        </td>
-                        <td class="text-center">3.5</td>
-                        <td class="text-center">Sistema de Gestão de Carteira de Projetos</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">0307</td>
-                        <td class="text-center">  
-                            Implantação de sistema de diagnóstico de infraestrutura urbana
-                        </td>
-                        <td class="text-center">3.2</td>
-                        <td class="text-center">Sistema de Diagnóstico de Infraestrutura e Serviços Públicos nos Municípios</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">0308</td>
-                        <td class="text-center">  
-                            Avaliação e monitoramento do Programa
-                        </td>
-                        <td class="text-center">3.5</td>
-                        <td class="text-center">Sistema de Gestão de Carteira de Projetos</td>
-                    </tr>
-                    
-                </tbody>
-            </table>
-
+                                    <input type="hidden" id="peppoa_pmr_id" name="peppoa_pmr_id">
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                            <button type="reset" class="btn btn-secondary" onclick="$('#dlgRegistros').modal('hide')" >Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+    <br><br>
 </body>
 <script>
 
-    
-    function mostrarTabelaConformeSelecao() {
-        var select = document.querySelector('.form-select');
-        var divIds = ['comp1', 'comp2', 'comp3'];
+    $("#formRegistros").submit(function(event){
+        event.preventDefault();
 
-        // Oculta todas as divs
-        for (var i = 0; i < divIds.length; i++) {
-            var div = document.getElementById(divIds[i]);
-            if (div) {
-                div.style.display = 'none';
+        //Verifica se está criando um novo ou editando
+        if($("#idAnoPepPoaPmr").val() != ''){
+            salvarRegistroAnoPepPoaPmr();
+        }
+        else{
+            criarRegistroPepPoaPmr();
+        }
+        
+        $("#dlgRegistros").modal('hide');
+    });
+
+    function salvarRegistroAnoPepPoaPmr(){
+        
+        anoPepPoaPmr = {
+            id: $('#idAnoPepPoaPmr').val(),
+            ano_id: $('#anoSelect').val(),
+            metaFisicaBid: $('#meta_fisica_bid').val(),
+            unidadeMedidaBid: $('#und_medida_bid').val(),
+            metaFisicaPrcid: $('#meta_fisica_prcid').val(),
+            unidadeMedidaPrcid: $('#und_medida_prcid').val(),
+            metaFinanceiraBid: $('#meta_fin_bid').val(),
+            metaFinanceiraPrcid: $('#meta_fin_prcid').val(),
+            peppoa_pmr_id: $('#peppoa_pmr_id').val()
+        };
+        var idCatPepPoa = 0;
+        var idCatPmr = 0;
+        var codigoPepPoa = "";
+        var codigoPmr = "";
+        var pepPoaPmr = null;
+
+        @for($i = 0; $i < count($pepPoaPmrTodos); $i++)
+            if(anoPepPoaPmr.peppoa_pmr_id == {{$pepPoaPmrTodos[$i]->id}}){
+                idCatPepPoa = "{{$pepPoaPmrTodos[$i]->categoriaPeppoa_id}}";
+                idCatPmr = "{{$pepPoaPmrTodos[$i]->categoriaPmr_id}}";
+            }
+        @endfor
+
+        @for($i = 0; $i < count($categoriasPeppoa); $i++)
+            if(idCatPepPoa == {{$categoriasPeppoa[$i]->id}}){
+                codigoPepPoa = "{{$categoriasPeppoa[$i]->codigo}}";
+            }
+        @endfor
+
+        @for($i = 0; $i < count($categoriasPmr); $i++)
+            if(idCatPmr == {{$categoriasPmr[$i]->id}}){
+                codigoPmr = "{{$categoriasPmr[$i]->codigo}}";
+            }
+        @endfor
+
+        $.getJSON('/api/pepPoaPmr/' + anoPepPoaPmr.peppoa_pmr_id, function(data){
+            pepPoaPmr = data;
+
+            $.ajax({
+                type: "PUT",
+                url: "/api/anoPepPoaPmr/" + anoPepPoaPmr.id,
+                context: this,
+                data: anoPepPoaPmr,
+                success: function(data){
+                    
+                    linhas = $("#tabelaPepPoaPmr>tbody>tr");
+                    e = linhas.filter(function(i, e) {
+                        return (e.cells[0].textContent == codigoPepPoa && e.cells[2].textContent == codigoPmr);
+                    });
+                    
+                    var novaLinha = montarLinha2(pepPoaPmr, anoPepPoaPmr);
+
+                    $(novaLinha).insertBefore(e);
+                    $(e).remove();
+
+                    $('#idAnoPepPoaPmr').val("");
+                    $('#meta_fisica_bid').val("");
+                    $('#und_medida_bid').val("");
+                    $('#meta_fisica_prcid').val("");
+                    $('#und_medida_prcid').val("");
+                    $('#meta_fin_bid').val("");
+                    $('#meta_fin_prcid').val("");
+                    $('#peppoa_pmr_id').val("");
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        });
+        
+    }
+
+    function criarRegistroPepPoaPmr(){
+        anoPepPoaPmr = {
+            ano_id: $('#anoSelect').val(),
+            metaFisicaBid: $('#meta_fisica_bid').val(),
+            unidadeMedidaBid: $('#und_medida_bid').val(),
+            metaFisicaPrcid: $('#meta_fisica_prcid').val(),
+            unidadeMedidaPrcid: $('#und_medida_prcid').val(),
+            metaFinanceiraBid: $('#meta_fin_bid').val(),
+            metaFinanceiraPrcid: $('#meta_fin_prcid').val(),
+            peppoa_pmr_id: $('#peppoa_pmr_id').val(),
+        };
+
+        var idCatPepPoa = 0;
+        var idCatPmr = 0;
+        var codigoPepPoa = "";
+        var codigoPmr = "";
+        var codigoPmr = "";
+        var pepPoaPmr = null;
+
+        @for($i = 0; $i < count($pepPoaPmrTodos); $i++)
+            if(anoPepPoaPmr.peppoa_pmr_id == {{$pepPoaPmrTodos[$i]->id}}){
+                idCatPepPoa = "{{$pepPoaPmrTodos[$i]->categoriaPeppoa_id}}";
+                idCatPmr = "{{$pepPoaPmrTodos[$i]->categoriaPmr_id}}";
+            }
+        @endfor
+
+        @for($i = 0; $i < count($categoriasPeppoa); $i++)
+            if(idCatPepPoa == {{$categoriasPeppoa[$i]->id}}){
+                codigoPepPoa = "{{$categoriasPeppoa[$i]->codigo}}";
+            }
+        @endfor
+
+        @for($i = 0; $i < count($categoriasPmr); $i++)
+            if(idCatPmr == {{$categoriasPmr[$i]->id}}){
+                codigoPmr = "{{$categoriasPmr[$i]->codigo}}";
+            }
+        @endfor
+
+        $.getJSON('/api/pepPoaPmr/' + anoPepPoaPmr.peppoa_pmr_id, function(data){
+            pepPoaPmr = data;
+
+            $.post("/api/anoPepPoaPmr", anoPepPoaPmr, function(data){
+                anoPepPoaPmr = JSON.parse(data);
+                linhas = $("#tabelaPepPoaPmr>tbody>tr");
+                e = linhas.filter(function(i, e) {
+                    return (e.cells[0].textContent == codigoPepPoa && e.cells[2].textContent == codigoPmr);
+                });
+                
+                var novaLinha = montarLinha2(pepPoaPmr, anoPepPoaPmr);
+
+                $(novaLinha).insertBefore(e);
+                $(e).remove();
+
+                $('#idAnoPepPoaPmr').val("");
+                $('#meta_fisica_bid').val("");
+                $('#und_medida_bid').val("");
+                $('#meta_fisica_prcid').val("");
+                $('#und_medida_prcid').val("");
+                $('#meta_fin_bid').val("");
+                $('#meta_fin_prcid').val("");
+                $('#peppoa_pmr_id').val("");
+            });
+        });
+    }
+
+    function carregarPepPoaPmr(){
+
+        $.getJSON('/api/pepPoaPmr/', function(data){
+            
+            for(i=0; i<data.length; i++){
+                montarLinha(data[i])
+                .then(function(linha) {
+                    $('#tabelaPepPoaPmr>tbody').append(linha);
+                })
+                .catch(function(error) {
+                    console.log(error); // Tratar erros, se houver
+                });
+                $('#tabelaPepPoaPmr>tbody').append(linha);
+            }
+        });
+    }
+
+    async function obterDadosAnoPepPoaPmr() {
+        try {
+            var response = await fetch('/api/anoPepPoaPmr/');
+            var data = await response.json();
+            return data;
+        } catch (error) {
+            throw new Error('Erro ao obter os dados do anoPepPoaPmr: ' + error.message);
+        }
+    }
+
+    async function montarLinha(a){
+        try {
+        var peppoaCodigo = 0;
+        var peppoaNome = "";
+        var pmrCodigo = 0;
+        var pmrNome = "";
+
+        var idAnoPepPoaPmr = 0;
+        var ano_id = 0;
+        var anoNome = "";
+        var metaFisicaBid = 0;
+        var unidadeMedidaBid = "";
+        var metaFisicaPrcid = 0;
+        var unidadeMedidaPrcid = "";
+        var metaFinanceiraBid = 0;
+        var metaFinanceiraPrcid = 0;
+
+        @for($i = 0; $i < count($categoriasPeppoa); $i++)
+            if(a.categoriaPeppoa_id == {{$categoriasPeppoa[$i]->id}}){
+                peppoaCodigo = "{{$categoriasPeppoa[$i]->codigo}}";
+                peppoaNome = "{{$categoriasPeppoa[$i]->nome}}";
+            }
+        @endfor
+
+        @for($i = 0; $i < count($categoriasPmr); $i++)
+            if(a.categoriaPmr_id == {{$categoriasPmr[$i]->id}}){
+                pmrCodigo = "{{$categoriasPmr[$i]->codigo}}";
+                pmrNome = "{{$categoriasPmr[$i]->nome}}";
+            }
+        @endfor
+
+        var anoSelect = document.getElementById('anoSelect');
+        
+        var anoPepPoaPmrTodos = await obterDadosAnoPepPoaPmr();
+
+        for(var i = 0; i < anoPepPoaPmrTodos.length; i++) {
+            if(a.id == anoPepPoaPmrTodos[i].peppoa_pmr_id && anoSelect.value == anoPepPoaPmrTodos[i].ano_id){
+                ano_id = anoPepPoaPmrTodos[i].ano_id;
+
+                idAnoPepPoaPmr = anoPepPoaPmrTodos[i].id;
+                metaFisicaBid = anoPepPoaPmrTodos[i].metaFisicaBid;
+                unidadeMedidaBid = anoPepPoaPmrTodos[i].unidadeMedidaBid;
+                metaFisicaPrcid = anoPepPoaPmrTodos[i].metaFisicaPrcid;
+                unidadeMedidaPrcid = anoPepPoaPmrTodos[i].unidadeMedidaPrcid;
+                metaFinanceiraBid = anoPepPoaPmrTodos[i].metaFinanceiraBid;
+                metaFinanceiraPrcid = anoPepPoaPmrTodos[i].metaFinanceiraPrcid;
             }
         }
 
-        // Obtém o valor selecionado no campo select
-        var selectedValue = select.value;
+        @for($i = 0; $i < count($anos); $i++)
+            if(ano_id == {{$anos[$i]->id}}){
+                anoNome = "{{$anos[$i]->nome}}";
+            }
+        @endfor
+        
+        var linha = "<tr>" +
+            "<td>" + peppoaCodigo + "</td>" +
+            "<td>" + peppoaNome +"</td>" +
+            "<td>" + pmrCodigo + "</td>" +
+            "<td>" + pmrNome + "</td>" +
+            "<td>" + metaFisicaBid + "</td>" +
+            "<td>" + unidadeMedidaBid + "</td>" +
+            "<td>" + metaFisicaPrcid + "</td>" +
+            "<td>" + unidadeMedidaPrcid + "</td>" +
+            "<td>" + metaFinanceiraBid + "</td>" +
+            "<td>" + metaFinanceiraPrcid + "</td>" +
+            "<td>" +
+                '<button class="btn btn-xs btn-primary" onclick="editar('+ a.id + "," + idAnoPepPoaPmr +')"> Editar </button>' +
+            "</td>" +
+        "</tr>";
+        return linha;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+    }
 
-        // Exibe a div correspondente ao componente selecionado
-        var divToShow = document.getElementById(selectedValue);
-        if (divToShow) {
-            divToShow.style.display = 'block';
+    function montarLinha2(a, b){
+        var peppoaCodigo = 0;
+        var peppoaNome = "";
+        var pmrCodigo = 0;
+        var pmrNome = "";
+
+        var idAnoPepPoaPmr = b.id;
+        
+        var ano_id = b.ano_id;
+        var anoNome = "";
+        var metaFisicaBid = b.metaFisicaBid;
+        var unidadeMedidaBid = b.unidadeMedidaBid;
+        var metaFisicaPrcid = b.metaFisicaPrcid;
+        var unidadeMedidaPrcid = b.unidadeMedidaPrcid;
+        var metaFinanceiraBid = b.metaFinanceiraBid;
+        var metaFinanceiraPrcid = b.metaFinanceiraPrcid;
+
+        @for($i = 0; $i < count($categoriasPeppoa); $i++)
+            if(a.categoriaPeppoa_id == {{$categoriasPeppoa[$i]->id}}){
+                peppoaCodigo = "{{$categoriasPeppoa[$i]->codigo}}";
+                peppoaNome = "{{$categoriasPeppoa[$i]->nome}}";
+            }
+        @endfor
+
+        @for($i = 0; $i < count($categoriasPmr); $i++)
+            if(a.categoriaPmr_id == {{$categoriasPmr[$i]->id}}){
+                pmrCodigo = "{{$categoriasPmr[$i]->codigo}}";
+                pmrNome = "{{$categoriasPmr[$i]->nome}}";
+            }
+        @endfor
+
+        @for($i = 0; $i < count($anos); $i++)
+            if(ano_id == {{$anos[$i]->id}}){
+                anoNome = "{{$anos[$i]->nome}}";
+            }
+        @endfor
+
+        var linha = "<tr>" +
+                "<td>" + peppoaCodigo + "</td>" +
+                "<td>" + peppoaNome +"</td>" +
+                "<td>" + pmrCodigo + "</td>" +
+                "<td>" + pmrNome + "</td>" +
+                "<td>" + metaFisicaBid + "</td>" +
+                "<td>" + unidadeMedidaBid + "</td>" +
+                "<td>" + metaFisicaPrcid + "</td>" +
+                "<td>" + unidadeMedidaPrcid + "</td>" +
+                "<td>" + metaFinanceiraBid + "</td>" +
+                "<td>" + metaFinanceiraPrcid + "</td>" +
+                "<td>" +
+                    '<button class="btn btn-xs btn-primary" onclick="editar('+ a.id + "," + idAnoPepPoaPmr +')"> Editar </button>' +
+                "</td>" +
+            "</tr>";
+        return linha;
+    }
+
+    function editar(idPepPoaPmr, id){
+        if(id != 0){
+            $.getJSON('/api/anoPepPoaPmr/' + id, function(data){
+                
+                    $('#idAnoPepPoaPmr').val(data.id);
+                    $('#meta_fisica_bid').val(data.metaFisicaBid);
+                    $('#und_medida_bid').val(data.unidadeMedidaBid);
+                    $('#meta_fisica_prcid').val(data.metaFisicaPrcid);
+                    $('#und_medida_prcid').val(data.unidadeMedidaPrcid);
+                    $('#meta_fin_bid').val(data.metaFinanceiraBid);
+                    $('#meta_fin_prcid').val(data.metaFinanceiraPrcid);
+                    $('#peppoa_pmr_id').val(data.peppoa_pmr_id);
+
+                    $('#dlgRegistros').modal('show');
+                    
+            });
+        }
+        else{
+            $('#peppoa_pmr_id').val(idPepPoaPmr);
+            $('#dlgRegistros').modal('show');
         }
     }
+
+    function mostrarTabelaConformeSelecao() {
+        var componenteSelect = document.getElementById('componenteSelect');
+        var subcomponenteSelect = document.getElementById('subcomponenteSelect');
+        var componenteId = componenteSelect.value;
+
+        // Limpar as opções do segundo select
+        subcomponenteSelect.innerHTML = '<option selected>Selecione um subcomponente</option>';
+        subcomponenteSelect.disabled = true;
+
+        if (componenteId) {
+            // Fazer a solicitação AJAX para obter os subcomponentes do componente selecionado
+            $.getJSON('/api/subcomponentes/', function(data){
+            
+            // Verificar se a resposta é um array
+                if (Array.isArray(data)) {
+                    data.forEach(function(subcomponente) {
+                        if(componenteId == subcomponente.componente_id){
+                            var option = document.createElement('option');
+                            option.value = subcomponente.id;
+                            option.text = subcomponente.nome;
+                            subcomponenteSelect.appendChild(option);
+                        }
+                    });
+                }
+                // Habilitar o segundo select
+                subcomponenteSelect.disabled = false;
+            });   
+        }
+    }
+
+    function filtrarDadosTabela(){
+        var subcomponenteSelect = document.getElementById('subcomponenteSelect');
+        var subcomponenteId = subcomponenteSelect.value;
+
+        // Limpar a tabela existente
+        $('#tabelaPepPoaPmr>tbody').empty();
+
+        // Fazer a solicitação AJAX para obter os dados atualizados da tabela com base no subcomponente selecionado
+        $.getJSON('/api/pepPoaPmr/', function(data){
+
+            for (var i = 0; i < data.length; i++) {
+                @foreach($categoriasPeppoa as $categoriaPeppoa)
+                    if(data[i].categoriaPeppoa_id == {{$categoriaPeppoa->id}}){
+                        if({{$categoriaPeppoa->subcomponente_id}} == subcomponenteId){
+                            montarLinha(data[i])
+                            .then(function(linha) {
+                                $('#tabelaPepPoaPmr>tbody').append(linha);
+                            })
+                            .catch(function(error) {
+                                console.log(error); // Tratar erros, se houver
+                            });
+                        }
+                    }
+                @endforeach
+            }
+        });
+    }
+
+    function habilitarComponenteSelect() {
+        $('#tabelaPepPoaPmr>tbody').empty();
+        $('#idAnoPepPoaPmr').val("");
+        $('#meta_fisica_bid').val("");
+        $('#und_medida_bid').val("");
+        $('#meta_fisica_prcid').val("");
+        $('#und_medida_prcid').val("");
+        $('#meta_fin_bid').val("");
+        $('#meta_fin_prcid').val("");
+        $('#peppoa_pmr_id').val("");
+        var anoSelect = document.getElementById('anoSelect');
+        var componenteSelect = document.getElementById('componenteSelect');
+        
+        if (anoSelect.value !== 'Selecione um ano') {
+            componenteSelect.disabled = false;
+            componenteSelect.value = '';
+            subcomponenteSelect.value = '';
+        } else {
+            componenteSelect.disabled = true;
+            componenteSelect.value = '';
+            subcomponenteSelect.disabled = true;
+            subcomponenteSelect.value = '';
+        }
+    }
+
+    $(function(){
+        
+    })
+
 </script>
 
 </html>

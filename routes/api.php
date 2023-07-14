@@ -11,6 +11,8 @@ use App\Http\Controllers\ControladorComponentes;
 use App\Http\Controllers\ControladorSubcomponentes;
 use App\Http\Controllers\ControladorCategoriaPeppoa;
 use App\Http\Controllers\ControladorCategoriaPmr;
+use App\Http\Controllers\ControladorPeppoaPmr;
+use App\Http\Controllers\ControladorAnoPeppoaPmr;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +45,10 @@ Route::resource('/componentes', ControladorComponentes::class);
 Route::resource('/subcomponentes', ControladorSubcomponentes::class);
 
 Route::get('/findComponenteById/{id}',[ControladorComponentes::class, 'findComponenteById']);
+Route::get('/findSubcomponenteByCodigoComponente/{id}',[ControladorSubcomponentes::class, 'findSubcomponenteByCodigoComponente']);
+Route::get('/findAnoPepPoaPmrByCodigoPepPoaPmr/{id}',[ControladorAnoPeppoaPmr::class, 'findAnoPepPoaPmrByCodigoPepPoaPmr']);
 
 Route::resource('/categoriasPeppoa', ControladorCategoriaPeppoa::class);
 Route::resource('/categoriasPmr', ControladorCategoriaPmr::class);
+Route::resource('/pepPoaPmr', ControladorPeppoaPmr::class);
+Route::resource('/anoPepPoaPmr', ControladorAnoPeppoaPmr::class);

@@ -107,6 +107,9 @@
                             <a class="btn btn-active btn-primary rounded-none" href="/relatoriosDss/paranaUrbanoIII/">Gerenciar programa</a>
                         </li>
                         <li class="nav-item">
+                            <a class="btn btn-active btn-primary rounded-none" href="/relatoriosDss/controlePepPoaPmr/">Parâmetros do programa</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="btn btn-active btn-primary rounded-none" href="/relatoriosDss/parametros/">Parâmetros do sistema</a>
                         </li>
                     </ul>
@@ -550,6 +553,7 @@
 // --------------------------------------------------------------------------- FUNÇÕES PARA GERENCIAR COMPONENTES PPU III ----------------------------------
 
     function mostrarTelaComponentesPPUIII(){
+        carregarComponentes();
         $("#telaAnos").hide();
         $("#telaSubcomponentesPPUIII").hide();
         $("#telaCategoriaPmr").hide();
@@ -661,6 +665,7 @@
 // --------------------------------------------------------------------------- FUNÇÕES PARA GERENCIAR SUBCOMPONENTES PPU III ----------------------------------
 
     function mostrarTelaSubcomponentesPPUIII(){
+        carregarSubcomponentes();
         $("#telaComponentesPPUIII").hide();
         $("#telaAnos").hide();
         $("#telaCategoriaPmr").hide();
@@ -788,6 +793,7 @@
 // --------------------------------------------------------------------------- FUNÇÕES PARA GERENCIAR CATEGORIA PEPPOA ----------------------------------
 
     function mostrarTelaCategoriaPEPPOA(){
+        carregarCategoriaPeppoa();
         $("#telaComponentesPPUIII").hide();
         $("#telaAnos").hide();
         $("#telaSubcomponentesPPUIII").hide();
@@ -923,6 +929,7 @@
 // --------------------------------------------------------------------------- FUNÇÕES PARA GERENCIAR CATEGORIA PMR ----------------------------------
 
     function mostrarTelaCategoriaPMR(){
+        carregarCategoriaPmr();
         $("#telaComponentesPPUIII").hide();
         $("#telaAnos").hide();
         $("#telaSubcomponentesPPUIII").hide();
@@ -1042,10 +1049,6 @@
 
     $(function(){
         carregarAnos();
-        carregarComponentes();
-        carregarSubcomponentes();
-        carregarCategoriaPeppoa();
-        carregarCategoriaPmr();
     })
 </script>
 

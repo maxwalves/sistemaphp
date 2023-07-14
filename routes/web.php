@@ -267,5 +267,6 @@ Route::middleware(['assinatura.termo'])->group(function () {
 
         Route::get('/relatoriosDss/paranaUrbanoIII/', [DssController::class,'paranaUrbanoIII']);
         Route::get('/relatoriosDss/parametros/', [DssController::class,'parametros']);
+        Route::get('/relatoriosDss/controlePepPoaPmr/', [DssController::class,'controlePepPoaPmr']);
 
 });
