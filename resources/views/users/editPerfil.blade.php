@@ -207,7 +207,7 @@
                         <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarDiretoriaExecutiva" class="btn btn-active btn-secondary" id="btDiretoriaExecutivaDisponivel">DAF</a>
                         @endif
                         @if ($dados["permission8"] == 'false')
-                            <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarGerCecr" class="btn btn-active btn-primary" id="btGerCecrDisponivel">GER CECR</a>
+                            <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarGerCecr" class="btn btn-active btn-secondary" id="btGerCecrDisponivel">GER CECR</a>
                         @endif
                         
                     </div>
