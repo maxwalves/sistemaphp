@@ -16,7 +16,7 @@
         @endif
     </div>
 </div>
-<div id="av-create-container" class="container">
+<div class="container">
     
         
         <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong> {{ $av->id }}</h1>
@@ -174,45 +174,174 @@
         </div>
 
         <div class="divider"></div> 
+
+</div>
+
+<div class="container d-none d-sm-block"> 
+    <div class="stat-title">Controle de diárias:
+    </div>
+        Mês saída: {{$mesSaidaInicial}} 
+        Mês chegada: {{$mesChegadaFinal}} <br>
+        <ul class="steps">
+
+            @if($mesSaidaInicial != $mesChegadaFinal)
+
+                @php
+                    $data = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
+                    $ultimoDiaMes = date('t', strtotime($data));
+                    $j=0;
+                @endphp
+                @for($i = $arrayDiasValores[0]['dia']; $i <= $ultimoDiaMes; $i++)
+                    <li class="step step-primary" data-content="{{$i}}">
+                        @if($i == $diaSaidaInicial)
+                            <div class="badge badge-outline">Hora saída: {{$horaSaidaInicial}}:{{$minutoSaidaInicial}}</div>
+                        @endif
+                        @if($i == $diaChegadaInicial)
+                            <div class="badge badge-outline">Hora chegada: {{$horaSaidaInicial}}:{{$minutoSaidaInicial}}</div>
+                        @endif
+                        @if($i == $diaChegadaFinal)
+                            <div class="badge badge-outline">Hora chegada: {{$horaChegadaFinal}}:{{$minutoChegadaFinal}}</div>
+                        @endif
+                        @if($i == $diaSaidaFinal)
+                            <div class="badge badge-outline">Hora saída: {{$horaSaidaFinal}}:{{$minutoSaidaFinal}}</div>
+                        @endif
+                        <div>
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
+                            @endif
+                        </div>
+                    </li>
+                    @php
+                        $j++;
+                    @endphp
+                @endfor
+                @for($i = 1; $i <= $diaChegadaFinal; $i++)
+                    <li class="step step-primary" data-content="{{$i}}">
+                        @if($i == $diaSaidaFinal)
+                            <div class="badge badge-outline">Hora saída: {{$horaSaidaFinal}}:{{$minutoSaidaFinal}}</div>
+                        @endif
+                        @if($i == $diaChegadaFinal)
+                            <div class="badge badge-outline">Hora chegada: {{$horaChegadaFinal}}:{{$minutoChegadaFinal}}</div>
+                        @endif
+                        <div>
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
+                            @endif
+
+                            @if($i ==  $diaChegadaFinal && $horaChegadaFinal >= 13 && $horaChegadaFinal <19)
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i ==  $diaChegadaFinal && $horaChegadaFinal >=19)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
+                            @endif
+                        </div>
+                    </li>
+                    @php
+                        $j++;
+                    @endphp
+                @endfor
+            @else
+                    @php
+                        $j=0;
+                    @endphp
+                @for($i = $arrayDiasValores[0]['dia']; $i <= $diaChegadaFinal; $i++)
+                    
+                    <li class="step step-primary" data-content="{{sprintf('%d', $i)}}">
+                        @if($i == $diaSaidaInicial)
+                            <div class="badge badge-outline">Hora saída: {{$horaSaidaInicial}}:{{$minutoSaidaInicial}}</div>
+                        @endif
+                        @if($i == $diaChegadaInicial)
+                            <div class="badge badge-outline">Hora chegada: {{$horaChegadaInicial}}:{{$minutoChegadaInicial}}</div>
+                        @endif
+                        @if($i == $diaSaidaFinal)
+                            <div class="badge badge-outline">Hora saída: {{$horaSaidaFinal}}:{{$minutoSaidaFinal}}</div>
+                        @endif
+                        @if($i == $diaChegadaFinal)
+                            <div class="badge badge-outline">Hora chegada: {{$horaChegadaFinal}}:{{$minutoChegadaFinal}}</div>
+                        @endif
+
+                        <div>
+                            @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if(($i ==  $diaSaidaInicial && $horaSaidaInicial > 13) || ($i ==  $diaSaidaInicial && $horaSaidaInicial == 13 && $minutoSaidaInicial >= 1))
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
+                            @endif
+
+                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <=19 && $minutoChegadaFinal == 0) || 
+                            ($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <19) ||
+                            ($i ==  $diaChegadaFinal && $horaChegadaFinal == 13 && $minutoChegadaFinal >= 1 && $horaChegadaFinal <19))
+                                <div class="stats stats-vertical bg-green-500 shadow rounded-none">Meia Diária: <br>R${{$arrayDiasValores[$j]['valor']}}</div>
+                            @endif
+                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal >19) || ($i ==  $diaChegadaFinal && $horaChegadaFinal ==19 && $minutoChegadaFinal >= 1))
+                                <div class="stats stats-vertical bg-warning shadow rounded-none">Diária Inteira: <br>R${{$arrayDiasValores[$j]['valor']}}</div>    
+                            @endif
+                        
+                        </div>
+                    </li>
+                    @php
+                        $j++;
+                    @endphp
+                @endfor
+            @endif
+        </ul>
+</div>
+
+<div class="divider"></div> 
+
+<div class="container">
+    <div class="flex flex-row">
+        <form action="/avs/secretariaAprovarAv" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+                <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                <label for="comentario">Comentário no envio: </label>
+                <br>
+                <textarea type="text" class="textarea textarea-bordered h-24" 
+                    name="comentario" style="width: 200px"
+                    id="comentario" placeholder="Comentário"></textarea>
+                @if($av->isCancelado == 0)
+                    <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
+                @else
+                    <button type="submit" class="btn btn-active btn-success">Finalizar AV</button>
+                @endif
+        </form>
         
-        <div class="flex flex-row">
-            <form action="/avs/secretariaAprovarAv" method="POST" enctype="multipart/form-data">
+        @if($av->isCancelado == 0)
+            <form action="/avs/secretariaReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
                 @csrf
                 @method('PUT')
                     <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                    <label for="comentario">Comentário no envio: </label>
+                    <label for="comentario">Voltar AV para o usuário: </label>
                     <br>
-                    <textarea type="text" class="textarea textarea-bordered h-24" 
+                    <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
                         name="comentario" style="width: 200px"
                         id="comentario" placeholder="Comentário"></textarea>
-                    @if($av->isCancelado == 0)
-                        <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
-                    @else
-                        <button type="submit" class="btn btn-active btn-success">Finalizar AV</button>
+                    <button type="submit" class="btn btn-active btn-error">Reprovar AV</button>
+                    @if ($errors->has('comentario'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('comentario') }}
+                            </div>
                     @endif
             </form>
-            
-            @if($av->isCancelado == 0)
-                <form action="/avs/secretariaReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
-                    @csrf
-                    @method('PUT')
-                        <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                        <label for="comentario">Voltar AV para o usuário: </label>
-                        <br>
-                        <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
-                            name="comentario" style="width: 200px"
-                            id="comentario" placeholder="Comentário"></textarea>
-                        <button type="submit" class="btn btn-active btn-error">Reprovar AV</button>
-                        @if ($errors->has('comentario'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('comentario') }}
-                                </div>
-                        @endif
-                </form>
-            @endif
-        </div>
-
+        @endif
     </div>
+</div>
 
     <input type="checkbox" id="my-modal-3" class="modal-toggle" />
 

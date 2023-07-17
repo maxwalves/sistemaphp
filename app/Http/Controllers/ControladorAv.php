@@ -165,6 +165,8 @@ class ControladorAv extends Controller
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
+        $colecao = $this->geraArrayDiasValores($av);
+
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
                 array_push($medicoesFiltradas, $medicao); 
@@ -230,10 +232,37 @@ class ControladorAv extends Controller
 
         $veiculosProprios = $userAv->veiculosProprios;
 
+        $arrayDiasValores = $colecao[0];
+        $anoSaidaInicial = $colecao[1];
+        $mesSaidaInicial = $colecao[2];
+        $diaSaidaInicial = $colecao[3];
+        $horaSaidaInicial = $colecao[4];
+        $minutoSaidaInicial = $colecao[5];
+        $mesChegadaInicial = $colecao[6];
+        $diaChegadaInicial = $colecao[7];
+        $horaChegadaInicial = $colecao[8];
+        $minutoChegadaInicial = $colecao[9];
+        $mesSaidaFinal = $colecao[10];
+        $diaSaidaFinal = $colecao[11];
+        $horaSaidaFinal = $colecao[12];
+        $minutoSaidaFinal = $colecao[13];
+        $mesChegadaFinal = $colecao[14];
+        $diaChegadaFinal = $colecao[15];
+        $horaChegadaFinal = $colecao[16];
+        $minutoChegadaFinal = $colecao[17];
+        $dataInicio = $colecao[18];
+        $dataFim = $colecao[19];
+
         if($possoEditar == true){
             return view('avs.verFluxoGestor', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade,
-            'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas]);
+            'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores,
+            'anoSaidaInicial' => $anoSaidaInicial, 'mesSaidaInicial' => $mesSaidaInicial, 'diaSaidaInicial' => $diaSaidaInicial,
+            'horaSaidaInicial' => $horaSaidaInicial, 'minutoSaidaInicial' => $minutoSaidaInicial, 'mesChegadaInicial' => $mesChegadaInicial,
+            'diaChegadaInicial' => $diaChegadaInicial, 'horaChegadaInicial' => $horaChegadaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial,
+            'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal, 'minutoSaidaFinal' => $minutoSaidaFinal,
+            'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal, 'minutoChegadaFinal' => $minutoChegadaFinal,
+            'dataInicio' => $dataInicio, 'dataFim' => $dataFim]);
         }
         else{
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -333,11 +362,38 @@ class ControladorAv extends Controller
             }
         }
 
+        $colecao = $this->geraArrayDiasValores($av);
+        $arrayDiasValores = $colecao[0];
+        $anoSaidaInicial = $colecao[1];
+        $mesSaidaInicial = $colecao[2];
+        $diaSaidaInicial = $colecao[3];
+        $horaSaidaInicial = $colecao[4];
+        $minutoSaidaInicial = $colecao[5];
+        $mesChegadaInicial = $colecao[6];
+        $diaChegadaInicial = $colecao[7];
+        $horaChegadaInicial = $colecao[8];
+        $minutoChegadaInicial = $colecao[9];
+        $mesSaidaFinal = $colecao[10];
+        $diaSaidaFinal = $colecao[11];
+        $horaSaidaFinal = $colecao[12];
+        $minutoSaidaFinal = $colecao[13];
+        $mesChegadaFinal = $colecao[14];
+        $diaChegadaFinal = $colecao[15];
+        $horaChegadaFinal = $colecao[16];
+        $minutoChegadaFinal = $colecao[17];
+        $dataInicio = $colecao[18];
+        $dataFim = $colecao[19];
 
         if($possoEditar == true){
             return view('avs.verFluxoSecretaria', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade,
-            'medicoesFiltradas' => $medicoesFiltradas]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores,
+            'anoSaidaInicial' => $anoSaidaInicial, 'mesSaidaInicial' => $mesSaidaInicial, 'diaSaidaInicial' => $diaSaidaInicial,
+            'horaSaidaInicial' => $horaSaidaInicial, 'minutoSaidaInicial' => $minutoSaidaInicial, 'mesChegadaInicial' => $mesChegadaInicial,
+            'diaChegadaInicial' => $diaChegadaInicial, 'horaChegadaInicial' => $horaChegadaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial,
+            'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal, 'minutoSaidaFinal' => $minutoSaidaFinal,
+            'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal, 'minutoChegadaFinal' => $minutoChegadaFinal,
+            'dataInicio' => $dataInicio, 'dataFim' => $dataFim]);
         }
         else{
             return redirect('avs/autSecretaria')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -904,11 +960,39 @@ class ControladorAv extends Controller
             }
         }
 
+        $colecao = $this->geraArrayDiasValores($av);
+        $arrayDiasValores = $colecao[0];
+        $anoSaidaInicial = $colecao[1];
+        $mesSaidaInicial = $colecao[2];
+        $diaSaidaInicial = $colecao[3];
+        $horaSaidaInicial = $colecao[4];
+        $minutoSaidaInicial = $colecao[5];
+        $mesChegadaInicial = $colecao[6];
+        $diaChegadaInicial = $colecao[7];
+        $horaChegadaInicial = $colecao[8];
+        $minutoChegadaInicial = $colecao[9];
+        $mesSaidaFinal = $colecao[10];
+        $diaSaidaFinal = $colecao[11];
+        $horaSaidaFinal = $colecao[12];
+        $minutoSaidaFinal = $colecao[13];
+        $mesChegadaFinal = $colecao[14];
+        $diaChegadaFinal = $colecao[15];
+        $horaChegadaFinal = $colecao[16];
+        $minutoChegadaFinal = $colecao[17];
+        $dataInicio = $colecao[18];
+        $dataFim = $colecao[19];
+
 
         if($possoEditar == true){
             return view('avs.verFluxoFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 
             'historicos'=> $historicos, 'anexos' => $anexos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade,
-            'medicoesFiltradas' => $medicoesFiltradas]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores,
+            'anoSaidaInicial' => $anoSaidaInicial, 'mesSaidaInicial' => $mesSaidaInicial, 'diaSaidaInicial' => $diaSaidaInicial,
+            'horaSaidaInicial' => $horaSaidaInicial, 'minutoSaidaInicial' => $minutoSaidaInicial, 'mesChegadaInicial' => $mesChegadaInicial,
+            'diaChegadaInicial' => $diaChegadaInicial, 'horaChegadaInicial' => $horaChegadaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial,
+            'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal, 'minutoSaidaFinal' => $minutoSaidaFinal,
+            'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal, 'minutoChegadaFinal' => $minutoChegadaFinal,
+            'dataInicio' => $dataInicio, 'dataFim' => $dataFim]);
         }
         else{
             return redirect('avs/autFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -1875,6 +1959,28 @@ class ControladorAv extends Controller
         $historicos = [];
         $users = User::all();
 
+        $colecao = $this->geraArrayDiasValores($av);
+        $arrayDiasValores = $colecao[0];
+        $anoSaidaInicial = $colecao[1];
+        $mesSaidaInicial = $colecao[2];
+        $diaSaidaInicial = $colecao[3];
+        $horaSaidaInicial = $colecao[4];
+        $minutoSaidaInicial = $colecao[5];
+        $mesChegadaInicial = $colecao[6];
+        $diaChegadaInicial = $colecao[7];
+        $horaChegadaInicial = $colecao[8];
+        $minutoChegadaInicial = $colecao[9];
+        $mesSaidaFinal = $colecao[10];
+        $diaSaidaFinal = $colecao[11];
+        $horaSaidaFinal = $colecao[12];
+        $minutoSaidaFinal = $colecao[13];
+        $mesChegadaFinal = $colecao[14];
+        $diaChegadaFinal = $colecao[15];
+        $horaChegadaFinal = $colecao[16];
+        $minutoChegadaFinal = $colecao[17];
+        $dataInicio = $colecao[18];
+        $dataFim = $colecao[19];
+
         foreach($historicosTodos as $hist){
             if($hist->av_id == $av->id){
                 array_push($historicos, $hist);
@@ -1885,7 +1991,10 @@ class ControladorAv extends Controller
         $dompdf = new Dompdf($options);
 
         $dompdf = new Dompdf();
-        $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv')));
+        $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 'arrayDiasValores', 'anoSaidaInicial', 
+        'mesSaidaInicial', 'diaSaidaInicial', 'horaSaidaInicial', 'minutoSaidaInicial', 'mesChegadaInicial', 'diaChegadaInicial', 'horaChegadaInicial', 
+        'minutoChegadaInicial', 'mesSaidaFinal', 'diaSaidaFinal', 'horaSaidaFinal', 'minutoSaidaFinal', 'mesChegadaFinal', 'diaChegadaFinal', 'horaChegadaFinal', 
+        'minutoChegadaFinal', 'dataInicio', 'dataFim', 'isVeiculoEmpresa')));
         $dompdf->render();
 
         $nomeArquivo = md5("relatorio" . strtotime("now")) . ".pdf";
@@ -4164,5 +4273,194 @@ class ControladorAv extends Controller
 
         return redirect('/avs/avs')->with('msg', 'Av cancelada com sucesso!');
         
+    }
+
+    public function geraArrayDiasValores($av){
+
+        $rotas = $av->rotas;
+        for ($i=0; $i < sizeof($rotas)-1 ; $i++) { 
+            //Verifica quais são das datas da rota atual e da próxima
+            $dataHoraSaidaRota1 = new DateTime($rotas[$i]->dataHoraSaida);//Data de saída da rota 1
+            $dataHoraChegadaRota1 = new DateTime($rotas[$i]->dataHoraChegada);//Data de chegada da rota 1
+
+            $dataHoraSaidaRota2 = new DateTime($rotas[$i + 1]->dataHoraSaida);//Data de saída da rota 2
+            $dataHoraChegadaRota2 = new DateTime($rotas[$i + 1]->dataHoraChegada);//Data de chegada da rota 2
+            
+            //DATAS ROTA 1
+            $anoSaidaRota1 = $dataHoraSaidaRota1->format('Y');
+            $mesSaidaRota1 = $dataHoraSaidaRota1->format('m');
+            $diaSaidaRota1 = $dataHoraSaidaRota1->format('d');
+            $horaSaidaRota1 = $dataHoraSaidaRota1->format('H');
+            $minutoSaidaRota1 = $dataHoraSaidaRota1->format('i');
+
+            $mesChegadaRota1 = $dataHoraChegadaRota1->format('m');
+            $diaChegadaRota1 = $dataHoraChegadaRota1->format('d');
+            $horaChegadaRota1 = $dataHoraChegadaRota1->format('H');
+            $minutoChegadaRota1 = $dataHoraChegadaRota1->format('i');
+
+            //DATAS ROTA 2
+            $mesSaidaRota2 = $dataHoraSaidaRota2->format('m');
+            $diaSaidaRota2 = $dataHoraSaidaRota2->format('d');
+            $horaSaidaRota2 = $dataHoraSaidaRota2->format('H');
+            $minutoSaidaRota2 = $dataHoraSaidaRota2->format('i');
+
+            $mesChegadaRota2 = $dataHoraChegadaRota2->format('m');
+            $diaChegadaRota2 = $dataHoraChegadaRota2->format('d');
+            $horaChegadaRota2 = $dataHoraChegadaRota2->format('H');
+            $minutoChegadaRota2 = $dataHoraChegadaRota2->format('i');
+            
+            if($i==0){
+                $anoSaidaInicial = $anoSaidaRota1;
+                $mesSaidaInicial = $mesSaidaRota1;
+                $diaSaidaInicial = $diaSaidaRota1;
+                $horaSaidaInicial = $horaSaidaRota1;
+                $minutoSaidaInicial = $minutoSaidaRota1;
+
+                $mesChegadaInicial = $mesChegadaRota1;
+                $diaChegadaInicial = $diaChegadaRota1;
+                $horaChegadaInicial = $horaChegadaRota1;
+                $minutoChegadaInicial = $minutoChegadaRota1;
+            }
+            if($i == sizeof($rotas)-2){
+                $mesSaidaFinal = $mesSaidaRota2;
+                $diaSaidaFinal = $diaSaidaRota2;
+                $horaSaidaFinal = $horaSaidaRota2;
+                $minutoSaidaFinal = $minutoSaidaRota2;
+
+                $mesChegadaFinal = $mesChegadaRota2;
+                $diaChegadaFinal = $diaChegadaRota2;
+                $horaChegadaFinal = $horaChegadaRota2;
+                $minutoChegadaFinal = $minutoChegadaRota2;
+            }
+        }
+
+        $dataInicio = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
+        $dataFim = "$anoSaidaInicial-$mesChegadaFinal-$diaChegadaFinal";
+
+                       
+        $arrayDiasValores = [];
+                        
+        $intervaloDatas = new DatePeriod(
+            new DateTime($dataInicio),
+            new DateInterval('P1D'),
+            (new DateTime($dataFim))->modify('+1 day') // Adicionar 1 dia ao fim para inclusão do último dia
+        );
+                        
+        foreach ($intervaloDatas as $data) {
+            $dia = $data->format('Y-m-d');
+            $valor = 0;
+            $acumulado = 0;
+
+            for ($i=0; $i < sizeof($rotas)-1 ; $i++) {
+                    $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraSaida)->format('Y-m-d H:i:s');
+                    $dataSaida2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraSaida)->format('Y-m-d H:i:s');
+                    $dataChegada2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraChegada)->format('Y-m-d H:i:s');
+
+                    $dataSaidaModificado1 = new DateTime($dataSaida);//Data de saída da rota 1
+                    $dataSaidaModificado2 = new DateTime($dataSaida2);//Data de saída da rota 2
+                    $dataChegadaModificado2 = new DateTime($dataChegada2);//Data de saída da rota 2
+
+                    $horaSaidaRota1 = $dataSaidaModificado1->format('H');
+                    $minutoSaidaRota1 = $dataSaidaModificado1->format('i');
+
+                    $horaSaidaRota2 = $dataSaidaModificado2->format('H');
+                    $minutoSaidaRota2 = $dataSaidaModificado2->format('i');
+
+                    $horaChegadaRota2 = $dataChegadaModificado2->format('H');
+                    $minutoChegadaRota2 = $dataChegadaModificado2->format('i');
+
+                    $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraSaida)->format('Y-m-d');
+                    $dataSaida2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraSaida)->format('Y-m-d');
+                    $dataChegada2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraChegada)->format('Y-m-d');
+
+                    if ($dia >= $dataSaida && $dia <= $dataSaida2) {
+                        
+                        if($rotas[$i]->continenteDestinoInternacional == 1 && $rotas[$i]->paisDestinoInternacional !=30){//América Latina ou Amética Central
+                            $valor = 100;
+                        }
+                        else if($rotas[$i]->continenteDestinoInternacional == 2){//América do Norte
+                            $valor = 150;
+                        }
+                        else if($rotas[$i]->continenteDestinoInternacional == 3){//Europa
+                            $valor = 180;
+                        }
+                        else if($rotas[$i]->continenteDestinoInternacional == 4){//África
+                            $valor = 140;
+                        }
+                        else if($rotas[$i]->continenteDestinoInternacional == 5){//Ásia
+                            $valor = 190;
+                        }else if(($rotas[$i]->cidadeDestinoNacional == "Curitiba" || $rotas[$i]->cidadeDestinoNacional == "Foz do Iguaçu") ||
+                        ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->estadoDestinoInternacional == "Paraná" && 
+                        ($rotas[$i]->cidadeDestinoInternacional == "Curitiba" || $rotas[$i]->cidadeDestinoInternacional == "Foz do Iguaçu"))){//Se for Curitiba ou Foz do Iguaçu
+                            $valor = 65;
+                        }
+                        else if($rotas[$i]->estadoDestinoNacional == "Paraná" || ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->estadoDestinoInternacional == "Paraná")){//Se for outra cidade do Paraná
+                            $valor = 55;
+                        }
+                        else if($rotas[$i]->cidadeDestinoNacional == "Brasília" || ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->cidadeDestinoInternacional == "Brasília")){//Se for Brasília
+                            $valor = 100;
+                        }
+                        else{//Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
+                            $valor = 80;
+                        }
+                        if($dia == $dataSaida){
+                            if($horaSaidaRota1 >= 13 && $horaSaidaRota1 < 19){
+                                $metade = ($valor/2);
+                                if($acumulado == 0){
+                                    $acumulado = $metade;
+                                }
+                                else{
+                                    $acumulado += $metade;
+                                }
+                            }
+                        }
+                        if(!($i == sizeof($rotas)-2)){
+                            if($dia == $dataSaida2){
+                                if($horaSaidaRota2 >= 13 && $horaSaidaRota2 < 19){
+                                    $metade = ($valor/2);
+                                    if($acumulado == 0){
+                                        $acumulado = $metade;
+                                    }
+                                    else{
+                                        $acumulado += $metade;
+                                    }
+                                }
+                            }
+                        }
+                        if($i == sizeof($rotas)-2){
+                            if($dia == $dataChegada2){
+                                if($horaChegadaRota2 >= 13 && $horaChegadaRota2 < 19){
+                                    $metade = ($valor/2);
+                                    if($acumulado == 0){
+                                        $acumulado = $metade;
+                                    }
+                                    else{
+                                        $acumulado += $metade;
+                                    }
+                                }
+                                else if($horaChegadaRota2 >= 19){
+                                    if($acumulado == 0){
+                                        $acumulado = $valor;
+                                    }
+                                    else{
+                                        $acumulado += $valor;
+                                    }
+                                }
+                            }
+                        }
+                    }
+            }
+            $diaFormatado = DateTime::createFromFormat('Y-m-d', $dia);
+            $arrayDiasValores[] = [
+                'dia' => $diaFormatado->format('d'),
+                'valor' => $acumulado != 0 ? $acumulado : $valor,
+            ];
+        }
+        $colecao = collect([$arrayDiasValores, $anoSaidaInicial, $mesSaidaInicial, $diaSaidaInicial, $horaSaidaInicial, $minutoSaidaInicial,
+                                                                $mesChegadaInicial, $diaChegadaInicial, $horaChegadaInicial, $minutoChegadaInicial,
+                                                                $mesSaidaFinal, $diaSaidaFinal, $horaSaidaFinal, $minutoSaidaFinal,
+                                                                $mesChegadaFinal, $diaChegadaFinal, $horaChegadaFinal, $minutoChegadaFinal,
+                                                                $dataInicio, $dataFim]);
+        return $colecao;
     }
 }

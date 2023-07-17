@@ -21,63 +21,58 @@
         </style>
     </head>
     <body>
-
-        <main>
-            <div >
-                <div style="position: relative;">
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/img/headerpc.png'))) }}" alt="Paranacidade" width="100%">
-                    <h1 style="position: absolute; top: 95; right: 20; text-align: right;">
-                        {{ $av->id}}
-                    </h1>
-                </div>
+        <div style="position: relative;">
+            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/img/headerpc.png'))) }}" alt="Paranacidade" width="100%">
+            <h1 style="position: absolute; top: 95; right: 20; text-align: right;">
+                {{ $av->id}}
+            </h1>
+        </div>
+        <main style="font-size: 12px">
+            
+            <div style="font-size: 12px">
+                
                 <div class="row">
                     
-                    <h2 >Dados básicos:</h2>
+                    <h3 >Dados básicos:</h3>
                     <div style="border: 1px solid black; padding-left:10px">
 
-                        <p><strong>Nome:</strong> {{ $userAv->name }} </p>
-                        <p><strong>E-mail:</strong> {{ $userAv->username }} </p>
-                        <p><strong>Setor:</strong> {{ $userAv->department }} </p>
-                        <p><strong>Matrícula:</strong> {{ $userAv->employeeNumber }} </p>
-                        <p><strong>Data assinatura termo de compromisso:</strong> {{ date('d/m/Y', strtotime($userAv->dataAssinaturaTermo)) }}</p>
-                        <br>
-                        <p><strong>Data de criação AV: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </p>
-                        <p><strong>Objetivo:</strong> 
+                        <p><strong>Nome:</strong> {{ $userAv->name }} <strong> E-mail:</strong> {{ $userAv->username }} <strong> Setor:</strong> {{ $userAv->department }} </p>
 
-                        @for($i = 0; $i < count($objetivos); $i++)
+                        <p><strong>Matrícula:</strong> {{ $userAv->employeeNumber }} <strong> Data assinatura termo de compromisso:</strong> {{ date('d/m/Y', strtotime($userAv->dataAssinaturaTermo)) }}</p>
 
-                            @if ($av->objetivo_id == $objetivos[$i]->id )
-                                    {{$objetivos[$i]->nomeObjetivo}}     
-                            @endif
-        
-                        @endfor
+                        <p><strong>Data de criação AV: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} 
+                            <strong>Objetivo:</strong> 
 
-                        @if (isset($av->outroObjetivo))
-                                {{$av->outroObjetivo }} 
-                        @endif
+                            @for($i = 0; $i < count($objetivos); $i++)
+    
+                                @if ($av->objetivo_id == $objetivos[$i]->id )
+                                        {{$objetivos[$i]->nomeObjetivo}}     
+                                @endif
+            
+                            @endfor
+    
+                            @if (isset($av->outroObjetivo))
+                                    {{$av->outroObjetivo }} 
+                            @endif</p>
 
-                        </p>
                         <p><strong>Comentário:</strong> {{ $av->comentario }} </p>
                         
                     </div>
                     
-                    <h2 >Dados bancários:</h2>
+                    <h3 >Dados bancários:</h3>
                     
                     <div style="border: 1px solid black; padding-left:10px">
     
-                        <p><strong>Banco:</strong> {{ $av->banco }} </p>
-                        <p><strong>Agência:</strong> {{ $av->agencia }} </p>
-                        <p><strong>Conta:</strong> {{ $av->conta }} </p>
-                        <p><strong>Pix:</strong> {{ $av->pix }} </p>
+                        <p><strong>Banco:</strong> {{ $av->banco }} <strong> Agência:</strong> {{ $av->agencia }} <strong> Conta:</strong> {{ $av->conta }} <strong> Pix:</strong> {{ $av->pix }}</p>
                         
                     </div>
-                    <br><br><br><br>
 
-                    <h2 >Pagamento realizado no acerto de contas:</h2>
+                    <h3 >Pagamento realizado no acerto de contas:</h3>
                     <div style="border: 1px solid black; padding-left:10px">
-                        <p><strong>Valor em reais:</strong> R$ {{ $av->valorReais }}</p>
-                        <p><strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
-                        <p><strong>Dedução em reais:</strong> R$ {{ $av->valorDeducaoReais }}</p>
+                        <p><strong>Valor:</strong> R$ {{ $av->valorReais }}
+                        <strong>Valor extra:</strong> R$ {{ $av->valorExtraReais }}
+                        <strong>Dedução:</strong> R$ {{ $av->valorDeducaoReais }}</p>
+
                         @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                             <p><strong>Valor referente a {{$av->qtdKmVeiculoProprio}} Km: </strong> R$ {{ $av->qtdKmVeiculoProprio * 0.49 }}</p>
                             <p><strong>Valor TOTAL reais:</strong> $ {{ $av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais + ($av->qtdKmVeiculoProprio * 0.49)}}</p>
@@ -93,7 +88,7 @@
                     </div>
                 </div>
             </div>
-            <h2 >Resultado:</h2>
+            <h3 style="font-size: 12px">Resultado:</h3>
             <div style="border: 1px solid black; padding-left:10px">
 
                 <div class="stats shadow">
@@ -172,47 +167,8 @@
             </div>
             <br><br>
             
-            <div class="col-md-8 offset-md-0">
-                <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
-                <table id="tabelaRota" class="comBordaSimples " >
-                    <thead>
-                        <tr>
-                            <th>Número</th>
-                            <th>Tipo</th>
-                            <th>Cidade de saída</th>
-                            <th>Data/Hora de saída</th>
-                            <th>-</th>
-                            <th>Cidade de chegada</th>
-                            <th>Data/Hora de chegada</th>
-                            <th>Hotel?</th>
-                            <th>Tipo de transporte</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($av->rotas as $rota)
-                        <tr>
-                            <td style="text-align: center"> {{$rota->id}} </td>
-                            <td style="text-align: center"> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
-                            <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} </td>
-                            <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-
-                            <td>-</td>
-                            <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} </td>
-            
-                            <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                            <td style="text-align: center"> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
-                            <td style="text-align: center"> 
-                                {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
-                                {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                                {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
-                                {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
-                                {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <h1 style="font-size: 24px"><strong>Detalhamento: </strong></h1>
+            <div class="col-md-8 offset-md-0" style="font-size: 12px">
+                <h3 style="font-size: 12px"><strong>Detalhamento: </strong></h3>
                 <table id="tabelaRota" class="comBordaSimples" >
                     <thead>
                         <tr>
@@ -246,12 +202,11 @@
                     </tbody>
                 </table>
                 
-                <h1 style="font-size: 24px"><strong>Histórico: </strong></h1>
+                <h3 style="font-size: 12px"><strong>Histórico: </strong></h3>
                 <table id="minhaTabela" class="comBordaSimples">
                     <!-- head -->
                     <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Data</th>
                         <th>Ocorrência</th>
                         <th>Comentário</th>
@@ -263,8 +218,7 @@
 
                     @for($i = 0; $i < count($historicos); $i++)
                             <tr>
-                                <td style="text-align: center">{{ $a = $i +1 }}</td>
-                                <td style="text-align: center">{{ $historicos[$i]->dataOcorrencia }}</td>
+                                <td style="text-align: center">{{ date('d/m/Y H:i', strtotime($historicos[$i]->dataOcorrencia)) }}</td>
                                 <td style="text-align: center">{{ $historicos[$i]->tipoOcorrencia }}</td>
                                 <td style="text-align: center">{{ $historicos[$i]->comentario }}</td>
                                 <td style="text-align: center">{{ $historicos[$i]->perfilDonoComentario }}</td>
