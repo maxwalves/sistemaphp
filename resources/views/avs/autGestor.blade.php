@@ -12,8 +12,9 @@
         </div>
         @if($usersFiltrados != null)
             <div class="col-12 col-md-5">
-                <p>Ver AV de subordinados: </p>
+                <p>Ver pendências de AVs como se fosse o usuário: </p>
                 <select name="users" id="usuarioSelecionado" class="select select-bordered w-full max-w-xs" >
+                    <option value="Selecione">Selecione</option>
                     @foreach ($usersFiltrados as $u)
                         <option value="{{ $u->id }}">{{ $u->name }}</option>
                     @endforeach
@@ -208,6 +209,12 @@
             });
 
             $('#reset-button').click(function() {
+
+                $('#usuarioSelecionado').html('');
+                $('#usuarioSelecionado').append('<option value="" selected>Selecione</option>');
+                @foreach ($usersFiltrados as $u)
+                    $('#usuarioSelecionado').append('<option value="{{ $u->id }}">{{ $u->name }}</option>');
+                @endforeach
 
                 const selectedUserId = '{{$user->id}}';
                 console.log(selectedUserId);

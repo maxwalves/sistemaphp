@@ -88,8 +88,8 @@
 
                         @if($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0 && $av->isCancelado == 0)
                             <label for="my-modal" data-av="{{ json_encode($av) }}" class="btn btn-active btn-warning btn-sm">Voltar AV</label>
-                            <a href="/rotas/rotasEditData/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                                style="width: 110px"> Mudar data</a>
+                            {{-- <a href="/rotas/rotasEditData/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                                style="width: 110px"> Mudar data</a> --}}
                         @endif
 
                         @if($av->isEnviadoUsuario == 1 && $av->isAcertoContasRealizado == 0 && $av->isPrestacaoContasRealizada == 0 && $av->isCancelado == 0 
@@ -101,10 +101,7 @@
                         @endif
                         <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
                             style="width: 110px"> Ver</a> 
-                        @if($av->isAcertoContasRealizado == 1 && $av->isUsuarioAprovaAcertoContas != 1)
-                            <a href="/avs/validarAcertoContasUsuario/{{ $av->id }}" class="btn btn-success btn-sm"
-                            style="width: 110px"> Validar PC</a>
-                        @endif
+                        
                     @endif
                 </td>
             </tr>

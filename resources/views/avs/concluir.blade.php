@@ -44,7 +44,7 @@
             
             <div class="row justify-content-start" style="padding-left: 5%">
 
-                <div class="col-12 col-md-4" >
+                <div class="col-12 col-md-3" >
 
                     <div class="form-group" id="nomeObjetivo" >
                         <label for="objetivo_id" class="control-label">Objetivo da viagem:</label>

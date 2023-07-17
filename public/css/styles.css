@@ -73,9 +73,18 @@ body {
     min-height: 150vh;
 }
 
-main {
-    min-height: 200vh;
-}
+@media (max-width: 767px) {
+    main {
+      min-height: 400vh;
+    }
+  }
+  
+  /* Estilos para dispositivos desktop */
+  @media (min-width: 768px) {
+    main {
+      min-height: 190vh;
+    }
+  }
 
 header{
     background-color: #FFF;

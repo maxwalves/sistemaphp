@@ -452,7 +452,8 @@
                             <div id="dataHoraSaidaVoltaNacionalDiv" class="input-append date">
                                 <label for="dataHoraSaidaVoltaNacional" class="control-label">Data/Hora de saída na volta: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaVoltaNacional" style="border-width: 1px; border-color: black"
-                                    id="dataHoraSaidaVoltaNacional" placeholder="Data/Hora de chegada" min="{{ $minDate }}">
+                                    id="dataHoraSaidaVoltaNacional" placeholder="Data/Hora de chegada" min="{{ $minDate }}" 
+                                    class="classeDataHoraSaidaVoltaNacional">
 
                             </div>
                             <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de saída na volta!</div>
@@ -464,7 +465,8 @@
                             <div id="dataHoraChegadaVoltaNacionalDiv" class="input-append date">
                                 <label for="dataHoraChegadaVoltaNacional" class="control-label">Data/Hora prevista de chegada na volta: </label>
                                 <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaVoltaNacional" style="border-width: 1px; border-color: black"
-                                    id="dataHoraChegadaVoltaNacional" placeholder="Data/Hora de chegada" min="{{ $minDate }}">
+                                    id="dataHoraChegadaVoltaNacional" placeholder="Data/Hora de chegada" min="{{ $minDate }}" 
+                                    class="classeDataHoraChegadaVoltaNacional">
 
                             </div>
                             <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de chegada na volta!</div>
@@ -562,6 +564,9 @@
 
 @section('javascript')
     <script type="text/javascript">
+
+    var data1 = null;
+    var data2 = null;
         
         function ativarCampo(){
             var tipoTransporte = document.getElementById("tipoTransporte")
@@ -859,18 +864,49 @@
                 document.getElementById("isInternacional").hidden = true;
             }
 
-
+//Se clicar no campo dataHoraSaidaNacional, seta o valor minimo do campo dataHoraChegadaNacional
             var dataHoraSaidaNacional = document.getElementById('dataHoraSaidaNacional');
             dataHoraSaidaNacional.addEventListener('change', function() {
                 var inputDatetimeLocal = document.querySelector('.classeDataHoraSaidaNacional');
                 var inputDatetimeLocal2 = document.querySelector('.classeDataHoraChegadaNacional');
-
+                
                 // Obter o valor do campo datetime-local
                 var valor = inputDatetimeLocal.value;
-  
-                // Definir a data mínima para dataHoraSaidaVoltaNacional com base no valor selecionado em dataHoraSaidaNacional
+                data1 = valor;
+                
                 inputDatetimeLocal2.min = valor;
+                inputDatetimeLocal2.value = valor;
             });
+
+//Se clicar no campo dataHoraChegadaNacional, seta o valor minimo do campo dataHoraSaidaVoltaNacional
+            var dataHoraChegadaNacional = document.getElementById('dataHoraChegadaNacional');
+            dataHoraChegadaNacional.addEventListener('change', function() {
+
+                var inputDatetimeChegadaNacional= document.querySelector('.classeDataHoraChegadaNacional');
+                
+                // Obter o valor do campo datetime-local
+                var valor2 = inputDatetimeChegadaNacional.value;
+                data2 = valor2;
+
+                var inputVolta1 = document.getElementById('dataHoraSaidaVoltaNacional');
+                inputVolta1.min = data2;
+                inputVolta1.value = data2;
+            });
+
+//Se clicar no campo dataHoraSaidaVoltaNacional, seta o valor minimo do campo dataHoraChegadaVoltaNacional
+            var dataHoraSaidaVoltaNacional = document.getElementById('dataHoraSaidaVoltaNacional');
+            dataHoraSaidaVoltaNacional.addEventListener('change', function() {
+
+                var classeDataHoraChegadaVoltaNacional= document.querySelector('.classeDataHoraChegadaVoltaNacional');
+
+                data2 = dataHoraSaidaVoltaNacional.value;
+
+                classeDataHoraChegadaVoltaNacional.min = data2;
+                classeDataHoraChegadaVoltaNacional.value = data2;
+            });
+
+            
+            
             
         })
     </script>

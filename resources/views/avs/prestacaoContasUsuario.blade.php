@@ -23,6 +23,7 @@
                 <th>Objetivo</th>
                 <th>Rota</th>
                 <th>Data criação</th>
+                <th>Data retorno</th>
                 <th>Status</th>
                 <th>Ações</th>
             </tr>
@@ -62,13 +63,46 @@
                 </td>
 
                 <td> <a> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </a></td>
+                <td>
+                    @for($i = 0; $i < count($av->rotas); $i++)
+                        @if($i == (count($av->rotas)-1))
+                            {{date('d/m/Y H:i', strtotime($av->rotas[$i]->dataHoraChegada))}}
+                        @endif
+                    @endfor
+                </td>
                 <td> {{$av->status}} </td>
                 <td> 
-                    <div class="opcoesGerenciarAv">
-                        <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                            style="width: 200px"> Prestar contas</a> 
-                        
-                    </div>
+                    @php
+                        date_default_timezone_set('America/Sao_Paulo');
+                    @endphp
+                    @if(($av->isEnviadoUsuario==1 && $av->isAprovadoGestor ==1 && $av->isRealizadoReserva ==1 && $av->isAprovadoFinanceiro ==1
+                        && $av->isPrestacaoContasRealizada == 0 && $av->isCancelado == 0) ||
+                        ($av->isCancelado == 1 && $av->isAprovadoFinanceiro == 1 && $av->isPrestacaoContasRealizada == 0))
+
+                        @for($i = 0; $i < count($av->rotas); $i++)
+                            @if($i == (count($av->rotas)-1))
+                                @if($av->rotas[$i]->dataHoraChegada < date('Y-m-d H:i:s'))
+                                <div class="opcoesGerenciarAv">
+                                    <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" class="btn btn-success btn-sm"
+                                        style="width: 200px"> Prestar contas</a> 
+                                </div>
+                                @else
+                                <p>Ainda não finalizou</p>
+                                @endif
+                            @endif
+                        @endfor
+                    @elseif(($av->isEnviadoUsuario==1 && $av->isAprovadoGestor ==1 && $av->isRealizadoReserva ==1 && $av->isAprovadoFinanceiro ==1
+                            && $av->isPrestacaoContasRealizada == 1) ||
+                            ($av->isCancelado == 1 && $av->isAprovadoFinanceiro == 1 && $av->isPrestacaoContasRealizada == 1))
+
+                        <a href="/avs/verDetalhesPc/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                            style="width: 110px"> Ver</a>
+
+                        @if($av->isAcertoContasRealizado == 1 && $av->isUsuarioAprovaAcertoContas != 1)
+                            <a href="/avs/validarAcertoContasUsuario/{{ $av->id }}" class="btn btn-success btn-sm"
+                            style="width: 110px"> Validar PC</a>
+                        @endif
+                    @endif
                 </td>
             </tr>
             @endforeach
@@ -119,7 +153,7 @@
         $(document).ready(function(){
             $('#minhaTabela').DataTable({
                     scrollY: 500,
-                    orderFixed: [0, 'desc'],
+                    "order": [ 0, 'desc' ],
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

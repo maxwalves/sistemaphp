@@ -441,9 +441,18 @@ class ControladorAv extends Controller
         $veiculosProprios = $userAv->veiculosProprios;
         $historicoPcAll = HistoricoPc::all();
         $historicoPc = [];
+        $valorRecebido = null;
 
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
+
+        $valorAcertoContasReal = 0;
+        $valorAcertoContasDolar = 0;
+		
+		foreach($comprovantes as $compFiltrado){
+            $valorAcertoContasReal += $compFiltrado->valorReais;
+            $valorAcertoContasDolar += $compFiltrado->valorDolar;
+        }
 
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
@@ -461,6 +470,16 @@ class ControladorAv extends Controller
             if($hisPc->av_id == $av->id){
                 array_push($historicoPc, $hisPc);
             }
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+                $valorRecebido = $hisPc;
+            }
+        }
+        if($valorRecebido == null){
+            $valorRecebido = new HistoricoPc();
+            $valorRecebido->valorReais = 0;
+            $valorRecebido->valorExtraReais = 0;
+            $valorRecebido->valorDolar = 0;
+            $valorRecebido->valorExtraDolar = 0;
         }
 
         foreach($av->rotas as $r){//Verifica todas as rotas da AV
@@ -492,7 +511,8 @@ class ControladorAv extends Controller
             return view('avs.avaliarPcFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes,
-            'medicoesFiltradas' => $medicoesFiltradas]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'valorRecebido' => $valorRecebido, 'valorAcertoContasReal' => $valorAcertoContasReal,
+            'valorAcertoContasDolar' => $valorAcertoContasDolar ]);
         }
         else{
             return redirect('avs/autPcFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -696,9 +716,18 @@ class ControladorAv extends Controller
         $veiculosProprios = $userAv->veiculosProprios;
         $historicoPcAll = HistoricoPc::all();
         $historicoPc = [];
+        $valorRecebido = null;
 
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
+
+        $valorAcertoContasReal = 0;
+        $valorAcertoContasDolar = 0;
+
+        foreach($comprovantes as $compFiltrado){
+            $valorAcertoContasReal += $compFiltrado->valorReais;
+            $valorAcertoContasDolar += $compFiltrado->valorDolar;
+        }
 
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
@@ -716,6 +745,16 @@ class ControladorAv extends Controller
             if($hisPc->av_id == $av->id){
                 array_push($historicoPc, $hisPc);
             }
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+                $valorRecebido = $hisPc;
+            }
+        }
+        if($valorRecebido == null){
+            $valorRecebido = new HistoricoPc();
+            $valorRecebido->valorReais = 0;
+            $valorRecebido->valorExtraReais = 0;
+            $valorRecebido->valorDolar = 0;
+            $valorRecebido->valorExtraDolar = 0;
         }
 
         foreach($av->rotas as $r){//Verifica todas as rotas da AV
@@ -748,7 +787,8 @@ class ControladorAv extends Controller
             return view('avs.avaliarPcGestor', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes,
-            'medicoesFiltradas' => $medicoesFiltradas]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'valorRecebido' => $valorRecebido, 'valorAcertoContasReal' => $valorAcertoContasReal,
+            'valorAcertoContasDolar' => $valorAcertoContasDolar]);
         }
         else{
             return redirect('avs/autPcGestor')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -1313,6 +1353,97 @@ class ControladorAv extends Controller
         'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas]);
     }
 
+    public function verDetalhesPc($id){
+
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $veiculosParanacidade = VeiculoParanacidade::all();
+        $users = User::all();
+        $historicos = [];
+        $anexos = [];
+        $user = auth()->user();
+        $usersFiltrados = [];
+        $possoEditar = false;
+        $veiculosProprios = $user->veiculosProprios;
+        $anexosFinanceiro = [];
+        $anexosRotas = [];
+        $comprovantesAll = ComprovanteDespesa::all();
+        $comprovantes = [];
+        $valorAcertoContasReal = 0;
+        $valorAcertoContasDolar = 0;
+        $isInternacional = false;
+
+        $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
+        $historicoPcAll = HistoricoPc::all();
+        $historicoPc = [];
+        $valorRecebido = null;
+
+        $medicoes = Medicao::all();
+        $medicoesFiltradas = [];
+
+        foreach($medicoes as $medicao){
+            if($medicao->av_id == $av->id){
+                array_push($medicoesFiltradas, $medicao); 
+            }
+        }
+
+        foreach($comprovantesAll as $comp){
+            if($comp->av_id == $av->id){
+                array_push($comprovantes, $comp);
+            }
+        }
+
+        foreach($comprovantes as $compFiltrado){
+            $valorAcertoContasReal += $compFiltrado->valorReais;
+            $valorAcertoContasDolar += $compFiltrado->valorDolar;
+        }
+        
+        foreach($historicoPcAll as $hisPc){
+            if($hisPc->av_id == $av->id){
+                array_push($historicoPc, $hisPc);
+            }
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+                $valorRecebido = $hisPc;
+            }
+        }
+        if($valorRecebido == null){
+            $valorRecebido = new HistoricoPc();
+            $valorRecebido->valorReais = 0;
+            $valorRecebido->valorExtraReais = 0;
+            $valorRecebido->valorDolar = 0;
+            $valorRecebido->valorExtraDolar = 0;
+        }
+
+        foreach($av->rotas as $r){//Verifica todas as rotas da AV
+            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+            }
+        }
+        
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        foreach($av->anexosFinanceiro as $anexF){
+                array_push($anexosFinanceiro, $anexF);
+        }
+
+        foreach($av->rotas as $r){
+            if($r->isViagemInternacional == true){
+                $isInternacional = true;
+            }
+        }
+
+        return view('avs.verDetalhesPc', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
+        'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
+        'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
+        'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade,
+        'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas]);
+    }
+
     public function verDetalhesAvGerenciar($id){
 
         $objetivos = Objetivo::all();
@@ -1441,7 +1572,7 @@ class ControladorAv extends Controller
         else{
             $dados = array(
                 "isAprovadoGestor" => 1,
-                "status" => "Aguardando reserva pela CAD e adiantamento pelo CFI"
+                "status" => "Aguardando reserva pela CAD e adiantamento pela CFI"
             );
         }
 
@@ -1618,13 +1749,13 @@ class ControladorAv extends Controller
                 $dados = array(
                     "isRealizadoReserva" => 1,
                     "isReservadoVeiculoParanacidade" => 1,
-                    "status" => "Aguardando adiantamento do CFI"
+                    "status" => "Aguardando adiantamento da CFI"
                 );
             }
             else{
                 $dados = array(
                     "isRealizadoReserva" => 1,
-                    "status" => "Aguardando adiantamento do CFI"
+                    "status" => "Aguardando adiantamento da CFI"
                 );
             }
         }
@@ -3576,8 +3707,8 @@ class ControladorAv extends Controller
             if($uf->id == $user->id){//Se o usuário for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
                     if(($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true 
-                    && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isPrestacaoContasRealizada"]==false && $avAtual["isCancelado"]==false) || 
-                    ($avAtual["isCancelado"]==true && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isPrestacaoContasRealizada"] == false)){
+                    && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isCancelado"]==false) || 
+                    ($avAtual["isCancelado"]==true && $avAtual["isAprovadoFinanceiro"]==true )){
                         $isVeiculoEmpresa = false;
                         foreach($avAtual->rotas as $rota){//Percorre todas as rotas da AV
                             if($rota["isVeiculoEmpresa"]==1){//Se a viagem tiver veículo da empresa

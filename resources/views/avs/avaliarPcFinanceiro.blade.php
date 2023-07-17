@@ -3,6 +3,14 @@
 @section('title', 'Editando: ' . $av->id)
 @section('content')
 
+<style>
+    .teste {
+        min-height: 100vh;
+    }
+</style>
+<div class="teste">
+
+
 <nav class="bg-base-200">
     <div class="flex flex-wrap items-center justify-between mx-auto p-1">
         <a href="#" class="flex items-center">
@@ -117,115 +125,328 @@
         </p>  
             <div class="divider"></div> 
         
-
-        <div class="col-md-12 offset-md-0">
-            <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
-            <table id="tabelaRota" class="display nowrap" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Cidade de saída</th>
-                        <th>Data/Hora de saída</th>
-                        <th>Cidade de chegada</th>
-                        <th>Data/Hora de chegada</th>
-                        <th>Hotel?</th>
-                        <th>Tipo de transporte</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($av->rotas as $rota)
-                    <tr>
-                        <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
-                        <td> 
-                            @if($rota->isAereo == 1)
-                                <img src="{{asset('/img/aviaosubindo.png')}}" style="width: 40px" >
-                            @endif
-        
-                            @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
-                            @endif
-        
-                            @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
-                            @endif
-        
-                            {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
-                            
-                        </td>
-                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-        
-                        <td> 
-                            @if($rota->isAereo == 1)
-                                <img src="{{asset('/img/aviaodescendo.png')}}" style="width: 40px" >
-                            @endif
-        
-                            @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
-                            @endif
-        
-                            @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
-                            @endif
-        
-                            {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
-                        </td>
-        
-                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                        <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
-                        <td> 
-                            {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
-                            {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                            @if($rota->isVeiculoProprio == 1)
-                                {{"Veículo próprio: "}} <br>
-                                @foreach ($veiculosProprios as $v)
-
-                                    @if($v->id == $rota->veiculoProprio_id)
-                                        {{$v->modelo . '-' . $v->placa}}
-                                    @endif
-                                    
-                                @endforeach
+        <div class="row">
+            <div class="col-md-6 offset-md-0">
+                <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
+                <table id="tabelaRota" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Cidade de saída</th>
+                            <th>Data/Hora de saída</th>
+                            <th>Cidade de chegada</th>
+                            <th>Data/Hora de chegada</th>
+                            <th>Hotel?</th>
+                            <th>Tipo de transporte</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($av->rotas as $rota)
+                        <tr>
+                            <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
+                            <td> 
+                                @if($rota->isAereo == 1)
+                                    <img src="{{asset('/img/aviaosubindo.png')}}" style="width: 40px" >
+                                @endif
+            
+                                @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                    <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+                                @endif
+            
+                                @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                    <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                                @endif
+            
+                                {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
                                 
-                                @if(count($veiculosProprios) == 0)
-                                    {{"Não encontrado"}}
+                            </td>
+                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+            
+                            <td> 
+                                @if($rota->isAereo == 1)
+                                    <img src="{{asset('/img/aviaodescendo.png')}}" style="width: 40px" >
+                                @endif
+            
+                                @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                    <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+                                @endif
+            
+                                @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                    <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                                @endif
+            
+                                {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
+                            </td>
+            
+                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
+                            <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
+                            <td> 
+                                {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
+                                {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
+                                @if($rota->isVeiculoProprio == 1)
+                                    {{"Veículo próprio: "}} <br>
+                                    @foreach ($veiculosProprios as $v)
+
+                                        @if($v->id == $rota->veiculoProprio_id)
+                                            {{$v->modelo . '-' . $v->placa}}
+                                        @endif
+                                        
+                                    @endforeach
+                                    
+                                    @if(count($veiculosProprios) == 0)
+                                        {{"Não encontrado"}}
+                                    @endif
+                                @endif
+                                {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
+                                {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div>
+                    <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
+                    <table id="minhaTabela5" class="display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Valor em reais</th>
+                                <th>Valor em dólar</th>
+                                <th>Anexo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($comprovantes as $comp)
+                                <tr>
+                                    <td> {{$comp->descricao}} </td>
+                                    <td> R${{$comp->valorReais}} </td>
+                                    <td> ${{$comp->valorDolar}} </td>
+                                
+                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
+                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                    
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6 offset-md-0">
+                @if($av->isPrestacaoContasRealizada==1)
+                    <div class="box box-40">
+                        <div class="col-md-12 offset-md-0">
+                            <h1 style="font-size: 24px"><strong>Prestação de contas: </strong></h1>
+                            <br>
+                            <p><strong> <span style="color: red">A:</span> Recebido antes da viagem</strong></p>
+                            <div class="stats shadow">
+                
+                                <div class="stat">
+                                <div class="stat-title">Valor em Reais</div>
+                                <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais}}</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-title">Valor extra em Reais</div>
+                                    <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais != null ? $valorRecebido->valorExtraReais : 0}}</div>
+                                </div>
+                                @if($av->valorDeducaoReais > 0)
+                                    <div class="stat">
+                                        <div class="stat-title">Dedução em Reais</div>
+                                        <div class="stat-value text-primary">- R$ {{$av->valorDeducaoReais}}</div>
+                                    </div>
+                                @endif
+                                @if($av->valorDeducaoDolar > 0)
+                                <div class="stat">
+                                    <div class="stat-title">Dedução em dólar</div>
+                                    <div class="stat-value text-primary">$ {{$av->valorDeducaoDolar}}</div>
+                                </div>
+                                @endif
+                                @if($valorRecebido->valorDolar > 0)
+                                    <div class="stat">
+                                    <div class="stat-title">Valor em dólar</div>
+                                    <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar}}</div>
+                                    </div>
+                                @endif
+                                @if($valorRecebido->valorExtraDolar > 0)
+                                    <div class="stat">
+                                        <div class="stat-title">Valor extra em dólar</div>
+                                        <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar}}</div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="stats shadow bg-yellow-500">
+                                <div class="stat">
+                                    <div class="stat-title">Resultado em Reais</div>
+                                    <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais + $valorRecebido->valorExtraReais - $av->valorDeducaoReais}}</div>
+                                </div>
+                                @if(($valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar) > 0)
+                                    <div class="stat">
+                                        <div class="stat-title">Resultado em Dólar</div>
+                                        <div class="stat-value text-primary">R$ {{$valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar}}</div>
+                                    </div>
+                                @endif
+                            </div>
+                            <br><br>
+                            <p><strong> <span style="color: green">B:</span> Informado na prestação de contas</strong></p>
+                            <div class="stats shadow">
+                
+                                <div class="stat">
+                                    <div class="stat-title">Valor em Reais</div>
+                                    <div class="stat-value text-primary">R$ {{$av->valorReais}} {{ $av->isAprovadoCarroDiretoriaExecutiva == true ? '+ R$ ' . $av->qtdKmVeiculoProprio * 0.49 : ""}} </div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-title">Valor extra em Reais</div>
+                                    <div class="stat-value text-primary">R$ {{$valorAcertoContasReal}}</div>
+                                </div>
+                                @if($av->valorDeducaoReais > 0)
+                                    <div class="stat">
+                                        <div class="stat-title">Dedução em Reais</div>
+                                        <div class="stat-value text-primary">- R$ {{$av->valorDeducaoReais}}</div>
+                                    </div>
+                                @endif
+                                @if($av->valorDeducaoDolar > 0)
+                                    <div class="stat">
+                                        <div class="stat-title">Dedução em dólar</div>
+                                        <div class="stat-value text-primary">$ {{$av->valorDeducaoDolar}}</div>
+                                    </div>
+                                @endif
+                                @if($av->valorDolar > 0)
+                                    <div class="stat">
+                                        <div class="stat-title">Valor em dólar</div>
+                                        <div class="stat-value text-primary">$ {{$av->valorDolar}}</div>
+                                    </div>
+                                @endif
+                                @if($valorAcertoContasDolar > 0)
+                                    <div class="stat">
+                                        <div class="stat-title">Valor extra em dólar</div>
+                                        <div class="stat-value text-primary">$ {{$valorAcertoContasDolar}}</div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="stats shadow bg-yellow-500">
+                                <div class="stat">
+                                    <div class="stat-title">Resultado em Reais</div>
+                                    <div class="stat-value text-primary">R$ {{$av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais}}</div>
+                                </div>
+                                @if(($av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar) > 0)
+                                    <div class="stat">
+                                        <div class="stat-title">Resultado em Dólar</div>
+                                        <div class="stat-value text-primary">R$ {{$av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</div>
+                                    </div>
+                                @endif
+                            </div>
+                            <br><br>
+                            <p><strong> <span style="color: red">A</span> - <span style="color: green">B</span>: Acerto de contas:</strong></p>
+                            <div class="stats shadow">
+                                @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                    <div class="stat">
+                                        <div class="stat-title" style="color: black">Valor em Reais</div>
+                                        <div class="stat-value text-gray-950">R$ {{($valorRecebido->valorReais-$av->valorReais) - ($av->qtdKmVeiculoProprio * 0.49)}}</div>
+                                    </div>
+                                @else
+                                    <div class="stat">
+                                        <div class="stat-title" style="color: black">Valor em Reais</div>
+                                        <div class="stat-value text-gray-950">R$ {{$valorRecebido->valorReais-$av->valorReais}}</div>
+                                    </div>
+                                @endif
+                                
+                                <div class="stat">
+                                    <div class="stat-title" style="color: black">Valor extra em Reais</div>
+                                    <div class="stat-value text-gray-950">R$ {{$valorRecebido->valorExtraReais-$valorAcertoContasReal}}</div>
+                                </div>
+                                
+                                @if(($valorRecebido->valorDolar-$av->valorDolar)>0)
+                                    <div class="stat">
+                                        <div class="stat-title" style="color: black">Valor em dólar</div>
+                                        <div class="stat-value text-gray-950">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
+                                    </div>
+                                @endif
+                                @if(($valorRecebido->valorExtraDolar-$valorAcertoContasDolar)>0)
+                                    <div class="stat">
+                                        <div class="stat-title" style="color: black">Valor extra em dólar</div>
+                                        <div class="stat-value text-gray-950">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                @if($av->isPrestacaoContasRealizada==1)
+                    <p><strong>Resultado:</strong></p>
+                    <div class="stats shadow">
+        
+                        <div class="stat">
+                            <div class="stat-title">
+                                <p>
+                                    @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                        @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )<0)
+                                            Valor que o usuário deve receber em reais
+                                        @endif
+                                        @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )>0)
+                                            Valor que o usuário deve pagar em reais
+                                        @endif
+                                    @else
+                                        @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
+                                            Valor que o usuário deve receber em reais
+                                        @endif
+                                        @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
+                                            Valor que o usuário deve pagar em reais
+                                        @endif
+                                    @endif
+                                </p>
+                            </div>
+
+                            @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) <0))
+                                    <div class="stat-value text-green-500">
+                                            R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
+                                    </div>
+                                @endif
+                                @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) >0))
+                                    <div class="stat-value text-error">
+                                            R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
+                                    </div>
+                                @endif
+                            @else
+                                @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
+                                    <div class="stat-value text-green-500">
+                                            R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal)) * (-1)}}
+                                    </div>
+                                @endif
+                                @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
+                                    <div class="stat-value text-error">
+                                            R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))}}
+                                    </div>
                                 @endif
                             @endif
-                            {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
-                            {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            
-        </div>
-
-        <div class="divider"></div> 
-
-        <div class="col-md-6 offset-md-0">
-            <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
-            <table id="minhaTabela5" class="display nowrap" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Descrição</th>
-                        <th>Valor em reais</th>
-                        <th>Valor em dólar</th>
-                        <th>Anexo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($comprovantes as $comp)
-                        <tr>
-                            <td> {{$comp->descricao}} </td>
-                            <td> R${{$comp->valorReais}} </td>
-                            <td> ${{$comp->valorDolar}} </td>
-                        
-                            <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
-                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
                             
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-title">
+                                <p>
+                                    @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))<0)
+                                        Valor que o usuário deve receber em dólar
+                                    @endif
+                                    @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))>0)
+                                        Valor que o usuário deve pagar em dólar
+                                    @endif
+                                </p>
+                            </div>
+                            @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))<0)
+                                <div class="stat-value text-green-500">
+                                        
+                                        $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar)) * (-1)}}
+                                </div>
+                            @endif
+                            @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))>0)
+                                <div class="stat-value text-error">
+                                        $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))}}
+                                </div>
+                            @endif
+                        </div>
+                        
+                    </div>
+                @endif
+            </div>
         </div>
 
         <div class="divider"></div> 
@@ -857,7 +1078,7 @@
             </div>
         </div>
     </div>
-    
+</div>
 @endsection
 
 {{-- Para implementação futura de AJAX --}} 
@@ -881,6 +1102,7 @@
         $(document).ready(function(){
             $('#tabelaRota').DataTable({
                     scrollY: 200,
+                    scrollX: true,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

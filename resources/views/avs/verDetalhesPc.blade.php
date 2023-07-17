@@ -6,8 +6,8 @@
 <nav class="bg-base-200">
     <div class="flex flex-wrap items-center justify-between mx-auto p-1">
         <a href="#" class="flex items-center">
-            <img src="{{asset('/img/balanca.png')}}" class="h-12 mr-3" />
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">Acerto de contas - Validação do usuário</span>
+            <img src="{{asset('/img/visualizar.png')}}" class="h-12 mr-3" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">Detalhes da PC</span>
         </a>
       <button data-collapse-toggle="navbar-dropdown" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-dropdown" aria-expanded="false">
         <span class="sr-only">Open main menu</span>
@@ -30,9 +30,11 @@
                     <li>
                         <label for="my-modal-4" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Dados atuais</label>
                     </li>
-                    <li>
-                        <label for="my-modal-5" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >FLUXO</label>
-                    </li>
+                    @if($isInternacional != true)
+                        <li>
+                            <label for="my-modal-5" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >FLUXO</label>
+                        </li>
+                    @endif
                     <li>
                         <label for="my-modal-10" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Trajeto</label>
                     </li>
@@ -77,9 +79,6 @@
                 </ul>
             </div>
         </li>
-        <li>
-            <label for="my-modal-9" class="btn" style="padding-bottom: 30px"><ion-icon name="cash-outline" size="large"></ion-icon>VALIDAR</label>
-        </li>
         </ul>
       </div>
     </div>
@@ -89,7 +88,7 @@
 
         <div class="containerAcertoContas">
             <div class="box box-90">
-                <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong> {{ $av->id }}</h1>
+                <h1 style="font-size: 24px"><strong>Prestação de contas referente a AV nº:</strong> {{ $av->id }}</h1>
                 <h1 style="font-size: 24px"><strong>Status atual:</strong> {{ $av->status }}</h1>
                 <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
                 </ion-icon> <strong>Nome do usuário: </strong> 
@@ -106,9 +105,6 @@
                             {{ $u->username }}
                         @endif
                 @endforeach
-                @if ($errors->has('comentario'))
-                    <p style="color: red"> <strong>É necessário realizar um comentário no caso de reprovação do Acerto de Contas!</strong></p>
-                @endif
                 </p>  
             </div>
         </div>
@@ -116,8 +112,9 @@
 
     <div class="divider"></div> 
 
-    <div id="av-create-container" class="container">
+    <div>
             <div class="containerAcertoContas">
+                @if($av->isPrestacaoContasRealizada==1)
                 <div class="box box-40">
                     <div class="col-md-12 offset-md-0">
                         <h1 style="font-size: 24px"><strong>Acerto de contas: </strong></h1>
@@ -254,120 +251,108 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <div class="box box-40">
                     <div >
-                        <h2 style="color: red">Insira o comprovante de pagamento do acerto de contas caso necessário:</h2><br>
-                        <div class="col-3">
-                            <label for="my-modal-11" class="btn btn-active btn-success btn-sm" style="padding-bottom: 30px; width:150px"><ion-icon name="add-circle-outline" size="large"></ion-icon>Adicionar</label>
-                        </div>
                         <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
                         <table id="minhaTabela6" class="display nowrap" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Descrição</th>
                                     <th>Anexo</th>
-                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($historicoPc as $hist)
                                     <tr>
                                         <td> {{$hist->comentario}} </td>
-                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}" 
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> 
-                                        </td>
-                                        <td>
-                                            @if($hist->comentario != "Adiantamento realizado - valor inicial" && $hist->comentario != "Acerto de contas"
-                                            && $hist->comentario != "Comprovante Acerto de Contas Financeiro")
-                                                
-                                                    <form action="/avs/deletarComprovanteAcertoContasUsuario/{{ $hist->id }}/{{ $av->id }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-active btn-accent btn-sm"
-                                                        style="width: 110px" > Deletar</button>
-                                                    </form>
-                                                
+                                            @if($hist->comentario == "AV Internacional gerada")
+                                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/internacional' . '/' . $hist->anexoRelatorio) }}" 
+                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                            @else
+                                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}" 
+                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
                                             @endif
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-
-                        <p><strong>Resultado:</strong></p>
-                        <div class="stats shadow">
+                        @if($av->isPrestacaoContasRealizada==1)
+                            <p><strong>Resultado:</strong></p>
+                            <div class="stats shadow">
               
-                            <div class="stat">
-                                <div class="stat-title">
-                                    <p>
-                                        @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                                            @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )<0)
-                                                Valor que o usuário deve receber em reais
+                                <div class="stat">
+                                    <div class="stat-title">
+                                        <p>
+                                            @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                                @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )<0)
+                                                    Valor que o usuário deve receber em reais
+                                                @endif
+                                                @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )>0)
+                                                    Valor que o usuário deve pagar em reais
+                                                @endif
+                                            @else
+                                                @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
+                                                    Valor que o usuário deve receber em reais
+                                                @endif
+                                                @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
+                                                    Valor que o usuário deve pagar em reais
+                                                @endif
                                             @endif
-                                            @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )>0)
-                                                Valor que o usuário deve pagar em reais
-                                            @endif
-                                        @else
-                                            @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
-                                                Valor que o usuário deve receber em reais
-                                            @endif
-                                            @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
-                                                Valor que o usuário deve pagar em reais
-                                            @endif
+                                        </p>
+                                    </div>
+    
+                                    @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                        @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) <0))
+                                            <div class="stat-value text-green-500">
+                                                    R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
+                                            </div>
                                         @endif
-                                    </p>
+                                        @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) >0))
+                                            <div class="stat-value text-error">
+                                                    R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
+                                            </div>
+                                        @endif
+                                    @else
+                                        @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
+                                            <div class="stat-value text-green-500">
+                                                    R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal)) * (-1)}}
+                                            </div>
+                                        @endif
+                                        @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
+                                            <div class="stat-value text-error">
+                                                    R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))}}
+                                            </div>
+                                        @endif
+                                    @endif
+                                    
                                 </div>
-
-                                @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                                    @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) <0))
+                                <div class="stat">
+                                    <div class="stat-title">
+                                        <p>
+                                            @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))<0)
+                                                Valor que o usuário deve receber em dólar
+                                            @endif
+                                            @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))>0)
+                                                Valor que o usuário deve pagar em dólar
+                                            @endif
+                                        </p>
+                                    </div>
+                                    @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))<0)
                                         <div class="stat-value text-green-500">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
+                                                
+                                                $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar)) * (-1)}}
                                         </div>
                                     @endif
-                                    @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) >0))
+                                    @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))>0)
                                         <div class="stat-value text-error">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
+                                                $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))}}
                                         </div>
                                     @endif
-                                @else
-                                    @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
-                                        <div class="stat-value text-green-500">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal)) * (-1)}}
-                                        </div>
-                                    @endif
-                                    @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
-                                        <div class="stat-value text-error">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))}}
-                                        </div>
-                                    @endif
-                                @endif
+                                </div>
                                 
                             </div>
-                            <div class="stat">
-                                <div class="stat-title">
-                                    <p>
-                                        @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))<0)
-                                            Valor que o usuário deve receber em dólar
-                                        @endif
-                                        @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))>0)
-                                            Valor que o usuário deve pagar em dólar
-                                        @endif
-                                    </p>
-                                </div>
-                                @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))<0)
-                                    <div class="stat-value text-green-500">
-                                            
-                                            $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar)) * (-1)}}
-                                    </div>
-                                @endif
-                                @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))>0)
-                                    <div class="stat-value text-error">
-                                            $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))}}
-                                    </div>
-                                @endif
-                            </div>
-                            
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -396,7 +381,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Aqui nesta etapa você deve avaliar o Acerto de Contas efetuado pelo Financeiro!
+                    Aqui nesta etapa você pode verificar o status da sua AV!
                   </div>
             </div>
             <div class="chat chat-end">
@@ -406,7 +391,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Para isso, analise os documentos comprobatórios e o cálculo realizado!
+                    No menu é possível ver informações importantes, como o histórico e o fluxo da AV.
                   </div>
             </div>
             <div class="chat chat-end">
@@ -416,7 +401,7 @@
                     </div>
                   </div>
                   <div class="chat-bubble chat-bubble-success">
-                    Se tiver algo errado, volte a AV para o financeiro para correção!
+                    No menu também é possível verificar as reservas e o financeiro.
                   </div>
             </div>
     
@@ -430,7 +415,7 @@
             <div class="modal-content">
                 <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px;">Histórico</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Histórico</h3>
                 <table id="minhaTabela" class="display nowrap">
                     <!-- head -->
                     <thead>
@@ -532,11 +517,13 @@
 
                 <h1 class="text-lg font-bold">Adiantamentos:</h1>
                 <div class="stats stats-vertical shadow">
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$ {{ $av->valorReais }},00</p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> R$ {{ $av->valorDolar }},00</p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }},00</p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> R$ {{ $av->valorExtraDolar }},00</p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
+                    <p class="av-owner" style="font-size: 20px; color: black; background-color: chartreuse"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$ {{ $av->valorReais }}</p>
+                    <p class="av-owner" style="font-size: 20px; color: black; background-color: chartreuse"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
+                    <p class="av-owner" style="font-size: 20px; color: black; background-color: coral"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
+                    <p class="av-owner" style="font-size: 20px; color: black; background-color: coral"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
+                    <p class="av-owner" style="font-size: 20px; color: black; background-color: rgb(255, 58, 98)"><ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$ {{ $av->valorDeducaoReais }}</p>
+                    <p class="av-owner" style="font-size: 20px; color: black; background-color: rgb(255, 58, 98)"><ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
+                    <p class="av-owner" style="font-size: 20px; color: black; background-color: deepskyblue"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
                     @if($av->autorizacao != null)
                         <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}" 
                             target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
@@ -601,7 +588,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    -
+                                    3
                                 </span>
                             @endif
                             <span>
@@ -609,7 +596,7 @@
                                 <div class="badge badge-error gap-2">Avalia pedido</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 border-2 border-black">
+                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
                             @if($av->isRealizadoReserva == 1)
                                 <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
                                     <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
@@ -620,7 +607,7 @@
                                 </span>
                             @endif
                             <span>
-                                <h3 class="font-medium leading-tight">Secretaria:</h3>
+                                <h3 class="font-medium leading-tight">CAD - Coordenadoria Administrativa:</h3>
                                 <div class="badge badge-outline">Realiza reservas</div>
                             </span>
                         </li>
@@ -631,29 +618,15 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    5
+                                    4
                                 </span>
                             @endif
                             <span>
-                                <h3 class="font-medium leading-tight">Financeiro:</h3>
+                                <h3 class="font-medium leading-tight">CFI - Coordenadoria Financeira:</h3>
                                 <div class="badge badge-outline">Adiantamento</div>
                             </span>
                         </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isReservadoVeiculoParanacidade == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    6
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Administração:</h3>
-                                <div class="badge badge-error gap-2">Reserva de veículo</div>
-                            </span>
-                        </li>
+                        
                     </ol>
                 </div>
                 <div class="divider"></div> 
@@ -663,7 +636,7 @@
                     <ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0">
                         <li class="flex items-center text-blue-600 dark:text-blue-500 space-x-2.5">
                             <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-gray-400">
-                                7
+                                5
                             </span>
                             <span>
                                 <h3 class="font-medium leading-tight">Viagem</h3>
@@ -676,7 +649,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    8
+                                    6
                                 </span>
                             @endif
                             <span>
@@ -691,7 +664,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    9
+                                    7
                                 </span>
                             @endif
                             <span>
@@ -706,7 +679,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    10
+                                    8
                                 </span>
                             @endif
                             <span>
@@ -721,7 +694,7 @@
                                 </span>
                             @else
                                 <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    11
+                                    9
                                 </span>
                             @endif
                             <span>
@@ -861,9 +834,9 @@
             <div class="modal-content">
                 <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px;">Adiantamentos realizados</h3>
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Adiantamentos realizados</h3>
 
-                <table id="minhaTabela3" class="display nowrap" style="width:100%">
+                <table id="minhaTabela3" class="display nowrap" style="width:100%;">
                     <thead>
                         <tr>
                             <th>Descrição</th>
@@ -886,50 +859,6 @@
         </div>
     </div>
 
-    <input type="checkbox" id="my-modal-9" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-3xl">
-            <div class="modal-content">
-                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
-                <br>
-                <h1 style="font-size: 24px; padding-left: 10px; padding-bottom: 20px;"><strong>Aprovar prestação de contas: </strong></h1>
-                <div class="flex flex-row" style="padding-left: 10px">
-                    <form action="/avs/usuarioAprovarAcertoContas" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                            <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                            <label for="comentario">Finalizar ciclo de vida da AV: </label>
-                            <br>
-                            <textarea type="text" class="textarea textarea-bordered h-24" 
-                                name="comentario" style="width: 200px"
-                                id="comentario" placeholder="Comentário"></textarea>
-        
-                            <button type="submit" class="btn btn-active btn-success">Finalizar PC</button>
-                    </form>
-        
-                    <form action="/avs/usuarioReprovarAcertoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
-                        @csrf
-                        @method('PUT')
-                            <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                            <label for="comentario">Voltar AV para o Financeiro: </label>
-                            <br>
-                            <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
-                                name="comentario" style="width: 200px"
-                                id="comentario" placeholder="Comentário"></textarea>
-                            <button type="submit" class="btn btn-active btn-error">Reprovar</button>
-                            @if ($errors->has('comentario'))
-                                    <div class="invalid-feedback">
-                                        {{ $errors->first('comentario') }}
-                                    </div>
-                            @endif
-                    </form>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-
     <input type="checkbox" id="my-modal-10" class="modal-toggle" />
 
     <div class="modal">
@@ -942,7 +871,6 @@
                 <table id="tabelaRota" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Número</th>
                             <th>Tipo</th>
                             <th>Cidade de saída</th>
                             <th>Data/Hora de saída</th>
@@ -950,12 +878,17 @@
                             <th>Data/Hora de chegada</th>
                             <th>Hotel?</th>
                             <th>Tipo de transporte</th>
+                            @foreach($av->rotas as $rota)
+                                @if($rota->isVeiculoEmpresa == 1)
+                                    <th>Veículo</th>
+                                    @break
+                                @endif
+                            @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($av->rotas as $rota)
                         <tr>
-                            <td> {{$rota->id}} </td>
                             <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
                             <td> 
                                 @if($rota->isAereo == 1)
@@ -996,33 +929,50 @@
                             <td> 
                                 {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
                                 {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                                {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
+                                @if($rota->isVeiculoProprio == 1)
+                                {{"Veículo próprio: "}} <br>
+                                @foreach ($veiculosProprios as $v)
+
+                                    @if($v->id == $rota->veiculoProprio_id)
+                                        {{$v->modelo . '-' . $v->placa}}
+                                    @endif
+                                    
+                                @endforeach
+                                
+                                @if(count($veiculosProprios) == 0)
+                                    {{"Não encontrado"}}
+                                @endif
+                            @endif
                                 {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                                 {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                             </td>
+                            @php
+                                $achouVeiculo = false;
+                            @endphp
+                            @if($rota->isVeiculoEmpresa == 1)
+                                @foreach($veiculosParanacidade as $v)
+                                        @if($rota->veiculoParanacidade_id == $v->id)
+                                            @php
+                                                $achouVeiculo = true;
+                                            @endphp
+                                        @endif
+                                @endforeach
+                                @if($achouVeiculo == true)
+                                    <td>
+                                        {{ $v->modelo }} ({{ $v->placa }})
+                                    </td>
+                                @else
+                                    <td>
+                                        A definir
+                                    </td>
+                                @endif
+                            @endif
+                            
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
 
-            </div>
-        </div>
-    </div>
-
-    <input type="checkbox" id="my-modal-11" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-1xl">
-            <div class="modal-content">
-                <label for="my-modal-11" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-                <br>
-                <form action="/avs/gravarComprovanteAcertoContasUsuario" method="POST" enctype="multipart/form-data">
-                    @csrf
-                        <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
-                        <input type="text" hidden="true" id="avId" name="avId" value="{{ $av->id }}">
-                        <br><br>
-                        <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
-                </form>
             </div>
         </div>
     </div>
@@ -1032,35 +982,36 @@
     <div class="modal">
         <div class="modal-box w-11/12 max-w-7xl">
             <div class="modal-content">
-                <label for="my-modal-12" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label for="my-modal-12" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
                 
                 <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Comprovantes de despesa:</strong></h1>
-                <table id="minhaTabela7" class="display nowrap" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Descrição</th>
-                            <th>Valor reais</th>
-                            <th>Valor dólar</th>
-                            <th>Anexo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($comprovantes as $comp)
-                            <tr>
-                                <td> {{$comp->descricao}} </td>
-                                <td> {{$comp->valorReais}} </td>
-                                <td> {{$comp->valorDolar}} </td>
-                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
-                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        <table id="minhaTabela7" class="display nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th>Valor reais</th>
+                                    <th>Valor dólar</th>
+                                    <th>Anexo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($comprovantes as $comp)
+                                    <tr>
+                                        <td> {{$comp->descricao}} </td>
+                                        <td> {{$comp->valorReais}} </td>
+                                        <td> {{$comp->valorDolar}} </td>
+                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
+                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
 
             </div>
         </div>
     </div>
+
     <input type="checkbox" id="my-modal-13" class="modal-toggle" />
 
     <div class="modal">
@@ -1123,6 +1074,7 @@
             </div>
         </div>
     </div>
+
     
 @endsection
 
@@ -1228,7 +1180,7 @@
                     }
             });
             $('#minhaTabela7').DataTable({
-                    scrollY: 200,
+                    scrollY: 100,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

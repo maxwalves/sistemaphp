@@ -122,7 +122,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control {{ $errors->has('outroObjetivo') ? 'is-invalid' :''}}" 
                     name="outroObjetivo"
-                    id="outroObjetivo" placeholder="Outro">
+                    id="outroObjetivo" placeholder="Digite outro objetivo">
                 </div>
 
                 @if ($errors->has('outroObjetivo'))

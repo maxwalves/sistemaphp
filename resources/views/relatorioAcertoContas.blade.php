@@ -25,7 +25,7 @@
         <main>
             <div >
                 <div style="position: relative;">
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/img/header.png'))) }}" alt="Paranacidade" width="100%">
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/img/headerpc.png'))) }}" alt="Paranacidade" width="100%">
                     <h1 style="position: absolute; top: 95; right: 20; text-align: right;">
                         {{ $av->id}}
                     </h1>

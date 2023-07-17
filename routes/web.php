@@ -60,6 +60,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::put('/avs/gestorAprovarAv', [ControladorAv::class, 'gestorAprovarAv'])->middleware('auth');
     Route::put('/avs/gestorReprovarAv', [ControladorAv::class, 'gestorReprovarAv'])->middleware('auth');
     Route::get('/avs/verDetalhesAv/{id}', [ControladorAv::class, 'verDetalhesAv'])->middleware('auth');
+    Route::get('/avs/verDetalhesPc/{id}', [ControladorAv::class, 'verDetalhesPc'])->middleware('auth');
     Route::get('/avs/verDetalhesAvGerenciar/{id}', [ControladorAv::class, 'verDetalhesAvGerenciar'])->middleware('auth');
 
     Route::get('/avs/autDiretoria', [ControladorAv::class, 'autDiretoria'])->middleware('auth');
