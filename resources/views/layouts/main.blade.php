@@ -127,37 +127,37 @@
                                 </li>
                                 @can('aprov-avs-gestor', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autGestor">Autorizações de AV pendentes Gestor</a>
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autGestor">AV pendentes Gestor</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-diretoria', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" href="/avs/autDiretoria">Autorizações de AV pendentes DAF</a>
+                                        <a class="btn btn-active btn-accent rounded-none" href="/avs/autDiretoria">AV pendentes DAF</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-secretaria', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent bg-info rounded-none" href="/avs/autSecretaria">Autorizações de AV pendentes CAD</a>
+                                        <a class="btn btn-active btn-accent bg-info rounded-none" href="/avs/autSecretaria">AV pendentes CAD</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autFinanceiro">Autorizações de AV pendentes CFI</a>
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autFinanceiro">AV pendentes CFI</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcFinanceiro">Prestações de contas pendentes CFI</a>
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcFinanceiro">PC pendentes CFI</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-gestor', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcGestor">Prestações de contas pendentes Gestor</a>
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcGestor">PC pendentes Gestor</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/acertoContasFinanceiro">Acertos de Contas pendentes</a>
+                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/acertoContasFinanceiro">Acertos de Contas pendentes CFI</a>
                                     </li>
                                 @endcan
 
