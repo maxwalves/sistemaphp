@@ -52,3 +52,5 @@ Route::resource('/categoriasPeppoa', ControladorCategoriaPeppoa::class);
 Route::resource('/categoriasPmr', ControladorCategoriaPmr::class);
 Route::resource('/pepPoaPmr', ControladorPeppoaPmr::class);
 Route::resource('/anoPepPoaPmr', ControladorAnoPeppoaPmr::class);
+
+Route::get('/getHorasExtrasByUser/{name}',[UsersController::class, 'getHorasExtrasByUser']);

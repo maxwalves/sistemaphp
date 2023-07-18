@@ -456,4 +456,29 @@ class UsersController extends Controller
 
         return redirect('/users/users')->with('msg', 'Usuário editado com sucesso!');
     }
+
+    public function getHorasExtrasByUser($name){
+        if (strpos($name, '@paranacidade.org.br') === false) {
+            $name = $name . '@paranacidade.org.br';
+        }
+        $user = User::where('username', $name)->firstOrFail();
+        $avs = $user->avs;
+        $todos = [];
+        foreach ($avs as $av) {
+            $dados = [];
+            if($av->horasExtras != null || $av->minutosExtras != null || $av->justificativaHorasExtras != null){
+                $dados += ['idAv' => $av->id];
+                $dados += ['user' => $user->name];
+                $dados += ['dataAv' => $av->dataCriacao];
+                $dados += ['horasExtras' => $av->horasExtras];
+                $dados += ['minutosExtras' => $av->minutosExtras];
+                $dados += ['justificativaHorasExtras' => $av->justificativaHorasExtras];
+                $dados += ['isFinanceiroAprovouPC' => $av->isFinanceiroAprovouPC];
+                $dados += ['isGestorAprovouPC' => $av->isGestorAprovouPC];
+                $dados += ['isAcertoContasRealizado' => $av->isAcertoContasRealizado];
+                array_push($todos, $dados);
+            }
+        }
+        return json_encode($todos);
+    }
 }
