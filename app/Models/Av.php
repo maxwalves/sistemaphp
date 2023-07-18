@@ -71,7 +71,10 @@ class Av extends Model
         'valorDeducaoDolar',
         'justificativaCancelamento',
         'odometroIda',
-        'odometroVolta'
+        'odometroVolta',
+        'horasExtras',
+        'minutosExtras',
+        'justificativaHorasExtras'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio', 'deleted_at'];

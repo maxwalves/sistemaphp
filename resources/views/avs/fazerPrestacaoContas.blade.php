@@ -207,6 +207,61 @@
                                 @endif
                             @endforeach
                             
+                            <div style="padding-left: 50px" class="form-group">
+                
+                                @if ($errors->has('horas') ||
+                                     $errors->has('minutos') ||
+                                     $errors->has('justificativa'))
+                                    <div>
+                                        <p style="color: red"> <strong>Os campos de hora extra não foram preenchidos!</strong></p>
+                                    </div>
+                                @endif
+                            </div>
+                            
+                            <div class="form-check form-switch" id="isHorasExtras">
+                                <input class="form-check-input" type="checkbox" role="switch" id="isSelecionado" name="isSelecionado"
+                                    style="height: 20px; width: 40px" onChange="mostrarCampoJustificativa()">
+                                <label class="form-check-label" for="isSelecionado" style="padding-left: 10px">Foi realizado horas extras?</label>
+                            </div>
+                            <div class="form-group" id="justificativaHorasExtras" style="display: none;">
+
+                                <label for="horas_extras">* Horas Extras:</label>
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="number" name="horas" id="horas" class="form-control {{ $errors->has('horas') ? 'is-invalid' :''}}" 
+                                        placeholder="Horas">
+
+                                        @if ($errors->has('horas'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('horas') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="col">
+                                        <input type="number" name="minutos" id="minutos" class="form-control {{ $errors->has('minutos') ? 'is-invalid' :''}}" 
+                                        placeholder="Minutos">
+
+                                        @if ($errors->has('minutos'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('minutos') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <label for="justificativa" class="control-label">* Digite a justificativa: </label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control {{ $errors->has('justificativa') ? 'is-invalid' :''}}" 
+                                    name="justificativa" id="justificativa" placeholder="Digite a justificativa">
+                                </div>
+                
+                                @if ($errors->has('justificativa'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('justificativa') }}
+                                    </div>
+                                @endif
+                            </div>
+
                             <div class="form-group">
                                 <label for="contatos" class="control-label {{ $errors->has('contatos') ? 'is-invalid' :''}}">* Contatos:</label><br>
                                 <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos"
@@ -1047,6 +1102,17 @@
             });
 
         })
+
+        function mostrarCampoJustificativa() {
+            var checkbox = document.getElementById("isSelecionado");
+            var divJustificativa = document.getElementById("justificativaHorasExtras");
+
+            if (checkbox.checked) {
+                divJustificativa.style.display = "block";
+            } else {
+                divJustificativa.style.display = "none";
+            }
+        }
 
     </script>
 @endsection

@@ -680,6 +680,7 @@
         $(document).ready(function(){
             $('#tabelaRota').DataTable({
                     scrollY: 300,
+                    scrollX: true,
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

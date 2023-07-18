@@ -453,12 +453,9 @@
                 <h1 class="text-lg font-bold">Adiantamentos:</h1>
                 <div class="stats stats-vertical shadow">
                     <p class="av-owner" style="font-size: 20px; color: black; background-color: chartreuse"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$ {{ $av->valorReais }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: chartreuse"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: coral"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: coral"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
+                    <p class="av-owner" style="font-size: 20px; color: black; background-color: chartreuse"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
                     <p class="av-owner" style="font-size: 20px; color: black; background-color: rgb(255, 58, 98)"><ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$ {{ $av->valorDeducaoReais }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: rgb(255, 58, 98)"><ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: deepskyblue"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
+                    <p class="av-owner" style="font-size: 20px; color: black; background-color: rgb(255, 58, 98)"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
                     @if($av->autorizacao != null)
                         <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}" 
                             target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>

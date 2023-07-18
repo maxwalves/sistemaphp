@@ -54,7 +54,7 @@
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <p class="tituloSistema justify-content-center mb-md-0">Sistema de Controle de Viagens</p></li>
+                <p class="tituloSistema justify-content-center mb-md-0">Sistema Integrado Paranacidade</p></li>
                 </ul>
 
                         

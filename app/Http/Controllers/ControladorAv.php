@@ -2120,9 +2120,21 @@ class ControladorAv extends Controller
             $regras += ['odometroIda' => 'required'];
             $regras += ['odometroVolta' => 'required'];
         }
+        
+        if ($request->isSelecionado!=null)
+        {
+            $regras += ['horas' => 'required'];
+            $regras += ['minutos' => 'required'];
+            $regras += ['justificativa' => 'required'];
+
+            $dados += ['horasExtras' => $request->get('horas')];
+            $dados += ['minutosExtras' => $request->get('minutos')];
+            $dados += ['justificativaHorasExtras' => $request->get('justificativa')];
+        }
+        
 
         $request->validate($regras, $mensagens);
-
+        
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 

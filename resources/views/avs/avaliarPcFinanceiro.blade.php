@@ -446,6 +446,15 @@
                         
                     </div>
                 @endif
+                <br><br>
+                @if($av->horasExtras != null || $av->minutosExtras !=null || $av->justificativaHorasExtras !=null)
+                    <div style="border: 1px solid black;; color: black; width: 50%; padding-left: 10%">
+                        <strong style="color: red">Foram realizadas horas extras:</strong>  <br>
+                        <strong>Horas:</strong> {{ $av->horasExtras }} <br>
+                        <strong>Minutos:</strong> {{ $av->minutosExtras }} <br>
+                        <strong>Justificativa:</strong> {{ $av->justificativaHorasExtras }} <br>
+                    </div>
+                @endif
             </div>
         </div>
 
