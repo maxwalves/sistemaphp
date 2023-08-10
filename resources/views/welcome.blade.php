@@ -56,7 +56,7 @@
                     </a>
 
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <p class="tituloSistema justify-content-center mb-md-0">Sistema Integrado Paranacidade</p></li>
+                    <p class="tituloSistema justify-content-center mb-md-0">Sistema de Controle de Viagens</p></li>
                     </ul>
 
                     <div class="dropdown text-end">
@@ -105,34 +105,6 @@
                         </div> 
                     </div>
                 </div>
-                <div class="col-12 col-xl-4">
-                    <div class= "card" >
-                        <div class="card-body">
-                            <h5 class="card-title"> Sistema de Normas </h5>
-                            <a href="/wiki/" class="btn btn-warning">Acessar</a>
-                        </div> 
-                    </div>
-                </div>
-                @can('ger-cecr', $user)
-                    <div class="col-12 col-xl-4">
-                        <div class= "card" >
-                            <div class="card-body">
-                                <h5 class="card-title"> Paraná Urbano III </h5>
-                                <a href="/relatoriosDss/paranaUrbanoIII/" class="btn btn-secondary bg-orange-600">Acessar</a>
-                            </div> 
-                        </div>
-                    </div>
-                @endcan
-                @can('view-users', $user)
-                    <div class="col-12 col-xl-4">
-                        <div class= "card" >
-                            <div class="card-body">
-                                <h5 class="card-title"> DSS </h5>
-                                <a href="/dss/" class="btn btn-primary bg-blue-500">Acessar</a>
-                            </div> 
-                        </div>
-                    </div>
-                @endcan
             </div>
         </div>
     </main>
