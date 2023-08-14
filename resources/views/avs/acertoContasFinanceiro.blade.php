@@ -8,7 +8,7 @@
     <div class="row justify-content-between">
         
         <div class="col-8">
-            <h4>Minhas autorizações de viagens</h4>
+            <h4>Acertos de contas pendentes</h4>
         </div>
     </div>
     <br>
@@ -119,6 +119,7 @@
         $(document).ready(function(){
             $('#minhaTabela').DataTable({
                     scrollY: 500,
+                    "order": [ 0, 'desc' ],
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

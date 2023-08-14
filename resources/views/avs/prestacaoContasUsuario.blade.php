@@ -8,7 +8,7 @@
     <div class="row justify-content-between">
         
         <div class="col-8">
-            <h4>Minhas autorizações de viagens</h4>
+            <h4>Minhas Prestações de Contas</h4>
         </div>
     </div>
     <br>
@@ -87,7 +87,7 @@
                                         style="width: 200px"> Prestar contas</a> 
                                 </div>
                                 @else
-                                <p>Ainda não finalizou</p>
+                                    <p>Ainda não finalizou</p>
                                 @endif
                             @endif
                         @endfor

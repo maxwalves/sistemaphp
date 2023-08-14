@@ -918,7 +918,7 @@
                             <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
                                 name="comentario" style="width: 200px"
                                 id="comentario" placeholder="Comentário"></textarea>
-                            <button type="submit" class="btn btn-active btn-error">Reprovar AV</button>
+                            <button type="submit" class="btn btn-active btn-error">Reprovar PC</button>
                             @if ($errors->has('comentario'))
                                     <div class="invalid-feedback">
                                         {{ $errors->first('comentario') }}

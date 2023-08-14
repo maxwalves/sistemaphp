@@ -504,6 +504,12 @@ class ControladorAv extends Controller
 
         $valorAcertoContasReal = 0;
         $valorAcertoContasDolar = 0;
+
+        foreach($comprovantesAll as $comp){
+            if($comp->av_id == $av->id){
+                array_push($comprovantes, $comp);
+            }
+        }
 		
 		foreach($comprovantes as $compFiltrado){
             $valorAcertoContasReal += $compFiltrado->valorReais;
@@ -562,7 +568,7 @@ class ControladorAv extends Controller
                 $possoEditar = true;
             }
         }
-
+        
         if($possoEditar == true){
             return view('avs.avaliarPcFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
@@ -779,6 +785,12 @@ class ControladorAv extends Controller
 
         $valorAcertoContasReal = 0;
         $valorAcertoContasDolar = 0;
+
+        foreach($comprovantesAll as $comp){
+            if($comp->av_id == $av->id){
+                array_push($comprovantes, $comp);
+            }
+        }
 
         foreach($comprovantes as $compFiltrado){
             $valorAcertoContasReal += $compFiltrado->valorReais;

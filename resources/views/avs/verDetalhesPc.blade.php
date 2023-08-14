@@ -963,6 +963,7 @@
                                         @if($rota->veiculoParanacidade_id == $v->id)
                                             @php
                                                 $achouVeiculo = true;
+                                                break;
                                             @endphp
                                         @endif
                                 @endforeach

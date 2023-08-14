@@ -140,11 +140,12 @@
                         @php
                             $achouVeiculo = false;
                         @endphp
-                        @if($rota->isVeiculoEmpresa == 1)
+                        @if($rota->isVeiculoEmpresa == 1)z
                             @foreach($veiculosParanacidade as $v)
                                     @if($rota->veiculoParanacidade_id == $v->id)
                                         @php
                                             $achouVeiculo = true;
+                                            break;
                                         @endphp
                                     @endif
                             @endforeach

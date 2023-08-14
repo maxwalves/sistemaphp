@@ -893,26 +893,26 @@
             <div class="modal-content">
                 <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
                 <br>
-                <h1 style="font-size: 24px; padding-left: 10px; padding-bottom: 20px;"><strong>Aprovar prestação de contas: </strong></h1>
+                <h1 style="font-size: 24px; padding-left: 10px; padding-bottom: 20px;"><strong>Aprovar acerto de contas: </strong></h1>
                 <div class="flex flex-row" style="padding-left: 10px">
                     <form action="/avs/usuarioAprovarAcertoContas" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                             <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                            <label for="comentario">Finalizar ciclo de vida da AV: </label>
+                            <label for="comentario">Finalizar ciclo de vida da PC: </label>
                             <br>
                             <textarea type="text" class="textarea textarea-bordered h-24" 
                                 name="comentario" style="width: 200px"
                                 id="comentario" placeholder="Comentário"></textarea>
         
-                            <button type="submit" class="btn btn-active btn-success">Finalizar PC</button>
+                            <button type="submit" class="btn btn-active btn-success">Finalizar</button>
                     </form>
         
                     <form action="/avs/usuarioReprovarAcertoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
                         @csrf
                         @method('PUT')
                             <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                            <label for="comentario">Voltar AV para o Financeiro: </label>
+                            <label for="comentario">Voltar PC para o Financeiro: </label>
                             <br>
                             <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
                                 name="comentario" style="width: 200px"

@@ -128,6 +128,7 @@
         $(document).ready(function(){
             $('#minhaTabela').DataTable({
                     scrollY: 500,
+                    orderFixed: [0, 'desc'],
                     "language": {
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",

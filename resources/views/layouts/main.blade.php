@@ -112,9 +112,7 @@
 
                         <div class="collapse navbar-collapse" id="navbarsExample09">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                <a class="btn btn-active btn-warning rounded-none" href="/">Voltar</a>
-                                </li>
+
                                 </li>
                                 <li class="nav-item">
                                 <a class="btn btn-active btn-success rounded-none" href="/avs/avs">Autorizações de viagem</a>
@@ -127,37 +125,37 @@
                                 </li>
                                 @can('aprov-avs-gestor', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autGestor">AV pendentes Gestor</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/autGestor">AV pendentes Gestor</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-diretoria', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" href="/avs/autDiretoria">AV pendentes DAF</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/autDiretoria">AV pendentes DAF</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-secretaria', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent bg-info rounded-none" href="/avs/autSecretaria">AV pendentes CAD</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/autSecretaria">AV pendentes CAD</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autFinanceiro">AV pendentes CFI</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/autFinanceiro">AV pendentes CFI</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcFinanceiro">PC pendentes CFI</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/autPcFinanceiro">PC pendentes CFI</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-gestor', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/autPcGestor">PC pendentes Gestor</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/autPcGestor">PC pendentes Gestor</a>
                                     </li>
                                 @endcan
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-accent rounded-none" style="border-width: 2px; border-color: black" href="/avs/acertoContasFinanceiro">Acertos de Contas pendentes CFI</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/acertoContasFinanceiro">Acertos de Contas pendentes CFI</a>
                                     </li>
                                 @endcan
 
@@ -170,19 +168,19 @@
                                 
                                 @can('aprov-avs-financeiro', $user)
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-error rounded-none" style="border-width: 2px; border-color: black" href="/avs/gerenciarAvs">GERENCIAR</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/gerenciarAvs">GERENCIAR</a>
                                     </li>
                                 @elseif($user->hasPermissionTo($permission1))
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-error rounded-none" style="border-width: 2px; border-color: black" href="/avs/gerenciarAvs">GERENCIAR</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/gerenciarAvs">GERENCIAR</a>
                                     </li>
                                 @elseif($user->hasPermissionTo($permission2))
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-error rounded-none" style="border-width: 2px; border-color: black" href="/avs/gerenciarAvs">GERENCIAR</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/gerenciarAvs">GERENCIAR</a>
                                     </li>
                                 @elseif($user->hasPermissionTo($permission3))
                                     <li class="nav-item">
-                                        <a class="btn btn-active btn-error rounded-none" style="border-width: 2px; border-color: black" href="/avs/gerenciarAvs">GERENCIAR</a>
+                                        <a class="btn btn-active btn-warning rounded-none" href="/avs/gerenciarAvs">GERENCIAR</a>
                                     </li>
                                 @endcan
 

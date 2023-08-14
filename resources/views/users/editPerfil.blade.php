@@ -56,7 +56,7 @@
                     </a>
 
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <p class="tituloSistema justify-content-center mb-md-0">Sistema Integrado Paranacidade</p></li>
+                    <p class="tituloSistema justify-content-center mb-md-0">Sistema de Controle de Viagens</p></li>
                     </ul>
 
                     <div class="dropdown text-end">
@@ -106,9 +106,6 @@
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-active btn-primary rounded-none" href="/avs/avs">Sistema de Viagens</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-active btn-warning rounded-none" href="/wiki">Sistema de Normas</a>
                             </li>
                         </ul>
                     </div>
@@ -179,9 +176,6 @@
                         @if ($dados["permission7"] == 'true')
                             <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarDiretoriaExecutiva" class="btn btn-active btn-primary" id="btDiretoriaExecutivaPossui">DAF</a>
                         @endif
-                        @if ($dados["permission8"] == 'true')
-                            <a href="/users/editPerfil/{{ $usuarioEditar->id }}/desativarGerCecr" class="btn btn-active btn-primary" id="btGerCecrPossui">GER CECR</a>
-                        @endif
                         
                     </div>
                     <div class="divider"></div> 
@@ -205,9 +199,6 @@
                         @endif
                         @if ($dados["permission7"] == 'false')
                         <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarDiretoriaExecutiva" class="btn btn-active btn-secondary" id="btDiretoriaExecutivaDisponivel">DAF</a>
-                        @endif
-                        @if ($dados["permission8"] == 'false')
-                            <a href="/users/editPerfil/{{ $usuarioEditar->id }}/ativarGerCecr" class="btn btn-active btn-secondary" id="btGerCecrDisponivel">GER CECR</a>
                         @endif
                         
                     </div>
