@@ -17,10 +17,10 @@
                     <div style="border: 1px solid black; padding-left:10px">
 
                         <p><strong>Nome:</strong> {{ $userAv->name }} </p>
-                        <p><strong>E-mail:</strong> {{ $userAv->username }} </p>
+                        
                         <p><strong>Setor:</strong> {{ $userAv->department }} </p>
                         <p><strong>Matrícula:</strong> {{ $userAv->employeeNumber }} </p>
-                        <p><strong>Data assinatura termo de compromisso:</strong> {{ date('d/m/Y', strtotime($userAv->dataAssinaturaTermo)) }}</p>
+                        
                         <br>
                         <p><strong>Data de criação AV: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </p>
                         <p><strong>Objetivo:</strong> 

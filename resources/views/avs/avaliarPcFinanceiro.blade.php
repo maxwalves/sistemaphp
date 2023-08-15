@@ -211,7 +211,6 @@
                             <tr>
                                 <th>Descrição</th>
                                 <th>Valor em reais</th>
-                                <th>Valor em dólar</th>
                                 <th>Anexo</th>
                             </tr>
                         </thead>
@@ -220,7 +219,6 @@
                                 <tr>
                                     <td> {{$comp->descricao}} </td>
                                     <td> R${{$comp->valorReais}} </td>
-                                    <td> ${{$comp->valorDolar}} </td>
                                 
                                     <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
                                         target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
@@ -1194,19 +1192,6 @@
             });
         });
 
-        $(function(){
-            
-
-            const input = document.getElementById('arquivo1');
-            const botaoEnviar = document.getElementById('botaoEnviarArquivo1');
-
-            input.addEventListener('change', (event) => {
-                if (event.target.value !== '') {
-                botaoEnviar.removeAttribute('disabled');
-                }
-            });
-
-        })
 
     </script>
 @endsection

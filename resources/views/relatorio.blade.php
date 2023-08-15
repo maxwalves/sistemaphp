@@ -17,9 +17,9 @@
                     <h3 >Dados básicos:</h3>
                     <div style="border: 1px solid black; padding-left:10px">
 
-                        <p><strong>Nome:</strong> {{ $userAv->name }} <strong> E-mail:</strong> {{ $userAv->username }} <strong> Setor:</strong> {{ $userAv->department }} </p>
+                        <p><strong>Nome:</strong> {{ $userAv->name }} <strong> Setor:</strong> {{ $userAv->department }} </p>
 
-                        <p><strong>Matrícula:</strong> {{ $userAv->employeeNumber }} <strong> Data assinatura termo de compromisso:</strong> {{ date('d/m/Y', strtotime($userAv->dataAssinaturaTermo)) }}</p>
+                        <p><strong>Matrícula:</strong> {{ $userAv->employeeNumber }} </p>
 
                         <p><strong>Data de criação AV: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} 
                             <strong>Objetivo:</strong> 
@@ -34,7 +34,8 @@
     
                             @if (isset($av->outroObjetivo))
                                     {{$av->outroObjetivo }} 
-                            @endif</p>
+                            @endif
+                        </p>
 
                         <p><strong>Comentário:</strong> {{ $av->comentario }} </p>
                         
@@ -83,12 +84,10 @@
                 <table id="tabelaRota" class="comBordaSimples" >
                     <thead>
                         <tr>
-                            <th>País de saída</th>
                             <th>Estado de saída</th>
                             <th>Cidade de saída</th>
                             <th>Data/Hora de saída</th>
                             <th>-</th>
-                            <th>País de chegada</th>
                             <th>Estado de chegada</th>
                             <th>Cidade de chegada</th>
                             <th>Data/Hora de chegada</th>
@@ -98,12 +97,10 @@
                     <tbody>
                         @foreach($av->rotas as $rota)
                         <tr>
-                            <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? "Brasil" : $rota->paisOrigemInternacional}} </td>
                             <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->estadoOrigemNacional : $rota->estadoOrigemInternacional}} </td>
                             <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} </td>
                             <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
                             <td>-</td>
-                            <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? "Brasil" : $rota->paisDestinoInternacional}} </td>
                             <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->estadoDestinoNacional : $rota->estadoDestinoInternacional}} </td>
                             <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} </td>
                             <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>

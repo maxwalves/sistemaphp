@@ -522,12 +522,6 @@ class ControladorAv extends Controller
             }
         }
 
-        foreach($comprovantesAll as $comp){
-            if($comp->av_id == $av->id){
-                array_push($comprovantes, $comp);
-            }
-        }
-        
         foreach($historicoPcAll as $hisPc){
             if($hisPc->av_id == $av->id){
                 array_push($historicoPc, $hisPc);
@@ -800,12 +794,6 @@ class ControladorAv extends Controller
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
                 array_push($medicoesFiltradas, $medicao); 
-            }
-        }
-
-        foreach($comprovantesAll as $comp){
-            if($comp->av_id == $av->id){
-                array_push($comprovantes, $comp);
             }
         }
         

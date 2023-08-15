@@ -142,7 +142,6 @@
                             <th>Descrição</th>
                             @if($av["isCancelado"]==false)
                                 <th>Valor em reais</th>
-                                <th>Valor em dólar</th>
                             @endif
                             <th>Anexo</th>
                             <th>Ações</th>
@@ -154,7 +153,6 @@
                                 <td> {{$comp->descricao}} </td>
                                 @if($av["isCancelado"]==false)
                                     <td> R${{$comp->valorReais}}</td>
-                                    <td> ${{$comp->valorDolar}}</td>
                                 @endif
                                 <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
                                     target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
@@ -812,8 +810,8 @@
                         @if($av["isCancelado"]==false)
                             <label for="valorReais">Valor em reais utilizado: </label><br>
                             <input type="text" id="valorReais" name="valorReais" class="input input-bordered input-secondary w-full max-w-xs"><br>
-                            <label for="valorDolar">Valor em dólar utilizado: </label><br>
-                            <input type="text" id="valorDolar" name="valorDolar" class="input input-bordered input-secondary w-full max-w-xs">
+                            <label for="valorDolar" hidden>Valor em dólar utilizado: </label><br>
+                            <input type="text" id="valorDolar" name="valorDolar" class="input input-bordered input-secondary w-full max-w-xs" hidden>
                         @endif
                         <br><br>
                         <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
