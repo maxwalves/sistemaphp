@@ -1,154 +1,173 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
 @section('title', 'Dashboard')
+
+@section('content_header')
+    <h1>AVS</h1>
+@stop
+
 @section('content')
-
-<div style="padding-left: 10%" class="container">
-    
-    <div class="row justify-content-between">
+    <div style="padding-left: 10%" class="container">
         
-        <div class="col-8">
-            <h4>Minhas autorizações de viagens</h4>
-        </div>
-        
-        <div class="col-3">
-            <strong>Adicionar AV</strong> 
-            <a class="btn btn-success" type="button" href="/avs/create" > <ion-icon name="add-circle-outline" size="large"></ion-icon></a>
-        </div>
-    </div>
-    <br>
-</div> 
-
-<div class="col-md-12 dashboard-avs-container">
-    @if(count($avs) > 0 )
-    <table id="minhaTabela" class="display nowrap">
-        <thead>
-            <tr>
-                <th style="width: 50px">Número</th>
-                <th>Objetivo</th>
-                <th>Rota</th>
-                <th>Data criação</th>
-                <th>Status</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($avs as $av)
-            <tr>
-                <td scropt="row">{{ $av->id }}</td>
-                
-                <td>
-                    @for($i = 0; $i < count($objetivos); $i++)
-
-                        @if ($av->objetivo_id == $objetivos[$i]->id )
-                                {{$objetivos[$i]->nomeObjetivo}}     
-                        @endif
-
-                    @endfor
-
-                    @if (isset($av->outroObjetivo))
-                            {{$av->outroObjetivo }} 
-                    @endif
-                </td>
-
-                <td>
-                    @for($i = 0; $i < count($av->rotas); $i++)
-
-                        @if($av->rotas[$i]->isViagemInternacional == 0)
-                           - {{$av->rotas[$i]->cidadeOrigemNacional}}
-                        @endif
-                        
-                        @if($av->rotas[$i]->isViagemInternacional == 1)
-                           - {{$av->rotas[$i]->cidadeOrigemInternacional}} 
-                        @endif
-
-                    @endfor
-
-                </td>
-
-                <td> <a> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </a></td>
-                <td> {{$av->status}} </td>
-                <td> 
-                    @if($av->isEnviadoUsuario == 0 && $av->isCancelado == 0)
-                        <div class="opcoesGerenciarAv">
-                            <a href="/avs/edit/{{ $av->id }}" class="btn btn-success btn-sm"
-                                style="width: 110px">  Editar</a>
-                            <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                                style="width: 110px"> Ver</a> 
-                            <a href="/rotas/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                                style="width: 110px"> Rotas</a> 
-                            <form action="/avs/{{ $av->id }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-active btn-accent btn-sm"
-                                style="width: 110px" > Deletar</button>
-                            </form>
-                        </div>
-                    @else
-
-                        @if($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0 && $av->isCancelado == 0)
-                            <label for="my-modal" data-av="{{ json_encode($av) }}" class="btn btn-active btn-warning btn-sm">Voltar AV</label>
-                            {{-- <a href="/rotas/rotasEditData/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                                style="width: 110px"> Mudar data</a> --}}
-                        @endif
-
-                        @if($av->isEnviadoUsuario == 1 && $av->isAcertoContasRealizado == 0 && $av->isPrestacaoContasRealizada == 0 && $av->isCancelado == 0 
-                        && $av->status != "AV Internacional cadastrada no sistema")
-
-                            <a href="/avs/cancelarAv/{{ $av->id }}" class="btn btn-active btn-error btn-sm"
-                                style="width: 110px"> Cancelar AV</a>
-                            
-                        @endif
-                        <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-secondary btn-sm"
-                            style="width: 110px"> Ver</a> 
-                        
-                    @endif
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-    @else
-    <p>Você ainda não tem autorizações de viagens, <a href="/avs/create"> Criar Nova AV</a></p>
-    @endif
-    
-    <input type="checkbox" id="my-modal" class="modal-toggle" />
-    <div class="modal">
-        <div class="modal-box">
-            <h3 class="font-bold text-lg"></h3>
-            <p class="py-4"></p>
-            <div class="modal-action">
+        <div class="row justify-content-between">
             
-            <a class="btn btn-error btn-sm" id="btn-submit-modal"
-                style="width: 200px">  Voltar av e editar</a>
+            <div class="col-8">
+                <h4>Minhas autorizações de viagens</h4>
+            </div>
             
-            <label for="my-modal" class="btn btn-success btn-sm" style="width: 100px">Não</label>
+            <div class="col-3">
+                <strong></strong> 
+                <a class="btn btn-success" type="button" href="/avs/create" > Adicionar AV</a>
             </div>
         </div>
+        <br>
+    </div> 
+
+    <div class="col-md-12 dashboard-avs-container">
+        @if(count($avs) > 0 )
+        <table id="minhaTabela" class="display nowrap">
+            <thead>
+                <tr>
+                    <th style="width: 50px">Número</th>
+                    <th>Objetivo</th>
+                    <th>Rota</th>
+                    <th>Data criação</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($avs as $av)
+                <tr>
+                    <td scropt="row">{{ $av->id }}</td>
+                    
+                    <td>
+                        @for($i = 0; $i < count($objetivos); $i++)
+
+                            @if ($av->objetivo_id == $objetivos[$i]->id )
+                                    {{$objetivos[$i]->nomeObjetivo}}     
+                            @endif
+
+                        @endfor
+
+                        @if (isset($av->outroObjetivo))
+                                {{$av->outroObjetivo }} 
+                        @endif
+                    </td>
+
+                    <td>
+                        @for($i = 0; $i < count($av->rotas); $i++)
+
+                            @if($av->rotas[$i]->isViagemInternacional == 0)
+                            - {{$av->rotas[$i]->cidadeOrigemNacional}}
+                            @endif
+                            
+                            @if($av->rotas[$i]->isViagemInternacional == 1)
+                            - {{$av->rotas[$i]->cidadeOrigemInternacional}} 
+                            @endif
+
+                        @endfor
+
+                    </td>
+
+                    <td> <a> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </a></td>
+                    <td> {{$av->status}} </td>
+                    <td> 
+                        @if($av->isEnviadoUsuario == 0 && $av->isCancelado == 0)
+                            <div class="opcoesGerenciarAv">
+                                <a href="/avs/edit/{{ $av->id }}" class="btn btn-success btn-sm"
+                                    style="width: 110px">  Editar</a>
+                                <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-primary btn-sm"
+                                    style="width: 110px"> Ver</a> 
+                                <a href="/rotas/rotas/{{ $av->id }}" class="btn btn-primary btn-sm"
+                                    style="width: 110px"> Rotas</a> 
+                                <form action="/avs/{{ $av->id }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-accent btn-sm"
+                                    style="width: 110px" > Deletar</button>
+                                </form>
+                            </div>
+                        @else
+
+                            @if($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0 && $av->isCancelado == 0)
+                                <button class="btn btn-active btn-warning btn-sm" 
+                                onclick="abrirModalVoltarAv({{$av}})">Voltar AV</button>
+                            @endif
+
+                            @if($av->isEnviadoUsuario == 1 && $av->isAcertoContasRealizado == 0 && $av->isPrestacaoContasRealizada == 0 && $av->isCancelado == 0 
+                            && $av->status != "AV Internacional cadastrada no sistema")
+
+                                <a href="/avs/cancelarAv/{{ $av->id }}" class="btn btn-danger btn-error btn-sm"
+                                    style="width: 110px"> Cancelar AV</a>
+                                
+                            @endif
+                            <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-primary btn-sm"
+                                style="width: 110px"> Ver</a> 
+                            
+                        @endif
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @else
+        <p>Você ainda não tem autorizações de viagens, <a href="/avs/create"> Criar Nova AV</a></p>
+        @endif
+        
+        <x-adminlte-modal id="modalVoltar" title="Voltar AV?" size="xl" theme="teal"
+        icon="fas fa-bell" v-centered static-backdrop scrollable>
+
+        <div>
+            
+            <h3 class="font-bold text-lg" id="tituloModal"></h3>
+            <p class="py-4" id="textoModal"></p>
+            <div class="modal-action">
+            </div>
+            
+        </div>
+        <x-slot name="footerSlot">
+            <x-adminlte-button id="btn-submit-modal" style="width: 200px" theme="success" label="Voltar av e editar" />
+            <x-adminlte-button theme="danger" label="Não" data-dismiss="modal"/>
+        </x-slot>
+
+        </x-adminlte-modal>       
+        
     </div>
-    
-</div>
+@stop
 
-@endsection
+@section('css')
+    <link href="{{asset('DataTables/datatables.min.css')}}" rel="stylesheet"/>
+@stop
 
-@section('javascript')
+@section('js')
+
+    <script src="{{asset('DataTables/datatables.min.js')}}"></script>
+    <script src="{{asset('/js/moment.js')}}"></script>
     <script type="text/javascript">
 
-        $(function(){
-            const modal = document.querySelector('.modal');
-            const avLabel = document.querySelector('.btn[data-av]');
-            const av = JSON.parse(avLabel.getAttribute('data-av'));
+        function abrirModalVoltarAv(av) {
 
-            avLabel.addEventListener('click', () => {
-                modal.querySelector('h3').textContent = `Você tem certeza que deseja voltar a AV ${av.id} ?`;
-                modal.querySelector('p').textContent = `Após ela retornar ao estado inicial, a Autorização de Viagem terá que passar todas as etapas novamente!`;
-                modal.querySelector('a').textContent = `Voltar AV ${av.id} e editar`;
-            });
+            //recupera o elemento h3 tituloModal
+            let tituloModal = document.querySelector('#tituloModal');
+            tituloModal.textContent = `Você tem certeza que deseja voltar a AV ${av.id} ?`;
+
+            //recupera o elemento p textoModal
+            let textoModal = document.querySelector('#textoModal');
+            textoModal.textContent = `Após ela retornar ao estado inicial, a Autorização de Viagem terá que passar todas as etapas novamente!`;
+
+            //recupera o elemento a btn-submit-modal
+            let btnSubmitModal = document.querySelector('#btn-submit-modal');
+            btnSubmitModal.textContent = `Voltar AV ${av.id} e editar`;
+
+            let modal = new bootstrap.Modal(document.querySelector('#modalVoltar'));
+    
+            modal.show();
 
             $('#btn-submit-modal').click(function() {
                 window.location.href = '/avs/voltarAv/' + av.id;
             });
-        })
+        }
 
         $(document).ready(function(){
             $('#minhaTabela').DataTable({
@@ -163,7 +182,24 @@
                         "search": "Pesquisar"
                     }
                 });
+
+            @if(session('error'))
+
+                Swal.fire({
+                    html: '<i class="fas fa-exclamation-triangle"></i> {{ session('error') }}',
+                    title: 'Oops...',
+                })
+            @endif
+
+            @if(session('msg'))
+
+                Swal.fire({
+                    title: '{{ session('msg') }}',
+                    text: '',
+                })
+            @endif
         });
+        
 
     </script>
-@endsection
+@stop

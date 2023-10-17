@@ -1,8 +1,13 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Aut Gestor')
+
+@section('content_header')
+    <h1>Aut Gestor</h1>
+@stop
+
 @section('content')
-
+    
 <div style="padding-left: 10%" class="container">
     
     <div class="row justify-content-between">
@@ -86,7 +91,7 @@
                 <td> {{$av->status}} </td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/verFluxoGestor/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                        <a href="/avs/verFluxoGestor/{{ $av->id }}" class="btn btn-primary btn-sm"
                             style="width: 110px"> Ver</a> 
                         
                     </div>
@@ -95,28 +100,19 @@
             @endforeach
         </tbody>
     </table>
-
-    
-    <input type="checkbox" id="my-modal" class="modal-toggle" />
-    <div class="modal">
-        <div class="modal-box">
-            <h3 class="font-bold text-lg"></h3>
-            <p class="py-4"></p>
-            <div class="modal-action">
-            
-            <a class="btn btn-error btn-sm" id="btn-submit-modal"
-                style="width: 200px">  Voltar AV e editar</a>
-            
-            <label for="my-modal" class="btn btn-success btn-sm" style="width: 100px">Não</label>
-            </div>
-        </div>
-    </div>
     
 </div>
 
-@endsection
+@stop
 
-@section('javascript')
+@section('css')
+    <link href="{{asset('DataTables/datatables.min.css')}}" rel="stylesheet"/>
+@stop
+
+@section('js')
+
+    <script src="{{asset('/js/moment.js')}}"></script>
+    <script src="{{asset('DataTables/datatables.min.js')}}"></script>
     <script type="text/javascript">
 
 
@@ -302,4 +298,5 @@
         })
 
     </script>
-@endsection
+
+@stop

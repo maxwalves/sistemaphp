@@ -154,7 +154,7 @@
                                                                                     <td align="center" class="esd-block-text">
                                                                                         <p style="color: aliceblue; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">© PARANACIDADE <br>
 
-                                                                                            Palácio das Araucárias - Rua Jacy Loureiro de Campos, 180 - 2º andar - Centro Cívico - 80530-140 - Curitiba - PR <br>
+                                                                                            Rua Eurípedes Garcez do Nascimento, 1195 - Ahú - 80540-280 - Curitiba - PR <br>
                                                                                             
                                                                                             Horário de Atendimento: das 8h30 às 12h e das 13h30 às 18h. <br>
                                                                                             

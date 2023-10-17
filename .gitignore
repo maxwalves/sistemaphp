@@ -6,6 +6,8 @@
 /public/avs
 /public/AVs
 /public/arquivos
+/public/vendor
+/resources/lang/vendor
 /storage/*.key
 /vendor
 .env

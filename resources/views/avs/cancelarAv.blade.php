@@ -1,13 +1,17 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', $av->id)
+@section('title', 'Cancelar AV')
+
+@section('content_header')
+    <h1>Cancelar AV</h1>
+@stop
+
 @section('content')
-
-<div class="row justify-content-start" style="padding-left: 5%">
-    <div class="col-3">
-        <a href="/avs/avs" class="btn btn-primary">Voltar</a>
+    <div class="row justify-content-start" style="padding-left: 5%">
+        <div class="col-3">
+            <a href="/avs/avs" class="btn btn-warning">Voltar</a>
+        </div>
     </div>
-</div>
     <div class="container">
         <div class="container text-center">
             <div id="info-container" class="col-12">
@@ -33,12 +37,19 @@
                         <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="justificativa"
                         id="justificativa" placeholder="Justificativa" style="width: 400px; height: 100px"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-active btn-accent btn-sm"> Cancelar AV</button>
+                    <button type="submit" class="btn btn-active btn-danger btn-sm"> Cancelar AV</button>
                 </form>
                 <br>
             </div>
         </div>
         
     </div>
+@stop
 
-@endsection
+@section('css')
+    
+@stop
+
+@section('js')
+    
+@stop

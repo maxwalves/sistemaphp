@@ -1,141 +1,153 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Gerenciar Rotas')
+
+@section('content_header')
+    <h1>Gerenciar Rotas</h1>
+@stop
+
 @section('content')
-
-<style>
-    @media (max-width: 600px) {
-      div {
-        flex-direction: column;
-      }
-    }
-  </style>
-
-<div style="padding-left: 50px, padding-right: 50px" class="container">
-    <div class="row justify-content-between" style="padding-left: 5%">
-        <div style="display: flex; justify-content: space-between;">
-            <div class="col-4" >
-                <a href="/avs/avs/" type="submit" class="btn btn-active btn-ghost" style="width: 180px"> Voltar!</a>
+    <div style="padding-left: 50px, padding-right: 50px" class="container">
+        <div class="row justify-content-between" style="padding-left: 5%">
+            <div class="col-2">
+                <label for="idav" > <strong>AV nº </strong> </label>
+                <input style="width: 50px; font-size: 16px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
             </div>
-            <div class="col-4" >
-                <a href="/rotas/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 180px"> + CADASTRAR ROTA</a>
+            <div class="col-2">
+                <strong style="font-size: 18px">Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong>
             </div>
-
-            <form action="/avs/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
-                <div id="btSalvarRota">
-                    <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-secondary" value="Calcular diárias">
+            <div style="display: flex; justify-content: space-between;">
+                <div class="col-4" >
+                    <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost" style="width: 180px"> Voltar!</a>
                 </div>
-            </form>
-            
+                <div class="col-4" >
+                    <a href="/rotas/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 180px"> + CADASTRAR ROTA</a>
+                </div>
+
+                <form action="/avs/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
+                    @if(count($rotas) > 0 )
+                        <div id="btSalvarRota">
+                            <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-secondary" value="Calcular diárias">
+                        </div>
+                    @endif
+                </form>
+                
+            </div>
         </div>
-        <div class="col-4">
-            <label for="idav" > <strong>AV nº </strong> </label>
-            <input style="width: 50px; font-size: 16px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
-            <h2> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
-        </div>
+        
+        <br>
     </div>
-    
-    <br>
-</div>
-<div class="col-md-10 offset-md-1 dashboard-avs-container">
-    @if(count($rotas) > 0 )
-    <table id="tabelaRota" class="display nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>Tipo</th>
-                <th>Cidade de saída</th>
-                <th>Data/Hora de saída</th>
-                <th>Cidade de chegada</th>
-                <th>Data/Hora de chegada</th>
-                <th>Hotel?</th>
-                <th>Tipo de transporte</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($rotas as $rota)
-            <tr>
-                <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
-                <td> 
-                    @if($rota->isAereo == 1)
-                        <img src="{{asset('/img/aviaosubindo.png')}}" style="width: 40px" >
-                    @endif
-
-                    @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                        <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
-                    @endif
-
-                    @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                        <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
-                    @endif
-
-                    {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
-                    
-                </td>
-                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-
-                <td> 
-                    @if($rota->isAereo == 1)
-                        <img src="{{asset('/img/aviaodescendo.png')}}" style="width: 40px" >
-                    @endif
-
-                    @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                        <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
-                    @endif
-
-                    @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                        <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
-                    @endif
-
-                    {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
-                </td>
-
-                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
-                <td> 
-                    {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
-                    {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                    @if($rota->isVeiculoProprio == 1)
-                        {{"Veículo próprio: "}} <br>
-                        @foreach ($veiculosProprios as $v)
-
-                            @if($v->id == $rota->veiculoProprio_id)
-                                {{$v->modelo . '-' . $v->placa}}
-                            @endif
-                            
-                        @endforeach
-                        
-                        @if(count($veiculosProprios) == 0)
-                            {{"Não encontrado"}}
+    <div class="col-md-10 offset-md-1 dashboard-avs-container">
+        @if(count($rotas) > 0 )
+        <table id="tabelaRota" class="display nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Cidade de saída</th>
+                    <th>Data/Hora de saída</th>
+                    <th>Cidade de chegada</th>
+                    <th>Data/Hora de chegada</th>
+                    <th>Hotel?</th>
+                    <th>Tipo de transporte</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($rotas as $rota)
+                <tr>
+                    <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
+                    <td> 
+                        @if($rota->isAereo == 1)
+                            <img src="{{asset('/img/aviaosubindo.png')}}" style="width: 40px" >
                         @endif
-                    @endif
-                    {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
-                    {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
-                </td>
-                <td> 
-                    <a href="/rotas/edit/{{ $rota->id }}" class="btn btn-success btn-sm" style="width: 85px"> Editar</a> 
-                    <form action="/rotas/{{ $rota->id }}" style="width: 85px" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-error btn-sm"> Deletar</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-    
-    @else
-    <p>Você ainda não tem rotas, <a href="/rotas/create/{{ $av->id }}"> Criar nova rota</a></p>
-    @endif
-</div>
 
-@endsection
+                        @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                            <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+                        @endif
 
-@section('javascript')
+                        @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                            <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                        @endif
+
+                        {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
+                        
+                    </td>
+                    <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+
+                    <td> 
+                        @if($rota->isAereo == 1)
+                            <img src="{{asset('/img/aviaodescendo.png')}}" style="width: 40px" >
+                        @endif
+
+                        @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                            <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+                        @endif
+
+                        @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                            <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                        @endif
+
+                        {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
+                    </td>
+
+                    <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
+                    <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
+                    <td> 
+                        {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
+                        {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
+                        @if($rota->isVeiculoProprio == 1)
+                            {{"Veículo próprio: "}} <br>
+                            @foreach ($veiculosProprios as $v)
+
+                                @if($v->id == $rota->veiculoProprio_id)
+                                    {{$v->modelo . '-' . $v->placa}}
+                                @endif
+                                
+                            @endforeach
+                            
+                            @if(count($veiculosProprios) == 0)
+                                {{"Não encontrado"}}
+                            @endif
+                        @endif
+                        {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
+                        {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
+                    </td>
+                    <td> 
+                        <a href="/rotas/edit/{{ $rota->id }}" class="btn btn-success btn-sm"> Editar</a> 
+                        <form action="/rotas/{{ $rota->id }}" style="width: 85px" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm"> Deletar</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        
+        @else
+        <p>Você ainda não tem rotas, <a href="/rotas/create/{{ $av->id }}"> Criar nova rota</a></p>
+        @endif
+    </div>
+@stop
+
+@section('css')
+    <link href="{{asset('DataTables/datatables.min.css')}}" rel="stylesheet"/>
+    <style>
+        @media (max-width: 600px) {
+        div {
+            flex-direction: column;
+        }
+        }
+    </style>
+@stop
+
+@section('js')
+    <script src="{{asset('DataTables/datatables.min.js')}}"></script>
+    <script src="{{asset('/js/moment.js')}}"></script>
     <script type="text/javascript">
 
         $(document).ready(function(){
@@ -180,4 +192,4 @@
             
         })
     </script>
-@endsection
+@stop

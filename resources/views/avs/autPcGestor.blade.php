@@ -1,6 +1,11 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Aut PC Gestor')
+
+@section('content_header')
+    <h1>Autorizações de PC Gestor</h1>
+@stop
+
 @section('content')
 
 <div style="padding-left: 10%" class="container">
@@ -8,7 +13,7 @@
     <div class="row justify-content-between">
         
         <div class="col-8">
-            <h4>Minhas autorizações de viagens</h4>
+            <h4>Prestações de Contas Pendentes de avaliação do Gestor</h4>
         </div>
     </div>
     <br>
@@ -74,7 +79,7 @@
                 <td> {{$av->status}} </td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/avaliarPcGestor/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                        <a href="/avs/avaliarPcGestor/{{ $av->id }}" class="btn btn-primary btn-sm"
                             style="width: 230px"> Avaliar Prestação de Contas</a> 
                         
                     </div>
@@ -89,9 +94,16 @@
     
 </div>
 
-@endsection
+@stop
 
-@section('javascript')
+@section('css')
+    <link href="{{asset('DataTables/datatables.min.css')}}" rel="stylesheet"/>
+@stop
+
+@section('js')
+
+    <script src="{{asset('/js/moment.js')}}"></script>
+    <script src="{{asset('DataTables/datatables.min.js')}}"></script>
     <script type="text/javascript">
 
         $(document).ready(function(){
@@ -109,4 +121,5 @@
         });
 
     </script>
-@endsection
+
+@stop
