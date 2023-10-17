@@ -191,6 +191,13 @@
             </div>
         </div>
 
+        <div class="mb-3 col-md-6 offset-md-3">
+            @if ($av->autorizacao != null)
+                <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}"
+                    target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
+            @endif
+        </div>
+        
         <input type="file" id="arquivo1" style="height: 150px" name="arquivo1" class="form-control form-control-lg col-md-6 offset-md-3">
 
         <br>

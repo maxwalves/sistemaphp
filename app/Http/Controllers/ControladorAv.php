@@ -3610,6 +3610,7 @@ class ControladorAv extends Controller
         $user = auth()->user();
 
         $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
 
         $user = auth()->user();
         $veiculosProprios = $user->veiculosProprios;
@@ -3644,7 +3645,7 @@ class ControladorAv extends Controller
         }
 
         return view('avs.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
-        'user'=> $user, 'filtro' => $filtro, 'filtroTodos' => $filtroTodos]);
+        'user'=> $user, 'filtro' => $filtro, 'filtroTodos' => $filtroTodos, 'userAv' => $userAv]);
     }
 
     public function editAvPc($id)
@@ -3654,15 +3655,42 @@ class ControladorAv extends Controller
         $user = auth()->user();
 
         $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
 
         $user = auth()->user();
         $veiculosProprios = $user->veiculosProprios;
+
+        $url = 'https://portaldosmunicipios.pr.gov.br/api/v1/medicao?status=27';
+        $json = file_get_contents($url);
+        $data = json_decode($json);
+        $filtro = [];
+        $filtroTodos = [];
+        $medicoes = Medicao::all();
+
+        foreach ($data as $item) {
+            $jaExiste = false;
+            foreach ($medicoes as $medicao) {
+                if (($item->municipio_id == $medicao->municipio_id) && ($item->numero_projeto == $medicao->numero_projeto)
+                && ($item->numero_lote == $medicao->numero_lote) && ($item->numero == $medicao->numero_medicao)) {
+                    $jaExiste = true;
+                }
+            }
+            if(!$jaExiste){
+                if ($item->nome_supervisor == $user->name) { //  para teste 'Fernanda Espindola de Oliveira'
+                    array_push($filtro, $item);
+                }
+                else{
+                    array_push($filtroTodos, $item);
+                }
+            }
+        }
 
         if($user->id != $av->user->id) {
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
         }
 
-        return view('avspc.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
+        return view('avspc.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 
+        'filtro' => $filtro, 'filtroTodos' => $filtroTodos, 'userAv' => $userAv]);
     }
 
     public function enviarGestor(Request $request)
@@ -4278,6 +4306,12 @@ class ControladorAv extends Controller
             'outroObjetivo' => 'required'
         ];
 
+        $idArrayTodosSelecionados = null;
+        $idArrayUsuarioSelecionou = null;
+
+        $idArrayTodosSelecionados = $request->input('todosSelecionados');
+        $idArrayUsuarioSelecionou = $request->input('medicoesUsuarioSelecionadas');
+
         if($request->get('isVeiculoProprio')=="1"){ // Se for veículo próprio, adiciona validação de campo
             $request->request->set('isVeiculoEmpresa', null);
             unset($regras['isVeiculoEmpresa']);
@@ -4304,10 +4338,55 @@ class ControladorAv extends Controller
 
         $data = $request->all();
         $data['isDiaria'] = $request->isDiaria == "Sim" ? true : false;
-        
-        Av::findOrFail($request->id)->update($data);
+
+        $av = Av::findOrFail($request->id);
+        $av->update($data);
+
+        $avRecuperada = Av::findOrFail($av->id);
+
+        $medicoes = Medicao::all();
+        foreach($medicoes as $medicao){
+            if($medicao->av_id == $avRecuperada->id){
+                $medicao->delete();
+            }
+        }
+
+        $url = 'https://portaldosmunicipios.pr.gov.br/api/v1/medicao?status=27';
+        $json = file_get_contents($url);
+        $data = json_decode($json);
+        foreach ($data as $item) {
+            if($idArrayUsuarioSelecionou != null){
+                foreach($idArrayUsuarioSelecionou as $selecionado){
+                    if ($item->id == $selecionado) {
+                        $medicao = new Medicao();
+                        $medicao->nome_municipio = $item->nome_municipio;
+                        $medicao->municipio_id = $item->municipio_id;
+                        $medicao->numero_projeto = $item->numero_projeto;
+                        $medicao->numero_lote = $item->numero_lote;
+                        $medicao->numero_medicao = $item->numero;
+                        $medicao->av_id = $avRecuperada->id;
+                        $medicao->save();
+                    }
+                }
+            }
+            if($idArrayTodosSelecionados != null){
+                foreach($idArrayTodosSelecionados as $selecionado){
+                    if ($item->id == $selecionado) {
+                        $medicao = new Medicao();
+                        $medicao->nome_municipio = $item->nome_municipio;
+                        $medicao->municipio_id = $item->municipio_id;
+                        $medicao->numero_projeto = $item->numero_projeto;
+                        $medicao->numero_lote = $item->numero_lote;
+                        $medicao->numero_medicao = $item->numero;
+                        $medicao->av_id = $avRecuperada->id;
+                        $medicao->save();
+                    }
+                }
+            }
+        }
+
         if($request->isPc=="sim"){
-            return redirect('/avs/fazerPrestacaoContas/' . $request->id)->with('msg', 'av editado com sucesso!');
+            return redirect('/avs/fazerPrestacaoContas/' . $request->id)->with('msg', 'Av editado com sucesso!');
         }
         else{
             return redirect('/avs/avs')->with('msg', 'Av editado com sucesso!');
