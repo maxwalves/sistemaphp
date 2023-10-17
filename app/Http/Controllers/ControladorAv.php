@@ -283,6 +283,15 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($id);
         $userAv = User::findOrFail($av->user_id);
 
+        $anexos = [];
+        $anexosFinanceiro = AnexoFinanceiro::all();
+        foreach($anexosFinanceiro as $a){
+            if($a->av_id == $av->id){
+                array_push($anexos, $a);
+            }
+        }
+		
+
         if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isVistoDiretoria"]==false && $av["isCancelado"]==false){ //Se a av já foi enviada e autorizada pelo Gestor
             foreach($av->rotas as $rota){//Percorre todas as rotas da AV
                 if($rota["isViagemInternacional"]==1 || $rota["isVeiculoProprio"]==1){//Se a viagem for internacional ou tiver veículo próprio
@@ -302,9 +311,47 @@ class ControladorAv extends Controller
 
         $veiculosProprios = $userAv->veiculosProprios;
 
+        $colecao = $this->geraArrayDiasValores($av);
+        $arrayDiasValores = $colecao[0];
+        $anoSaidaInicial = $colecao[1];
+        $mesSaidaInicial = $colecao[2];
+        $diaSaidaInicial = $colecao[3];
+        $horaSaidaInicial = $colecao[4];
+        $minutoSaidaInicial = $colecao[5];
+        $mesChegadaInicial = $colecao[6];
+        $diaChegadaInicial = $colecao[7];
+        $horaChegadaInicial = $colecao[8];
+        $minutoChegadaInicial = $colecao[9];
+        $mesSaidaFinal = $colecao[10];
+        $diaSaidaFinal = $colecao[11];
+        $horaSaidaFinal = $colecao[12];
+        $minutoSaidaFinal = $colecao[13];
+        $mesChegadaFinal = $colecao[14];
+        $diaChegadaFinal = $colecao[15];
+        $horaChegadaFinal = $colecao[16];
+        $minutoChegadaFinal = $colecao[17];
+        $dataInicio = $colecao[18];
+        $dataFim = $colecao[19];
+
+        $medicoes = Medicao::all();
+        $medicoesFiltradas = [];
+		
+		foreach($medicoes as $medicao){
+            if($medicao->av_id == $av->id){
+                array_push($medicoesFiltradas, $medicao); 
+            }
+        }
+
         if($possoEditar == true){
             return view('avs.verFluxoDiretoria', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
-            'user'=> $user, 'historicos'=> $historicos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade]);
+            'user'=> $user, 'historicos'=> $historicos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade, 
+            'anexos' => $anexos, 'arrayDiasValores' => $arrayDiasValores,
+            'anoSaidaInicial' => $anoSaidaInicial, 'mesSaidaInicial' => $mesSaidaInicial, 'diaSaidaInicial' => $diaSaidaInicial,
+            'horaSaidaInicial' => $horaSaidaInicial, 'minutoSaidaInicial' => $minutoSaidaInicial, 'mesChegadaInicial' => $mesChegadaInicial,
+            'diaChegadaInicial' => $diaChegadaInicial, 'horaChegadaInicial' => $horaChegadaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial,
+            'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal, 'minutoSaidaFinal' => $minutoSaidaFinal,
+            'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal, 'minutoChegadaFinal' => $minutoChegadaFinal,
+            'dataInicio' => $dataInicio, 'dataFim' => $dataFim, 'medicoesFiltradas' => $medicoesFiltradas]);
         }
         else{
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -481,6 +528,7 @@ class ControladorAv extends Controller
         $objetivos = Objetivo::all();
         $historicosTodos = Historico::all();
         $users = User::all();
+        $veiculosParanacidade = VeiculoParanacidade::all();
         $historicos = [];
         $anexos = [];
         $user = auth()->user();
@@ -568,7 +616,7 @@ class ControladorAv extends Controller
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes,
             'medicoesFiltradas' => $medicoesFiltradas, 'valorRecebido' => $valorRecebido, 'valorAcertoContasReal' => $valorAcertoContasReal,
-            'valorAcertoContasDolar' => $valorAcertoContasDolar ]);
+            'valorAcertoContasDolar' => $valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade]);
         }
         else{
             return redirect('avs/autPcFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -578,6 +626,7 @@ class ControladorAv extends Controller
     public function realizarAcertoContasFinanceiro($id){
         $objetivos = Objetivo::all();
         $historicosTodos = Historico::all();
+        $veiculosParanacidade = VeiculoParanacidade::all();
         $users = User::all();
         $historicos = [];
         $anexos = [];
@@ -656,7 +705,8 @@ class ControladorAv extends Controller
             return view('avs.realizarAcertoContasFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
-            'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'medicoesFiltradas' => $medicoesFiltradas]);
+            'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'medicoesFiltradas' => $medicoesFiltradas, 
+            'veiculosParanacidade' => $veiculosParanacidade]);
         }
         else{
             return redirect('avs/autPcFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -666,6 +716,7 @@ class ControladorAv extends Controller
     public function validarAcertoContasUsuario($id){
         $objetivos = Objetivo::all();
         $historicosTodos = Historico::all();
+        $veiculosParanacidade = VeiculoParanacidade::all();
         $users = User::all();
         $historicos = [];
         $anexos = [];
@@ -745,7 +796,8 @@ class ControladorAv extends Controller
             return view('avs.validarAcertoContasUsuario', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
-            'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'medicoesFiltradas' => $medicoesFiltradas]);
+            'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'medicoesFiltradas' => $medicoesFiltradas, 
+            'veiculosParanacidade' => $veiculosParanacidade]);
         }
         else{
             return redirect('avs/avs')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -755,6 +807,7 @@ class ControladorAv extends Controller
     public function avaliarPcGestor($id){
         $objetivos = Objetivo::all();
         $historicosTodos = Historico::all();
+        $veiculosParanacidade = VeiculoParanacidade::all();
         $users = User::all();
         $historicos = [];
         $anexos = [];
@@ -844,7 +897,7 @@ class ControladorAv extends Controller
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes,
             'medicoesFiltradas' => $medicoesFiltradas, 'valorRecebido' => $valorRecebido, 'valorAcertoContasReal' => $valorAcertoContasReal,
-            'valorAcertoContasDolar' => $valorAcertoContasDolar]);
+            'valorAcertoContasDolar' => $valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade]);
         }
         else{
             return redirect('avs/autPcGestor')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -1707,7 +1760,7 @@ class ControladorAv extends Controller
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
-        $permission = Permission::where('name', 'aprov avs diretoria')->first();
+        $permissionDir = Permission::where('name', 'aprov avs diretoria')->first();
         $permission2 = Permission::where('name', 'aprov avs secretaria')->first();
         $permission3 = Permission::where('name', 'aprov avs financeiro')->first();
 
@@ -1715,6 +1768,18 @@ class ControladorAv extends Controller
             
             Mail::to($userAv->username)
                         ->send(new EnvioGestorToUsuarioViagemInternacional($userAv->id));
+        }
+        else if($isVeiculoProprio == true){
+            $users = User::all();
+            foreach($users as $uDir){
+                try {
+                    if($uDir->hasPermissionTo($permissionDir)){
+                        Mail::to($uDir->username)
+                        ->send(new EnvioGestorToDiretoria($av->user_id, $uDir->id));
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
         }
         else{
             $users = User::all();
@@ -2652,6 +2717,7 @@ class ControladorAv extends Controller
         $historico->save();
 
         $permission = Permission::where('name', 'aprov avs secretaria')->first();
+        $permission2 = Permission::where('name', 'aprov avs financeiro')->first();
 
         $users = User::all();
         foreach($users as $u){
@@ -2659,6 +2725,15 @@ class ControladorAv extends Controller
                 if($u->hasPermissionTo($permission)){
                     Mail::to($u->username)
                     ->send(new EnvioDiretoriaToSecretaria($av->user_id, $u->id));
+                }
+            } catch (\Throwable $th) {
+            }
+        }
+        foreach($users as $u2){
+            try {
+                if($u2->hasPermissionTo($permission2)){
+                    Mail::to($u2->username)
+                    ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
                 }
             } catch (\Throwable $th) {
             }
@@ -3539,11 +3614,37 @@ class ControladorAv extends Controller
         $user = auth()->user();
         $veiculosProprios = $user->veiculosProprios;
 
+        $url = 'https://portaldosmunicipios.pr.gov.br/api/v1/medicao?status=27';
+        $json = file_get_contents($url);
+        $data = json_decode($json);
+        $filtro = [];
+        $filtroTodos = [];
+        $medicoes = Medicao::all();
+
+        foreach ($data as $item) {
+            $jaExiste = false;
+            foreach ($medicoes as $medicao) {
+                if (($item->municipio_id == $medicao->municipio_id) && ($item->numero_projeto == $medicao->numero_projeto)
+                && ($item->numero_lote == $medicao->numero_lote) && ($item->numero == $medicao->numero_medicao)) {
+                    $jaExiste = true;
+                }
+            }
+            if(!$jaExiste){
+                if ($item->nome_supervisor == $user->name) { //  para teste 'Fernanda Espindola de Oliveira'
+                    array_push($filtro, $item);
+                }
+                else{
+                    array_push($filtroTodos, $item);
+                }
+            }
+        }
+
         if($user->id != $av->user->id) {
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
         }
 
-        return view('avs.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
+        return view('avs.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
+        'user'=> $user, 'filtro' => $filtro, 'filtroTodos' => $filtroTodos]);
     }
 
     public function editAvPc($id)

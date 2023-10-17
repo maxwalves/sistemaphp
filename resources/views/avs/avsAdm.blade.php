@@ -1,9 +1,13 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
 @section('title', 'Dashboard')
+
+@section('content_header')
+    <h1>Dashboard</h1>
+@stop
+
 @section('content')
-
-
+    
 <div class="col-md-12 dashboard-avs-container">
     @if(count($avs) > 0 )
     <nav class="navbar navbar-expand-lg navbar-light bg-light rounded border" aria-label="Eleventh navbar example">
@@ -113,7 +117,7 @@
                 <td scropt="row">{{ $av->id }}</td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/verDetalhesAvGerenciar/{{ $av->id }}" class="btn btn-secondary btn-sm"> Ver</a> 
+                        <a href="/avs/verDetalhesAvGerenciar/{{ $av->id }}" class="btn btn-primary btn-sm"> Ver</a> 
                     </div>
                 </td>
                 <td>
@@ -180,9 +184,16 @@
     
 </div>
 
-@endsection
+@stop
 
-@section('javascript')
+@section('css')
+    <link href="{{asset('DataTables/datatables.min.css')}}" rel="stylesheet"/>
+@stop
+
+@section('js')
+    
+    <script src="{{asset('/js/moment.js')}}"></script>
+    <script src="{{asset('DataTables/datatables.min.js')}}"></script>
     <script type="text/javascript">
 
         $(document).ready(function(){
@@ -464,4 +475,5 @@
         }
 
     </script>
-@endsection
+
+@stop

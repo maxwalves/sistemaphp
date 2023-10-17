@@ -1,14 +1,19 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Objetivos')
+
+@section('content_header')
+    <h1>Objetivos</h1>
+@stop
+
 @section('content')
-
+    
 <div class="col-md-10 offset-md-1 dashboard-title-container">
-    <h1>Objetivos de viagens cadastrados</h1>
+    <h2>Objetivos de viagens cadastrados</h2>
 </div>
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
     @if(count($objetivos) > 0 )
-    <table class="table table-hover table-sm table-responsive">
+    <table class="table table-hover table-bordered" style="width: 100%">
         <thead>
             <tr>
                 <th>Nome Objetivo</th>
@@ -20,11 +25,11 @@
             <tr>
                 <td> {{$objetivo->nomeObjetivo}} </td>
                 <td> 
-                    <a href="/objetivos/edit/{{ $objetivo->id }}" class="btn btn-success btn-sm"><ion-icon name="create-outline"></ion-icon>  Editar</a> 
+                    <a href="/objetivos/edit/{{ $objetivo->id }}" class="btn btn-success btn-sm">Editar</a> 
                     <form action="/objetivos/{{ $objetivo->id }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-error btn-sm"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
                     </form>
                 </td>
             </tr>
@@ -37,4 +42,12 @@
     <a style="font-size: 16px" href="/objetivos/create" type="submit" class="btn btn-primary btn-lg"> Cadastrar novo objetivo!</a>
 </div>
 
-@endsection
+@stop
+
+@section('css')
+    
+@stop
+
+@section('js')
+    
+@stop

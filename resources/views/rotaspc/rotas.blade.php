@@ -1,6 +1,11 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Editar Rotas')
+
+@section('content_header')
+    <h1>Editar Rotas</h1>
+@stop
+
 @section('content')
 
 <style>
@@ -11,22 +16,23 @@
     }
   </style>
 
-<div style="padding-left: 50px, padding-right: 50px" class="container">
-    <div class="row justify-content-between" style="padding-left: 5%">
-        <div style="display: flex; justify-content: space-between;">
+<div>
+    <div class="container">
+        <div class="row">
             <div class="col-4" >
-                <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-ghost" style="width: 180px"> Voltar!</a>
+                <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"> Voltar!</a>
             </div>
             <div class="col-4" >
-                <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary" style="width: 180px"> + CADASTRAR ROTA</a>
+                <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary"> + CADASTRAR ROTA</a>
             </div>
         </div>
+        <br>
             
-        <div class="col-12 col-xl-6">
+        <div class="col-md-6 container">
             <label for="idav" style="font-size: 24px; color: green"> <strong>AV nº </strong> </label>
             <input style="width: 50px; font-size: 24px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
             <h2 style="font-size: 24px"> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
-            <table class="table table-striped">
+            <table class="table table-hover table-bordered" style="width: 100%">
                 <tr>
                     <td>
                         <strong style="font-size: 18px">Valor adiantamento em reais: </strong>
@@ -93,7 +99,7 @@
 </div>
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
     @if(count($rotas) > 0 )
-    <table id="tabelaRota" class="display nowrap" style="width:100%">
+    <table id="tabelaRota" class="table table-hover table-bordered table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl" style="width: 100%">
         <thead>
             <tr>
                 <th>Tipo</th>
@@ -158,7 +164,7 @@
                     <form action="/rotaspc/{{ $rota->id }}" style="width: 85px" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-error btn-sm"> Deletar</button>
+                        <button type="submit" class="btn btn-danger btn-sm"> Deletar</button>
                     </form>
                 </td>
             </tr>
@@ -171,51 +177,43 @@
     @endif
 </div>
 
-@endsection
+@stop
 
-@section('javascript')
-    <script type="text/javascript">
+@section('css')
+    
+@stop
 
-        $(document).ready(function(){
-            $('#tabelaRota').DataTable({
-                    scrollY: 400,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Procure uma AV"
-                    }
-                });
-        });
+@section('js')
+    
+<script type="text/javascript">
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-            }
-        });
-
-        function gerenciaNacionalInternacional(){
-
-            if(isViagemInternacional.value=="0") {
-
-            }
-            else if(isViagemInternacional.value=="1"){
-
-            }
-            else{
-
-            }
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': "{{ csrf_token() }}"
         }
-        function carregaCidade(){
-            
-        }
+    });
 
-                //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
-        $(function(){
-            carregaCidade();
-            
-        })
-    </script>
-@endsection
+    function gerenciaNacionalInternacional(){
+
+        if(isViagemInternacional.value=="0") {
+
+        }
+        else if(isViagemInternacional.value=="1"){
+
+        }
+        else{
+
+        }
+    }
+    function carregaCidade(){
+        
+    }
+
+            //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
+    $(function(){
+        carregaCidade();
+        
+    })
+</script>
+
+@stop

@@ -1,14 +1,19 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Veículos Paranacidade')
+
+@section('content_header')
+    <h1>Veículos Paranacidade</h1>
+@stop
+
 @section('content')
 
 <div class="col-md-10 offset-md-1 dashboard-title-container">
-    <h1>Veículos do Paranacidade</h1>
+    <h5>Veículos do Paranacidade</h5>
 </div>
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
     @if(count($veiculosParanacidade) > 0 )
-    <table class="table table-hover table-sm table-responsive">
+    <table class="table table-hover table-bordered" style="width: 100%">
         <thead>
             <tr>
                 <th>Marca</th>
@@ -34,7 +39,7 @@
                     <form action="/veiculosParanacidade/{{ $veiculoParanacidade->id }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-error btn-sm"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
+                        <button type="submit" class="btn btn-danger btn-sm"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
                     </form>
                 </td>
             </tr>
@@ -47,4 +52,12 @@
     <a style="font-size: 16px" href="/veiculosParanacidade/create" type="submit" class="btn btn-primary btn-lg"> Cadastrar novo veículo!</a>
 </div>
 
-@endsection
+@stop
+
+@section('css')
+    
+@stop
+
+@section('js')
+    
+@stop

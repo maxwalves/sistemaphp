@@ -1,229 +1,235 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Criar Autorização de viagem')
+@section('title', 'Criar AV')
+
+@section('content_header')
+    <h1>Criar AV</h1>
+@stop
+
 @section('content')
-
 <div class="row justify-content-start" style="padding-left: 5%">
     <div class="col-3">
-        <a href="/avs/avs/" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
+        <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost"> Voltar!</a>
     </div>
 </div>
 <div id="av-create-container" >
-        <h2>Crie uma autorização de viagem!</h2>
-        <form action="/avs/gravarAv" method="POST" enctype="multipart/form-data">
-            @csrf
-            
-            <div class="form-group col-md-6 offset-md-3" id="nomeObjetivo">
-                <label for="objetivo_id" class="control-label" required>Qual é o Objetivo da viagem? (selecione)</label>
-                <br>
-                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
-                        id="objetivo_id" name="objetivo_id" onChange="verificarObjetivoViagem()">
-                        <option value="" name=""> Selecione</option>
-                        @for($i = 0; $i < count($objetivos); $i++)
-                            <div>
-                                <option value="{{ $objetivos[$i]->id }}" 
-                                    name="{{ $objetivos[$i]->id }}"> {{ $objetivos[$i] ->nomeObjetivo }} </option>
-                            </div>
-                        @endfor
-                    </select>
+    <h2>Crie uma autorização de viagem!</h2>
+    <form action="/avs/gravarAv" method="POST" enctype="multipart/form-data">
+        @csrf
+        
+        <div class="form-group col-md-6 offset-md-3" id="nomeObjetivo">
+            <label for="objetivo_id" class="control-label" required>Qual é o Objetivo da viagem? (selecione)</label>
+            <br>
+                <select class="select select-bordered w-full max-w-xs {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
+                    id="objetivo_id" name="objetivo_id" onChange="verificarObjetivoViagem()">
+                    <option value="" name=""> Selecione</option>
+                    @for($i = 0; $i < count($objetivos); $i++)
+                        <div>
+                            <option value="{{ $objetivos[$i]->id }}" 
+                                name="{{ $objetivos[$i]->id }}"> {{ $objetivos[$i] ->nomeObjetivo }} </option>
+                        </div>
+                    @endfor
+                </select>
 
-                    @if ($errors->has('objetivo_id'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('objetivo_id') }}
-                    </div>
-                    @endif
-            </div>
-            <div class="form-group col-md-6 offset-md-3" id="isMostrarTodos">
-                <span class="label-text">Mostrar todos</span> 
-                <input type="checkbox" class="toggle" onChange="mostrarTodos()"/>
-            </div>
-
-            <div id="autorizacaoComissao">
-                <h1>Lista de medições pendentes</h1>
-                <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Nome do supervisor</th>
-                            <th>Regional</th>
-                            <th>Município</th>
-                            <th>Projeto</th>
-                            <th>Lote</th>
-                            <th>Medição</th>
-                            <th>Tipo medição</th>
-                            <th>Valor da medição</th>
-                            <th>Descrição do componente</th>
-                            <th>Selecione</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($filtro as $item)
-                        <tr>
-                            <td> {{ $item->nome_supervisor }} </td>
-                            <td> {{ $item->codigo_regional }} </td>
-                            <td> {{ $item->nome_municipio }} </td>
-                            <td> {{ $item->numero_projeto }} </td>
-                            <td> {{ $item->numero_lote }} </td>
-                            <td> {{ $item->numero }} </td>
-                            <td> {{ $item->tipo_medicao }} </td>
-                            <td>R$ {{ number_format($item->valor_medicao_sam, 2, ',', '.') }}</td>
-                            <td> {{ $item->descricao_componente }} </td>
-                            <td> 
-                                <input type="radio" name="medicoesUsuarioSelecionadas[]" id="medicoesUsuarioSelecionadas" 
-                                class="radio radio-error" value="{{ $item->id }}"/>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                
-            </div>
-            <div id="autorizacaoComissaoTodos">
-                <h1>Lista de medições pendentes</h1>
-                <table class="display nowrap" id="minhaTabela">
-                    <thead>
-                        <tr>
-                            <th style="width: 5%">Selecione</th>
-                            <th>Nome do supervisor</th>
-                            <th>Regional</th>
-                            <th>Município</th>
-                            <th>Projeto</th>
-                            <th>Lote</th>
-                            <th>Medição</th>
-                            <th>Tipo medição</th>
-                            <th>Valor da medição</th>
-                            <th>Descrição do componente</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($filtroTodos as $item)
-                        <tr>
-                            <td> 
-                                <input type="checkbox" name="todosSelecionados[]" id="todosSelecionados" 
-                                class="checkbox checkbox-md" value="{{ $item->id }}"/>
-                            </td>
-                            <td> {{ $item->nome_supervisor }} </td>
-                            <td> {{ $item->codigo_regional }} </td>
-                            <td> {{ $item->nome_municipio }} </td>
-                            <td> {{ $item->numero_projeto }} </td>
-                            <td> {{ $item->numero_lote }} </td>
-                            <td> {{ $item->numero }} </td>
-                            <td> {{ $item->tipo_medicao }} </td>
-                            <td>R$ {{ number_format($item->valor_medicao_sam, 2, ',', '.') }}</td>
-                            <td> {{ $item->descricao_componente }} </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                
-            </div>
-
-            <div class="form-group col-md-6 offset-md-3" id="outroObjetivoCampo">
-                <label for="outro" class="control-label">Digite outro objetivo: </label>
-                <div class="input-group">
-                    <input type="text" class="form-control {{ $errors->has('outroObjetivo') ? 'is-invalid' :''}}" 
-                    name="outroObjetivo"
-                    id="outroObjetivo" placeholder="Digite outro objetivo">
+                @if ($errors->has('objetivo_id'))
+                <div class="invalid-feedback">
+                    {{ $errors->first('objetivo_id') }}
                 </div>
+                @endif
+        </div>
+        <div class="form-group col-md-6 offset-md-3" id="isMostrarTodos">
+            <span class="label-text">Mostrar todos</span> 
+            <input type="checkbox" class="toggle" onChange="mostrarTodos()"/>
+        </div>
 
-                @if ($errors->has('outroObjetivo'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('outroObjetivo') }}
-                    </div>
+        <div id="autorizacaoComissao">
+            <h1>Lista de medições pendentes</h1>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Nome do supervisor</th>
+                        <th>Regional</th>
+                        <th>Município</th>
+                        <th>Projeto</th>
+                        <th>Lote</th>
+                        <th>Medição</th>
+                        <th>Tipo medição</th>
+                        <th>Valor da medição</th>
+                        <th>Descrição do componente</th>
+                        <th>Selecione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($filtro as $item)
+                    <tr>
+                        <td> {{ $item->nome_supervisor }} </td>
+                        <td> {{ $item->codigo_regional }} </td>
+                        <td> {{ $item->nome_municipio }} </td>
+                        <td> {{ $item->numero_projeto }} </td>
+                        <td> {{ $item->numero_lote }} </td>
+                        <td> {{ $item->numero }} </td>
+                        <td> {{ $item->tipo_medicao }} </td>
+                        <td>R$ {{ number_format($item->valor_medicao_sam, 2, ',', '.') }}</td>
+                        <td> {{ $item->descricao_componente }} </td>
+                        <td> 
+                            <input type="radio" name="medicoesUsuarioSelecionadas[]" id="medicoesUsuarioSelecionadas" 
+                            class="radio radio-error" value="{{ $item->id }}"/>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            
+        </div>
+        <div id="autorizacaoComissaoTodos">
+            <h1>Lista de medições pendentes</h1>
+            <table class="display nowrap" id="minhaTabela">
+                <thead>
+                    <tr>
+                        <th style="width: 5%">Selecione</th>
+                        <th>Nome do supervisor</th>
+                        <th>Regional</th>
+                        <th>Município</th>
+                        <th>Projeto</th>
+                        <th>Lote</th>
+                        <th>Medição</th>
+                        <th>Tipo medição</th>
+                        <th>Valor da medição</th>
+                        <th>Descrição do componente</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($filtroTodos as $item)
+                    <tr>
+                        <td> 
+                            <input type="checkbox" name="todosSelecionados[]" id="todosSelecionados" 
+                            class="checkbox checkbox-md" value="{{ $item->id }}"/>
+                        </td>
+                        <td> {{ $item->nome_supervisor }} </td>
+                        <td> {{ $item->codigo_regional }} </td>
+                        <td> {{ $item->nome_municipio }} </td>
+                        <td> {{ $item->numero_projeto }} </td>
+                        <td> {{ $item->numero_lote }} </td>
+                        <td> {{ $item->numero }} </td>
+                        <td> {{ $item->tipo_medicao }} </td>
+                        <td>R$ {{ number_format($item->valor_medicao_sam, 2, ',', '.') }}</td>
+                        <td> {{ $item->descricao_componente }} </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            
+        </div>
+
+        <div class="form-group col-md-6 offset-md-3" id="outroObjetivoCampo">
+            <label for="outro" class="control-label">Digite outro objetivo: </label>
+            <div class="input-group">
+                <input type="text" class="form-control {{ $errors->has('outroObjetivo') ? 'is-invalid' :''}}" 
+                name="outroObjetivo"
+                id="outroObjetivo" placeholder="Digite outro objetivo">
+            </div>
+
+            @if ($errors->has('outroObjetivo'))
+                <div class="invalid-feedback">
+                    {{ $errors->first('outroObjetivo') }}
+                </div>
+            @endif
+        </div>
+
+        <div class="form-check form-switch col-md-6 offset-md-3" id="selecOutroObj">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" 
+            style="height: 20px; width: 40px" onChange="desativarCampoObjetivo()">
+            <label class="form-check-label" for="flexSwitchCheckDefault" style="padding-left: 10px">Não achei o objetivo que desejo na lista!</label>
+        </div>
+        <input type="boolean" id="isSelecionado" name="isSelecionado" value="0" hidden="true">
+        <br>
+        <br>
+
+        <div class="mb-3 col-md-6 offset-md-3">
+            <label for="banco" class="form-label">Banco</label>
+            <div class="input-group mb-3">   
+                <input type="text" class="form-control  {{ $errors->has('banco') ? 'is-invalid' :''}}" name="banco"
+                id="banco" placeholder="Banco">
+                <span class="input-group-text" id="basic-addon2">Ex: Banco do Brasil</span>
+
+                @if ($errors->has('banco'))
+                <div class="invalid-feedback">
+                    {{ $errors->first('banco') }}
+                </div>
                 @endif
             </div>
+        </div>
 
-            <div class="form-check form-switch col-md-6 offset-md-3" id="selecOutroObj">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" 
-                style="height: 20px; width: 40px" onChange="desativarCampoObjetivo()">
-                <label class="form-check-label" for="flexSwitchCheckDefault" style="padding-left: 10px">Não achei o objetivo que desejo na lista!</label>
-            </div>
-            <input type="boolean" id="isSelecionado" name="isSelecionado" value="0" hidden="true">
-            <br>
-            <br>
-    
-            <div class="mb-3 col-md-6 offset-md-3">
-                <label for="banco" class="form-label">Banco</label>
-                <div class="input-group mb-3">   
-                    <input type="text" class="form-control  {{ $errors->has('banco') ? 'is-invalid' :''}}" name="banco"
-                    id="banco" placeholder="Banco">
-                    <span class="input-group-text" id="basic-addon2">Ex: Banco do Brasil</span>
+        <div class="mb-3 col-md-6 offset-md-3">
+            <label for="agencia" class="form-label">Agência</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control  {{ $errors->has('agencia') ? 'is-invalid' :''}}" name="agencia"
+                    id="agencia" placeholder="Agência">
+                <span class="input-group-text" id="basic-addon2">Ex: 1234-X</span>
 
-                    @if ($errors->has('banco'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('banco') }}
-                    </div>
-                    @endif
+                @if ($errors->has('agencia'))
+                <div class="invalid-feedback">
+                    {{ $errors->first('agencia') }}
                 </div>
+                @endif
             </div>
+        </div>
 
-            <div class="mb-3 col-md-6 offset-md-3">
-                <label for="agencia" class="form-label">Agência</label>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control  {{ $errors->has('agencia') ? 'is-invalid' :''}}" name="agencia"
-                        id="agencia" placeholder="Agência">
-                    <span class="input-group-text" id="basic-addon2">Ex: 1234-X</span>
+        <div class="mb-3 col-md-6 offset-md-3">
+            <label for="conta" class="form-label">Conta</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control  {{ $errors->has('conta') ? 'is-invalid' :''}}" name="conta"
+                id="conta" placeholder="Conta">
+                <span class="input-group-text" id="basic-addon2">Ex: 12345-X</span>
 
-                    @if ($errors->has('agencia'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('agencia') }}
-                    </div>
-                    @endif
+                @if ($errors->has('conta'))
+                <div class="invalid-feedback">
+                    {{ $errors->first('conta') }}
                 </div>
+                @endif
             </div>
+        </div>
 
-            <div class="mb-3 col-md-6 offset-md-3">
-                <label for="conta" class="form-label">Conta</label>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control  {{ $errors->has('conta') ? 'is-invalid' :''}}" name="conta"
-                    id="conta" placeholder="Conta">
-                    <span class="input-group-text" id="basic-addon2">Ex: 12345-X</span>
-
-                    @if ($errors->has('conta'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('conta') }}
-                    </div>
-                    @endif
-                </div>
+        <div class="mb-3 col-md-6 offset-md-3">
+            <label for="pix" class="form-label">Pix</label><br>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="pix"
+                    id="pix" placeholder="Pix">
+                <span class="input-group-text" id="basic-addon2">Chave pix</span>
             </div>
+        </div>
 
-            <div class="mb-3 col-md-6 offset-md-3">
-                <label for="pix" class="form-label">Pix</label><br>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="pix"
-                        id="pix" placeholder="Pix">
-                    <span class="input-group-text" id="basic-addon2">Chave pix</span>
-                </div>
+        <div class="mb-3 col-md-6 offset-md-3">
+            <label for="comentario" class="form-label">Comentários</label><br>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="comentario"
+                    id="comentario" placeholder="Comentário">
+                <span class="input-group-text" id="basic-addon2">Opcional</span>
             </div>
+        </div>
+        <input type="file" id="arquivo1" style="height: 150px" name="arquivo1" class="form-control form-control-lg col-md-6 offset-md-3">
 
-            <div class="mb-3 col-md-6 offset-md-3">
-                <label for="comentario" class="form-label">Comentários</label><br>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="comentario"
-                        id="comentario" placeholder="Comentário">
-                    <span class="input-group-text" id="basic-addon2">Opcional</span>
-                </div>
+        <br>
+
+        <div class="col-md-6 offset-md-3">
+            <div id="btSalvarAv">
+                <input style="font-size: 14px" type="submit" class="btn btn-active btn-primary" value="Salvar e escolher itinerário!">
             </div>
-            <input type="file" id="arquivo1" style="height: 150px" name="arquivo1" class="form-control form-control-lg col-md-6 offset-md-3">
+        </div>
+    </form>
+    <br><br>
 
-            <br>
+</div>
 
-            <div class="col-md-6 offset-md-3" style="background-color: lightgrey">
-                <div id="btSalvarAv">
-                    <input style="font-size: 14px" type="submit" class="btn btn-active btn-secondary" value="Salvar e escolher itinerário!">
-                </div>
-            </div>
-        </form>
+@stop
 
-    </div>
+@section('css')
+    <link href="{{asset('DataTables/datatables.min.css')}}" rel="stylesheet"/>
+@stop
 
-    
-@endsection
-
-
-
-
-{{-- Para implementação futura de AJAX --}} 
-@section('javascript')
+@section('js')
+    <script src="{{asset('DataTables/datatables.min.js')}}"></script>
+    <script src="{{asset('/js/moment.js')}}"></script>
     <script type="text/javascript">
 
         $(document).ready(function(){
@@ -303,4 +309,4 @@
             document.getElementById("isMostrarTodos").hidden = true;
         })
     </script>
-@endsection
+@stop

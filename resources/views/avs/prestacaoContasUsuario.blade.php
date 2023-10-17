@@ -1,8 +1,13 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Prestação de Contas')
+
+@section('content_header')
+    <h1>Prestação de Contas</h1>
+@stop
+
 @section('content')
-
+    
 <div style="padding-left: 10%" class="container">
     
     <div class="row justify-content-between">
@@ -87,7 +92,7 @@
                                         style="width: 200px"> Prestar contas</a> 
                                 </div>
                                 @else
-                                    <p>Ainda não finalizou</p>
+                                    Ainda não finalizou
                                 @endif
                             @endif
                         @endfor
@@ -95,7 +100,7 @@
                             && $av->isPrestacaoContasRealizada == 1) ||
                             ($av->isCancelado == 1 && $av->isAprovadoFinanceiro == 1 && $av->isPrestacaoContasRealizada == 1))
 
-                        <a href="/avs/verDetalhesPc/{{ $av->id }}" class="btn btn-secondary btn-sm"
+                        <a href="/avs/verDetalhesPc/{{ $av->id }}" class="btn btn-primary btn-sm"
                             style="width: 110px"> Ver</a>
 
                         @if($av->isAcertoContasRealizado == 1 && $av->isUsuarioAprovaAcertoContas != 1)
@@ -114,9 +119,16 @@
     
 </div>
 
-@endsection
+@stop
 
-@section('javascript')
+@section('css')
+    <link href="{{ asset('DataTables/datatables.min.css') }}" rel="stylesheet" />
+@stop
+
+@section('js')
+
+    <script src="{{ asset('DataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('/js/moment.js') }}"></script>
     <script type="text/javascript">
 
         $(document).ready(function(){
@@ -124,6 +136,7 @@
                     scrollY: 500,
                     "order": [ 0, 'desc' ],
                     "language": {
+                        "search": "Buscar",
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
@@ -134,4 +147,5 @@
         });
 
     </script>
-@endsection
+
+@stop

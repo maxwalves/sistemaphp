@@ -1,8 +1,13 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Editar nova data')
+
+@section('content_header')
+    <h1>Editar nova data</h1>
+@stop
+
 @section('content')
-
+    
 <style>
     @media (max-width: 600px) {
       div {
@@ -118,51 +123,59 @@
 
 </div>
 
-@endsection
 
-@section('javascript')
-    <script type="text/javascript">
+@stop
 
-        $(document).ready(function(){
-            $('#tabelaRota').DataTable({
-                    scrollY: 400,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Procure uma AV"
-                    }
-                });
-        });
+@section('css')
+    
+@stop
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-            }
-        });
+@section('js')
+    
+<script type="text/javascript">
 
-        function gerenciaNacionalInternacional(){
+    $(document).ready(function(){
+        $('#tabelaRota').DataTable({
+                scrollY: 400,
+                "language": {
+                    "lengthMenu": "Mostrando _MENU_ registros por página",
+                    "zeroRecords": "Nada encontrado",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Nenhum registro disponível",
+                    "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                    "search": "Procure uma AV"
+                }
+            });
+    });
 
-            if(isViagemInternacional.value=="0") {
-
-            }
-            else if(isViagemInternacional.value=="1"){
-
-            }
-            else{
-
-            }
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': "{{ csrf_token() }}"
         }
-        function carregaCidade(){
-            
-        }
+    });
 
-                //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
-        $(function(){
-            carregaCidade();
-            
-        })
-    </script>
-@endsection
+    function gerenciaNacionalInternacional(){
+
+        if(isViagemInternacional.value=="0") {
+
+        }
+        else if(isViagemInternacional.value=="1"){
+
+        }
+        else{
+
+        }
+    }
+    function carregaCidade(){
+        
+    }
+
+            //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
+    $(function(){
+        carregaCidade();
+        
+    })
+</script>
+
+@stop
+

@@ -1,14 +1,19 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Editando: ' . $av->id)
+@section('title', 'Realizar Reservas')
+
+@section('content_header')
+    <h1>Realizar Reservas</h1>
+@stop
+
 @section('content')
 
 <div class="row justify-content-start" style="padding-left: 5%">
     <div class="col-3">
-        <a href="/avs/verFluxoSecretaria/{{ $av->id }}" type="submit" class="btn btn-active btn-ghost"> Voltar!</a>
+        <a href="/avs/verFluxoSecretaria/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"> Voltar!</a>
     </div>
 </div>
-<div id="container_reserva" class="container">
+<div>
 
     <h1 style="font-size: 24px"><strong>Rota nº:</strong> {{ $rota->id }}</h1>
     <p class="av-owner" style="font-size: 24px"><ion-icon name="chevron-forward-circle-outline">
@@ -30,8 +35,8 @@
     <div class="divider"></div> 
 
 
-        <div class="flex flex-row">
-            <div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="flex flex-row">
                     <label for="paisOrigem" style="font-size: 24px" ><strong>País de origem:</strong></label>
                     <input type="text" style="font-size: 24px; padding-left: 5px" id="paisOrigem" disabled value="{{ $rota->isViagemInternacional ? $rota->paisOrigemInternacional : "Brasil" }}">
@@ -40,7 +45,7 @@
                 <h1 style="font-size: 24px"><strong>Cidade de origem: </strong> {{ $rota->isViagemInternacional ? $rota->cidadeOrigemInternacional : $rota->cidadeOrigemNacional }}</h1>
             </div>
 
-            <div>
+            <div class="col-md-6">
                 <div class="flex flex-row">
                     <label for="paisDestino" style="font-size: 24px"><strong>País de destino: </strong> </label>
                     <input type="text" style="font-size: 24px; padding-left: 5px" id="paisDestino" disabled value="{{ $rota->isViagemInternacional ? $rota->paisDestinoInternacional : "Brasil" }}">
@@ -53,8 +58,7 @@
 
         @if($rota->isReservaHotel == true)
             <div class="col-3">
-                <strong>Adicionar Reserva de Hotel</strong> 
-                <label for="my-modal-3" class="btn btn-active btn-success"><ion-icon name="add-circle-outline" size="large"></ion-icon></label>
+                <x-adminlte-button label="Adicionar Reserva de Hotel" data-toggle="modal" data-target="#my-modal-3" class="bg-teal"/>
             </div>
 
             <div class="col-md-6 offset-md-0">
@@ -80,7 +84,7 @@
                                     <form action="/avs/deletarAnexoHotel/{{ $anexo->id }}/{{ $rota->id }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-active btn-accent btn-sm"
+                                        <button type="submit" class="btn btn-active btn-danger btn-sm"
                                         style="width: 110px" > Deletar</button>
                                     </form>
                                 </td>
@@ -94,8 +98,7 @@
 
         @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1 || $rota->isAereo ==1)
             <div class="col-3">
-                <strong>Adicionar Reserva de Transporte</strong>
-                <label for="my-modal-4" class="btn btn-active btn-success"><ion-icon name="add-circle-outline" size="large"></ion-icon></label>
+                <x-adminlte-button label="Adicionar Reserva de Transporte" data-toggle="modal" data-target="#my-modal-4" class="bg-teal"/>
             </div>
             <div class="col-md-6 offset-md-0">
                 <h1 style="font-size: 24px"><strong>Reserva de transporte: </strong></h1>
@@ -121,7 +124,7 @@
                                     <form action="/avs/deletarAnexoTransporte/{{ $anexo->id }}/{{ $rota->id }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-active btn-accent btn-sm"
+                                        <button type="submit" class="btn btn-active btn-danger btn-sm"
                                         style="width: 110px" > Deletar</button>
                                     </form>
                                 </td>   
@@ -138,59 +141,62 @@
 
 </div>
 
-<input type="checkbox" id="my-modal-3" class="modal-toggle" />
-
-<div class="modal">
-    <div class="modal-box w-11/12 max-w-1xl">
-        <div class="modal-content">
-            <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-            <br>
-            <form action="/avs/gravarReservaHotel" method="POST" enctype="multipart/form-data">
-                @csrf
-                    <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
-                    <input type="text" hidden="true" id="rotaId" name="rotaId" value="{{ $rota->id }}">
-                    <br><br>
-                    <label for="descricao">Descrição</label>
-                    <input type="text" id="descricao" name="descricao" class="input input-bordered input-secondary w-full max-w-xs">
-                    <br><br>
-                    <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<input type="checkbox" id="my-modal-4" class="modal-toggle" />
-
-<div class="modal">
-    <div class="modal-box w-11/12 max-w-1xl">
-        <div class="modal-content">
-            <label for="my-modal-4" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-            <br>
-            <form action="/avs/gravarReservaTransporte" method="POST" enctype="multipart/form-data">
-                @csrf
-                    <input type="file" id="arquivo2" name="arquivo2" class="form-control-file">
-                    <input type="text" hidden="true" id="rotaId" name="rotaId" value="{{ $rota->id }}">
-                    <br><br>
-                    <label for="descricao">Descrição</label>
-                    <input type="text" id="descricao" name="descricao" class="input input-bordered input-secondary w-full max-w-xs">
-                    <br><br>
-                    <button type="submit" id="botaoEnviarArquivo2" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
-            </form>
-        </div>
-    </div>
-</div>
+<x-adminlte-modal id="my-modal-3" title="Reserva de Hotel" size="lg" theme="teal"
+    icon="fas fa-bell" v-centered static-backdrop scrollable>
+    
+    <form action="/avs/gravarReservaHotel" method="POST" enctype="multipart/form-data">
+        @csrf
+            <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
+            <input type="text" hidden="true" id="rotaId" name="rotaId" value="{{ $rota->id }}">
+            <br><br>
+            <label for="descricao">Descrição</label>
+            <input type="text" id="descricao" name="descricao" class="input input-bordered input-secondary w-full max-w-xs">
+            <br><br>
+            <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
+    </form>
 
 
-@endsection
+    <x-slot name="footerSlot">
+        <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal"/>
+    </x-slot>
+</x-adminlte-modal>
 
-{{-- Para implementação futura de AJAX --}} 
-@section('javascript')
+<x-adminlte-modal id="my-modal-4" title="Reserva de Transporte" size="lg" theme="teal"
+    icon="fas fa-bell" v-centered static-backdrop scrollable>
+    
+    <form action="/avs/gravarReservaTransporte" method="POST" enctype="multipart/form-data">
+        @csrf
+            <input type="file" id="arquivo2" name="arquivo2" class="form-control-file">
+            <input type="text" hidden="true" id="rotaId" name="rotaId" value="{{ $rota->id }}">
+            <br><br>
+            <label for="descricao">Descrição</label>
+            <input type="text" id="descricao" name="descricao" class="input input-bordered input-secondary w-full max-w-xs">
+            <br><br>
+            <button type="submit" id="botaoEnviarArquivo2" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
+    </form>
+
+    <x-slot name="footerSlot">
+        <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal"/>
+    </x-slot>
+</x-adminlte-modal>
+
+@stop
+
+@section('css')
+    <link href="{{ asset('DataTables/datatables.min.css') }}" rel="stylesheet" />
+@stop
+
+@section('js')
+    
+    <script src="{{ asset('DataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('/js/moment.js') }}"></script>
     <script type="text/javascript">
 
         $(document).ready(function(){
             $('#minhaTabela1').DataTable({
                     scrollY: 200,
                     "language": {
+                        "search": "Procurar:",
                         "lengthMenu": "Mostrando _MENU_ registros por página",
                         "zeroRecords": "Nada encontrado",
                         "info": "Mostrando página _PAGE_ de _PAGES_",
@@ -268,4 +274,6 @@
             });
         })
     </script>
-@endsection
+
+@stop
+

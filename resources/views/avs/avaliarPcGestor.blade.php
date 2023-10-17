@@ -1,116 +1,810 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Editando: ' . $av->id)
+@section('title', 'Avaliação de Prestação de Contas')
+
+@section('content_header')
+    <h1>Avaliação de Prestação de Contas - Gestor</h1>
+@stop
+
 @section('content')
 
-<nav class="bg-base-200">
-    <div class="flex flex-wrap items-center justify-between mx-auto p-1">
-        <a href="#" class="flex items-center">
-            <img src="{{asset('/img/visualizar.png')}}" class="h-12 mr-3" />
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">Avaliar Prestação de Contas</span>
-        </a>
-      <button data-collapse-toggle="navbar-dropdown" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-dropdown" aria-expanded="false">
-        <span class="sr-only">Open main menu</span>
-        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
-      </button>
-      <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
-        
-        <ul class="flex flex-col font-medium p-4 md:p-0 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-200 dark:border-gray-700">
-          <li>
-            <a href="/avs/autPcGestor" type="submit" style="padding-bottom: 40px" class="btn btn bg-slate-600"><ion-icon name="chevron-back-outline" size="large"></ion-icon> Voltar!</a>
-          </li>
-          <li>
-            <label for="my-modal-3" class="btn btn-sm" style="padding-bottom: 40px"><ion-icon name="layers-outline" size="large"></ion-icon>Histórico</label>
-          </li>
-          <li>
-              <button id="dropdownNavbarLink" style="padding-bottom: 40px" data-dropdown-toggle="dropdownNavbar" class="btn btn-sm"><ion-icon name="layers-outline" size="large"></ion-icon>AV <svg class="w-5 h-5 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-              <!-- Dropdown menu -->
-              <div id="dropdownNavbar" class="z-10 hidden font-normal bg-dark divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                  <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
-                    <li>
-                        <label for="my-modal-4" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Dados atuais</label>
+<div>
+    <a href="/avs/autPcGestor" class="btn btn-warning">Voltar</a>
+</div>
+<br>
+<div class="col-md-12 col-sm-6">
+    <div class="card card-primary card-outline card-tabs">
+        <div class="card-header p-0 pt-1 border-bottom-0">
+            <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill"
+                        href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home"
+                        aria-selected="true">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-historico-tab" data-toggle="pill"
+                        href="#custom-tabs-three-historico" role="tab" aria-controls="custom-tabs-three-historico"
+                        aria-selected="false">Histórico</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-dados-tab" data-toggle="pill"
+                        href="#custom-tabs-three-dados" role="tab" aria-controls="custom-tabs-three-dados"
+                        aria-selected="false">Dados básicos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-fases-tab" data-toggle="pill"
+                        href="#custom-tabs-three-fases" role="tab" aria-controls="custom-tabs-three-fases"
+                        aria-selected="false">Fases</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-trajeto-tab" data-toggle="pill"
+                        href="#custom-tabs-three-trajeto" role="tab" aria-controls="custom-tabs-three-trajeto"
+                        aria-selected="false">Trajeto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-relatorio-tab" data-toggle="pill"
+                        href="#custom-tabs-three-relatorio" role="tab" aria-controls="custom-tabs-three-relatorio"
+                        aria-selected="false">Relatório</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-hotel-tab" data-toggle="pill"
+                        href="#custom-tabs-three-hotel" role="tab" aria-controls="custom-tabs-three-hotel"
+                        aria-selected="false">Hotel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-transporte-tab" data-toggle="pill"
+                        href="#custom-tabs-three-transporte" role="tab" aria-controls="custom-tabs-three-transporte"
+                        aria-selected="false">Transporte</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-adiantamentos-tab" data-toggle="pill"
+                        href="#custom-tabs-three-adiantamentos" role="tab"
+                        aria-controls="custom-tabs-three-adiantamentos" aria-selected="false">Adiantamentos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-three-despesas-tab" data-toggle="pill"
+                        href="#custom-tabs-three-despesas" role="tab" aria-controls="custom-tabs-three-despesas"
+                        aria-selected="false">Despesas</a>
+                </li>
+                @if ($av->objetivo_id == 3)
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-three-medicoes-tab" data-toggle="pill"
+                            href="#custom-tabs-three-medicoes" role="tab" aria-controls="custom-tabs-three-medicoes"
+                            aria-selected="false">Medições</a>
                     </li>
-                    <li>
-                        <label for="my-modal-5" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >FLUXO</label>
-                    </li>
-                    <li>
-                        <label for="my-modal-13" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Relatório</label>
-                    </li>
-                    @if($av->objetivo_id == 3)
-                        <li>
-                            <label for="my-modal-14" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Medições</label>
-                        </li>
-                    @endif
-                  </ul>
-              </div>
-          </li>
-          
-          <li>
-            <button id="dropdownNavbarLink2" style="padding-bottom: 40px" data-dropdown-toggle="dropdownNavbar2" class="btn btn-sm"><ion-icon name="layers-outline" size="large"></ion-icon>Reservas <svg class="w-5 h-5 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-            <!-- Dropdown menu -->
-            <div id="dropdownNavbar2" class="z-10 hidden font-normal bg-dark divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
-                  <li>
-                      <label for="my-modal-6" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Hotel</label>
-                  </li>
-                  <li>
-                      <label for="my-modal-7" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Transporte</label>
-                  </li>
-                </ul>
-            </div>
-        </li>
-
-        <li>
-            <button id="dropdownNavbarLink3" style="padding-bottom: 40px" data-dropdown-toggle="dropdownNavbar3" class="btn btn-sm"><ion-icon name="layers-outline" size="large"></ion-icon>Financeiro <svg class="w-5 h-5 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-            <!-- Dropdown menu -->
-            <div id="dropdownNavbar3" class="z-10 hidden font-normal bg-dark divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
-                    <li>
-                        <label for="my-modal-8" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >Adiantamentos</label>
-                    </li>
-                    <li>
-                        <label for="my-modal-9" class="btn btn-sm btn-ghost block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"> Ver AV INICIAL</label>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-    <div id="av-create-container" class="container">
-    
-        
-        <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong> {{ $av->id }}</h1>
-        <h1 style="font-size: 24px"><strong>Status atual:</strong> {{ $av->status }}</h1>
-        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-        </ion-icon> <strong>Nome do usuário: </strong> 
-        @foreach($users as $u)
-                @if ($u->id == $av->user_id)
-                    {{ $u->name }}
                 @endif
-        @endforeach
-        </p>        
-        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-        </ion-icon> <strong>E-mail do usuário: </strong> 
-        @foreach($users as $u)
-                @if ($u->id == $av->user_id)
-                    {{ $u->username }}
-                @endif
-        @endforeach
-        </p>  
-        @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-            <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-            </ion-icon> <strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}
-        @endif
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="custom-tabs-three-tabContent">
+                <div class="tab-pane fade active show" id="custom-tabs-three-home" role="tabpanel"
+                    aria-labelledby="custom-tabs-three-home-tab">
 
-            <div class="divider"></div> 
-        
-            <div class="row">
-                <div class="col-md-6 offset-md-0">
-                    <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
-                    <table id="tabelaRota" class="display nowrap" style="width:100%">
+
+                    <div class="containerAcertoContas">
+
+                        <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong> {{ $av->id }}</h1>
+                        <h1 style="font-size: 24px"><strong>Status atual:</strong> {{ $av->status }}</h1>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+                        </ion-icon> <strong>Nome do usuário: </strong> 
+                        @foreach($users as $u)
+                                @if ($u->id == $av->user_id)
+                                    {{ $u->name }}
+                                @endif
+                        @endforeach
+                        </p>        
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+                        </ion-icon> <strong>E-mail do usuário: </strong> 
+                        @foreach($users as $u)
+                                @if ($u->id == $av->user_id)
+                                    {{ $u->username }}
+                                @endif
+                        @endforeach
+                        @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+                            <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+                            </ion-icon> <strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}</p>
+                        @endif
+                    </div>
+
+                    <div>
+                        <div class="containerAcertoContas">
+                            @if ($av->isPrestacaoContasRealizada == 1)
+                                <div class="box box-40">
+                                    <div class="col-md-12 offset-md-0">
+                                        <h1 style="font-size: 24px"><strong>Acerto de contas: </strong></h1>
+                                        <br>
+                                        <p><strong> <span style="color: red">A:</span> Recebido antes da viagem</strong></p>
+                                        <div class="callout callout-info">
+                    
+                                            <div class="stat">
+                                                <div class="stat-title">Valor em Reais</div>
+                                                <div class="stat-value text-primary">R$ {{ $valorRecebido->valorReais }}</div>
+                                            </div>
+                                            <div class="stat">
+                                                <div class="stat-title">Valor extra em Reais</div>
+                                                <div class="stat-value text-primary">R$
+                                                    {{ $valorRecebido->valorExtraReais != null ? $valorRecebido->valorExtraReais : 0 }}
+                                                </div>
+                                            </div>
+                                            @if ($av->valorDeducaoReais > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title">Dedução em Reais</div>
+                                                    <div class="stat-value text-primary">- R$ {{ $av->valorDeducaoReais }}</div>
+                                                </div>
+                                            @endif
+                                            @if ($av->valorDeducaoDolar > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title">Dedução em dólar</div>
+                                                    <div class="stat-value text-primary">$ {{ $av->valorDeducaoDolar }}</div>
+                                                </div>
+                                            @endif
+                                            @if ($valorRecebido->valorDolar > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title">Valor em dólar</div>
+                                                    <div class="stat-value text-primary">$ {{ $valorRecebido->valorDolar }}</div>
+                                                </div>
+                                            @endif
+                                            @if ($valorRecebido->valorExtraDolar > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title">Valor extra em dólar</div>
+                                                    <div class="stat-value text-primary">$ {{ $valorRecebido->valorExtraDolar }}</div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="callout callout-success">
+                                            <div class="stat">
+                                                <div class="stat-title">Resultado em Reais</div>
+                                                <div class="stat-value text-primary">R$
+                                                    {{ $valorRecebido->valorReais + $valorRecebido->valorExtraReais - $av->valorDeducaoReais }}
+                                                </div>
+                                            </div>
+                                            @if ($valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title">Resultado em Dólar</div>
+                                                    <div class="stat-value text-primary">R$
+                                                        {{ $valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar }}
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <br><br>
+                                        <p><strong> <span style="color: green">B:</span> Informado na prestação de contas</strong></p>
+                                        <div class="callout callout-info">
+                    
+                                            <div class="stat">
+                                                <div class="stat-title">Valor em Reais</div>
+                                                <div class="stat-value text-primary">R$ {{ $av->valorReais }}
+                                                    {{ $av->isAprovadoCarroDiretoriaExecutiva == true ? '+ R$ ' . $av->qtdKmVeiculoProprio * 0.49 : '' }}
+                                                </div>
+                                            </div>
+                                            <div class="stat">
+                                                <div class="stat-title">Valor extra em Reais</div>
+                                                <div class="stat-value text-primary">R$ {{ $valorAcertoContasReal }}</div>
+                                            </div>
+                                            @if ($av->valorDeducaoReais > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title">Dedução em Reais</div>
+                                                    <div class="stat-value text-primary">- R$ {{ $av->valorDeducaoReais }}</div>
+                                                </div>
+                                            @endif
+                                            @if ($av->valorDeducaoDolar > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title">Dedução em dólar</div>
+                                                    <div class="stat-value text-primary">$ {{ $av->valorDeducaoDolar }}</div>
+                                                </div>
+                                            @endif
+                                            @if ($av->valorDolar > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title">Valor em dólar</div>
+                                                    <div class="stat-value text-primary">$ {{ $av->valorDolar }}</div>
+                                                </div>
+                                            @endif
+                                            @if ($valorAcertoContasDolar > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title">Valor extra em dólar</div>
+                                                    <div class="stat-value text-primary">$ {{ $valorAcertoContasDolar }}</div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="callout callout-success">
+                                            <div class="stat">
+                                                <div class="stat-title">Resultado em Reais</div>
+                                                <div class="stat-value text-primary">R$
+                                                    {{ $av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais }}</div>
+                                            </div>
+                                            @if ($av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title">Resultado em Dólar</div>
+                                                    <div class="stat-value text-primary">R$
+                                                        {{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar }}</div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <br><br>
+                                        <p><strong> <span style="color: red">A</span> - <span style="color: green">B</span>: Acerto de
+                                                contas:</strong></p>
+                                        <div class="callout callout-success">
+                                            @if ($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                                <div class="stat">
+                                                    <div class="stat-title" style="color: black">Valor em Reais</div>
+                                                    <div class="stat-value text-gray-950">R$
+                                                        {{ $valorRecebido->valorReais - $av->valorReais - $av->qtdKmVeiculoProprio * 0.49 }}
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="stat">
+                                                    <div class="stat-title" style="color: black">Valor em Reais</div>
+                                                    <div class="stat-value text-gray-950">R$
+                                                        {{ $valorRecebido->valorReais - $av->valorReais }}</div>
+                                                </div>
+                                            @endif
+                    
+                                            <div class="stat">
+                                                <div class="stat-title" style="color: black">Valor extra em Reais</div>
+                                                <div class="stat-value text-gray-950">R$
+                                                    {{ $valorRecebido->valorExtraReais - $valorAcertoContasReal }}</div>
+                                            </div>
+                    
+                                            @if ($valorRecebido->valorDolar - $av->valorDolar > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title" style="color: black">Valor em dólar</div>
+                                                    <div class="stat-value text-gray-950">$
+                                                        {{ $valorRecebido->valorDolar - $av->valorDolar }}</div>
+                                                </div>
+                                            @endif
+                                            @if ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar > 0)
+                                                <div class="stat">
+                                                    <div class="stat-title" style="color: black">Valor extra em dólar</div>
+                                                    <div class="stat-value text-gray-950">$
+                                                        {{ $valorRecebido->valorExtraDolar - $valorAcertoContasDolar }}</div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="box box-40">
+                                <div>
+                                    <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
+                                    <table id="minhaTabela6" class="table table-hover table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th>Anexo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($historicoPc as $hist)
+                                                <tr>
+                                                    <td> {{ $hist->comentario }} </td>
+                                                    @if ($hist->comentario == 'AV Internacional gerada')
+                                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/internacional' . '/' . $hist->anexoRelatorio) }}"
+                                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir
+                                                                documento</a> </td>
+                                                    @else
+                                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}"
+                                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir
+                                                                documento</a> </td>
+                                                    @endif
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    @if ($av->isPrestacaoContasRealizada == 1)
+                                        <p><strong>Resultado:</strong></p>
+                                        <div class="callout callout-success">
+                    
+                                            <div class="stat">
+                                                <div class="stat-title">
+                                                    <p>
+                                                        @if ($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                                            @if (
+                                                                $valorRecebido->valorReais -
+                                                                    $av->valorReais -
+                                                                    $av->qtdKmVeiculoProprio * 0.49 +
+                                                                    ($valorRecebido->valorExtraReais - $valorAcertoContasReal) <
+                                                                    0)
+                                                                Valor que o usuário deve receber em reais
+                                                            @endif
+                                                            @if (
+                                                                $valorRecebido->valorReais -
+                                                                    $av->valorReais -
+                                                                    $av->qtdKmVeiculoProprio * 0.49 +
+                                                                    ($valorRecebido->valorExtraReais - $valorAcertoContasReal) >
+                                                                    0)
+                                                                Valor que o usuário deve pagar em reais
+                                                            @endif
+                                                        @else
+                                                            @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) < 0)
+                                                                Valor que o usuário deve receber em reais
+                                                            @endif
+                                                            @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0)
+                                                                Valor que o usuário deve pagar em reais
+                                                            @endif
+                                                        @endif
+                                                    </p>
+                                                </div>
+                    
+                                                @if ($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                                    @if (
+                                                        $valorRecebido->valorReais -
+                                                            $av->valorReais +
+                                                            ($valorRecebido->valorExtraReais - $valorAcertoContasReal) -
+                                                            $av->qtdKmVeiculoProprio * 0.49 <
+                                                            0)
+                                                        <div class="stat-value text-green-500">
+                                                            R$
+                                                            {{ ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) - $av->qtdKmVeiculoProprio * 0.49) * -1 }}
+                                                        </div>
+                                                    @endif
+                                                    @if (
+                                                        $valorRecebido->valorReais -
+                                                            $av->valorReais +
+                                                            ($valorRecebido->valorExtraReais - $valorAcertoContasReal) -
+                                                            $av->qtdKmVeiculoProprio * 0.49 >
+                                                            0)
+                                                        <div class="stat-value text-error">
+                                                            R$
+                                                            {{ ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) - $av->qtdKmVeiculoProprio * 0.49) * -1 }}
+                                                        </div>
+                                                    @endif
+                                                @else
+                                                    @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) < 0)
+                                                        <div class="stat-value text-green-500">
+                                                            R$
+                                                            {{ ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal)) * -1 }}
+                                                        </div>
+                                                    @endif
+                                                    @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0)
+                                                        <div class="stat-value text-error">
+                                                            R$
+                                                            {{ $valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) }}
+                                                        </div>
+                                                    @endif
+                                                @endif
+                    
+                                            </div>
+                                            <div class="stat">
+                                                <div class="stat-title">
+                                                    <p>
+                                                        @if ($valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar) < 0)
+                                                            Valor que o usuário deve receber em dólar
+                                                        @endif
+                                                        @if ($valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar) > 0)
+                                                            Valor que o usuário deve pagar em dólar
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                                @if ($valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar) < 0)
+                                                    <div class="stat-value text-green-500">
+                    
+                                                        $
+                                                        {{ ($valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar)) * -1 }}
+                                                    </div>
+                                                @endif
+                                                @if ($valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar) > 0)
+                                                    <div class="stat-value text-error">
+                                                        $
+                                                        {{ $valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar) }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                    
+                                        </div>
+                                    @endif
+                                </div>
+                                <br><br>
+                                @if ($av->horasExtras != null || $av->minutosExtras != null || $av->justificativaHorasExtras != null)
+                                    <div class="callout callout-danger">
+                                        <strong style="color: red">Foram realizadas horas extras:</strong> <br>
+                                        <strong>Horas:</strong> {{ $av->horasExtras }} <br>
+                                        <strong>Minutos:</strong> {{ $av->minutosExtras }} <br>
+                                        <strong>Justificativa:</strong> {{ $av->justificativaHorasExtras }} <br>
+                                    </div>
+                                @endif
+
+                                <div class="container">
+                        
+                                    <div class="row">
+
+                                        <div class="col-md-6">
+                                            <form action="/avs/gestorAprovaPrestacaoContas" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                                                    <label for="comentario">Aprovar PC e enviar para acerto de contas: </label>
+                                                    <br>
+                                                    <textarea type="text" class="textarea textarea-bordered h-24" 
+                                                        name="comentario" style="width: 200px"
+                                                        id="comentario" placeholder="Comentário"></textarea>
+                                
+                                                    <button type="submit" class="btn btn-active btn-success">Aprovar PC</button>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <form action="/avs/gestorReprovaPrestacaoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
+                                                @csrf
+                                                @method('PUT')
+                                                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                                                    <label for="comentario">Voltar PC para a prestação de contas do usuário: </label>
+                                                    <br>
+                                                    <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
+                                                        name="comentario" style="width: 200px"
+                                                        id="comentario" placeholder="Comentário"></textarea>
+                                                    <button type="submit" class="btn btn-active btn-danger">Reprovar PC</button>
+                                                    @if ($errors->has('comentario'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('comentario') }}
+                                                            </div>
+                                                    @endif
+                                            </form>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="divider"></div>
+                    
+                    </div>
+
+
+                </div>
+                <div class="tab-pane fade" id="custom-tabs-three-historico" role="tabpanel"
+                    aria-labelledby="custom-tabs-three-historico-tab">
+                    <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Histórico</h3>
+                    <table id="minhaTabela" class="table table-hover table-bordered">
+                        <!-- head -->
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Ocorrência</th>
+                                <th>Comentário</th>
+                                <th>Perfil</th>
+                                <th>Autor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- row 1 -->
+
+                            @foreach ($historicos as $historico)
+                                <tr>
+                                    <td>{{ date('d/m/Y', strtotime($historico->dataOcorrencia)) }}</td>
+                                    <td>{{ $historico->tipoOcorrencia }}</td>
+                                    <td>{{ $historico->comentario }}</td>
+                                    <td>{{ $historico->perfilDonoComentario }}</td>
+
+                                    @foreach ($users as $u)
+                                        @if ($u->id == $historico->usuario_comentario_id)
+                                            <td>{{ $u->name }}</td>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="tab-pane fade" id="custom-tabs-three-dados" role="tabpanel"
+                    aria-labelledby="custom-tabs-three-dados-tab">
+                    <br>
+                    <h1 class="text-lg font-bold">Dados básicos:</h1>
+                    <div class="stats stats-vertical shadow">
+
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+                            </ion-icon> <strong>Nome do usuário: </strong>
+                            @foreach ($users as $u)
+                                @if ($u->id == $av->user_id)
+                                    {{ $u->name }}
+                                @endif
+                            @endforeach
+                        </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
+                            </ion-icon> <strong>E-mail do usuário: </strong>
+                            @foreach ($users as $u)
+                                @if ($u->id == $av->user_id)
+                                    {{ $u->username }}
+                                @endif
+                            @endforeach
+                        </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="calendar-outline"></ion-icon>
+                            <strong>Data de criação: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }}
+                        </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="flag-outline">
+                            </ion-icon> <strong>Objetivo:</strong>
+
+                            @for ($i = 0; $i < count($objetivos); $i++)
+                                @if ($av->objetivo_id == $objetivos[$i]->id)
+                                    {{ $objetivos[$i]->nomeObjetivo }}
+                                @endif
+                            @endfor
+
+                            @if (isset($av->outroObjetivo))
+                                {{ $av->outroObjetivo }}
+                            @endif
+
+                        </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="pricetag-outline"></ion-icon>
+                            <strong>Comentário:</strong> {{ $av->comentario }}
+                        </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon
+                                name="chevron-forward-circle-outline"></ion-icon> <strong>Status:</strong>
+                            {{ $av->status }}
+                        </p>
+                    </div>
+                    <br>
+                    <h1 class="text-lg font-bold">Dados bancários:</h1>
+
+                    <div class="stats stats-vertical shadow">
+
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="business-outline"></ion-icon>
+                            <strong>Banco:</strong> {{ $av->banco }}
+                        </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="home-outline"></ion-icon>
+                            <strong>Agência:</strong> {{ $av->agencia }}
+                        </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="wallet-outline"></ion-icon>
+                            <strong>Conta:</strong> {{ $av->conta }}
+                        </p>
+                        <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon>
+                            <strong>Pix:</strong> {{ $av->pix }}
+                        </p>
+
+                    </div>
+                    <br>
+
+                    <h1 class="text-lg font-bold">Adiantamentos:</h1>
+                    <div class="stats stats-vertical shadow">
+                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
+                            {{ $av->valorReais }}</p>
+                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
+                            {{ $av->valorDolar }}</p>
+                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
+                            {{ $av->valorExtraReais }}</p>
+                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
+                            {{ $av->valorExtraDolar }}</p>
+                        <p class="av-owner" style="font-size: 20px; color: black;">
+                            <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
+                            {{ $av->valorDeducaoReais }}
+                        </p>
+                        <p class="av-owner" style="font-size: 20px; color: black;">
+                            <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
+                            {{ $av->valorDeducaoDolar }}
+                        </p>
+                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
+                                extra:</strong>
+                            {{ $av->justificativaValorExtra }}</p>
+                        @if ($av->autorizacao != null)
+                            <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}"
+                                target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
+                        @endif
+                    </div>
+
+                </div>
+                <div class="tab-pane fade" id="custom-tabs-three-fases" role="tabpanel"
+                    aria-labelledby="custom-tabs-three-fases-tab">
+
+                    <div class="col-md-12">
+
+                        <div class="timeline">
+
+                            <div class="time-label">
+                                <span class="bg-red">Fases da realização da viagem</span>
+                            </div>
+
+
+                            <div>
+                                @if ($av->isEnviadoUsuario == 1)
+                                    <i class="fas fa-caret-right bg-green"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-success btn-lg" @readonly(true)>1 - Usuário -
+                                                Preenchimento da AV</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <i class="fas fa-caret-right bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-primary btn-md" @readonly(true)>1 - Usuário -
+                                                Preenchimento da AV</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                @if ($av->isAprovadoGestor == 1)
+                                    <i class="fas fa-caret-right bg-green"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-success btn-lg" @readonly(true)>2 - Gestor - Avaliação
+                                                inicial</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <i class="fas fa-caret-right bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-primary btn-md" @readonly(true)>2 - Gestor - Avaliação
+                                                inicial</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                @if ($av->isVistoDiretoria == 1)
+                                    <i class="fas fa-caret-right bg-green"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-success btn-lg" @readonly(true)>3 - DAF - Avalia
+                                                pedido</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <i class="fas fa-caret-right bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-primary btn-md" @readonly(true)>3 - DAF - Avalia
+                                                pedido</a>
+                                            <span class="badge bg-warning float-right">Se carro particular ou viagem internacional</span>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                @if ($av->isRealizadoReserva == 1)
+                                    <i class="fas fa-caret-right bg-green"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-success btn-lg" @readonly(true)>4 - CAD - Coordenadoria
+                                                Administrativa - Realiza reservas</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <i class="fas fa-caret-right bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-primary btn-md" @readonly(true)>4 - CAD -
+                                                Coordenadoria
+                                                Administrativa - Realiza reservas</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                @if ($av->isAprovadoFinanceiro == 1)
+                                    <i class="fas fa-caret-right bg-green"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-success btn-lg" @readonly(true)>4 - CFI -
+                                                Coordenadoria
+                                                Financeira - Adiantamento</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <i class="fas fa-caret-right bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-primary btn-md" @readonly(true)>4 - CFI -
+                                                Coordenadoria Financeira - Adiantamento</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                @if ($av->isPrestacaoContasRealizada == 1)
+                                    <i class="fas fa-caret-right bg-green"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-success btn-md" @readonly(true)>5 - Viagem</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <i class="fas fa-caret-right bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-primary btn-md" @readonly(true)>5 - Viagem</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                @if ($av->isPrestacaoContasRealizada == 1)
+                                    <i class="fas fa-caret-right bg-green"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-success btn-lg" @readonly(true)>6 - Usuário - Realiza
+                                                PC</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <i class="fas fa-caret-right bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-primary btn-md" @readonly(true)>6 - Usuário - Realiza
+                                                PC</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                @if ($av->isFinanceiroAprovouPC == 1)
+                                    <i class="fas fa-caret-right bg-green"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-success btn-lg" @readonly(true)>7 - Financeiro -
+                                                Avalia PC</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <i class="fas fa-caret-right bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-primary btn-md" @readonly(true)>7 - Financeiro -
+                                                Avalia PC</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                @if ($av->isGestorAprovouPC == 1)
+                                    <i class="fas fa-caret-right bg-green"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-success btn-lg" @readonly(true)>8 - Gestor - Avalia
+                                                PC</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <i class="fas fa-caret-right bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-primary btn-md" @readonly(true)>8 - Gestor - Avalia
+                                                PC</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                @if ($av->isAcertoContasRealizado == 1)
+                                    <i class="fas fa-caret-right bg-green"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-success btn-lg" @readonly(true)>9 - Financeiro -
+                                                Acerto de Contas</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <i class="fas fa-caret-right bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <div class="timeline-header">
+                                            <a class="btn btn-primary btn-md" @readonly(true)>9 - Financeiro -
+                                                Acerto de Contas</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div>
+                                <i class="far fa-check-circle bg-green"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane fade" id="custom-tabs-three-trajeto" role="tabpanel"
+                    aria-labelledby="custom-tabs-three-trajeto-tab">
+                    <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Trajeto: </strong></h1>
+
+                    <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Tipo</th>
@@ -120,772 +814,165 @@
                                 <th>Data/Hora de chegada</th>
                                 <th>Hotel?</th>
                                 <th>Tipo de transporte</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($av->rotas as $rota)
+                                @foreach ($av->rotas as $rota)
+                                    @if ($rota->isVeiculoEmpresa == 1)
+                                        <th>Veículo</th>
+                                    @break
+                                @endif
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($av->rotas as $rota)
                             <tr>
-                                <td> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
-                                <td> 
-                                    @if($rota->isAereo == 1)
-                                        <img src="{{asset('/img/aviaosubindo.png')}}" style="width: 40px" >
+                                <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
+                                <td>
+                                    @if ($rota->isAereo == 1)
+                                        <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
                                     @endif
-                
-                                    @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                        <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+
+                                    @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                        <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
                                     @endif
-                
-                                    @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                        <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+
+                                    @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                        <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
                                     @endif
-                
-                                    {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
-                                    
+
+                                    {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
+
                                 </td>
                                 <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-                
-                                <td> 
-                                    @if($rota->isAereo == 1)
-                                        <img src="{{asset('/img/aviaodescendo.png')}}" style="width: 40px" >
-                                    @endif
-                
-                                    @if($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                        <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
-                                    @endif
-                
-                                    @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                        <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
-                                    @endif
-                
-                                    {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
-                                </td>
-                
-                                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                                <td> {{ $rota->isReservaHotel == 1 ? "Sim" : "Não"}}</td>
-                                <td> 
-                                    {{ $rota->isOnibusLeito == 1 ? "Onibus leito" : ""}}
-                                    {{ $rota->isOnibusConvencional == 1 ? "Onibus convencional" : ""}}
-                                    @if($rota->isVeiculoProprio == 1)
-                                        {{"Veículo próprio: "}} <br>
-                                        @foreach ($veiculosProprios as $v)
-    
-                                            @if($v->id == $rota->veiculoProprio_id)
-                                                {{$v->modelo . '-' . $v->placa}}
-                                            @endif
-                                            
-                                        @endforeach
-                                        
-                                        @if(count($veiculosProprios) == 0)
-                                            {{"Não encontrado"}}
-                                        @endif
-                                    @endif
-                                    {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
-                                    {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    <div>
-                        <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
-                        <table id="minhaTabela5" class="display nowrap" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Descrição</th>
-                                    <th>Valor em reais</th>
-                                    <th>Valor em dólar</th>
-                                    <th>Anexo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($comprovantes as $comp)
-                                    <tr>
-                                        <td> {{$comp->descricao}} </td>
-                                        <td> R${{$comp->valorReais}} </td>
-                                        <td> ${{$comp->valorDolar}} </td>
-                                    
-                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}" 
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                                        
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="col-md-6 offset-md-0">
-                    @if($av->isPrestacaoContasRealizada==1)
-                        <div class="box box-40">
-                            <div class="col-md-12 offset-md-0">
-                                <h1 style="font-size: 24px"><strong>Prestação de contas: </strong></h1>
-                                <br>
-                                <p><strong> <span style="color: red">A:</span> Recebido antes da viagem</strong></p>
-                                <div class="stats shadow">
-                    
-                                    <div class="stat">
-                                    <div class="stat-title">Valor em Reais</div>
-                                    <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais}}</div>
-                                    </div>
-                                    <div class="stat">
-                                        <div class="stat-title">Valor extra em Reais</div>
-                                        <div class="stat-value text-primary">R$ {{$valorRecebido->valorExtraReais != null ? $valorRecebido->valorExtraReais : 0}}</div>
-                                    </div>
-                                    @if($av->valorDeducaoReais > 0)
-                                        <div class="stat">
-                                            <div class="stat-title">Dedução em Reais</div>
-                                            <div class="stat-value text-primary">- R$ {{$av->valorDeducaoReais}}</div>
-                                        </div>
-                                    @endif
-                                    @if($av->valorDeducaoDolar > 0)
-                                    <div class="stat">
-                                        <div class="stat-title">Dedução em dólar</div>
-                                        <div class="stat-value text-primary">$ {{$av->valorDeducaoDolar}}</div>
-                                    </div>
-                                    @endif
-                                    @if($valorRecebido->valorDolar > 0)
-                                        <div class="stat">
-                                        <div class="stat-title">Valor em dólar</div>
-                                        <div class="stat-value text-primary">$ {{$valorRecebido->valorDolar}}</div>
-                                        </div>
-                                    @endif
-                                    @if($valorRecebido->valorExtraDolar > 0)
-                                        <div class="stat">
-                                            <div class="stat-title">Valor extra em dólar</div>
-                                            <div class="stat-value text-primary">$ {{$valorRecebido->valorExtraDolar}}</div>
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="stats shadow bg-yellow-500">
-                                    <div class="stat">
-                                        <div class="stat-title">Resultado em Reais</div>
-                                        <div class="stat-value text-primary">R$ {{$valorRecebido->valorReais + $valorRecebido->valorExtraReais - $av->valorDeducaoReais}}</div>
-                                    </div>
-                                    @if(($valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar) > 0)
-                                        <div class="stat">
-                                            <div class="stat-title">Resultado em Dólar</div>
-                                            <div class="stat-value text-primary">R$ {{$valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar}}</div>
-                                        </div>
-                                    @endif
-                                </div>
-                                <br><br>
-                                <p><strong> <span style="color: green">B:</span> Informado na prestação de contas</strong></p>
-                                <div class="stats shadow">
-                    
-                                    <div class="stat">
-                                        <div class="stat-title">Valor em Reais</div>
-                                        <div class="stat-value text-primary">R$ {{$av->valorReais}} {{ $av->isAprovadoCarroDiretoriaExecutiva == true ? '+ R$ ' . $av->qtdKmVeiculoProprio * 0.49 : ""}} </div>
-                                    </div>
-                                    <div class="stat">
-                                        <div class="stat-title">Valor extra em Reais</div>
-                                        <div class="stat-value text-primary">R$ {{$valorAcertoContasReal}}</div>
-                                    </div>
-                                    @if($av->valorDeducaoReais > 0)
-                                        <div class="stat">
-                                            <div class="stat-title">Dedução em Reais</div>
-                                            <div class="stat-value text-primary">- R$ {{$av->valorDeducaoReais}}</div>
-                                        </div>
-                                    @endif
-                                    @if($av->valorDeducaoDolar > 0)
-                                        <div class="stat">
-                                            <div class="stat-title">Dedução em dólar</div>
-                                            <div class="stat-value text-primary">$ {{$av->valorDeducaoDolar}}</div>
-                                        </div>
-                                    @endif
-                                    @if($av->valorDolar > 0)
-                                        <div class="stat">
-                                            <div class="stat-title">Valor em dólar</div>
-                                            <div class="stat-value text-primary">$ {{$av->valorDolar}}</div>
-                                        </div>
-                                    @endif
-                                    @if($valorAcertoContasDolar > 0)
-                                        <div class="stat">
-                                            <div class="stat-title">Valor extra em dólar</div>
-                                            <div class="stat-value text-primary">$ {{$valorAcertoContasDolar}}</div>
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="stats shadow bg-yellow-500">
-                                    <div class="stat">
-                                        <div class="stat-title">Resultado em Reais</div>
-                                        <div class="stat-value text-primary">R$ {{$av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais}}</div>
-                                    </div>
-                                    @if(($av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar) > 0)
-                                        <div class="stat">
-                                            <div class="stat-title">Resultado em Dólar</div>
-                                            <div class="stat-value text-primary">R$ {{$av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</div>
-                                        </div>
-                                    @endif
-                                </div>
-                                <br><br>
-                                <p><strong> <span style="color: red">A</span> - <span style="color: green">B</span>: Acerto de contas:</strong></p>
-                                <div class="stats shadow">
-                                    @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                                        <div class="stat">
-                                            <div class="stat-title" style="color: black">Valor em Reais</div>
-                                            <div class="stat-value text-gray-950">R$ {{($valorRecebido->valorReais-$av->valorReais) - ($av->qtdKmVeiculoProprio * 0.49)}}</div>
-                                        </div>
-                                    @else
-                                        <div class="stat">
-                                            <div class="stat-title" style="color: black">Valor em Reais</div>
-                                            <div class="stat-value text-gray-950">R$ {{$valorRecebido->valorReais-$av->valorReais}}</div>
-                                        </div>
-                                    @endif
-                                    
-                                    <div class="stat">
-                                        <div class="stat-title" style="color: black">Valor extra em Reais</div>
-                                        <div class="stat-value text-gray-950">R$ {{$valorRecebido->valorExtraReais-$valorAcertoContasReal}}</div>
-                                    </div>
-                                    
-                                    @if(($valorRecebido->valorDolar-$av->valorDolar)>0)
-                                        <div class="stat">
-                                            <div class="stat-title" style="color: black">Valor em dólar</div>
-                                            <div class="stat-value text-gray-950">$ {{$valorRecebido->valorDolar-$av->valorDolar}}</div>
-                                        </div>
-                                    @endif
-                                    @if(($valorRecebido->valorExtraDolar-$valorAcertoContasDolar)>0)
-                                        <div class="stat">
-                                            <div class="stat-title" style="color: black">Valor extra em dólar</div>
-                                            <div class="stat-value text-gray-950">$ {{$valorRecebido->valorExtraDolar-$valorAcertoContasDolar}}</div>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                    @if($av->isPrestacaoContasRealizada==1)
-                        <p><strong>Resultado:</strong></p>
-                        <div class="stats shadow">
-            
-                            <div class="stat">
-                                <div class="stat-title">
-                                    <p>
-                                        @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                                            @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )<0)
-                                                Valor que o usuário deve receber em reais
-                                            @endif
-                                            @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )>0)
-                                                Valor que o usuário deve pagar em reais
-                                            @endif
-                                        @else
-                                            @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
-                                                Valor que o usuário deve receber em reais
-                                            @endif
-                                            @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
-                                                Valor que o usuário deve pagar em reais
-                                            @endif
-                                        @endif
-                                    </p>
-                                </div>
-    
-                                @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                                    @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) <0))
-                                        <div class="stat-value text-green-500">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
-                                        </div>
-                                    @endif
-                                    @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) >0))
-                                        <div class="stat-value text-error">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
-                                        </div>
-                                    @endif
-                                @else
-                                    @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
-                                        <div class="stat-value text-green-500">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal)) * (-1)}}
-                                        </div>
-                                    @endif
-                                    @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
-                                        <div class="stat-value text-error">
-                                                R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))}}
-                                        </div>
-                                    @endif
-                                @endif
-                                
-                            </div>
-                            <div class="stat">
-                                <div class="stat-title">
-                                    <p>
-                                        @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))<0)
-                                            Valor que o usuário deve receber em dólar
-                                        @endif
-                                        @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))>0)
-                                            Valor que o usuário deve pagar em dólar
-                                        @endif
-                                    </p>
-                                </div>
-                                @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))<0)
-                                    <div class="stat-value text-green-500">
-                                            
-                                            $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar)) * (-1)}}
-                                    </div>
-                                @endif
-                                @if((($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))>0)
-                                    <div class="stat-value text-error">
-                                            $ {{(($valorRecebido->valorDolar-$av->valorDolar) + ($valorRecebido->valorExtraDolar-$valorAcertoContasDolar))}}
-                                    </div>
-                                @endif
-                            </div>
-                            
-                        </div>
-                    @endif
-                    <br><br>
-                    @if($av->horasExtras != null || $av->minutosExtras !=null || $av->justificativaHorasExtras !=null)
-                        <div style="border: 1px solid black;; color: black; width: 50%; padding-left: 10%">
-                            <strong style="color: red">Foram realizadas horas extras:</strong>  <br>
-                            <strong>Horas:</strong> {{ $av->horasExtras }} <br>
-                            <strong>Minutos:</strong> {{ $av->minutosExtras }} <br>
-                            <strong>Justificativa:</strong> {{ $av->justificativaHorasExtras }} <br>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        
 
-        <div class="divider"></div> 
-
-        <div class="flex flex-row">
-            <form action="/avs/gestorAprovaPrestacaoContas" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                    <label for="comentario">Aprovar AV e enviar para acerto de contas: </label>
-                    <br>
-                    <textarea type="text" class="textarea textarea-bordered h-24" 
-                        name="comentario" style="width: 200px"
-                        id="comentario" placeholder="Comentário"></textarea>
-
-                    <button type="submit" class="btn btn-active btn-success">Aprovar PC</button>
-            </form>
-
-            <form action="/avs/gestorReprovaPrestacaoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
-                @csrf
-                @method('PUT')
-                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                    <label for="comentario">Voltar AV para a prestação de contas do usuário: </label>
-                    <br>
-                    <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
-                        name="comentario" style="width: 200px"
-                        id="comentario" placeholder="Comentário"></textarea>
-                    <button type="submit" class="btn btn-active btn-error">Reprovar PC</button>
-                    @if ($errors->has('comentario'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('comentario') }}
-                            </div>
-                    @endif
-            </form>
-            
-        </div>
-
-    </div>
-
-    
-
-    <input type="checkbox" id="my-modal-3" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-7xl">
-            <div class="modal-content">
-                <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
-                <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Histórico</h3>
-                <h3>-</h3>
-                <table id="minhaTabela" class="display nowrap">
-                    <!-- head -->
-                    <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Data</th>
-                        <th>Ocorrência</th>
-                        <th>Comentário</th>
-                        <th>Perfil</th>
-                        <th>Autor</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- row 1 -->
-    
-                    @foreach ($historicos as $historico)
-                            <tr>
-                                <td>{{ $historico->id }}</td>
-                                <td>{{ $historico->dataOcorrencia }}</td>
-                                <td>{{ $historico->tipoOcorrencia }}</td>
-                                <td>{{ $historico->comentario }}</td>
-                                <td>{{ $historico->perfilDonoComentario }}</td>
-                                
-                                @foreach($users as $u)
-                                    @if ($u->id == $historico->usuario_comentario_id)
-                                        <td>{{ $u->name }}</td>
-                                    @endif
-                                @endforeach
-                            </tr>
-                    @endforeach
-    
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <input type="checkbox" id="my-modal-4" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-2xl">
-            <div class="modal-content">
-                <label for="my-modal-4" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
-                <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Dados</h3>
-
-                <br>
-                <h1 class="text-lg font-bold">Dados básicos:</h1>
-                <div class="stats stats-vertical shadow">
-                    
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                        </ion-icon> <strong>Nome do usuário: </strong> 
-                        @foreach($users as $u)
-                                @if ($u->id == $av->user_id)
-                                    {{ $u->name }}
-                                @endif
-                        @endforeach
-                    </p>        
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                    </ion-icon> <strong>E-mail do usuário: </strong> 
-                    @foreach($users as $u)
-                            @if ($u->id == $av->user_id)
-                                {{ $u->username }}
-                            @endif
-                    @endforeach
-                    </p>     
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="calendar-outline"></ion-icon> <strong>Data de criação: </strong> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="flag-outline">
-                        </ion-icon> <strong>Objetivo:</strong> 
-
-                        @for($i = 0; $i < count($objetivos); $i++)
-    
-                            @if ($av->objetivo_id == $objetivos[$i]->id )
-                                    {{$objetivos[$i]->nomeObjetivo}}     
-                            @endif
-        
-                        @endfor
-    
-                        @if (isset($av->outroObjetivo))
-                                {{$av->outroObjetivo }} 
-                        @endif
-
-                    </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="pricetag-outline"></ion-icon> <strong>Comentário:</strong> {{ $av->comentario }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Status:</strong>  {{ $av->status }} </p>
-                </div>
-                <br>
-                <h1 class="text-lg font-bold">Dados bancários:</h1>
-                
-                <div class="stats stats-vertical shadow">
-  
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="business-outline"></ion-icon> <strong>Banco:</strong> {{ $av->banco }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="home-outline"></ion-icon> <strong>Agência:</strong> {{ $av->agencia }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="wallet-outline"></ion-icon> <strong>Conta:</strong> {{ $av->conta }} </p>
-                    <p class="av-owner" style="font-size: 20px"><ion-icon name="cash-outline"></ion-icon> <strong>Pix:</strong> {{ $av->pix }} </p>
-                    
-                </div>
-                <br>
-
-                <h1 class="text-lg font-bold">Adiantamentos:</h1>
-                <div class="stats stats-vertical shadow">
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: chartreuse"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$ {{ $av->valorReais }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: chartreuse"><ion-icon name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: coral"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$ {{ $av->valorExtraReais }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: coral"><ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: rgb(255, 58, 98)"><ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$ {{ $av->valorDeducaoReais }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: rgb(255, 58, 98)"><ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
-                    <p class="av-owner" style="font-size: 20px; color: black; background-color: deepskyblue"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
-                    @if($av->autorizacao != null)
-                        <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}" 
-                            target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
-                    @endif
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <input type="checkbox" id="my-modal-5" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-7xl">
-            <div class="modal-content">
-                <label for="my-modal-5" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
-                <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Fases</h3>
-                <br>
-                <div style="padding-left: 10px">
-                    <div class="badge badge-warning gap-2">PC = Prestação de Contas</div>
-                    <div class="badge badge-error gap-2">Se carro particular</div>
-                </div>
-                <br>
-                <div style="padding-left: 10px">
-
-                    <ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0">
-                        <li class="flex items-center text-blue-600 dark:text-blue-500 space-x-2.5">
-                            @if($av->isEnviadoUsuario == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    1
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Usuário</h3>
-                                <p class="text-sm">Preenchimento da AV</p>
-                            </span>
-                        </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isAprovadoGestor == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    2
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Gestor:</h3>
-                                <div class="badge badge-outline">Avaliação inicial</div>
-                            </span>
-                        </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isVistoDiretoria == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    -
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">DAF:</h3>
-                                <div class="badge badge-error gap-2">Avalia pedido</div>
-                            </span>
-                        </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 border-2 border-black">
-                            @if($av->isRealizadoReserva == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    4
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Secretaria:</h3>
-                                <div class="badge badge-outline">Realiza reservas</div>
-                            </span>
-                        </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isAprovadoFinanceiro == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    5
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Financeiro:</h3>
-                                <div class="badge badge-outline">Adiantamento</div>
-                            </span>
-                        </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isReservadoVeiculoParanacidade == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    6
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Administração:</h3>
-                                <div class="badge badge-error gap-2">Reserva de veículo</div>
-                            </span>
-                        </li>
-                    </ol>
-                </div>
-                <div class="divider"></div> 
-
-                <div style="padding-left: 10px">
-    
-                    <ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0">
-                        <li class="flex items-center text-blue-600 dark:text-blue-500 space-x-2.5">
-                            <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-gray-400">
-                                7
-                            </span>
-                            <span>
-                                <h3 class="font-medium leading-tight">Viagem</h3>
-                            </span>
-                        </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isPrestacaoContasRealizada == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    8
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Usuário:</h3>
-                                <div class="badge badge-warning gap-2">Realiza PC</div>
-                            </span>
-                        </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isFinanceiroAprovouPC == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    9
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Financeiro:</h3>
-                                <div class="badge badge-warning gap-2">Avalia PC</div>
-                            </span>
-                        </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isGestorAprovouPC == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    10
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Gestor:</h3>
-                                <div class="badge badge-warning gap-2">Avalia PC</div>
-                            </span>
-                        </li>
-                        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5">
-                            @if($av->isAcertoContasRealizado == 1)
-                                <span class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            @else
-                                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-                                    11
-                                </span>
-                            @endif
-                            <span>
-                                <h3 class="font-medium leading-tight">Financeiro:</h3>
-                                <div class="badge badge-info gap-2">Acerto de Contas</div>
-                            </span>
-                        </li>
-                    </ol>
-                </div>
-                <br>
-            </div>
-        </div>
-    </div>
-
-    <input type="checkbox" id="my-modal-6" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-7xl">
-            <div class="modal-content">
-                <label for="my-modal-6" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
-                <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Reserva de hotel</h3>
-                <table id="minhaTabela1" class="display nowrap" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Descrição</th>
-                            <th>Rota</th>
-                            <th>Anexo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($anexosRotas as $anexoHotel)
-                        @if($anexoHotel->anexoHotel !=null)
-                            <tr>
-                                <td> {{$anexoHotel->descricao}} </td>
-                                
                                 <td>
-                                    @for($i = 0; $i < count($av->rotas); $i++)
+                                    @if ($rota->isAereo == 1)
+                                        <img src="{{ asset('/img/aviaodescendo.png') }}" style="width: 40px">
+                                    @endif
 
-                                        @if($anexoHotel->rota_id == $av->rotas[$i]->id)
-                                            @if($av->rotas[$i]->isViagemInternacional == 0)
-                                            - {{$av->rotas[$i]->cidadeOrigemNacional}}
-                                            -> {{$av->rotas[$i]->cidadeDestinoNacional}}
-                                            @endif
-                                            
-                                            @if($av->rotas[$i]->isViagemInternacional == 1)
-                                            - {{$av->rotas[$i]->cidadeOrigemInternacional}} 
-                                            -> {{$av->rotas[$i]->cidadeDestinoInternacional}} 
-                                            @endif
-                                        @endif
-                                    @endfor
+                                    @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                        <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                    @endif
+
+                                    @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                        <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                    @endif
+
+                                    {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
                                 </td>
-                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}" 
-                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+
+                                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
+                                <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
+                                <td>
+                                    {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
+                                    {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
+                                    @if ($rota->isVeiculoProprio == 1)
+                                        {{ 'Veículo próprio: ' }} <br>
+                                        @foreach ($veiculosProprios as $v)
+                                            @if ($v->id == $rota->veiculoProprio_id)
+                                                {{ $v->modelo . '-' . $v->placa }}
+                                            @endif
+                                        @endforeach
+
+                                        @if (count($veiculosProprios) == 0)
+                                            {{ 'Não encontrado' }}
+                                        @endif
+                                    @endif
+                                    {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
+                                    {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
+                                </td>
+                                @php
+                                    $achouVeiculo = false;
+                                @endphp
+                                @if ($rota->isVeiculoEmpresa == 1)
+                                    @foreach ($veiculosParanacidade as $v)
+                                        @if ($rota->veiculoParanacidade_id == $v->id)
+                                            @php
+                                                $achouVeiculo = true;
+                                                break;
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                    @if ($achouVeiculo == true)
+                                        <td>
+                                            {{ $v->modelo }} ({{ $v->placa }})
+                                        </td>
+                                    @else
+                                        <td>
+                                            A definir
+                                        </td>
+                                    @endif
+                                @endif
+
                             </tr>
-                        @endif
                         @endforeach
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
+            <div class="tab-pane fade" id="custom-tabs-three-relatorio" role="tabpanel"
+                aria-labelledby="custom-tabs-three-relatorio-tab">
+                <h1 style="font-size: 24px"><strong>Relatório:</strong></h1>
 
-    <input type="checkbox" id="my-modal-7" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-7xl">
-            <div class="modal-content">
-                <label for="my-modal-7" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
-                <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Reservas de transporte</h3>
-                
-                <table id="minhaTabela2" class="display nowrap" style="width:100%">
+                <div class="form-group">
+                    <label for="contatos" class="control-label">Contatos:</label><br>
+                    <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos" id="contatos"
+                        placeholder="Contatos" style="width: 100%; height: 100px" disabled>{{ $av->contatos }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="atividades" class="control-label">Atividades:</label><br>
+                    <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades" id="atividades"
+                        placeholder="Atividades" style="width: 100%; height: 100px" disabled>{{ $av->atividades }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="conclusoes" class="control-label">Conclusões:</label><br>
+                    <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes" id="conclusoes"
+                        placeholder="Conclusões" style="width: 100%; height: 100px" disabled>{{ $av->conclusoes }}</textarea>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="custom-tabs-three-hotel" role="tabpanel"
+                aria-labelledby="custom-tabs-three-hotel-tab">
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reserva de hotel
+                </h3>
+                <table id="minhaTabela1" class="table table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th>Descrição</th>
+                            <th>IdRota</th>
                             <th>Rota</th>
                             <th>Anexo</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($anexosRotas as $anexoTransporte)
-                            @if($anexoTransporte->anexoTransporte !=null)
+                        @foreach ($anexosRotas as $anexoHotel)
+                            @if ($anexoHotel->anexoHotel != null)
                                 <tr>
-                                    <td> {{$anexoTransporte->descricao}} </td>
-                                    
-                                    <td>
-                                        @for($i = 0; $i < count($av->rotas); $i++)
+                                    <td> {{ $anexoHotel->descricao }} </td>
 
-                                            @if($anexoTransporte->rota_id == $av->rotas[$i]->id)
-                                                @if($av->rotas[$i]->isViagemInternacional == 0)
-                                                - {{$av->rotas[$i]->cidadeOrigemNacional}}
-                                                -> {{$av->rotas[$i]->cidadeDestinoNacional}}
+                                    <td>
+                                        @for ($i = 0; $i < count($av->rotas); $i++)
+                                            @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
+                                                {{ $av->rotas[$i]->id }}
+                                            @endif
+                                        @endfor
+                                    </td>
+                                    <td>
+                                        @for ($i = 0; $i < count($av->rotas); $i++)
+                                            @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
+                                                @if ($av->rotas[$i]->isViagemInternacional == 0)
+                                                    - {{ $av->rotas[$i]->cidadeOrigemNacional }}
+                                                    -> {{ $av->rotas[$i]->cidadeDestinoNacional }}
                                                 @endif
-                                                
-                                                @if($av->rotas[$i]->isViagemInternacional == 1)
-                                                - {{$av->rotas[$i]->cidadeOrigemInternacional}} 
-                                                -> {{$av->rotas[$i]->cidadeDestinoInternacional}} 
+
+                                                @if ($av->rotas[$i]->isViagemInternacional == 1)
+                                                    - {{ $av->rotas[$i]->cidadeOrigemInternacional }}
+                                                    -> {{ $av->rotas[$i]->cidadeDestinoInternacional }}
                                                 @endif
                                             @endif
                                         @endfor
                                     </td>
-                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}" 
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
+                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
+                                            documento</a>
+                                    </td>
                                 </tr>
                             @endif
                         @endforeach
@@ -893,300 +980,154 @@
                 </table>
 
             </div>
-        </div>
-    </div>
+            <div class="tab-pane fade" id="custom-tabs-three-transporte" role="tabpanel"
+                aria-labelledby="custom-tabs-three-transporte-tab">
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reservas de
+                    transporte</h3>
 
-    <input type="checkbox" id="my-modal-8" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-7xl">
-            <div class="modal-content">
-                <label for="my-modal-8" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
-                <br>
-                <h3 class="text-lg font-bold" style="padding-left: 10%">Adiantamentos realizados</h3>
-
-                <table id="minhaTabela3" class="display nowrap" style="width:100%">
+                <table id="minhaTabela2" class="table table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th>Descrição</th>
+                            <th>IdRota</th>
+                            <th>Rota</th>
                             <th>Anexo</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($anexosFinanceiro as $anexoFinanceiro)
-                            <tr>
-                                <td> {{$anexoFinanceiro->descricao}} </td>
-                            
-                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}" 
-                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                                
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <input type="checkbox" id="my-modal-9" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-7xl">
-            <div class="modal-content">
-                <label for="my-modal-9" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
-                <br>
-                <h1 style="font-size: 24px"><strong>Documento AV gerado: </strong></h1>
-                <table id="minhaTabela4" class="display nowrap" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Descrição</th>
-                            <th>Anexo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($historicoPc as $hist)
-                            <tr>
-                                <td> {{$hist->comentario}} </td>
-                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}" 
-                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                                
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="dropdown dropdown-top dropdown-end">
-        <label tabindex="0" class="btn" style="position: fixed; bottom: 20px; right: 20px;"><ion-icon name="cash-outline" size="large"></ion-icon>Ajuda</label>
-        <ul tabindex="0" class="dropdown-content card card-compact w-80 p-2 shadow text-primary-content" style="position: fixed; bottom: 70px; right: 20px;">
-            <div class="chat chat-end">
-                <div class="chat-image avatar">
-                    <div class="w-10 rounded-full">
-                      <img src="{{asset('/img/user.png')}}" />
-                    </div>
-                  </div>
-                  <div class="chat-bubble chat-bubble-success">
-                    Olá {{$user->name}}!
-                  </div>
-            </div>
-            <div class="chat chat-end">
-                <div class="chat-image avatar">
-                    <div class="w-10 rounded-full">
-                      <img src="{{asset('/img/user.png')}}" />
-                    </div>
-                  </div>
-                  <div class="chat-bubble chat-bubble-success">
-                    Aqui nesta etapa você deve avaliar a Prestação de Contas do usuário!
-                  </div>
-            </div>
-            <div class="chat chat-end">
-                <div class="chat-image avatar">
-                    <div class="w-10 rounded-full">
-                      <img src="{{asset('/img/user.png')}}" />
-                    </div>
-                  </div>
-                  <div class="chat-bubble chat-bubble-success">
-                    Para isso analise se os comprovantes emitidos são válidos e se ocorreu alguma edição na AV, assim como em suas rotas.
-                  </div>
-            </div>
-            <div class="chat chat-end">
-                <div class="chat-image avatar">
-                    <div class="w-10 rounded-full">
-                      <img src="{{asset('/img/user.png')}}" />
-                    </div>
-                  </div>
-                  <div class="chat-bubble chat-bubble-success">
-                    Na opção "Ver AV inicial" no menu FINANCEIRO é possível verificar a AV em seu estado inicial.
-                  </div>
-            </div>
-    
-        </ul>
-    </div>
-
-    <input type="checkbox" id="my-modal-13" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-1xl">
-            <div class="modal-content">
-                <label for="my-modal-13" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
-                <br>
-                
-                <h1 style="font-size: 24px"><strong>Relatório:</strong></h1>
-
-                    <div class="form-group">
-                        <label for="contatos" class="control-label">Contatos:</label><br>
-                        <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos"
-                        id="contatos" placeholder="Contatos" style="width: 400px; height: 100px" disabled>{{$av->contatos}}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="atividades" class="control-label">Atividades:</label><br>
-                        <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades"
-                        id="atividades" placeholder="Atividades" style="width: 400px; height: 100px" disabled>{{$av->atividades}}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="conclusoes" class="control-label">Conclusões:</label><br>
-                        <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes"
-                        id="conclusoes" placeholder="Conclusões" style="width: 400px; height: 100px" disabled>{{$av->conclusoes}}</textarea>
-                    </div>
-
-            </div>
-        </div>
-    </div>
-
-    <input type="checkbox" id="my-modal-14" class="modal-toggle" />
-
-    <div class="modal">
-        <div class="modal-box w-11/12 max-w-7xl">
-            <div class="modal-content">
-                <label for="my-modal-14" class="btn btn-sm btn-circle absolute right-0 top-0">✕</label>
-                <br>
-                
-                <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Medições vinculadas:</strong></h1>
-                        <table id="minhaTabela8" class="display nowrap" style="width:100%">
-                            <thead>
+                        @foreach ($anexosRotas as $anexoTransporte)
+                            @if ($anexoTransporte->anexoTransporte != null)
                                 <tr>
-                                    <th>Nome do município</th>
-                                    <th>Número do projeto</th>
-                                    <th>Número do lote</th>
-                                    <th>Número da medição</th>
+                                    <td> {{ $anexoTransporte->descricao }} </td>
+
+                                    <td>
+                                        @for ($i = 0; $i < count($av->rotas); $i++)
+                                            @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
+                                                {{ $av->rotas[$i]->id }}
+                                            @endif
+                                        @endfor
+                                    </td>
+                                    <td>
+                                        @for ($i = 0; $i < count($av->rotas); $i++)
+                                            @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
+                                                @if ($av->rotas[$i]->isViagemInternacional == 0)
+                                                    - {{ $av->rotas[$i]->cidadeOrigemNacional }}
+                                                    -> {{ $av->rotas[$i]->cidadeDestinoNacional }}
+                                                @endif
+
+                                                @if ($av->rotas[$i]->isViagemInternacional == 1)
+                                                    - {{ $av->rotas[$i]->cidadeOrigemInternacional }}
+                                                    -> {{ $av->rotas[$i]->cidadeDestinoInternacional }}
+                                                @endif
+                                            @endif
+                                        @endfor
+                                    </td>
+                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
+                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
+                                            documento</a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($medicoesFiltradas as $med)
-                                    <tr>
-                                        <td> {{$med->nome_municipio}} </td>
-                                        <td> {{$med->numero_projeto}} </td>
-                                        <td> {{$med->numero_lote}} </td>
-                                        <td> {{$med->numero_medicao}} </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+            <div class="tab-pane fade" id="custom-tabs-three-adiantamentos" role="tabpanel"
+                aria-labelledby="custom-tabs-three-adiantamentos-tab">
+                <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Adiantamentos
+                    realizados
+                </h3>
+
+                <table id="minhaTabela3" class="table table-hover table-bordered" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Anexo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($anexosFinanceiro as $anexoFinanceiro)
+                            <tr>
+                                <td> {{ $anexoFinanceiro->descricao }} </td>
+
+                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
+                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
+                                        documento</a>
+                                </td>
+
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="custom-tabs-three-despesas" role="tabpanel"
+                aria-labelledby="custom-tabs-three-despesas-tab">
+                <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Comprovantes de despesa:</strong></h1>
+                <table id="minhaTabela7" class="table table-hover table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Valor reais</th>
+                            <th>Valor dólar</th>
+                            <th>Anexo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($comprovantes as $comp)
+                            <tr>
+                                <td> {{ $comp->descricao }} </td>
+                                <td> {{ $comp->valorReais }} </td>
+                                <td> {{ $comp->valorDolar }} </td>
+                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
+                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
+                                        documento</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @if ($av->objetivo_id == 3)
+                <div class="tab-pane fade" id="custom-tabs-three-medicoes" role="tabpanel"
+                    aria-labelledby="custom-tabs-three-medicoes-tab">
+                    <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Medições vinculadas:</strong></h1>
+                    <table id="minhaTabela8" class="table table-hover table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Nome do município</th>
+                                <th>Número do projeto</th>
+                                <th>Número do lote</th>
+                                <th>Número da medição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($medicoesFiltradas as $med)
+                                <tr>
+                                    <td> {{ $med->nome_municipio }} </td>
+                                    <td> {{ $med->numero_projeto }} </td>
+                                    <td> {{ $med->numero_lote }} </td>
+                                    <td> {{ $med->numero_medicao }} </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
     </div>
+
+</div>
+
+@stop
+
+@section('css')
     
-@endsection
+@stop
 
-{{-- Para implementação futura de AJAX --}} 
-@section('javascript')
-    <script type="text/javascript">
+@section('js')
+    
+<script type="text/javascript">
 
-        $(document).ready(function(){
-            $('#minhaTabela').DataTable({
-                    scrollY: 500,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Pesquisar"
-                    }
-                });
-        });
+</script>
 
-        $(document).ready(function(){
-            $('#tabelaRota').DataTable({
-                    scrollY: 200,
-                    scrollX: true,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Procure uma AV"
-                    }
-            });
-
-            $('#minhaTabela1').DataTable({
-                    scrollY: 300,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Pesquisar"
-                    }
-            });
-
-            $('#minhaTabela2').DataTable({
-                    scrollY: 300,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Pesquisar"
-                    }
-            });
-
-            $('#minhaTabela3').DataTable({
-                    scrollY: 300,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Pesquisar"
-                    }
-            });
-
-            $('#minhaTabela4').DataTable({
-                    scrollY: 200,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Pesquisar"
-                    }
-            });
-
-            $('#minhaTabela5').DataTable({
-                    scrollY: 200,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Pesquisar"
-                    }
-            });
-            $('#minhaTabela8').DataTable({
-                    scrollY: 200,
-                    "language": {
-                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Pesquisar"
-                    }
-            });
-        });
-
-        $(function(){
-            
-
-            const input = document.getElementById('arquivo1');
-            const botaoEnviar = document.getElementById('botaoEnviarArquivo1');
-
-            input.addEventListener('change', (event) => {
-                if (event.target.value !== '') {
-                botaoEnviar.removeAttribute('disabled');
-                }
-            });
-
-        })
-
-    </script>
-@endsection
+@stop
