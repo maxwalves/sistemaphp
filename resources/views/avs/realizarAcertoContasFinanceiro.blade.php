@@ -411,6 +411,7 @@
                                         <tr>
                                             <th>Descrição</th>
                                             <th>Anexo</th>
+                                            <th>Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -420,15 +421,15 @@
                                                 <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}" 
                                                     target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
                                                     @if($hist->comentario != "Adiantamento realizado - valor inicial" && $hist->comentario != "Acerto de contas")
-                                                    <td>
-                                                        <form action="/avs/deletarComprovanteAcertoContas/{{ $hist->id }}/{{ $av->id }}" method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-active btn-accent btn-sm"
-                                                            style="width: 110px" > Deletar</button>
-                                                        </form>
-                                                    </td>
-                                                @endif
+                                                        <td>
+                                                            <form action="/avs/deletarComprovanteAcertoContas/{{ $hist->id }}/{{ $av->id }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-active btn-danger btn-sm"
+                                                                style="width: 110px" > Remover</button>
+                                                            </form>
+                                                        </td>
+                                                    @endif
                                             </tr>
                                         @endforeach
                                     </tbody>
