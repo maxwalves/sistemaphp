@@ -568,14 +568,16 @@
                                     <i class="fas fa-caret-right bg-green"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>1 - Usuário - Preenchimento da AV</a>
+                                            <a class="btn btn-success btn-lg" @readonly(true)>1 - Usuário -
+                                                Preenchimento da AV</a>
                                         </div>
                                     </div>
                                 @else
                                     <i class="fas fa-caret-right bg-blue"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>1 - Usuário - Preenchimento da AV</a>
+                                            <a class="btn btn-primary btn-md" @readonly(true)>1 - Usuário -
+                                                Preenchimento da AV</a>
                                         </div>
                                     </div>
                                 @endif
@@ -585,14 +587,16 @@
                                     <i class="fas fa-caret-right bg-green"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>2 - Gestor - Avaliação inicial</a>
+                                            <a class="btn btn-success btn-lg" @readonly(true)>2 - Gestor - Avaliação
+                                                inicial</a>
                                         </div>
                                     </div>
                                 @else
                                     <i class="fas fa-caret-right bg-blue"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>2 - Gestor - Avaliação inicial</a>
+                                            <a class="btn btn-primary btn-md" @readonly(true)>2 - Gestor - Avaliação
+                                                inicial</a>
                                         </div>
                                     </div>
                                 @endif
@@ -602,7 +606,8 @@
                                     <i class="fas fa-caret-right bg-green"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>3 - DAF - Avalia pedido</a>
+                                            <a class="btn btn-success btn-lg" @readonly(true)>3 - DAF - Avalia
+                                                pedido</a>
                                             <span class="badge bg-warning float-right">Se carro particular ou viagem internacional</span>
                                         </div>
                                     </div>
@@ -610,7 +615,8 @@
                                     <i class="fas fa-caret-right bg-blue"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>3 - DAF - Avalia pedido</a>
+                                            <a class="btn btn-primary btn-md" @readonly(true)>3 - DAF - Avalia
+                                                pedido</a>
                                             <span class="badge bg-warning float-right">Se carro particular ou viagem internacional</span>
                                         </div>
                                     </div>
@@ -621,14 +627,17 @@
                                     <i class="fas fa-caret-right bg-green"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>4 - CAD - Coordenadoria Administrativa - Realiza reservas</a>
+                                            <a class="btn btn-success btn-lg" @readonly(true)>4 - CAD - Coordenadoria
+                                                Administrativa - Realiza reservas</a>
                                         </div>
                                     </div>
                                 @else
                                     <i class="fas fa-caret-right bg-blue"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>4 - CAD - Coordenadoria Administrativa - Realiza reservas</a>
+                                            <a class="btn btn-primary btn-md" @readonly(true)>4 - CAD -
+                                                Coordenadoria
+                                                Administrativa - Realiza reservas</a>
                                         </div>
                                     </div>
                                 @endif
@@ -638,14 +647,17 @@
                                     <i class="fas fa-caret-right bg-green"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>4 - CFI - Coordenadoria Financeira - Adiantamento</a>
+                                            <a class="btn btn-success btn-lg" @readonly(true)>4 - CFI -
+                                                Coordenadoria
+                                                Financeira - Adiantamento</a>
                                         </div>
                                     </div>
                                 @else
                                     <i class="fas fa-caret-right bg-blue"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>4 - CFI - Coordenadoria Financeira - Adiantamento</a>
+                                            <a class="btn btn-primary btn-md" @readonly(true)>4 - CFI -
+                                                Coordenadoria Financeira - Adiantamento</a>
                                         </div>
                                     </div>
                                 @endif
@@ -655,7 +667,7 @@
                                     <i class="fas fa-caret-right bg-green"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>5 - Viagem</a>
+                                            <a class="btn btn-success btn-md" @readonly(true)>5 - Viagem</a>
                                         </div>
                                     </div>
                                 @else
@@ -672,14 +684,16 @@
                                     <i class="fas fa-caret-right bg-green"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>6 - Usuário - Realiza PC</a>
+                                            <a class="btn btn-success btn-lg" @readonly(true)>6 - Usuário - Realiza
+                                                PC</a>
                                         </div>
                                     </div>
                                 @else
                                     <i class="fas fa-caret-right bg-blue"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>6 - Usuário - Realiza PC</a>
+                                            <a class="btn btn-primary btn-md" @readonly(true)>6 - Usuário - Realiza
+                                                PC</a>
                                         </div>
                                     </div>
                                 @endif
@@ -689,14 +703,16 @@
                                     <i class="fas fa-caret-right bg-green"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>7 - Financeiro - Avalia PC</a>
+                                            <a class="btn btn-success btn-lg" @readonly(true)>7 - Financeiro -
+                                                Avalia PC</a>
                                         </div>
                                     </div>
                                 @else
                                     <i class="fas fa-caret-right bg-blue"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>7 - Financeiro - Avalia PC</a>
+                                            <a class="btn btn-primary btn-md" @readonly(true)>7 - Financeiro -
+                                                Avalia PC</a>
                                         </div>
                                     </div>
                                 @endif
@@ -706,14 +722,16 @@
                                     <i class="fas fa-caret-right bg-green"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>8 - Gestor - Avalia PC</a>
+                                            <a class="btn btn-success btn-lg" @readonly(true)>8 - Gestor - Avalia
+                                                PC</a>
                                         </div>
                                     </div>
                                 @else
                                     <i class="fas fa-caret-right bg-blue"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>8 - Gestor - Avalia PC</a>
+                                            <a class="btn btn-primary btn-md" @readonly(true)>8 - Gestor - Avalia
+                                                PC</a>
                                         </div>
                                     </div>
                                 @endif
@@ -723,14 +741,16 @@
                                     <i class="fas fa-caret-right bg-green"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>9 - Financeiro - Acerto de Contas</a>
+                                            <a class="btn btn-success btn-lg" @readonly(true)>9 - Financeiro -
+                                                Acerto de Contas</a>
                                         </div>
                                     </div>
                                 @else
                                     <i class="fas fa-caret-right bg-blue"></i>
                                     <div class="timeline-item">
                                         <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>9 - Financeiro - Acerto de Contas</a>
+                                            <a class="btn btn-primary btn-md" @readonly(true)>9 - Financeiro -
+                                                Acerto de Contas</a>
                                         </div>
                                     </div>
                                 @endif

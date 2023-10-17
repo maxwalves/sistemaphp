@@ -556,12 +556,12 @@
                         <div class="col-md-12">
 
                             <div class="timeline">
-
+    
                                 <div class="time-label">
                                     <span class="bg-red">Fases da realização da viagem</span>
                                 </div>
-
-
+    
+    
                                 <div>
                                     @if ($av->isEnviadoUsuario == 1)
                                         <i class="fas fa-caret-right bg-green"></i>
@@ -607,6 +607,7 @@
                                             <div class="timeline-header">
                                                 <a class="btn btn-success btn-lg" @readonly(true)>3 - DAF - Avalia
                                                     pedido</a>
+                                                <span class="badge bg-warning float-right">Se carro particular ou viagem internacional</span>
                                             </div>
                                         </div>
                                     @else
@@ -615,6 +616,7 @@
                                             <div class="timeline-header">
                                                 <a class="btn btn-primary btn-md" @readonly(true)>3 - DAF - Avalia
                                                     pedido</a>
+                                                <span class="badge bg-warning float-right">Se carro particular ou viagem internacional</span>
                                             </div>
                                         </div>
                                     @endif
@@ -660,12 +662,21 @@
                                     @endif
                                 </div>
                                 <div>
-                                    <i class="fas fa-caret-right bg-blue"></i>
-                                    <div class="timeline-item">
-                                        <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>5 - Viagem</a>
+                                    @if ($av->isPrestacaoContasRealizada == 1)
+                                        <i class="fas fa-caret-right bg-green"></i>
+                                        <div class="timeline-item">
+                                            <div class="timeline-header">
+                                                <a class="btn btn-success btn-md" @readonly(true)>5 - Viagem</a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <i class="fas fa-caret-right bg-blue"></i>
+                                        <div class="timeline-item">
+                                            <div class="timeline-header">
+                                                <a class="btn btn-primary btn-md" @readonly(true)>5 - Viagem</a>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div>
                                     @if ($av->isPrestacaoContasRealizada == 1)
@@ -743,7 +754,7 @@
                                         </div>
                                     @endif
                                 </div>
-
+    
                                 <div>
                                     <i class="far fa-check-circle bg-green"></i>
                                 </div>
