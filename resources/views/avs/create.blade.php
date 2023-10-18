@@ -146,16 +146,28 @@
         <br>
 
         <div class="mb-3 col-md-6 offset-md-3">
+
             <label for="banco" class="form-label">Banco</label>
             <div class="input-group mb-3">   
-                <input type="text" class="form-control  {{ $errors->has('banco') ? 'is-invalid' :''}}" name="banco"
-                id="banco" placeholder="Banco">
+
+                <select class="form-control  {{ $errors->has('banco') ? 'is-invalid' :''}}" 
+                    style="width: 20%" id="banco" name="banco" placeholder="Banco">
+                    <option value="">Selecione</option>
+                    @for($i = 0; $i < count($bancos); $i++)
+                            <option value="{{ $bancos[$i] }}" 
+                                name="{{ $bancos[$i] }}"> {{ $bancos[$i] }} </option>
+                    @endfor
+                    
+                    <option value="outro">Outro</option>
+                </select>
+
+                <input type="text" id="outrobanco" name="outrobanco" style="width: 50%; display: none;">
                 <span class="input-group-text" id="basic-addon2">Ex: Banco do Brasil</span>
 
                 @if ($errors->has('banco'))
-                <div class="invalid-feedback">
-                    {{ $errors->first('banco') }}
-                </div>
+                    <div class="invalid-feedback">
+                        {{ $errors->first('banco') }}
+                    </div>
                 @endif
             </div>
         </div>
@@ -163,14 +175,25 @@
         <div class="mb-3 col-md-6 offset-md-3">
             <label for="agencia" class="form-label">Agência</label>
             <div class="input-group mb-3">
-                <input type="text" class="form-control  {{ $errors->has('agencia') ? 'is-invalid' :''}}" name="agencia"
-                    id="agencia" placeholder="Agência">
+
+                <select class="form-control  {{ $errors->has('agencia') ? 'is-invalid' :''}}" name="agencia"
+                    id="agencia" placeholder="Agência" style="width: 20%">
+                    <option value="">Selecione</option>
+                    @for($i = 0; $i < count($agencias); $i++)
+                            <option value="{{ $agencias[$i] }}" 
+                                name="{{ $agencias[$i] }}"> {{ $agencias[$i] }} </option>
+                    @endfor
+                    
+                    <option value="outro">Outro</option>
+                </select>
+
+                <input type="text" id="outraagencia" name="outraagencia" style="width: 50%; display: none;">
                 <span class="input-group-text" id="basic-addon2">Ex: 1234-X</span>
 
                 @if ($errors->has('agencia'))
-                <div class="invalid-feedback">
-                    {{ $errors->first('agencia') }}
-                </div>
+                    <div class="invalid-feedback">
+                        {{ $errors->first('agencia') }}
+                    </div>
                 @endif
             </div>
         </div>
@@ -178,14 +201,25 @@
         <div class="mb-3 col-md-6 offset-md-3">
             <label for="conta" class="form-label">Conta</label>
             <div class="input-group mb-3">
-                <input type="text" class="form-control  {{ $errors->has('conta') ? 'is-invalid' :''}}" name="conta"
-                id="conta" placeholder="Conta">
+
+                <select class="form-control  {{ $errors->has('conta') ? 'is-invalid' :''}}" name="conta"
+                    id="conta" placeholder="Conta" style="width: 20%">
+                    <option value="">Selecione</option>
+                    @for($i = 0; $i < count($contas); $i++)
+                            <option value="{{ $contas[$i] }}" 
+                                name="{{ $contas[$i] }}"> {{ $contas[$i] }} </option>
+                    @endfor
+                    
+                    <option value="outro">Outro</option>
+                </select>
+
+                <input type="text" id="outraconta" name="outraconta" style="width: 50%; display: none;">
                 <span class="input-group-text" id="basic-addon2">Ex: 12345-X</span>
 
                 @if ($errors->has('conta'))
-                <div class="invalid-feedback">
-                    {{ $errors->first('conta') }}
-                </div>
+                    <div class="invalid-feedback">
+                        {{ $errors->first('conta') }}
+                    </div>
                 @endif
             </div>
         </div>
@@ -193,9 +227,21 @@
         <div class="mb-3 col-md-6 offset-md-3">
             <label for="pix" class="form-label">Pix</label><br>
             <div class="input-group mb-3">
-                <input type="text" class="form-control" name="pix"
-                    id="pix" placeholder="Pix">
+
+                <select class="form-control" name="pix"
+                id="pix" placeholder="Pix" style="width: 20%">
+                    <option value="">Selecione</option>
+                    @for($i = 0; $i < count($pixs); $i++)
+                            <option value="{{ $pixs[$i] }}" 
+                                name="{{ $pixs[$i] }}"> {{ $pixs[$i] }} </option>
+                    @endfor
+                    
+                    <option value="outro">Outro</option>
+                </select>
+
+                <input type="text" id="outropix" name="outropix" style="width: 50%; display: none;">
                 <span class="input-group-text" id="basic-addon2">Chave pix</span>
+
             </div>
         </div>
 
@@ -308,5 +354,53 @@
             document.getElementById("autorizacaoComissaoTodos").hidden = true;
             document.getElementById("isMostrarTodos").hidden = true;
         })
+
+        var selectBanco = document.getElementById("banco");
+        var inputOutroBanco = document.getElementById("outrobanco");
+
+        var selectAgencia = document.getElementById("agencia");
+        var inputOutraAgencia = document.getElementById("outraagencia");
+
+        var selectConta = document.getElementById("conta");
+        var inputOutraConta = document.getElementById("outraconta");
+
+        var selectPix = document.getElementById("pix");
+        var inputOutroPix = document.getElementById("outropix");
+
+        selectBanco.addEventListener("change", function () {
+            if (selectBanco.value === "outro") {
+                inputOutroBanco.style.display = "block";
+                inputOutroBanco.value = ""; // Limpa o campo de entrada
+            } else {
+                inputOutroBanco.style.display = "none";
+            }
+        });
+
+        selectAgencia.addEventListener("change", function () {
+            if (selectAgencia.value === "outro") {
+                inputOutraAgencia.style.display = "block";
+                inputOutraAgencia.value = ""; // Limpa o campo de entrada
+            } else {
+                inputOutraAgencia.style.display = "none";
+            }
+        });
+
+        selectConta.addEventListener("change", function () {
+            if (selectConta.value === "outro") {
+                inputOutraConta.style.display = "block";
+                inputOutraConta.value = ""; // Limpa o campo de entrada
+            } else {
+                inputOutraConta.style.display = "none";
+            }
+        });
+
+        selectPix.addEventListener("change", function () {
+            if (selectPix.value === "outro") {
+                inputOutroPix.style.display = "block";
+                inputOutroPix.value = ""; // Limpa o campo de entrada
+            } else {
+                inputOutroPix.style.display = "none";
+            }
+        });
     </script>
 @stop

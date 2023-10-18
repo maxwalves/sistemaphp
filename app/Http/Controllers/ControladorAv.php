@@ -103,6 +103,25 @@ class ControladorAv extends Controller
         $filtroTodos = [];
         $medicoes = Medicao::all();
 
+        $avs = $user->avs;
+        $bancos = [];
+        $agencias = [];
+        $contas = [];
+        $pixs = [];
+        //itere avs
+        foreach($avs as $av){
+            //adicione nos arrays
+            array_push($bancos, $av->banco);
+            array_push($agencias, $av->agencia);
+            array_push($contas, $av->conta);
+            array_push($pixs, $av->pix);
+            //elimine os repetidos
+            $bancos = array_unique($bancos);
+            $agencias = array_unique($agencias);
+            $contas = array_unique($contas);
+            $pixs = array_unique($pixs);
+        }
+
         foreach ($data as $item) {
             $jaExiste = false;
             foreach ($medicoes as $medicao) {
@@ -121,7 +140,7 @@ class ControladorAv extends Controller
             }
         }
         return view('avs.create', ['objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'veiculosParanacidade' => $veiculosParanacidade, 
-        'user'=> $user, 'filtro' => $filtro, 'filtroTodos' => $filtroTodos]);
+        'user'=> $user, 'filtro' => $filtro, 'filtroTodos' => $filtroTodos, 'bancos' => $bancos, 'agencias' => $agencias, 'contas' => $contas, 'pixs' => $pixs]);
     }
 
     public function verFluxo($id){
@@ -2885,14 +2904,13 @@ class ControladorAv extends Controller
         
         $timezone = new DateTimeZone('America/Sao_Paulo');
         $av->dataCriacao = new DateTime('now', $timezone);
-        $av->banco = $request->banco;
-        $av->agencia = $request->agencia;
-        $av->conta = $request->conta;
-        $av->pix = $request->pix;
+        $av->banco = ($request->banco == "outro" ? $request->outrobanco : $request->banco);
+        $av->agencia = ($request->agencia == "outro" ? $request->outraagencia : $request->agencia);
+        $av->conta = ($request->conta == "outro" ? $request->outraconta : $request->conta);
+        $av->pix = ($request->pix == "outro" ? $request->outropix : $request->pix);
         $av->comentario = $request->comentario;
         $av->status = "Aguardando envio para o Gestor";
         $av->outroObjetivo = $request->outroObjetivo;
-
         $idArrayTodosSelecionados = null;
         $idArrayUsuarioSelecionou = null;
 
