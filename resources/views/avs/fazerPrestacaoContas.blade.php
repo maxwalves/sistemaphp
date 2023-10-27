@@ -187,8 +187,9 @@
                                 @endif
                             </div>
                         
-                            <div class="row">
-                                <div class="col-12 col-xl-8">
+                            <div class="row" style="overflow-x: auto;">
+                                <div class="col-12 col-xl-8" style="overflow-x: auto;">
+                                    
                                     @if ($av['isCancelado'] == false)
                                         <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
                                     @else
@@ -229,6 +230,120 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+
+                                    <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
+                                    <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
+                                        <thead>
+                                                <tr>
+                                                    <th>Tipo</th>
+                                                    <th>Cidade de saída</th>
+                                                    <th>Data/Hora de saída</th>
+                                                    <th>Cidade de chegada</th>
+                                                    <th>Data/Hora de chegada</th>
+                                                    <th>Hotel?</th>
+                                                    <th>Tipo de transporte</th>
+                                                    @foreach ($av->rotas as $rota)
+                                                        @if ($rota->isVeiculoEmpresa == 1)
+                                                            <th>Veículo</th>
+                                                        @break
+                                                    @endif
+                                                @endforeach
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($av->rotas as $rota)
+                                                <tr>
+                                                    <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
+                                                    <td>
+                                                        @if ($rota->isAereo == 1)
+                                                            <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
+                                                        @endif
+                
+                                                        @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                                            <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                                        @endif
+                
+                                                        @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                                            <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                                        @endif
+
+                                                        @if($rota->isOutroMeioTransporte == 1)
+                                                            <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                                        @endif
+                
+                                                        {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
+                
+                                                    </td>
+                                                    <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+                
+                                                    <td>
+                                                        @if ($rota->isAereo == 1)
+                                                            <img src="{{ asset('/img/aviaodescendo.png') }}" style="width: 40px">
+                                                        @endif
+                
+                                                        @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                                            <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                                        @endif
+                
+                                                        @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                                            <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                                        @endif
+
+                                                        @if($rota->isOutroMeioTransporte == 1)
+                                                            <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                                        @endif
+                
+                                                        {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
+                                                    </td>
+                
+                                                    <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
+                                                    <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
+                                                    <td>
+                                                        {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
+                                                        {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
+                                                        @if ($rota->isVeiculoProprio == 1)
+                                                            {{ 'Veículo próprio: ' }} <br>
+                                                            @foreach ($veiculosProprios as $v)
+                                                                @if ($v->id == $rota->veiculoProprio_id)
+                                                                    {{ $v->modelo . '-' . $v->placa }}
+                                                                @endif
+                                                            @endforeach
+                
+                                                            @if (count($veiculosProprios) == 0)
+                                                                {{ 'Não encontrado' }}
+                                                            @endif
+                                                        @endif
+                                                        {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
+                                                        {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
+                                                        {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
+                                                    </td>
+                                                    @php
+                                                        $achouVeiculo = false;
+                                                    @endphp
+                                                    @if ($rota->isVeiculoEmpresa == 1)
+                                                        @foreach ($veiculosParanacidade as $v)
+                                                            @if ($rota->veiculoParanacidade_id == $v->id)
+                                                                @php
+                                                                    $achouVeiculo = true;
+                                                                    break;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                        @if ($achouVeiculo == true)
+                                                            <td>
+                                                                {{ $v->modelo }} ({{ $v->placa }})
+                                                            </td>
+                                                        @else
+                                                            <td>
+                                                                A definir
+                                                            </td>
+                                                        @endif
+                                                    @endif
+                
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div class="col-12 col-xl-4">
                                     <form action="/avs/usuarioEnviarPrestacaoContas" method="POST" enctype="multipart/form-data">
@@ -246,7 +361,7 @@
                                                                 class="control-label {{ $errors->has('odometroIda') ? 'is-invalid' : '' }}">Odômetro
                                                                 ida:</label><br>
                                                             <input type="number" class="form-control" name="odometroIda" id="odometroIda"
-                                                                placeholder="Odômetro ida" style="width: 400px">
+                                                                placeholder="Odômetro ida" style="width: 100%">
                                                             @if ($errors->has('odometroIda'))
                                                                 <div class="invalid-feedback">
                                                                     {{ $errors->first('odometroIda') }}
@@ -258,7 +373,7 @@
                                                                 class="control-label {{ $errors->has('odometroVolta') ? 'is-invalid' : '' }}">Odômetro
                                                                 volta:</label><br>
                                                             <input type="number" class="form-control" name="odometroVolta" id="odometroVolta"
-                                                                placeholder="Odômetro volta" style="width: 400px">
+                                                                placeholder="Odômetro volta" style="width: 100%">
                                                             @if ($errors->has('odometroVolta'))
                                                                 <div class="invalid-feedback">
                                                                     {{ $errors->first('odometroVolta') }}
@@ -333,7 +448,7 @@
                                                     class="control-label {{ $errors->has('contatos') ? 'is-invalid' : '' }}">*
                                                     Contatos:</label><br>
                                                 <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos" id="contatos"
-                                                    placeholder="Contatos" style="width: 400px; height: 100px">{{ $av->contatos }}</textarea>
+                                                    placeholder="Contatos" style="width: 100%; height: 100px">{{ $av->contatos }}</textarea>
                         
                                                 @if ($errors->has('contatos'))
                                                     <div class="invalid-feedback">
@@ -346,7 +461,7 @@
                                                     class="control-label {{ $errors->has('atividades') ? 'is-invalid' : '' }}">*
                                                     Atividades:</label><br>
                                                 <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades" id="atividades"
-                                                    placeholder="Atividades" style="width: 400px; height: 100px">{{ $av->atividades }}</textarea>
+                                                    placeholder="Atividades" style="width: 100%; height: 100px">{{ $av->atividades }}</textarea>
                         
                                                 @if ($errors->has('atividades'))
                                                     <div class="invalid-feedback">
@@ -359,7 +474,7 @@
                                                     class="control-label {{ $errors->has('conclusoes') ? 'is-invalid' : '' }}">*
                                                     Conclusões:</label><br>
                                                 <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes" id="conclusoes"
-                                                    placeholder="Conclusões" style="width: 400px; height: 100px">{{ $av->conclusoes }}</textarea>
+                                                    placeholder="Conclusões" style="width: 100%; height: 100px">{{ $av->conclusoes }}</textarea>
                         
                                                 @if ($errors->has('conclusoes'))
                                                     <div class="invalid-feedback">
@@ -373,17 +488,22 @@
                                         <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
                                         <label for="comentario">Enviar AV para aprovação do Financeiro: </label>
                                         <br>
-                                        <textarea type="text" class="textarea textarea-bordered h-24" name="comentario" style="width: 200px"
+                                        
+                                        <div class="input-group mb-3">
+                                            <textarea type="text" class="textarea textarea-bordered h-24" name="comentario" style="width: 200px"
                                             id="comentario" placeholder="Comentário"></textarea>
-                        
-                                        <button type="submit" class="btn btn-active btn-success">Enviar AV</button>
+
+                                            <span class="input-group-append">
+                                                <button type="submit" class="btn btn-active btn-success">Enviar AV</button>
+                                            </span>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-three-historico" role="tabpanel"
-                        aria-labelledby="custom-tabs-three-historico-tab">
+                        aria-labelledby="custom-tabs-three-historico-tab" style="overflow-x: auto;">
                         <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Histórico</h3>
                         <table id="minhaTabela" class="table table-hover table-bordered">
                             <!-- head -->
@@ -711,7 +831,7 @@
 
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-three-trajeto" role="tabpanel"
-                        aria-labelledby="custom-tabs-three-trajeto-tab">
+                        aria-labelledby="custom-tabs-three-trajeto-tab" style="overflow-x: auto;">
                         <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Trajeto: </strong></h1>
 
                         <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
@@ -749,6 +869,10 @@
                                             <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
                                         @endif
 
+                                        @if($rota->isOutroMeioTransporte == 1)
+                                            <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                        @endif
+
                                         {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
 
                                     </td>
@@ -765,6 +889,10 @@
 
                                         @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
                                             <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                        @endif
+
+                                        @if($rota->isOutroMeioTransporte == 1)
+                                            <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
                                         @endif
 
                                         {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
@@ -789,6 +917,7 @@
                                         @endif
                                         {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
                                         {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
+                                        {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
                                     </td>
                                     @php
                                         $achouVeiculo = false;

@@ -80,7 +80,7 @@
                     <br>
                     <h4 style="color: crimson"> Origem: </h4>
                     <div class="form-group">
-                        <label for="selecaoContinenteOrigem" class="control-label">Selecione o continente origem</label>
+                        <label for="selecaoContinenteOrigem" class="control-label"><strong style="color: red">* </strong>Selecione o continente origem</label>
                         <br>
                             <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('selecaoContinenteOrigem') ? 'is-invalid' :''}}" 
                                 id="selecaoContinenteOrigem" name="selecaoContinenteOrigem" >
@@ -100,7 +100,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="selecaoPaisOrigem" class="control-label">Selecione o país origem:</label>
+                        <label for="selecaoPaisOrigem" class="control-label"><strong style="color: red">* </strong>Selecione o país origem:</label>
                         <br>
                 
                         <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('selecaoPaisOrigem') ? 'is-invalid' :''}}" 
@@ -118,7 +118,7 @@
 
                     <div class="form-group">
                         
-                        <label for="selecaoEstadoOrigem" class="control-label">Digite o nome do estado/província origem:</label>
+                        <label for="selecaoEstadoOrigem" class="control-label"><strong style="color: red">* </strong>Digite o nome do estado/província origem:</label>
                         <br>
                             <input class="input input-bordered input-primary w-full max-w-xs {{ $errors->has('selecaoEstadoOrigem') ? 'is-invalid' :''}}" type="text"
                             id="selecaoEstadoOrigem" name="selecaoEstadoOrigem">
@@ -132,7 +132,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="selecaoCidadeOrigem" class="control-label">Digite o nome da cidade de origem:</label>
+                        <label for="selecaoCidadeOrigem" class="control-label"><strong style="color: red">* </strong>Digite o nome da cidade de origem:</label>
                         <br>
 
                             <input class="input input-bordered input-primary w-full max-w-xs {{ $errors->has('selecaoCidadeOrigem') ? 'is-invalid' :''}}" type="text"
@@ -157,7 +157,7 @@
 
                     <div class="form-group"> 
                         <div id="dataHoraSaidaInternacional" class="input-append date" >
-                            <label for="dataHoraSaidaInternacional" class="control-label">Data/Hora de saída: </label>
+                            <label for="dataHoraSaidaInternacional" class="control-label"><strong style="color: red">* </strong>Data/Hora de saída: </label>
                             <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaInternacional" style="border-width: 1px; border-color: black"
                                 id="dataHoraSaidaInternacional" placeholder="Data/Hora de saída" class="{{ $errors->has('dataHoraSaidaInternacional') ? 'is-invalid' :''}}"
                                 min="{{ $minDate }}">
@@ -175,7 +175,7 @@
                     <br><br>
                     <h4 style="color: crimson"> Destino: </h4>
                     <div class="form-group">
-                        <label for="selecaoContinenteDestinoInternacional" class="control-label">Selecione o continente destino</label>
+                        <label for="selecaoContinenteDestinoInternacional" class="control-label"><strong style="color: red">* </strong>Selecione o continente destino</label>
                         <br>
                             <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('selecaoContinenteDestinoInternacional') ? 'is-invalid' :''}}" 
                                 id="selecaoContinenteDestinoInternacional" name="selecaoContinenteDestinoInternacional" >
@@ -195,7 +195,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="selecaoPaisDestinoInternacional" class="control-label">Selecione o país destino:</label>
+                        <label for="selecaoPaisDestinoInternacional" class="control-label"><strong style="color: red">* </strong>Selecione o país destino:</label>
                         <br>
                 
                         <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('selecaoPaisDestinoInternacional') ? 'is-invalid' :''}}" 
@@ -213,7 +213,7 @@
 
                     <div class="form-group">
                         
-                        <label for="selecaoEstadoDestinoInternacional" class="control-label">Digite o nome do estado/província destino:</label>
+                        <label for="selecaoEstadoDestinoInternacional" class="control-label"><strong style="color: red">* </strong>Digite o nome do estado/província destino:</label>
                         <br>
 
                             <input class="input input-bordered input-primary w-full max-w-xs {{ $errors->has('selecaoEstadoDestinoInternacional') ? 'is-invalid' :''}}" type="text"
@@ -227,7 +227,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="selecaoCidadeDestinoInternacional" class="control-label">Digite o nome da cidade destino:</label>
+                        <label for="selecaoCidadeDestinoInternacional" class="control-label"><strong style="color: red">* </strong>Digite o nome da cidade destino:</label>
                         <br>
 
                             <input class="input input-bordered input-primary w-full max-w-xs {{ $errors->has('selecaoCidadeDestinoInternacional') ? 'is-invalid' :''}}" type="text"
@@ -252,7 +252,7 @@
 
                     <div class="form-group">
                         <div id="dataHoraChegadaInternacional" class="input-append date">
-                            <label for="dataHoraChegadaInternacional" class="control-label">Data/Hora de chegada: </label>
+                            <label for="dataHoraChegadaInternacional" class="control-label"><strong style="color: red">* </strong>Data/Hora de chegada: </label>
                             <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaInternacional" style="border-width: 1px; border-color: black"
                                 id="dataHoraChegadaInternacional" placeholder="Data/Hora de chegada" class="{{ $errors->has('dataHoraChegadaInternacional') ? 'is-invalid' :''}}"
                                 min="{{ $minDate }}">
@@ -281,7 +281,7 @@
                     <br>   
                     <h4 style="color: darkolivegreen"> Origem: </h4>
                     <div class="form-group">
-                        <label for="selecaoEstadoOrigemNacional" class="control-label">Selecione o estado origem:</label>
+                        <label for="selecaoEstadoOrigemNacional" class="control-label"><strong style="color: red">* </strong>Selecione o estado origem:</label>
                         <br>
                         
                             <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoEstadoOrigemNacional') ? 'is-invalid' :''}}" 
@@ -301,7 +301,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="selecaoCidadeOrigemNacional" class="control-label">Selecione a cidade origem:</label>
+                        <label for="selecaoCidadeOrigemNacional" class="control-label"><strong style="color: red">* </strong>Selecione a cidade origem:</label>
                         <br>
                             <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoCidadeOrigemNacional') ? 'is-invalid' :''}}" 
                                 id="selecaoCidadeOrigemNacional" name="selecaoCidadeOrigemNacional" >
@@ -342,7 +342,7 @@
                     <div class="form-group">
 
                         <div id="dataHoraSaidaNacional" class="input-append date">
-                            <label for="dataHoraSaidaNacional" class="control-label">Data/Hora de saída: </label>
+                            <label for="dataHoraSaidaNacional" class="control-label"><strong style="color: red">* </strong>Data/Hora de saída: </label>
                             <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional" style="border-width: 1px; border-color: black"
                                 id="dataHoraSaidaNacional" placeholder="Data/Hora de saída" 
                                 class="classeDataHoraSaidaNacional {{ $errors->has('dataHoraSaidaNacional') ? 'is-invalid' :''}}"
@@ -368,7 +368,7 @@
                     <br><br>
                     <h4 style="color: darkolivegreen"> Destino: </h4>
                     <div class="form-group">
-                        <label for="selecaoEstadoDestinoNacional" class="control-label">Selecione o estado destino</label>
+                        <label for="selecaoEstadoDestinoNacional" class="control-label"><strong style="color: red">* </strong>Selecione o estado destino</label>
                         <br>
                             
                             <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoEstadoDestinoNacional') ? 'is-invalid' :''}}" 
@@ -385,7 +385,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="selecaoCidadeDestinoNacional" class="control-label">Selecione a cidade destino</label>
+                        <label for="selecaoCidadeDestinoNacional" class="control-label"><strong style="color: red">* </strong>Selecione a cidade destino</label>
                         <br>
                             <input type="text" id="cidadeOrigemGeral" name="cidadeOrigemGeral" value="{{ count($av->rotas) > 0 ? $rotaOriginal->cidadeOrigemNacional : "" }}" hidden="true">
 
@@ -406,7 +406,7 @@
 
                     <div class="form-group"> 
                         <div id="dataHoraChegadaNacional" class="input-append date">
-                            <label for="dataHoraChegadaNacional" class="control-label">Data/Hora de chegada: </label>
+                            <label for="dataHoraChegadaNacional" class="control-label"><strong style="color: red">* </strong>Data/Hora de chegada: </label>
                             <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaNacional" style="border-width: 1px; border-color: black"
                                 id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada" 
                                 class="classeDataHoraChegadaNacional {{ $errors->has('dataHoraChegadaNacional') ? 'is-invalid' :''}}"
@@ -444,7 +444,7 @@
                 <div>
                     <div id="camposFinais" hidden="true">
                         <div class="form-group" id="campoHotel">
-                            <label for="isReservaHotel" class="control-label">Você vai precisar de reserva de hotel no destino?</label>
+                            <label for="isReservaHotel" class="control-label"><strong style="color: red">* </strong>Você vai precisar de reserva de hotel no destino?</label>
                             <br>
                                 <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('isReservaHotel') ? 'is-invalid' :''}}" 
                                     id="isReservaHotel" name="isReservaHotel" >
@@ -461,7 +461,7 @@
             
             
                         <div class="form-group">
-                            <label for="tipoTransporte" class="control-label">Qual o tipo de transporte?</label>
+                            <label for="tipoTransporte" class="control-label"><strong style="color: red">* </strong>Qual o tipo de transporte?</label>
                             <br>
                                 <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('tipoTransporte') ? 'is-invalid' :''}}" 
                                     id="tipoTransporte" name="tipoTransporte" onChange="ativarCampo()">

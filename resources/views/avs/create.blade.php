@@ -147,7 +147,7 @@
 
         <div class="mb-3 col-md-6 offset-md-3">
 
-            <label for="banco" class="form-label">Banco</label>
+            <label for="banco" class="form-label"><strong style="color: red">* </strong>Banco</label>
             <div class="input-group mb-3">   
 
                 <select class="form-control  {{ $errors->has('banco') ? 'is-invalid' :''}}" 
@@ -173,7 +173,7 @@
         </div>
 
         <div class="mb-3 col-md-6 offset-md-3">
-            <label for="agencia" class="form-label">Agência</label>
+            <label for="agencia" class="form-label"><strong style="color: red">* </strong>Agência</label>
             <div class="input-group mb-3">
 
                 <select class="form-control  {{ $errors->has('agencia') ? 'is-invalid' :''}}" name="agencia"
@@ -199,7 +199,7 @@
         </div>
 
         <div class="mb-3 col-md-6 offset-md-3">
-            <label for="conta" class="form-label">Conta</label>
+            <label for="conta" class="form-label"><strong style="color: red">* </strong>Conta</label>
             <div class="input-group mb-3">
 
                 <select class="form-control  {{ $errors->has('conta') ? 'is-invalid' :''}}" name="conta"

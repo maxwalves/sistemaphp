@@ -3391,7 +3391,7 @@ class ControladorAv extends Controller
         $intervaloDatas = new DatePeriod(
             new DateTime($dataInicio),
             new DateInterval('P1D'),
-            (new DateTime($dataFim))->modify('+1 day') // Adicionar 1 dia ao fim para inclusão do último dia
+            ($dataInicio != $dataFim ? (new DateTime($dataFim))->modify('+1 day') : (new DateTime($dataFim))) // Adicionar 1 dia ao fim para inclusão do último dia
         );
                         
         foreach ($intervaloDatas as $data) {
@@ -3505,9 +3505,87 @@ class ControladorAv extends Controller
             ];
         }
 
+        if(empty($arrayDiasValores)){
+            $data = new DateTime($rotas[0]->dataHoraSaida);
+
+            $dia = $data->format('Y-m-d');
+            $valor = 0;
+            $acumulado = 0;
+
+            for ($i=0; $i < sizeof($rotas)-1 ; $i++) {
+                    $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraSaida)->format('Y-m-d H:i:s');
+                    $dataSaida2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraSaida)->format('Y-m-d H:i:s');
+                    $dataChegada2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraChegada)->format('Y-m-d H:i:s');
+
+                    $dataSaidaModificado1 = new DateTime($dataSaida);//Data de saída da rota 1
+                    $dataSaidaModificado2 = new DateTime($dataSaida2);//Data de saída da rota 2
+                    $dataChegadaModificado2 = new DateTime($dataChegada2);//Data de saída da rota 2
+
+                    $horaSaidaRota1 = $dataSaidaModificado1->format('H');
+                    $minutoSaidaRota1 = $dataSaidaModificado1->format('i');
+
+                    $horaSaidaRota2 = $dataSaidaModificado2->format('H');
+                    $minutoSaidaRota2 = $dataSaidaModificado2->format('i');
+
+                    $horaChegadaRota2 = $dataChegadaModificado2->format('H');
+                    $minutoChegadaRota2 = $dataChegadaModificado2->format('i');
+
+                    $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraSaida)->format('Y-m-d');
+                    $dataSaida2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraSaida)->format('Y-m-d');
+                    $dataChegada2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraChegada)->format('Y-m-d');
+
+                    if ($dia >= $dataSaida && $dia <= $dataSaida2) {
+                        
+                        if($rotas[$i]->continenteDestinoInternacional == 1 && $rotas[$i]->paisDestinoInternacional !=30){//América Latina ou Amética Central
+                            $valor = 100;
+                        }
+                        else if($rotas[$i]->continenteDestinoInternacional == 2){//América do Norte
+                            $valor = 150;
+                        }
+                        else if($rotas[$i]->continenteDestinoInternacional == 3){//Europa
+                            $valor = 180;
+                        }
+                        else if($rotas[$i]->continenteDestinoInternacional == 4){//África
+                            $valor = 140;
+                        }
+                        else if($rotas[$i]->continenteDestinoInternacional == 5){//Ásia
+                            $valor = 190;
+                        }else if(($rotas[$i]->cidadeDestinoNacional == "Curitiba" || $rotas[$i]->cidadeDestinoNacional == "Foz do Iguaçu") ||
+                        ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->estadoDestinoInternacional == "Paraná" && 
+                        ($rotas[$i]->cidadeDestinoInternacional == "Curitiba" || $rotas[$i]->cidadeDestinoInternacional == "Foz do Iguaçu"))){//Se for Curitiba ou Foz do Iguaçu
+                            $valor = 65;
+                        }
+                        else if($rotas[$i]->estadoDestinoNacional == "Paraná" || ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->estadoDestinoInternacional == "Paraná")){//Se for outra cidade do Paraná
+                            $valor = 55;
+                        }
+                        else if($rotas[$i]->cidadeDestinoNacional == "Brasília" || ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->cidadeDestinoInternacional == "Brasília")){//Se for Brasília
+                            $valor = 100;
+                        }
+                        else{//Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
+                            $valor = 80;
+                        }
+                        if($dia == $dataSaida){
+                            if($horaSaidaRota1 >= 13 && $horaSaidaRota1 < 19){
+                                $metade = ($valor/2);
+                                if($acumulado == 0){
+                                    $acumulado = $metade;
+                                }
+                                else{
+                                    $acumulado += $metade;
+                                }
+                            }
+                        }
+                    }
+            }
+            $diaFormatado = DateTime::createFromFormat('Y-m-d', $dia);
+            $arrayDiasValores[] = [
+                'dia' => $diaFormatado->format('d'),
+                'valor' => $acumulado != 0 ? $acumulado : $valor,
+            ];
+        }
         //$teste += ['Data saída: ' => $valorReais];
         //$teste += ['Data chegada: ' => $anoChegada. "/" .$mesChegada. "/" .$diaChegada. "/" .$horaChegada. "/" .$minutoChegada. "/" .$segundoChegada];
-            
+        //dd($arrayDiasValores);
 
         $av->valorReais = $valorReais;
         $av->valorDolar = $valorDolar;

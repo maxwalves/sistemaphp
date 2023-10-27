@@ -121,6 +121,7 @@
                                 {{ $rota->isVeiculoProprio == 1 ? "Veículo próprio" : ""}}
                                 {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                                 {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
+                                {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
                             </td>
                         </tr>
                         @endforeach

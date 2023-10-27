@@ -17,7 +17,7 @@
         </div>
         @if($usersFiltrados != null)
             <div class="col-12 col-md-5">
-                <p>Ver pendências de AVs como se fosse o usuário: </p>
+                <p>Ver pendências de AVs dos gestores subordinados: </p>
                 <select name="users" id="usuarioSelecionado" class="select select-bordered w-full max-w-xs" >
                     <option value="Selecione">Selecione</option>
                     @foreach ($usersFiltrados as $u)

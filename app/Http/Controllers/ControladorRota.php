@@ -230,6 +230,8 @@ class ControladorRota extends Controller
             $rota->isVeiculoEmpresa = 1;
         } else if($request->get('tipoTransporte')==4){
             $rota->isAereo = 1;
+        } else if($request->get('tipoTransporte')==5){
+            $rota->isOutroMeioTransporte = 1;
         }
         
         $mensagens = [
@@ -244,9 +246,8 @@ class ControladorRota extends Controller
         //Não será informado o número de veículo do Paranacidade pq quem cadastra é a Secretaria
     
         $rota->save();
-
         if($request->get('isViagemInternacional')=="0"){
-            if($request->get('dataHoraSaidaVoltaNacional')!=null){
+            if($request->get('flexSwitchCheckDefault')=="on"){
                 $rota2 = new Rota();
                 $rota2->isViagemInternacional = false;
 
@@ -286,6 +287,8 @@ class ControladorRota extends Controller
                     $rota2->isVeiculoEmpresa = 1;
                 } else if($request->get('tipoTransporte')==4){
                     $rota2->isAereo = 1;
+                } else if($request->get('tipoTransporte')==5){
+                    $rota2->isOutroMeioTransporte = 1;
                 }
 
                 $rota2->av_id = $request->idav;
@@ -418,7 +421,8 @@ class ControladorRota extends Controller
             "isVeiculoEmpresa" => "",
             "isAereo" => "",
             "av_id" => $request->idav,
-            "veiculoProprio_id" => $request->veiculoProprio_id
+            "veiculoProprio_id" => $request->veiculoProprio_id,
+            "isOutroMeioTransporte" => ""
         );
 
         $regras = [
@@ -495,30 +499,42 @@ class ControladorRota extends Controller
             $dados["isVeiculoProprio"] = 0;
             $dados["isVeiculoEmpresa"] = 0;
             $dados["isAereo"] = 0;
+            $dados["isOutroMeioTransporte"] = 0;
         } else if($request->get('tipoTransporte')==1){
             $dados["isOnibusLeito"] = 0;
             $dados["isOnibusConvencional"] = 1;
             $dados["isVeiculoProprio"] = 0;
             $dados["isVeiculoEmpresa"] = 0;
             $dados["isAereo"] = 0;
+            $dados["isOutroMeioTransporte"] = 0;
         } else if($request->get('tipoTransporte')==2){
             $dados["isOnibusLeito"] = 0;
             $dados["isOnibusConvencional"] = 0;
             $dados["isVeiculoProprio"] = 1;
             $dados["isVeiculoEmpresa"] = 0;
             $dados["isAereo"] = 0;
+            $dados["isOutroMeioTransporte"] = 0;
         } else if($request->get('tipoTransporte')==3){
             $dados["isOnibusLeito"] = 0;
             $dados["isOnibusConvencional"] = 0;
             $dados["isVeiculoProprio"] = 0;
             $dados["isVeiculoEmpresa"] = 1;
             $dados["isAereo"] = 0;
+            $dados["isOutroMeioTransporte"] = 0;
         } else if($request->get('tipoTransporte')==4){
             $dados["isOnibusLeito"] = 0;
             $dados["isOnibusConvencional"] = 0;
             $dados["isVeiculoProprio"] = 0;
             $dados["isVeiculoEmpresa"] = 0;
             $dados["isAereo"] = 1;
+            $dados["isOutroMeioTransporte"] = 0;
+        } else if($request->get('tipoTransporte')==5){
+            $dados["isOnibusLeito"] = 0;
+            $dados["isOnibusConvencional"] = 0;
+            $dados["isVeiculoProprio"] = 0;
+            $dados["isVeiculoEmpresa"] = 0;
+            $dados["isAereo"] = 0;
+            $dados["isOutroMeioTransporte"] = 1;
         }
 
         $mensagens = [

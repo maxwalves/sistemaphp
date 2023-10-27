@@ -129,24 +129,24 @@
                                                     <div class="stat-value text-primary">- R$ {{ $av->valorDeducaoReais }}</div>
                                                 </div>
                                             @endif
-                                            @if ($av->valorDeducaoDolar > 0)
+                                            {{-- @if ($av->valorDeducaoDolar > 0)
                                                 <div class="stat">
                                                     <div class="stat-title">Dedução em dólar</div>
                                                     <div class="stat-value text-primary">$ {{ $av->valorDeducaoDolar }}</div>
                                                 </div>
-                                            @endif
-                                            @if ($valorRecebido->valorDolar > 0)
+                                            @endif --}}
+                                            {{-- @if ($valorRecebido->valorDolar > 0)
                                                 <div class="stat">
                                                     <div class="stat-title">Valor em dólar</div>
                                                     <div class="stat-value text-primary">$ {{ $valorRecebido->valorDolar }}</div>
                                                 </div>
-                                            @endif
-                                            @if ($valorRecebido->valorExtraDolar > 0)
+                                            @endif --}}
+                                            {{-- @if ($valorRecebido->valorExtraDolar > 0)
                                                 <div class="stat">
                                                     <div class="stat-title">Valor extra em dólar</div>
                                                     <div class="stat-value text-primary">$ {{ $valorRecebido->valorExtraDolar }}</div>
                                                 </div>
-                                            @endif
+                                            @endif --}}
                                         </div>
                                         <div class="callout callout-success">
                                             <div class="stat">
@@ -263,7 +263,7 @@
                             <div class="box box-40">
                                 <div>
                                     <div class="box box-40">
-                                        <div >
+                                        <div style="overflow-x: auto;">
                                             <h5 style="color: red">Insira o comprovante de pagamento do acerto de contas caso necessário:</h5><br>
                                             <div class="col-3">
                                                 <x-adminlte-button label="Adicionar" data-toggle="modal" data-target="#modalAddArquivo" class="bg-teal"/>
@@ -431,24 +431,36 @@
                                                     <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
                                                     <label for="comentario">Finalizar ciclo de vida da PC: </label>
                                                     <br>
-                                                    <textarea type="text" class="textarea textarea-bordered h-24" 
+                                                    
+                                                    <div class="input-group mb-3">
+                                                        <textarea type="text" class="textarea textarea-bordered h-24" 
                                                         name="comentario" style="width: 200px"
                                                         id="comentario" placeholder="Comentário"></textarea>
-                                
-                                                    <button type="submit" class="btn btn-active btn-success">Finalizar</button>
+            
+                                                        <span class="input-group-append">
+                                                            <button type="submit" class="btn btn-active btn-success">Finalizar</button>
+                                                        </span>
+                                                    </div>
                                             </form>
                                         </div>
                                         <div class="col-md-6">
-                                            <form action="/avs/usuarioReprovarAcertoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
+                                            <form action="/avs/usuarioReprovarAcertoContas" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
                                                     <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
                                                     <label for="comentario">Voltar PC para o Financeiro: </label>
                                                     <br>
-                                                    <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
-                                                        name="comentario" style="width: 200px"
-                                                        id="comentario" placeholder="Comentário"></textarea>
-                                                    <button type="submit" class="btn btn-active btn-danger">Reprovar</button>
+                                                    
+                                                    <div class="input-group mb-3">
+                                                        <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
+                                                            name="comentario" style="width: 200px"
+                                                            id="comentario" placeholder="Comentário"></textarea>
+            
+                                                        <span class="input-group-append">
+                                                            <button type="submit" class="btn btn-active btn-danger">Reprovar</button>
+                                                        </span>
+                                                    </div>
+
                                                     @if ($errors->has('comentario'))
                                                             <div class="invalid-feedback">
                                                                 {{ $errors->first('comentario') }}
@@ -469,7 +481,7 @@
 
                 </div>
                 <div class="tab-pane fade" id="custom-tabs-three-historico" role="tabpanel"
-                    aria-labelledby="custom-tabs-three-historico-tab">
+                    aria-labelledby="custom-tabs-three-historico-tab" style="overflow-x: auto;">
                     <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Histórico</h3>
                     <table id="minhaTabela" class="table table-hover table-bordered">
                         <!-- head -->
@@ -577,23 +589,23 @@
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
                             {{ $av->valorReais }}</p>
-                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
-                            {{ $av->valorDolar }}</p>
+                        {{-- <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                name="cash-outline"></ion-icon> <strong>Valor em dólar:</strong> $
+                            {{ $av->valorDolar }}</p> --}}
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
                             {{ $av->valorExtraReais }}</p>
-                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                        {{-- <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
-                            {{ $av->valorExtraDolar }}</p>
+                            {{ $av->valorExtraDolar }}</p> --}}
                         <p class="av-owner" style="font-size: 20px; color: black;">
                             <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
                             {{ $av->valorDeducaoReais }}
                         </p>
-                        <p class="av-owner" style="font-size: 20px; color: black;">
+                        {{-- <p class="av-owner" style="font-size: 20px; color: black;">
                             <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
                             {{ $av->valorDeducaoDolar }}
-                        </p>
+                        </p> --}}
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                 extra:</strong>
@@ -818,7 +830,7 @@
 
                 </div>
                 <div class="tab-pane fade" id="custom-tabs-three-trajeto" role="tabpanel"
-                    aria-labelledby="custom-tabs-three-trajeto-tab">
+                    aria-labelledby="custom-tabs-three-trajeto-tab" style="overflow-x: auto;">
                     <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Trajeto: </strong></h1>
 
                     <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
@@ -856,6 +868,10 @@
                                         <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
                                     @endif
 
+                                    @if($rota->isOutroMeioTransporte == 1)
+                                        <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                    @endif
+
                                     {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
 
                                 </td>
@@ -872,6 +888,10 @@
 
                                     @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
                                         <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                    @endif
+
+                                    @if($rota->isOutroMeioTransporte == 1)
+                                        <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
                                     @endif
 
                                     {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
@@ -896,6 +916,7 @@
                                     @endif
                                     {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
                                     {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
+                                    {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
                                 </td>
                                 @php
                                     $achouVeiculo = false;

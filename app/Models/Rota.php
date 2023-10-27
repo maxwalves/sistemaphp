@@ -39,7 +39,8 @@ class Rota extends Model
         'isAereo',
         'av_id',
         'veiculoProprio_id',
-        'veiculoParanacidade_id'
+        'veiculoParanacidade_id',
+        'isOutroMeioTransporte'
     ];
 
     protected $dates = ['dataHoraSaida', 'dataHoraChegada'];

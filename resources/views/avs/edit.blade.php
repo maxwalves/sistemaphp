@@ -147,7 +147,7 @@
         <br>
 
         <div class="mb-3 col-md-6 offset-md-3">
-            <label for="banco" class="form-label">Banco</label>
+            <label for="banco" class="form-label"><strong style="color: red">* </strong>Banco</label>
             <div class="input-group mb-3">   
                 <input type="text" class="form-control" name="banco"
                 id="banco" placeholder="Banco" value="{{$av->banco}}">
@@ -156,7 +156,7 @@
         </div>
 
         <div class="mb-3 col-md-6 offset-md-3">
-            <label for="agencia" class="form-label">Agência</label>
+            <label for="agencia" class="form-label"><strong style="color: red">* </strong>Agência</label>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="agencia"
                     id="agencia" placeholder="Agência" value="{{$av->agencia}}">
@@ -165,7 +165,7 @@
         </div>
 
         <div class="mb-3 col-md-6 offset-md-3">
-            <label for="conta" class="form-label">Conta</label>
+            <label for="conta" class="form-label"><strong style="color: red">* </strong>Conta</label>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="conta"
                 id="conta" placeholder="Conta" value="{{$av->conta}}">

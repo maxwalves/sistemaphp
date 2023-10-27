@@ -368,16 +368,18 @@
                                         </td>
                                     </tr>
                                 @endif
-                                @if(($i ==  $diaChegadaFinal && $horaChegadaFinal >19) || ($i ==  $diaChegadaFinal && $horaChegadaFinal ==19 && $minutoChegadaFinal >= 1))
-                                    <tr>
-                                        <td>
-                                            {{$i}}
-                                        </td>
-                                        <td> 
-                                            <span class="badge bg-danger">Diária Inteira</span>
-                                            <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span>
-                                        </td>
-                                    </tr> 
+                                @if($diaSaidaInicial != $diaChegadaFinal)
+                                    @if(($i ==  $diaChegadaFinal && $horaChegadaFinal >19) || ($i ==  $diaChegadaFinal && $horaChegadaFinal ==19 && $minutoChegadaFinal >= 1))
+                                        <tr>
+                                            <td>
+                                                {{$i}}
+                                            </td>
+                                            <td> 
+                                                <span class="badge bg-danger">Diária Inteira</span>
+                                                <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span>
+                                            </td>
+                                        </tr> 
+                                    @endif
                                 @endif
                             
                             

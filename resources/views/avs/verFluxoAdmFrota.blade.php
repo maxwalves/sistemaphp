@@ -75,6 +75,10 @@
                             @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
                                 <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
                             @endif
+
+                            @if($rota->isOutroMeioTransporte == 1)
+                                <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                            @endif
         
                             {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
                             
@@ -92,6 +96,10 @@
         
                             @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
                                 <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                            @endif
+
+                            @if($rota->isOutroMeioTransporte == 1)
+                                <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
                             @endif
         
                             {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
@@ -118,6 +126,7 @@
                             @endif
                             {{ $rota->isVeiculoEmpresa == 1 ? "Veículo empresa" : ""}}
                             {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
+                            {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
                         </td>
                         <td>
                             @foreach($veiculosParanacidade as $v)

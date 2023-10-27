@@ -76,15 +76,11 @@
                                 </ion-icon> <strong>Valor do adiantamento em reais: </strong>
                                 R$ {{ $av->valorReais + $av->valorExtraReais }}
                             </p>
-                            <p class="av-owner" style="font-size: 20px; color: green"><ion-icon name="chevron-forward-circle-outline">
-                                </ion-icon> <strong>Valor do adiantamento em dólar: </strong>
-                                R$ {{ $av->valorDolar + $av->valorExtraDolar }}
-                            </p>
 
                             <div class="col-3">
                                 <x-adminlte-button label="Adicionar Comprovante de adiantamento" data-toggle="modal" data-target="#modalCustom" class="bg-teal"/>
                             </div>
-                            <div class="col-md-6 offset-md-0">
+                            <div class="col-md-6 offset-md-0" style="overflow-x: auto;">
                                 <h1 style="font-size: 24px"><strong>Comprovante de adiantamentos: </strong></h1>
                                 <table id="minhaTabela2" class="table table-hover table-bordered" style="width:100%">
                                     <thead>
@@ -108,7 +104,7 @@
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-active btn-danger btn-sm" style="width: 110px">
-                                                            Deletar</button>
+                                                            Remover</button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -117,7 +113,7 @@
                                 </table>
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="overflow-x: auto;">
 
                                 <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
                                 <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
@@ -154,6 +150,10 @@
                                                 @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
                                                     <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
                                                 @endif
+
+                                                @if($rota->isOutroMeioTransporte == 1)
+                                                    <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                                @endif
                     
                                                 {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
                     
@@ -171,6 +171,10 @@
                     
                                                 @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
                                                     <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                                @endif
+
+                                                @if($rota->isOutroMeioTransporte == 1)
+                                                    <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
                                                 @endif
                     
                                                 {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
@@ -195,6 +199,7 @@
                                                 @endif
                                                 {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
                                                 {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
+                                                {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
                                             </td>
                                             @php
                                                 $achouVeiculo = false;
@@ -223,256 +228,272 @@
                                 </tbody>
                             </table>
                             </div>
-                            <div class="container">
-                                <div class="stat-title">Controle de diárias:
-                                </div>
-                                Mês saída: {{ $mesSaidaInicial }}
-                                Mês chegada: {{ $mesChegadaFinal }} <br>
-                                <table class="table table-hover table-bordered" style="width: 25%">
-                                    <thead>
-                                        <tr>
-                                            <th>Dias</th>
-                                            <th>Dados</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        @if ($mesSaidaInicial != $mesChegadaFinal)
-
-                                            @php
-                                                $data = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
-                                                $ultimoDiaMes = date('t', strtotime($data));
-                                                $j = 0;
-                                            @endphp
-                                            @for ($i = $arrayDiasValores[0]['dia']; $i <= $ultimoDiaMes; $i++)
-                                                @if ($i == $diaSaidaInicial && $horaSaidaInicial < 12)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-danger">Diária Inteira</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                                @if ($i == $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-warning">Meia Diária</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                                @if ($i != $diaSaidaInicial && $i != $diaChegadaFinal)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-danger">Diária Inteira</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-
-                                                @php
-                                                    $j++;
-                                                @endphp
-                                            @endfor
-                                            @for ($i = 1; $i <= $diaChegadaFinal; $i++)
-                                                @if ($i == $diaSaidaInicial && $horaSaidaInicial < 12)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-danger">Diária Inteira</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                                @if ($i == $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-warning">Meia Diária</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                                @if ($i != $diaSaidaInicial && $i != $diaChegadaFinal)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-danger">Diária Inteira</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-
-                                                @if ($i == $diaChegadaFinal && $horaChegadaFinal >= 13 && $horaChegadaFinal < 19)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-warning">Meia Diária</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                                @if ($i == $diaChegadaFinal && $horaChegadaFinal >= 19)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-danger">Diária Inteira</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-
-                                                @php
-                                                    $j++;
-                                                @endphp
-                                            @endfor
-                                        @else
-                                            @php
-                                                $j = 0;
-                                            @endphp
-                                            @for ($i = $arrayDiasValores[0]['dia']; $i <= $diaChegadaFinal; $i++)
-                                                @if ($i == $diaSaidaInicial && $horaSaidaInicial < 12)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-danger">Diária Inteira</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                                @if (
-                                                    ($i == $diaSaidaInicial && $horaSaidaInicial > 13) ||
-                                                        ($i == $diaSaidaInicial && $horaSaidaInicial == 13 && $minutoSaidaInicial >= 1))
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-warning">Meia Diária</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                                @if ($i != $diaSaidaInicial && $i != $diaChegadaFinal)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-danger">Diária Inteira</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-
-                                                @if (
-                                                    ($i == $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <= 19 && $minutoChegadaFinal == 0) ||
-                                                        ($i == $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal < 19) ||
-                                                        ($i == $diaChegadaFinal && $horaChegadaFinal == 13 && $minutoChegadaFinal >= 1 && $horaChegadaFinal < 19))
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-warning">Meia Diária</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                                @if (
-                                                    ($i == $diaChegadaFinal && $horaChegadaFinal > 19) ||
-                                                        ($i == $diaChegadaFinal && $horaChegadaFinal == 19 && $minutoChegadaFinal >= 1))
-                                                    <tr>
-                                                        <td>
-                                                            {{ $i }}
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-danger">Diária Inteira</span>
-                                                            <span
-                                                                class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-
-
-                                                @php
-                                                    $j++;
-                                                @endphp
-                                            @endfor
-                                        @endif
-                                    </tbody>
-                                </table>
-                                <br><br>
-                            </div>
-
-                            <div class="divider"></div>
-
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <form action="/avs/financeiroAprovarAv" method="POST" enctype="multipart/form-data">
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                                            <label for="comentario">Comentário no envio: </label>
-                                            <br>
-                                            <textarea type="text" class="textarea textarea-bordered h-24" name="comentario" style="width: 200px"
-                                                id="comentario" placeholder="Comentário"></textarea>
-                        
-                                            <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
-                                        </form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="stat-title">Controle de diárias:
                                     </div>
-                                    <div class="col-md-6">
-                                        <form action="/avs/financeiroReprovarAv" method="POST" enctype="multipart/form-data"
-                                            style="padding-left: 10px">
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                                            <label for="comentario">Voltar AV para o usuário: </label>
-                                            <br>
-                                            <textarea type="text"
-                                                class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' : '' }}" name="comentario"
-                                                style="width: 200px" id="comentario" placeholder="Comentário"></textarea>
-                                            <button type="submit" class="btn btn-active btn-danger">Reprovar AV</button>
-                                            @if ($errors->has('comentario'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('comentario') }}
-                                                </div>
+                                    Mês saída: {{ $mesSaidaInicial }}
+                                    Mês chegada: {{ $mesChegadaFinal }} <br>
+                                    <table class="table table-hover table-bordered" style="width: 60%">
+                                        <thead>
+                                            <tr>
+                                                <th>Dias</th>
+                                                <th>Dados</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+    
+                                            @if ($mesSaidaInicial != $mesChegadaFinal)
+    
+                                                @php
+                                                    $data = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
+                                                    $ultimoDiaMes = date('t', strtotime($data));
+                                                    $j = 0;
+                                                @endphp
+                                                @for ($i = $arrayDiasValores[0]['dia']; $i <= $ultimoDiaMes; $i++)
+                                                    @if ($i == $diaSaidaInicial && $horaSaidaInicial < 12)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-danger">Diária Inteira</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    @if ($i == $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-warning">Meia Diária</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    @if ($i != $diaSaidaInicial && $i != $diaChegadaFinal)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-danger">Diária Inteira</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+    
+                                                    @php
+                                                        $j++;
+                                                    @endphp
+                                                @endfor
+                                                @for ($i = 1; $i <= $diaChegadaFinal; $i++)
+                                                    @if ($i == $diaSaidaInicial && $horaSaidaInicial < 12)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-danger">Diária Inteira</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    @if ($i == $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-warning">Meia Diária</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    @if ($i != $diaSaidaInicial && $i != $diaChegadaFinal)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-danger">Diária Inteira</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+    
+                                                    @if ($i == $diaChegadaFinal && $horaChegadaFinal >= 13 && $horaChegadaFinal < 19)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-warning">Meia Diária</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    @if ($i == $diaChegadaFinal && $horaChegadaFinal >= 19)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-danger">Diária Inteira</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+    
+                                                    @php
+                                                        $j++;
+                                                    @endphp
+                                                @endfor
+                                            @else
+                                                @php
+                                                    $j = 0;
+                                                @endphp
+                                                @for ($i = $arrayDiasValores[0]['dia']; $i <= $diaChegadaFinal; $i++)
+                                                    @if ($i == $diaSaidaInicial && $horaSaidaInicial < 12)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-danger">Diária Inteira</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    @if (
+                                                        ($i == $diaSaidaInicial && $horaSaidaInicial > 13) ||
+                                                            ($i == $diaSaidaInicial && $horaSaidaInicial == 13 && $minutoSaidaInicial >= 1))
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-warning">Meia Diária</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    @if ($i != $diaSaidaInicial && $i != $diaChegadaFinal)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-danger">Diária Inteira</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+    
+                                                    @if (
+                                                        ($i == $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <= 19 && $minutoChegadaFinal == 0) ||
+                                                            ($i == $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal < 19) ||
+                                                            ($i == $diaChegadaFinal && $horaChegadaFinal == 13 && $minutoChegadaFinal >= 1 && $horaChegadaFinal < 19))
+                                                        <tr>
+                                                            <td>
+                                                                {{ $i }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-warning">Meia Diária</span>
+                                                                <span
+                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    @if ($diaSaidaInicial != $diaChegadaFinal)
+                                                        @if (
+                                                            ($i == $diaChegadaFinal && $horaChegadaFinal > 19) ||
+                                                                ($i == $diaChegadaFinal && $horaChegadaFinal == 19 && $minutoChegadaFinal >= 1))
+                                                            <tr>
+                                                                <td>
+                                                                    {{ $i }}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-danger">Diária Inteira</span>
+                                                                    <span
+                                                                        class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                                </td>
+                                                            </tr>
+                                                        @endif
+                                                    @endif
+    
+    
+                                                    @php
+                                                        $j++;
+                                                    @endphp
+                                                @endfor
                                             @endif
-                                        </form>
+                                        </tbody>
+                                    </table>
+                                    <br><br>
+                                </div>
+                                <div class="col-md-6">
+                                    <br><br>
+                                    <div class="row">
+                                        
+                                        <div class="col-md-6" id="divAprovacao" >
+                                            <form action="/avs/financeiroAprovarAv" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                                                <label for="comentario">Comentário no envio: </label>
+                                                <br>
+                                                
+                                                <div class="input-group mb-3">
+                                                    <textarea type="text" class="textarea textarea-bordered h-24" name="comentario" style="width: 200px"
+                                                    id="comentario" placeholder="Comentário"></textarea>
+    
+                                                    <span class="input-group-append">
+                                                        <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
+                                                    </span>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-6" id="divReprovacao" >
+                                            @if ($av->isCancelado == 0)
+                                            <form action="/avs/financeiroReprovarAv" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                                                <label for="comentario">Voltar AV para o usuário: </label>
+                                                <br>
+
+                                                <div class="input-group mb-3">
+                                                    <textarea type="text"
+                                                    class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' : '' }}" name="comentario"
+                                                    style="width: 200px" id="comentario" placeholder="Comentário"></textarea>
+    
+                                                    <span class="input-group-append">
+                                                        <button type="submit" class="btn btn-active btn-danger">Reprovar AV</button>
+                                                    </span>
+                                                </div>
+                                                @if ($errors->has('comentario'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('comentario') }}
+                                                    </div>
+                                                @endif
+                                            </form>
+                                            @endif
+                                        </div>
+    
                                     </div>
                                 </div>
                             </div>
@@ -480,7 +501,7 @@
                         </div>
 
                         <div class="tab-pane fade" id="custom-tabs-three-historico" role="tabpanel"
-                            aria-labelledby="custom-tabs-three-historico-tab">
+                            aria-labelledby="custom-tabs-three-historico-tab" style="overflow-x: auto;">
                             <h3 class="text-lg font-bold" style="padding-left: 10%">Histórico</h3>
                             <table id="minhaTabela" class="table table-hover table-bordered">
                                 <!-- head -->

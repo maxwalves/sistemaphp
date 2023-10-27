@@ -28,11 +28,6 @@
                                     aria-selected="true">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="custom-tabs-three-trajeto-tab" data-toggle="pill"
-                                    href="#custom-tabs-three-trajeto" role="tab"
-                                    aria-controls="custom-tabs-three-trajeto" aria-selected="false">Trajeto</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" id="custom-tabs-three-historico-tab" data-toggle="pill"
                                     href="#custom-tabs-three-historico" role="tab"
                                     aria-controls="custom-tabs-three-historico" aria-selected="false">Histórico</a>
@@ -79,12 +74,137 @@
                                         @endif
                                     @endforeach
                                 </p>
-                                <div class="container">
+
+                                <p class="av-owner" style="font-size: 20px; color: green"><ion-icon name="chevron-forward-circle-outline">
+                                    </ion-icon> <strong>Valor do adiantamento em reais: </strong>
+                                    R$ {{ $av->valorReais + $av->valorExtraReais }}
+                                </p>
+
+                                <div class="col-md-12" style="overflow-x: auto;">
+                                    <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
+                                    <table class="table table-hover table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Cidade de saída</th>
+                                                <th>Data/Hora de saída</th>
+                                                <th>Cidade de chegada</th>
+                                                <th>Data/Hora de chegada</th>
+                                                <th>Hotel?</th>
+                                                <th>Tipo de transporte</th>
+                                                @foreach ($av->rotas as $rota)
+                                                    @if ($rota->isVeiculoEmpresa == 1)
+                                                        <th>Veículo</th>
+                                                    @break
+                                                @endif
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($av->rotas as $rota)
+                                            <tr>
+                                                <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }}
+                                                </td>
+                                                <td>
+                                                    @if ($rota->isAereo == 1)
+                                                        <img src="{{ asset('/img/aviaosubindo.png') }}"
+                                                            style="width: 40px">
+                                                    @endif
+
+                                                    @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                                        <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                                    @endif
+
+                                                    @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                                        <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                                    @endif
+
+                                                    @if($rota->isOutroMeioTransporte == 1)
+                                                        <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                                    @endif
+
+                                                    {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
+
+                                                </td>
+                                                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+
+                                                <td>
+                                                    @if ($rota->isAereo == 1)
+                                                        <img src="{{ asset('/img/aviaodescendo.png') }}"
+                                                            style="width: 40px">
+                                                    @endif
+
+                                                    @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                                        <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                                    @endif
+
+                                                    @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                                        <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                                    @endif
+
+                                                    @if($rota->isOutroMeioTransporte == 1)
+                                                        <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                                    @endif
+
+                                                    {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
+                                                </td>
+
+                                                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
+                                                <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
+                                                <td>
+                                                    {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
+                                                    {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
+                                                    @if ($rota->isVeiculoProprio == 1)
+                                                        {{ 'Veículo próprio: ' }} <br>
+                                                        @foreach ($veiculosProprios as $v)
+                                                            @if ($v->id == $rota->veiculoProprio_id)
+                                                                {{ $v->modelo . '-' . $v->placa }}
+                                                            @endif
+                                                        @endforeach
+
+                                                        @if (count($veiculosProprios) == 0)
+                                                            {{ 'Não encontrado' }}
+                                                        @endif
+                                                    @endif
+                                                    {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
+                                                    {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
+                                                    {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
+                                                </td>
+                                                @php
+                                                    $achouVeiculo = false;
+                                                @endphp
+                                                @if ($rota->isVeiculoEmpresa == 1)
+                                                    @foreach ($veiculosParanacidade as $v)
+                                                        @if ($rota->veiculoParanacidade_id == $v->id)
+                                                            @php
+                                                                $achouVeiculo = true;
+                                                                break;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                    @if ($achouVeiculo == true)
+                                                        <td>
+                                                            {{ $v->modelo }} ({{ $v->placa }})
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            A definir
+                                                        </td>
+                                                    @endif
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
                                     <div class="stat-title">Controle de diárias:
                                     </div>
                                     Mês saída: {{ $mesSaidaInicial }}
                                     Mês chegada: {{ $mesChegadaFinal }} <br>
-                                    <table class="table table-hover table-bordered" style="width: 25%">
+                                    <table class="table table-hover table-bordered" style="width: 60%">
                                         <thead>
                                             <tr>
                                                 <th>Dias</th>
@@ -92,9 +212,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
+    
                                             @if ($mesSaidaInicial != $mesChegadaFinal)
-
+    
                                                 @php
                                                     $data = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
                                                     $ultimoDiaMes = date('t', strtotime($data));
@@ -137,7 +257,7 @@
                                                             </td>
                                                         </tr>
                                                     @endif
-
+    
                                                     @php
                                                         $j++;
                                                     @endphp
@@ -179,7 +299,7 @@
                                                             </td>
                                                         </tr>
                                                     @endif
-
+    
                                                     @if ($i == $diaChegadaFinal && $horaChegadaFinal >= 13 && $horaChegadaFinal < 19)
                                                         <tr>
                                                             <td>
@@ -204,7 +324,7 @@
                                                             </td>
                                                         </tr>
                                                     @endif
-
+    
                                                     @php
                                                         $j++;
                                                     @endphp
@@ -252,7 +372,7 @@
                                                             </td>
                                                         </tr>
                                                     @endif
-
+    
                                                     @if (
                                                         ($i == $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <= 19 && $minutoChegadaFinal == 0) ||
                                                             ($i == $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal < 19) ||
@@ -268,22 +388,24 @@
                                                             </td>
                                                         </tr>
                                                     @endif
-                                                    @if (
-                                                        ($i == $diaChegadaFinal && $horaChegadaFinal > 19) ||
-                                                            ($i == $diaChegadaFinal && $horaChegadaFinal == 19 && $minutoChegadaFinal >= 1))
-                                                        <tr>
-                                                            <td>
-                                                                {{ $i }}
-                                                            </td>
-                                                            <td>
-                                                                <span class="badge bg-danger">Diária Inteira</span>
-                                                                <span
-                                                                    class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
-                                                            </td>
-                                                        </tr>
+                                                    @if ($diaSaidaInicial != $diaChegadaFinal)
+                                                        @if (
+                                                            ($i == $diaChegadaFinal && $horaChegadaFinal > 19) ||
+                                                                ($i == $diaChegadaFinal && $horaChegadaFinal == 19 && $minutoChegadaFinal >= 1))
+                                                            <tr>
+                                                                <td>
+                                                                    {{ $i }}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-danger">Diária Inteira</span>
+                                                                    <span
+                                                                        class="badge bg-success">R${{ $arrayDiasValores[$j]['valor'] }}</span>
+                                                                </td>
+                                                            </tr>
+                                                        @endif
                                                     @endif
-
-
+    
+    
                                                     @php
                                                         $j++;
                                                     @endphp
@@ -293,164 +415,62 @@
                                     </table>
                                     <br><br>
                                 </div>
-
-                                <div class="divider"></div>
-
-                                <div class="container">
+                                <div class="col-md-6">
+                                    <br><br>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        
+                                        <div class="col-md-6" id="divAprovacao" >
                                             <form action="/avs/gestorAprovarAv" method="POST"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+    
+                                                <input type="text" hidden="true" id="id" name="id"
+                                                    value="{{ $av->id }}">
+    
+                                                <div class="input-group mb-3">
+                                                    <textarea type="text" class="textarea textarea-bordered h-24" name="comentario" style="width: 200px"
+                                                        id="comentario" placeholder="Comentário"></textarea>
+    
+                                                    <span class="input-group-append">
+                                                        <button type="submit" class="btn btn-active btn-success">Aprovar
+                                                            AV</button>
+                                                    </span>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-6" id="divReprovacao" >
+                                            <form action="/avs/gestorReprovarAv" method="POST"
                                                 enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="text" hidden="true" id="id" name="id"
                                                     value="{{ $av->id }}">
-                                                <label for="comentario">Comentário na aprovação: </label>
-                                                <br>
-                                                <textarea type="text" class="textarea textarea-bordered h-24" name="comentario" style="width: 200px"
-                                                    id="comentario" placeholder="Comentário"></textarea>
-
-                                                <button type="submit" class="btn btn-active btn-success">Aprovar
-                                                    AV</button>
-                                            </form>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <form action="/avs/gestorReprovarAv" method="POST"
-                                                enctype="multipart/form-data" style="padding-left: 10px">
-                                                @csrf
-                                                @method('PUT')
-                                                <input type="text" hidden="true" id="id" name="id"
-                                                    value="{{ $av->id }}">
-                                                <label for="comentario">Comentário na reprovação: </label>
-                                                <br>
-                                                <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' : '' }}"
-                                                    name="comentario" style="width: 200px" id="comentario" placeholder="Comentário"></textarea>
-                                                <button type="submit" class="btn btn-active btn-danger">Reprovar
-                                                    AV</button>
+    
+                                                <div class="input-group mb-3">
+                                                    <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' : '' }}"
+                                                        name="comentario" style="width: 200px" id="comentario" placeholder="Comentário"></textarea>
+    
+                                                    <span class="input-group-append">
+                                                        <button type="submit" class="btn btn-active btn-danger">Reprovar
+                                                            AV</button>
+                                                    </span>
+                                                </div>
                                                 @if ($errors->has('comentario'))
                                                     <div class="invalid-feedback">
                                                         {{ $errors->first('comentario') }}
                                                     </div>
                                                 @endif
+    
                                             </form>
                                         </div>
-
+    
                                     </div>
                                 </div>
-
                             </div>
-                            <div class="tab-pane fade" id="custom-tabs-three-trajeto" role="tabpanel"
-                                aria-labelledby="custom-tabs-three-trajeto-tab">
-                                <div class="col-md-12">
-                                    <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
-                                    <table class="table table-hover table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Tipo</th>
-                                                <th>Cidade de saída</th>
-                                                <th>Data/Hora de saída</th>
-                                                <th>Cidade de chegada</th>
-                                                <th>Data/Hora de chegada</th>
-                                                <th>Hotel?</th>
-                                                <th>Tipo de transporte</th>
-                                                @foreach ($av->rotas as $rota)
-                                                    @if ($rota->isVeiculoEmpresa == 1)
-                                                        <th>Veículo</th>
-                                                    @break
-                                                @endif
-                                            @endforeach
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($av->rotas as $rota)
-                                            <tr>
-                                                <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }}
-                                                </td>
-                                                <td>
-                                                    @if ($rota->isAereo == 1)
-                                                        <img src="{{ asset('/img/aviaosubindo.png') }}"
-                                                            style="width: 40px">
-                                                    @endif
+                            
 
-                                                    @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                                        <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
-                                                    @endif
-
-                                                    @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                                        <img src="{{ asset('/img/onibus.png') }}"
-                                                            style="width: 40px">
-                                                    @endif
-
-                                                    {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
-
-                                                </td>
-                                                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-
-                                                <td>
-                                                    @if ($rota->isAereo == 1)
-                                                        <img src="{{ asset('/img/aviaodescendo.png') }}"
-                                                            style="width: 40px">
-                                                    @endif
-
-                                                    @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                                        <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
-                                                    @endif
-
-                                                    @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                                        <img src="{{ asset('/img/onibus.png') }}"
-                                                            style="width: 40px">
-                                                    @endif
-
-                                                    {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
-                                                </td>
-
-                                                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                                                <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
-                                                <td>
-                                                    {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
-                                                    {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
-                                                    @if ($rota->isVeiculoProprio == 1)
-                                                        {{ 'Veículo próprio: ' }} <br>
-                                                        @foreach ($veiculosProprios as $v)
-                                                            @if ($v->id == $rota->veiculoProprio_id)
-                                                                {{ $v->modelo . '-' . $v->placa }}
-                                                            @endif
-                                                        @endforeach
-
-                                                        @if (count($veiculosProprios) == 0)
-                                                            {{ 'Não encontrado' }}
-                                                        @endif
-                                                    @endif
-                                                    {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
-                                                    {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
-                                                </td>
-                                                @php
-                                                    $achouVeiculo = false;
-                                                @endphp
-                                                @if ($rota->isVeiculoEmpresa == 1)
-                                                    @foreach ($veiculosParanacidade as $v)
-                                                        @if ($rota->veiculoParanacidade_id == $v->id)
-                                                            @php
-                                                                $achouVeiculo = true;
-                                                                break;
-                                                            @endphp
-                                                        @endif
-                                                    @endforeach
-                                                    @if ($achouVeiculo == true)
-                                                        <td>
-                                                            {{ $v->modelo }} ({{ $v->placa }})
-                                                        </td>
-                                                    @else
-                                                        <td>
-                                                            A definir
-                                                        </td>
-                                                    @endif
-                                                @endif
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                            
 
                         </div>
                         <div class="tab-pane fade" id="custom-tabs-three-historico" role="tabpanel"
@@ -605,12 +625,12 @@
                             <div class="col-md-12">
 
                                 <div class="timeline">
-        
+
                                     <div class="time-label">
                                         <span class="bg-red">Fases da realização da viagem</span>
                                     </div>
-        
-        
+
+
                                     <div>
                                         @if ($av->isEnviadoUsuario == 1)
                                             <i class="fas fa-caret-right bg-green"></i>
@@ -635,7 +655,8 @@
                                             <i class="fas fa-caret-right bg-green"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-success btn-lg" @readonly(true)>2 - Gestor - Avaliação
+                                                    <a class="btn btn-success btn-lg" @readonly(true)>2 - Gestor -
+                                                        Avaliação
                                                         inicial</a>
                                                 </div>
                                             </div>
@@ -643,7 +664,8 @@
                                             <i class="fas fa-caret-right bg-blue"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-primary btn-md" @readonly(true)>2 - Gestor - Avaliação
+                                                    <a class="btn btn-primary btn-md" @readonly(true)>2 - Gestor -
+                                                        Avaliação
                                                         inicial</a>
                                                 </div>
                                             </div>
@@ -654,18 +676,22 @@
                                             <i class="fas fa-caret-right bg-green"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-success btn-lg" @readonly(true)>3 - DAF - Avalia
+                                                    <a class="btn btn-success btn-lg" @readonly(true)>3 - DAF -
+                                                        Avalia
                                                         pedido</a>
-                                                    <span class="badge bg-warning float-right">Se carro particular ou viagem internacional</span>
+                                                    <span class="badge bg-warning float-right">Se carro particular ou
+                                                        viagem internacional</span>
                                                 </div>
                                             </div>
                                         @else
                                             <i class="fas fa-caret-right bg-blue"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-primary btn-md" @readonly(true)>3 - DAF - Avalia
+                                                    <a class="btn btn-primary btn-md" @readonly(true)>3 - DAF -
+                                                        Avalia
                                                         pedido</a>
-                                                    <span class="badge bg-warning float-right">Se carro particular ou viagem internacional</span>
+                                                    <span class="badge bg-warning float-right">Se carro particular ou
+                                                        viagem internacional</span>
                                                 </div>
                                             </div>
                                         @endif
@@ -675,7 +701,8 @@
                                             <i class="fas fa-caret-right bg-green"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-success btn-lg" @readonly(true)>4 - CAD - Coordenadoria
+                                                    <a class="btn btn-success btn-lg" @readonly(true)>4 - CAD -
+                                                        Coordenadoria
                                                         Administrativa - Realiza reservas</a>
                                                 </div>
                                             </div>
@@ -732,7 +759,8 @@
                                             <i class="fas fa-caret-right bg-green"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-success btn-lg" @readonly(true)>6 - Usuário - Realiza
+                                                    <a class="btn btn-success btn-lg" @readonly(true)>6 - Usuário -
+                                                        Realiza
                                                         PC</a>
                                                 </div>
                                             </div>
@@ -740,7 +768,8 @@
                                             <i class="fas fa-caret-right bg-blue"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-primary btn-md" @readonly(true)>6 - Usuário - Realiza
+                                                    <a class="btn btn-primary btn-md" @readonly(true)>6 - Usuário -
+                                                        Realiza
                                                         PC</a>
                                                 </div>
                                             </div>
@@ -751,7 +780,8 @@
                                             <i class="fas fa-caret-right bg-green"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-success btn-lg" @readonly(true)>7 - Financeiro -
+                                                    <a class="btn btn-success btn-lg" @readonly(true)>7 - Financeiro
+                                                        -
                                                         Avalia PC</a>
                                                 </div>
                                             </div>
@@ -759,7 +789,8 @@
                                             <i class="fas fa-caret-right bg-blue"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-primary btn-md" @readonly(true)>7 - Financeiro -
+                                                    <a class="btn btn-primary btn-md" @readonly(true)>7 - Financeiro
+                                                        -
                                                         Avalia PC</a>
                                                 </div>
                                             </div>
@@ -770,7 +801,8 @@
                                             <i class="fas fa-caret-right bg-green"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-success btn-lg" @readonly(true)>8 - Gestor - Avalia
+                                                    <a class="btn btn-success btn-lg" @readonly(true)>8 - Gestor -
+                                                        Avalia
                                                         PC</a>
                                                 </div>
                                             </div>
@@ -778,7 +810,8 @@
                                             <i class="fas fa-caret-right bg-blue"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-primary btn-md" @readonly(true)>8 - Gestor - Avalia
+                                                    <a class="btn btn-primary btn-md" @readonly(true)>8 - Gestor -
+                                                        Avalia
                                                         PC</a>
                                                 </div>
                                             </div>
@@ -789,7 +822,8 @@
                                             <i class="fas fa-caret-right bg-green"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-success btn-lg" @readonly(true)>9 - Financeiro -
+                                                    <a class="btn btn-success btn-lg" @readonly(true)>9 - Financeiro
+                                                        -
                                                         Acerto de Contas</a>
                                                 </div>
                                             </div>
@@ -797,13 +831,14 @@
                                             <i class="fas fa-caret-right bg-blue"></i>
                                             <div class="timeline-item">
                                                 <div class="timeline-header">
-                                                    <a class="btn btn-primary btn-md" @readonly(true)>9 - Financeiro -
+                                                    <a class="btn btn-primary btn-md" @readonly(true)>9 - Financeiro
+                                                        -
                                                         Acerto de Contas</a>
                                                 </div>
                                             </div>
                                         @endif
                                     </div>
-        
+
                                     <div>
                                         <i class="far fa-check-circle bg-green"></i>
                                     </div>
@@ -854,15 +889,13 @@
 @stop
 
 @section('css')
-    <link href="{{ asset('DataTables/datatables.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('DataTables/datatables.min.css') }}" rel="stylesheet" />
 @stop
 
 @section('js')
 
-    <script src="{{ asset('DataTables/datatables.min.js') }}"></script>
-    <script src="{{ asset('/js/moment.js') }}"></script>
-    <script type="text/javascript">
-
-    </script>
+<script src="{{ asset('DataTables/datatables.min.js') }}"></script>
+<script src="{{ asset('/js/moment.js') }}"></script>
+<script type="text/javascript"></script>
 
 @stop
