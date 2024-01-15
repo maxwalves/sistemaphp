@@ -3,17 +3,16 @@
 @section('title', 'Criar AV')
 
 @section('content_header')
-    <h1>Criar AV</h1>
 @stop
 
 @section('content')
-<div class="row justify-content-start" style="padding-left: 5%">
+
+<div id="av-create-container" >
+    <br>
+    <h2>Cadastro de autorização de viagem:</h2>
     <div class="col-3">
         <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost"> Voltar!</a>
     </div>
-</div>
-<div id="av-create-container" >
-    <h2>Crie uma autorização de viagem!</h2>
     <form action="/avs/gravarAv" method="POST" enctype="multipart/form-data">
         @csrf
         

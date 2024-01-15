@@ -246,28 +246,32 @@ Route::middleware(['assinatura.termo'])->group(function () {
         Route::post('/setores', [SetorController::class,'store'])->middleware('auth');
 
 
-        Route::get('/wiki', [ArquivosController::class,'index']);
-        Route::get('/pesquisar', [ArquivosController::class, 'pesquisar'])->name('pesquisar');
-        Route::get('/pesquisarAdmin', [ArquivosController::class, 'pesquisarAdmin'])->name('pesquisarAdmin');
-        Route::get('/pesquisarNormas', [ArquivosController::class, 'pesquisarNormas'])->name('pesquisarNormas');
-        Route::get('/pesquisarInstrucoesNormativas', [ArquivosController::class, 'pesquisarInstrucoesNormativas'])->name('pesquisarInstrucoesNormativas');
-        Route::get('/pesquisarLegislacao', [ArquivosController::class, 'pesquisarLegislacao'])->name('pesquisarLegislacao');
-        Route::get('/pesquisarNormasGestao', [ArquivosController::class, 'pesquisarNormasGestao'])->name('pesquisarNormasGestao');
-        Route::get('/normas', [ArquivosController::class, 'acessarNormas']);
-        Route::get('/instrucoesNormativas', [ArquivosController::class, 'acessarInstrucoesNormativas']);
-        Route::get('/legislacao', [ArquivosController::class, 'acessarLegislacao']);
-        Route::get('/normasGestao', [ArquivosController::class, 'acessarNormasGestao']);
-        Route::get('/admin', [ArquivosController::class, 'acessarAdmin']);
-        Route::get('/create', [ArquivosController::class, 'create']);
-        Route::post('/gravarArquivo', [ArquivosController::class,'store']);
-        Route::get('/edit/{id}', [ArquivosController::class, 'edit']);
-        Route::put('/update/{id}', [ArquivosController::class, 'update']);
-        Route::get('/show/{id}', [ArquivosController::class, 'show']);
-        Route::delete('/delete/{id}', [ArquivosController::class, 'destroy']);
+        // Route::get('/wiki', [ArquivosController::class,'index']);
+        // Route::get('/pesquisar', [ArquivosController::class, 'pesquisar'])->name('pesquisar');
+        // Route::get('/pesquisarAdmin', [ArquivosController::class, 'pesquisarAdmin'])->name('pesquisarAdmin');
+        // Route::get('/pesquisarNormas', [ArquivosController::class, 'pesquisarNormas'])->name('pesquisarNormas');
+        // Route::get('/pesquisarInstrucoesNormativas', [ArquivosController::class, 'pesquisarInstrucoesNormativas'])->name('pesquisarInstrucoesNormativas');
+        // Route::get('/pesquisarLegislacao', [ArquivosController::class, 'pesquisarLegislacao'])->name('pesquisarLegislacao');
+        // Route::get('/pesquisarNormasGestao', [ArquivosController::class, 'pesquisarNormasGestao'])->name('pesquisarNormasGestao');
+        // Route::get('/normas', [ArquivosController::class, 'acessarNormas']);
+        // Route::get('/instrucoesNormativas', [ArquivosController::class, 'acessarInstrucoesNormativas']);
+        // Route::get('/legislacao', [ArquivosController::class, 'acessarLegislacao']);
+        // Route::get('/normasGestao', [ArquivosController::class, 'acessarNormasGestao']);
+        // Route::get('/admin', [ArquivosController::class, 'acessarAdmin']);
+        // Route::get('/create', [ArquivosController::class, 'create']);
+        // Route::post('/gravarArquivo', [ArquivosController::class,'store']);
+        // Route::get('/edit/{id}', [ArquivosController::class, 'edit']);
+        // Route::put('/update/{id}', [ArquivosController::class, 'update']);
+        // Route::get('/show/{id}', [ArquivosController::class, 'show']);
+        // Route::delete('/delete/{id}', [ArquivosController::class, 'destroy']);
 
 
         Route::get('/relatoriosDss/paranaUrbanoIII/', [DssController::class,'paranaUrbanoIII']);
         Route::get('/relatoriosDss/parametros/', [DssController::class,'parametros']);
         Route::get('/relatoriosDss/controlePepPoaPmr/', [DssController::class,'controlePepPoaPmr']);
+
+        //faça uma rota post reservasVeiculo.store
+        Route::post('/reservasVeiculo', [ControladorRota::class, 'registrarReservaVeiculo'])->middleware('auth')->name('reservasVeiculo.store');
+        Route::delete('/reservasVeiculo/{id}/{av}', [ControladorRota::class, 'removerReservaVeiculo'])->middleware('auth')->name('reservasVeiculo.destroy');
 
 });

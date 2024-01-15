@@ -36,11 +36,141 @@ class ControladorRota extends Controller
         $rotas = $av->rotas;//Busca as rotas da AV
         $veiculosProprios = VeiculoProprio::all();
 
+        //obter dados da API
+        $eventos = [];
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $eventos = json_decode(curl_exec($ch));
+
+        $url = 'http://10.51.10.43/reservas/public/api/getReservasUsuarioAPI/' . $user->username;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+
         if($av->isEnviadoUsuario == 1){
             return redirect('/avs/avs/')->with('msg', 'Você não tem autorização para editar uma rota de AV que já foi enviada!');
         }
 
-        return view('rotas.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user, 'veiculosProprios' => $veiculosProprios]);
+        return view('rotas.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user, 'veiculosProprios' => $veiculosProprios, 
+        'eventos' => $eventos, 'reservas2' => $reservas2, 'veiculos' => $veiculos]);
+    }
+
+    public function registrarReservaVeiculo(Request $request){
+
+        $user = auth()->user();
+        $parametros = [
+            "username" => $user->username,
+            "daterange1" => $request->daterange1,
+            "daterange2" => $request->daterange2,
+            "idVeiculo" => $request->idVeiculo,
+            "observacoes" => "[Reserva realizada pelo Sistema de Viagens, referente a AV: " . $request->nrAv . "] "
+        ];
+    
+        $curl = curl_init();
+    
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "http://10.51.10.43/reservas/public/api/inserirReservaVeiculo",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => http_build_query($parametros), // Alteração aqui
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer 123",
+                "Content-Type: application/x-www-form-urlencoded" // Alteração aqui
+            ],
+        ]);
+    
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+    
+        curl_close($curl);
+
+        //obtem dados e manda o usuário para a view novamente-------------------------------------
+        $av = Av::findOrFail($request->nrAv);//Busca a AV com base no ID
+        $rotas = $av->rotas;//Busca as rotas da AV
+        $veiculosProprios = VeiculoProprio::all();
+
+        //obter dados da API
+        $eventos = [];
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $eventos = json_decode(curl_exec($ch));
+
+        $url = 'http://10.51.10.43/reservas/public/api/getReservasUsuarioAPI/' . $user->username;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+
+        if($av->isEnviadoUsuario == 1){
+            return redirect('/avs/avs/')->with('msg', 'Você não tem autorização para editar uma rota de AV que já foi enviada!');
+        }
+        //o response é um json com um atributo message, verifique se ele é Reserva de veículo criada com sucesso!
+        $responseArray = json_decode($response, true);
+
+        if(isset($responseArray['message']) && $responseArray['message'] == 'true'){
+            return redirect('/rotas/rotas/' . $request->nrAv )->with('success', 'Reserva de veículo criada com sucesso!');
+        } else {
+            return redirect('/rotas/rotas/' . $request->nrAv )->with('error', $responseArray['message']);
+        }
+    }
+
+    public function removerReservaVeiculo($idReserva, $av){
+        $user = auth()->user();
+        $parametros = [
+            "username" => $user->username,
+            "idReserva" => $idReserva
+        ];
+    
+        $curl = curl_init();
+    
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "http://10.51.10.43/reservas/public/api/removerReservaVeiculo",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => http_build_query($parametros), // Alteração aqui
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer 123",
+                "Content-Type: application/x-www-form-urlencoded" // Alteração aqui
+            ],
+        ]);
+    
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+    
+        curl_close($curl);
+            
+        $responseArray = json_decode($response, true);
+
+        if(isset($responseArray['message']) && $responseArray['message'] == 'true'){
+            return redirect('/rotas/rotas/' . $av )->with('success', 'Reserva de veículo excluída com sucesso!');
+        } else {
+            return redirect('/rotas/rotas/' . $av )->with('error', $responseArray['message']);
+        }
     }
 
     public function rotasEditData($id)//Id da AV

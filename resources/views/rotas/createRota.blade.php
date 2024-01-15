@@ -3,7 +3,6 @@
 @section('title', 'Criar Rota')
 
 @section('content_header')
-    <h1>Criar Rota</h1>
 @stop
 
 @section('content')
@@ -14,15 +13,17 @@
         @csrf
         <div class="row justify-content-start">
             <div class="col-3">
-                <a href="/rotas/rotas/{{ $av->id }}" type="submit" class="btn btn-warning btn-sm"> Voltar!</a>
+                <br>
+                <a href="/rotas/rotas/{{ $av->id }}" type="submit" class="btn btn-warning"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="col-8">
-                <label for="idav"> <strong>Cadastro de nova rota da Autorização de Viagem nº </strong> </label>
+                <label for="idav"> <strong>NOVA ROTA - Autorização de Viagem nº </strong> </label>
                 <input type="text" style="width: 50px" value="{{ $av->id }}" id="idav" name="idav" readonly>
-
-                <h4> <strong>Data da Autorização de Viagem: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h4>
+                <br>
+                <span><strong>Data da Autorização de Viagem: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong></span>
             </div>
         </div>
+        <hr>
         <div style="padding-left: 50px" class="form-group">
             
             @if ($errors->has('isViagemInternacional') ||
@@ -144,11 +145,6 @@
                             @endif
                     </div>
 
-                    <div>
-                        <input type="text" id="botaoResetOrigemInternacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemInternacional()">
-                    </div>
-
                     <br>
                     <?php
                         $minDate = date('Y-m-d\TH:i');
@@ -237,11 +233,6 @@
                                 {{ $errors->first('selecaoCidadeDestinoInternacional') }}
                             </div>
                             @endif
-                    </div>
-
-                    <div>
-                        <input type="text" id="botaoResetDestinoInternacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoInternacional()">
                     </div>
 
                     <br>
@@ -356,12 +347,7 @@
                         <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de saída!</div>
                     </div>
 
-                    <div>
-                        <input type="text" id="botaoResetOrigemNacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemNacional()">
-                    </div>
                 </div>
-
                     
                 <div class="col-12 col-xl-5">    
                     <br><br>
@@ -418,11 +404,6 @@
                             @endif
                         </div>
                         <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de chegada!</div>
-                    </div>
-
-                    <div>
-                        <input type="text" id="botaoResetDestinoNacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoNacional()">
                     </div>
 
                 </div>

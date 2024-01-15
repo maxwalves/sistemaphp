@@ -3,22 +3,20 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>AVS</h1>
 @stop
 
 @section('content')
-    <div style="padding-left: 10%" class="container">
+    <div>
         
         <div class="row justify-content-between">
-            
             <div class="col-8">
+                <br>
                 <h4>Minhas autorizações de viagens</h4>
             </div>
-            
-            <div class="col-3">
-                <strong></strong> 
-                <a class="btn btn-success" type="button" href="/avs/create" > Adicionar AV</a>
-            </div>
+        </div>
+        <div class="col-3">
+            <strong></strong> 
+            <a class="btn btn-success btn-lg" type="button" href="/avs/create" ><i class="fas fa-plus"></i></a>
         </div>
         <br>
     </div> 
@@ -74,36 +72,38 @@
                     <td> {{$av->status}} </td>
                     <td> 
                         @if($av->isEnviadoUsuario == 0 && $av->isCancelado == 0)
-                            <div class="opcoesGerenciarAv">
-                                <a href="/avs/edit/{{ $av->id }}" class="btn btn-success btn-sm"
-                                    style="width: 110px">  Editar</a>
-                                <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-primary btn-sm"
-                                    style="width: 110px"> Ver</a> 
-                                <a href="/rotas/rotas/{{ $av->id }}" class="btn btn-primary btn-sm"
-                                    style="width: 110px"> Rotas</a> 
+                            <div class="opcoesGerenciarAv d-flex align-items-center">
+                                <a href="/avs/edit/{{ $av->id }}" class="btn btn-warning btn-sm" title="Editar AV">
+                                    <i class="far fa-edit"></i></a>
+
+                                <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-info btn-sm" title="Ver AV">
+                                    <i class="far fa-eye"></i></a> 
+
+                                <a href="/rotas/rotas/{{ $av->id }}" class="btn btn-primary btn-sm" title="Rotas">
+                                    <i class="fas fa-map-marked"></i></a>
+
                                 <form action="/avs/{{ $av->id }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-accent btn-sm"
-                                    style="width: 110px" > Deletar</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Remover AV">
+                                        <i class="fas fa-trash-alt"></i></button>
                                 </form>
                             </div>
                         @else
 
                             @if($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0 && $av->isCancelado == 0)
-                                <button class="btn btn-active btn-warning btn-sm" 
-                                onclick="abrirModalVoltarAv({{$av}})">Voltar AV</button>
+                                <button class="btn btn-active btn-warning btn-sm" title="Voltar AV"
+                                onclick="abrirModalVoltarAv({{$av}})"><i class="fas fa-arrow-left"></i></button>
                             @endif
 
                             @if($av->isEnviadoUsuario == 1 && $av->isAcertoContasRealizado == 0 && $av->isPrestacaoContasRealizada == 0 && $av->isCancelado == 0 
                             && $av->status != "AV Internacional cadastrada no sistema")
 
-                                <a href="/avs/cancelarAv/{{ $av->id }}" class="btn btn-danger btn-error btn-sm"
-                                    style="width: 110px"> Cancelar AV</a>
-                                
+                                <a href="/avs/cancelarAv/{{ $av->id }}" class="btn btn-danger btn-error btn-sm" title="Cancelar AV">
+                                    <i class="fas fa-window-close"></i></a>
                             @endif
-                            <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-primary btn-sm"
-                                style="width: 110px"> Ver</a> 
+                            <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-info btn-sm" title="Ver AV">
+                                <i class="far fa-eye"></i></a> 
                             
                         @endif
                     </td>

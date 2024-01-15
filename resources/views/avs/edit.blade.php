@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-<div class="row justify-content-start" style="padding-left: 5%">
+<div class="row">
     <div class="col-3">
         <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost"> Voltar!</a>
     </div>

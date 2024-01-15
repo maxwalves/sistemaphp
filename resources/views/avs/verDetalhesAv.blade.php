@@ -4,6 +4,7 @@
 
 @section('content_header')
     <h1>Ver detalhes da AV</h1>
+    <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost"> Voltar!</a>
 @stop
 
 @section('content')
@@ -517,23 +518,29 @@
                             <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                     name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
                                 {{ $av->valorReais }}</p>
-                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                    name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
+                            @if($av->valorDolar > 0)
+                                <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                    name="cash-outline"></ion-icon> <strong>Valor em dólar:</strong> $
                                 {{ $av->valorDolar }}</p>
+                            @endif
                             <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                     name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
                                 {{ $av->valorExtraReais }}</p>
-                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                    name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
-                                {{ $av->valorExtraDolar }}</p>
+                            @if($av->valorExtraDolar > 0)
+                                <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                        name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
+                                    {{ $av->valorExtraDolar }}</p>
+                            @endif
                             <p class="av-owner" style="font-size: 20px; color: black;">
                                 <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
                                 {{ $av->valorDeducaoReais }}
                             </p>
-                            <p class="av-owner" style="font-size: 20px; color: black;">
-                                <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
-                                {{ $av->valorDeducaoDolar }}
-                            </p>
+                            @if($av->valorDeducaoDolar > 0)
+                                <p class="av-owner" style="font-size: 20px; color: black;">
+                                    <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
+                                    {{ $av->valorDeducaoDolar }}
+                                </p>
+                            @endif
                             <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                     name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                     extra:</strong>
