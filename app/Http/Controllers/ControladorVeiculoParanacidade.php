@@ -11,14 +11,23 @@ class ControladorVeiculoParanacidade extends Controller
     {
         $user = auth()->user();
         $veiculosParanacidade = VeiculoParanacidade::all();
-
         return view('veiculosParanacidade.veiculosParanacidade', ['avs' => $veiculosParanacidade, 'user'=> $user]);
     }
 
     public function veiculosParanacidade()
     {
         $user = auth()->user();
-        $veiculosParanacidade = VeiculoParanacidade::all();
+        
+
+        //obtem os veículos de uma api a partir do link 10.51.10.43/reservas/public/api/veiculosCadastrados
+        $url = "http://10.51.10.43/reservas/public/api/veiculosCadastrados";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        curl_close($ch);
+
+        $veiculosParanacidade = $veiculos;
+
         return view('veiculosParanacidade.veiculosParanacidade', ['veiculosParanacidade' => $veiculosParanacidade, 'user'=> $user]);
     }
 

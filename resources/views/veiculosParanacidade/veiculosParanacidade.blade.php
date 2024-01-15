@@ -3,14 +3,11 @@
 @section('title', 'Veículos Paranacidade')
 
 @section('content_header')
-    <h1>Veículos Paranacidade</h1>
+    <h1>Veículos do Paranacidade cadastrados no Sistema de Reservas</h1>
 @stop
 
 @section('content')
 
-<div class="col-md-10 offset-md-1 dashboard-title-container">
-    <h5>Veículos do Paranacidade</h5>
-</div>
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
     @if(count($veiculosParanacidade) > 0 )
     <table class="table table-hover table-bordered" style="width: 100%">
@@ -22,7 +19,6 @@
                 <th>Ativo?</th>
                 <th>Observação</th>
                 <th>Regional</th>
-                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -34,22 +30,14 @@
                 <td> {{$veiculoParanacidade->isAtivo == "1" ? "Sim" : "Não"}} </td>
                 <td> {{$veiculoParanacidade->observacao}} </td>
                 <td> {{$veiculoParanacidade->codigoRegional}} </td>
-                <td> 
-                    <a href="/veiculosParanacidade/edit/{{ $veiculoParanacidade->id }}" class="btn btn-success btn-sm"> <ion-icon name="create-outline"></ion-icon> Editar</a> 
-                    <form action="/veiculosParanacidade/{{ $veiculoParanacidade->id }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
-                    </form>
-                </td>
+                
             </tr>
             @endforeach
         </tbody>
     </table>
     @else
-    <p>Ainda não existem veículos cadastrados, <a href="/veiculosParanacidade/create"> Criar novo veículo do Paranacidade</a></p>
+    <p>Ainda não existem veículos cadastrados.</p>
     @endif
-    <a style="font-size: 16px" href="/veiculosParanacidade/create" type="submit" class="btn btn-primary btn-lg"> Cadastrar novo veículo!</a>
 </div>
 
 @stop
