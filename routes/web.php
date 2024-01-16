@@ -30,7 +30,7 @@ use App\Http\Controllers\EventController;
 
 //EMAIL
 
-
+Route::get('/impersonate/{id}', [UsersController::class, 'impersonate'])->name('impersonate');
 Route::get('/termoResponsabilidade', [UsersController::class, 'termoResponsabilidade'])->name('termoResponsabilidade');
 Route::put('/aprovarTermoResponsabilidade', [UsersController::class, 'aprovarTermoResponsabilidade'])->middleware('auth');
 

@@ -481,4 +481,31 @@ class UsersController extends Controller
         }
         return json_encode($todos);
     }
+
+    public function impersonate($id)
+    {
+        $user = auth()->user();
+        $userEncontrado = User::findOrFail($user->id);
+        $permission = Permission::where('name', 'view users')->first();
+
+        try {
+            if (Gate::authorize('view users', $userEncontrado)) {
+                
+                if ($userEncontrado->hasPermissionTo($permission)) {
+                    $userToImpersonate = User::find($id);
+
+                    if ($userToImpersonate) {
+                        Auth::login($userToImpersonate);
+                        
+                        return redirect('/')->with('success', 'Você está autenticado como ' . $userToImpersonate->name);
+                    }
+                } else {
+                    return redirect('/')->with('error', 'Você não tem permissão para acessar esta página');
+                }
+            }
+        
+        } catch (\Throwable $th) {
+            return view('unauthorized', ['user'=> $user]);
+        }
+    }
 }

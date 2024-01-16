@@ -1,8 +1,11 @@
-@extends('layouts.main')
+@extends('adminlte::page')
 
-@section('title', 'Paranacidade')
+@section('title', 'Gerenciar Rotas')
+
+@section('content_header')
+@stop
+
 @section('content')
-
 
 <div id="container" class="col-md-12">
 
@@ -15,4 +18,11 @@
 
 </div>
 
-@endsection
+@stop
+
+@section('css')
+
+@stop
+
+@section('js')
+@stop

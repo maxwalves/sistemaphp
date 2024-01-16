@@ -2986,6 +2986,11 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($request->avId);
         $rotas = $av->rotas;//Busca as rotas da AV
 
+        //se somente existir uma rota, volte uma mensagem de erro dizendo que tem que ter pelo menos duas rotas
+        if(sizeof($rotas) < 2){
+            return redirect('/rotas/rotas/' . $av->id)->with('error', 'Não é possível concluir uma AV com apenas uma rota!');
+        }
+
         //Valor do cálculo de rota e verificar quanto que terá que pagar ao usuário
         $diariaTotal = 0;
         $meiaDiaria = 0;
