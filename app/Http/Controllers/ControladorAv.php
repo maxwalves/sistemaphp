@@ -386,7 +386,8 @@ class ControladorAv extends Controller
         $user = auth()->user();
         $usersFiltrados = [];
         $possoEditar = false;
-        
+
+        $anexosRotas = AnexoRota::all();
 
         $av = Av::findOrFail($id);
         $userAv = User::findOrFail($av->user_id);
@@ -459,7 +460,7 @@ class ControladorAv extends Controller
             'diaChegadaInicial' => $diaChegadaInicial, 'horaChegadaInicial' => $horaChegadaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial,
             'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal, 'minutoSaidaFinal' => $minutoSaidaFinal,
             'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal, 'minutoChegadaFinal' => $minutoChegadaFinal,
-            'dataInicio' => $dataInicio, 'dataFim' => $dataFim]);
+            'dataInicio' => $dataInicio, 'dataFim' => $dataFim], ['anexosRotas' => $anexosRotas]);
         }
         else{
             return redirect('avs/autSecretaria')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -962,32 +963,6 @@ class ControladorAv extends Controller
         }
     }
 
-    public function escolherVeiculo($rota, $veiculo){
-
-        $rota = Rota::findOrFail($rota);
-        $av = Av::findOrFail($rota->av_id);
-        $rotas = $av->rotas;
-        if($veiculo !=0){
-            $veiculoParanacidade = VeiculoParanacidade::findOrFail($veiculo);
-
-            $dados = array(
-                "veiculoParanacidade_id"=> $veiculoParanacidade->id
-            );
-        }
-        else{
-            $dados = array(
-                "veiculoParanacidade_id"=> null
-            );
-        }
-
-        foreach($rotas as $r){
-            $r->update($dados);
-        }
-
-        return redirect('/avs/verFluxoSecretaria/' . $rota->av_id)->with('msg', 'Veículo escolhido!');
-
-    }
-
     public function verFluxoFinanceiro($id){
         $objetivos = Objetivo::all();
         $historicosTodos = Historico::all();
@@ -1087,7 +1062,7 @@ class ControladorAv extends Controller
 
             $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
             
-            $requestFile->move(public_path('AVs/' . $userAv->name . '/' . $av->id . '/'), $fileName);
+            $requestFile->move('/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/', $fileName);
 
             $anexoRota->anexoHotel = $fileName;
             $anexoRota->usuario_id = $av->user_id;
@@ -1114,7 +1089,7 @@ class ControladorAv extends Controller
 
             $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
             
-            $requestFile->move(public_path('AVs/' . $userAv->name . '/' . $av->id . '/'), $fileName);
+            $requestFile->move('/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/', $fileName);
 
             $anexoRota->anexoTransporte = $fileName;
             $anexoRota->usuario_id = $av->user_id;
@@ -1135,7 +1110,7 @@ class ControladorAv extends Controller
 
         $fileName = $anexoRota->anexoHotel;
         
-        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/') . $fileName;
+        $filePath = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/' . $fileName;
         //dd($filePath);
         if (file_exists($filePath)) {
             //dd($filePath);
@@ -1154,7 +1129,7 @@ class ControladorAv extends Controller
         $anexoRota = AnexoRota::findOrFail($id);
 
         $fileName = $anexoRota->anexoTransporte;
-        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/') . $fileName;
+        $filePath = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/' . $fileName;
 
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -1173,7 +1148,7 @@ class ControladorAv extends Controller
 
         $fileName = $anexoFin->anexoFinanceiro;
         
-        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/') . $fileName;
+        $filePath = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $fileName;
         
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -1191,7 +1166,7 @@ class ControladorAv extends Controller
 
         $fileName = $comprovante->anexoDespesa;
         
-        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/') . $fileName;
+        $filePath = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $fileName;
         
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -1209,7 +1184,7 @@ class ControladorAv extends Controller
 
         $fileName = $historicoPc->anexoRelatorio;
         
-        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/') . $fileName;
+        $filePath = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $fileName;
         
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -1227,7 +1202,7 @@ class ControladorAv extends Controller
 
         $fileName = $historicoPc->anexoRelatorio;
         
-        $filePath = public_path('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/') . $fileName;
+        $filePath = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $fileName;
         
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -1254,7 +1229,7 @@ class ControladorAv extends Controller
 
             $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
             
-            $requestFile->move(public_path('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/'), $fileName);
+            $requestFile->move('/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/', $fileName);
 
             $anexoFinanceiro->anexoFinanceiro = $fileName;
             $anexoFinanceiro->av_id = $av->id;
@@ -1285,7 +1260,7 @@ class ControladorAv extends Controller
 
             $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
             
-            $requestFile->move(public_path('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/'), $fileName);
+            $requestFile->move('/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/', $fileName);
 
             $comprovante->anexoDespesa = $fileName;
             $comprovante->av_id = $av->id;
@@ -1325,7 +1300,7 @@ class ControladorAv extends Controller
 
             $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
             
-            $requestFile->move(public_path('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/'), $fileName);
+            $requestFile->move('/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/', $fileName);
 
             $historicoPc->anexoRelatorio = $fileName;
             $historicoPc->av_id = $av->id;
@@ -1355,7 +1330,7 @@ class ControladorAv extends Controller
 
             $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
             
-            $requestFile->move(public_path('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/'), $fileName);
+            $requestFile->move('/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/', $fileName);
 
             $historicoPc->anexoRelatorio = $fileName;
             $historicoPc->av_id = $av->id;
@@ -1374,11 +1349,14 @@ class ControladorAv extends Controller
         $rota = Rota::findOrFail($id);
         $anexos = $rota->anexos;
         $av = Av::findOrFail($rota->av_id);
+        $rotasDaAv = $av->rotas;
+        $anexosRotas = AnexoRota::all();
         $userAv = User::findOrFail($av->user_id);
         $users = User::all();
         $user = auth()->user();
         $rotaPertenceAv = false;
         $possoEditar = false;
+        $objetivos = Objetivo::all();
 
         if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true  && $av["isRealizadoReserva"]==false && $av["isCancelado"]==false)
         || ($av["isCancelado"]== true && $av["isRealizadoReserva"]== true)){ //Se a av dele já foi enviada e autorizada pelo Gestor
@@ -1411,7 +1389,8 @@ class ControladorAv extends Controller
 
 
         if($possoEditar == true){
-            return view('avs.realizarReservas', ['rota' => $rota, 'user'=> $user, 'av' => $av, 'users' => $users, 'anexos' => $anexos, 'userAv' => $userAv]);
+            return view('avs.realizarReservas', ['rota' => $rota, 'user'=> $user, 'av' => $av, 'users' => $users, 'anexos' => $anexos, 'userAv' => $userAv, 
+            'objetivos' => $objetivos, 'rotasDaAv' => $rotasDaAv, 'anexosRotas' => $anexosRotas]);
         }
         else{
             return redirect('avs/autSecretaria')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -1754,7 +1733,7 @@ class ControladorAv extends Controller
             $dompdf->render();
 
             $nomeArquivo = md5("relatorio" . strtotime("now")) . ".pdf";
-            $caminhoDiretorio = public_path('AVs/' . $userAv->name . '/' . $av->id . '/internacional' . '/');
+            $caminhoDiretorio = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/internacional' . '/';
             $caminhoArquivo = $caminhoDiretorio . $nomeArquivo;
             if (!file_exists($caminhoDiretorio)) {
                 mkdir($caminhoDiretorio, 0777, true);
@@ -2082,7 +2061,7 @@ class ControladorAv extends Controller
         $dompdf->render();
 
         $nomeArquivo = md5("relatorio" . strtotime("now")) . ".pdf";
-        $caminhoDiretorio = public_path('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/');
+        $caminhoDiretorio = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/';
         $caminhoArquivo = $caminhoDiretorio . $nomeArquivo;
         if (!file_exists($caminhoDiretorio)) {
             mkdir($caminhoDiretorio, 0777, true);
@@ -2405,7 +2384,7 @@ class ControladorAv extends Controller
         $dompdf->render();
 
         $nomeArquivo = md5("relatorioAcertoContas" . strtotime("now")) . ".pdf";
-        $caminhoDiretorio = public_path('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/');
+        $caminhoDiretorio = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/';
         $caminhoArquivo = $caminhoDiretorio . $nomeArquivo;
         if (!file_exists($caminhoDiretorio)) {
             mkdir($caminhoDiretorio, 0777, true);
@@ -2921,6 +2900,12 @@ class ControladorAv extends Controller
             return redirect('/avs/avs/' . $av->id)->with('msg', 'Não é possível criar uma AV de medição se não existir autorização da comissão!');
         }
 
+        $av->user_id = $user->id;
+    
+        $av->save();
+
+        $avRecuperada = Av::findOrFail($av->id);
+
         if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
         {
             $requestFile = $request->arquivo1;
@@ -2929,16 +2914,12 @@ class ControladorAv extends Controller
 
             $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
             
-            $requestFile->move(public_path('AVs/' . $user->name . '/autorizacaoAv' . '/' . $av->id . '/'), $fileName);
+            $requestFile->move('/mnt/arquivos_viagem/AVs/' . $user->name . '/' . $avRecuperada->id . '/' . 'autorizacaoAv', $fileName);
 
-            $av->autorizacao = $fileName;
+            $avRecuperada->autorizacao = $fileName;
+
+            $avRecuperada->save();
         }
-
-        $av->user_id = $user->id;
-    
-        $av->save();
-
-        $avRecuperada = Av::findOrFail($av->id);
 
         $url = 'https://portaldosmunicipios.pr.gov.br/api/v1/medicao?status=27';
         $json = file_get_contents($url);

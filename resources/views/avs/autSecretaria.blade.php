@@ -8,17 +8,6 @@
 
 @section('content')
 
-<div style="padding-left: 10%" class="container">
-    
-    <div class="row justify-content-between">
-        
-        <div class="col-8">
-            <h4>Minhas autorizações de viagens</h4>
-        </div>
-    </div>
-    <br>
-</div> 
-
 <div class="col-md-12 dashboard-avs-container">
     @if(count($avs) > 0 )
     <table id="minhaTabela" class="display nowrap">
@@ -81,12 +70,12 @@
                     @if($av->isCancelado == true)
                     <div class="opcoesGerenciarAv">
                         <a href="/avs/verFluxoSecretaria/{{ $av->id }}" class="btn btn-warning btn-sm"
-                            style="width: 200px"> Gerenciar cancelamento</a> 
+                            style="width: 200px" title="Gerenciar cancelamento"><i class="far fa-calendar-times"></i></a> 
                     </div>
                     @else
                     <div class="opcoesGerenciarAv">
                         <a href="/avs/verFluxoSecretaria/{{ $av->id }}" class="btn btn-primary btn-sm"
-                            style="width: 200px"> Realizar Reservas</a> 
+                           title="Realizar Reservas"><i class="far fa-calendar-alt"></i></a> 
                     </div>
                     @endif
                     

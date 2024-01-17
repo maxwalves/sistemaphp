@@ -508,4 +508,14 @@ class UsersController extends Controller
             return view('unauthorized', ['user'=> $user]);
         }
     }
+
+    public function recuperaArquivo($name, $id, $pasta, $anexo)
+    {
+        //recupere o arquivo que está localizado no NAS no seguinte caminho: /mnt/arquivos_viagem/ . $string
+        $path = '/mnt/arquivos_viagem/AVs/' . $name . '/' . $id . '/' . $pasta . '/' . $anexo;
+        if($pasta = 'null'){
+            $path = '/mnt/arquivos_viagem/AVs/' . $name . '/' . $id . '/' . $anexo;
+        }
+        return response()->download($path);
+    }
 }

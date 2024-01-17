@@ -280,7 +280,12 @@
                     <p class="av-owner" style="font-size: 20px; color: black; background-color: rgb(255, 58, 98)"><ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
                     <p class="av-owner" style="font-size: 20px; color: black; background-color: deepskyblue"><ion-icon name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
                     @if($av->autorizacao != null)
-                        <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}" 
+                        <a href="{{ route('recuperaArquivo', [
+                            'name' => $userAv->name,
+                            'id' => $av->id,
+                            'pasta' => 'autorizacaoAv',
+                            'anexoRelatorio' => $av->autorizacao,
+                            ]) }}"
                             target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
                     @endif
                 </div>

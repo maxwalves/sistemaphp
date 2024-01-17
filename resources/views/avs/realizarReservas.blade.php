@@ -3,14 +3,19 @@
 @section('title', 'Realizar Reservas')
 
 @section('content_header')
-    <h1>Realizar Reservas</h1>
+    
 @stop
 
 @section('content')
 
 <div class="row justify-content-start" style="padding-left: 5%">
-    <div class="col-3">
-        <a href="/avs/verFluxoSecretaria/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"> Voltar!</a>
+    <div class="col-md-9">
+        <br>
+        <h2>Realizar Reservas</h2>
+    </div>
+    <div class="col-md-3">
+        <br>
+        <a href="/avs/verFluxoSecretaria/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i></a>
     </div>
 </div>
 <div>
@@ -25,40 +30,159 @@
     @endforeach
     </p>        
     <p class="av-owner" style="font-size: 24px"><ion-icon name="chevron-forward-circle-outline">
-    </ion-icon> <strong>E-mail do usuário: </strong> 
-    @foreach($users as $u)
-            @if ($u->id == $av->user_id)
-                {{ $u->username }}
+        </ion-icon> <strong>Objetivo: </strong>
+        @for ($i = 0; $i < count($objetivos); $i++)
+            @if ($av->objetivo_id == $objetivos[$i]->id)
+                {{ $objetivos[$i]->nomeObjetivo }}
             @endif
-    @endforeach
-    </p>  
+        @endfor
+
+        @if (isset($av->outroObjetivo))
+            {{ $av->outroObjetivo }}
+        @endif
+    </p>
     <div class="divider"></div> 
 
 
         <div class="row">
-            <div class="col-md-6">
-                <div class="flex flex-row">
-                    <label for="paisOrigem" style="font-size: 24px" ><strong>País de origem:</strong></label>
-                    <input type="text" style="font-size: 24px; padding-left: 5px" id="paisOrigem" disabled value="{{ $rota->isViagemInternacional ? $rota->paisOrigemInternacional : "Brasil" }}">
-                </div>
-                <h1 style="font-size: 24px"><strong>Estado de origem: </strong> {{ $rota->isViagemInternacional ? $rota->estadoOrigemInternacional : $rota->estadoOrigemNacional }}</h1>
-                <h1 style="font-size: 24px"><strong>Cidade de origem: </strong> {{ $rota->isViagemInternacional ? $rota->cidadeOrigemInternacional : $rota->cidadeOrigemNacional }}</h1>
+            <div class="flex flex-row">
+                <input type="text" style="display: none" id="paisOrigem" disabled value="{{ $rota->isViagemInternacional ? $rota->paisOrigemInternacional : "Brasil" }}">
+            </div>
+            <div class="flex flex-row">
+                <input type="text" style="display: none" id="paisDestino" disabled value="{{ $rota->isViagemInternacional ? $rota->paisDestinoInternacional : "Brasil" }}">
+            </div>
+            <div class="col-md-12">
+                {{-- mostre dados da próxima rota --}}
+                <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Cidade de saída</th>
+                            <th>Data/Hora de saída</th>
+                            <th>Cidade de chegada</th>
+                            <th>Data/Hora de chegada</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($rotasDaAv as $r)
+                        <tr style="{{($rota->id == $r->id ? 'background-color:yellow' : "")}}">
+                            <td> 
+                                @if($r->isAereo == 1)
+                                    <img src="{{asset('/img/aviaosubindo.png')}}" style="width: 40px" >
+                                @endif
+            
+                                @if($r->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                    <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+                                @endif
+            
+                                @if($r->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                    <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                                @endif
+
+                                @if($r->isOutroMeioTransporte == 1)
+                                    <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                @endif
+            
+                                {{$r->isViagemInternacional == 0 ? $r->cidadeOrigemNacional : $r->cidadeOrigemInternacional}} 
+                                
+                            </td>
+                            <td> {{ date('d/m/Y H:i', strtotime($r->dataHoraSaida)) }} </td>
+            
+                            <td> 
+                                @if($r->isAereo == 1)
+                                    <img src="{{asset('/img/aviaodescendo.png')}}" style="width: 40px" >
+                                @endif
+            
+                                @if($r->isVeiculoProprio == 1 || $r->isVeiculoEmpresa == 1)
+                                    <img src="{{asset('/img/carro.png')}}" style="width: 40px" >
+                                @endif
+            
+                                @if($r->isOnibusLeito == 1 || $r->isOnibusConvencional == 1)
+                                    <img src="{{asset('/img/onibus.png')}}" style="width: 40px" >
+                                @endif
+
+                                @if($r->isOutroMeioTransporte == 1)
+                                    <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                @endif
+            
+                                {{$r->isViagemInternacional == 0 ? $r->cidadeDestinoNacional : $r->cidadeDestinoInternacional}} 
+                            </td>
+            
+                            <td> {{ date('d/m/Y H:i', strtotime($r->dataHoraChegada)) }} </td>
+                            
+                            <td>
+                                @php
+                                    $correspondenciaHotelEncontrada = false;
+                                    $correspondenciaOnibusEncontrada = false;
+                                    $correspondenciaAereoEncontrada = false;
+                                @endphp
+                               
+                                @if($r->isReservaHotel ==1)
+                                    @foreach($anexosRotas as $anexo)
+                                        @if($anexo->rota_id == $r->id && $anexo->anexoHotel != null)
+                                            @php
+                                                $correspondenciaHotelEncontrada = true;
+                                            @endphp
+                                            <span class="badge bg-success badge-large"><i class="far fa-building"></i></span>
+                                            @break
+                                        @endif
+                                    @endforeach
+                                    @if(!$correspondenciaHotelEncontrada)
+                                        <span class="badge bg-warning badge-large"><i class="far fa-building"></i></span>
+                                    @endif
+                                @else
+                                    <span class="badge bg-danger badge-large"><i class="far fa-building"></i></span>
+                                @endif
+
+                                @if($r->isOnibusLeito == 1 || $av->isOnibusConvencional == 1)
+                                    @foreach($anexosRotas as $anexo)
+                                        @if($anexo->rota_id == $r->id && $anexo->anexoTransporte != null)
+                                            @php
+                                                $correspondenciaOnibusEncontrada = true;
+                                            @endphp
+                                            <span class="badge bg-success badge-large"><i class="fas fa-bus"></i></span>
+                                            @break
+                                        @endif
+                                    @endforeach
+                                    @if(!$correspondenciaOnibusEncontrada)
+                                        <span class="badge bg-warning badge-large"><i class="fas fa-bus"></i></span>
+                                    @endif
+                                @else
+                                    <span class="badge bg-danger badge-large"><i class="fas fa-bus"></i></span>
+                                @endif
+
+                                @if($r->isAereo == 1)
+                                    @foreach($anexosRotas as $anexo)
+                                        @if($anexo->rota_id == $r->id && $anexo->anexoTransporte != null)
+                                            @php
+                                                $correspondenciaAereoEncontrada = true;
+                                            @endphp
+                                            <span class="badge bg-success badge-large"><i class="fas fa-plane"></i></span>
+                                            @break
+                                        @endif
+                                    @endforeach
+                                    @if(!$correspondenciaAereoEncontrada)
+                                        <span class="badge bg-warning badge-large"><i class="fas fa-plane"></i></span>
+                                    @endif
+                                @else
+                                    <span class="badge bg-danger badge-large"><i class="fas fa-plane"></i></span>
+                                @endif
+                                
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <p>Legenda do status: <span class="badge bg-success">Reservado</span> <span class="badge bg-warning">Pendente</span> <span class="badge bg-danger">Não tem</span></p>
             </div>
 
-            <div class="col-md-6">
-                <div class="flex flex-row">
-                    <label for="paisDestino" style="font-size: 24px"><strong>País de destino: </strong> </label>
-                    <input type="text" style="font-size: 24px; padding-left: 5px" id="paisDestino" disabled value="{{ $rota->isViagemInternacional ? $rota->paisDestinoInternacional : "Brasil" }}">
-                </div>
-                <h1 style="font-size: 24px"><strong>Estado de destino: </strong> {{ $rota->isViagemInternacional ? $rota->estadoDestinoInternacional : $rota->estadoDestinoNacional }}</h1>
-                <h1 style="font-size: 24px"><strong>Cidade de destino: </strong> {{ $rota->isViagemInternacional ? $rota->cidadeDestinoInternacional : $rota->cidadeDestinoNacional }}</h1>
-            </div>
         </div>
-        <div class="divider"></div> 
+        <hr>
+        <br>
 
         @if($rota->isReservaHotel == true)
             <div class="col-3">
-                <x-adminlte-button label="Adicionar Reserva de Hotel" data-toggle="modal" data-target="#my-modal-3" class="bg-teal"/>
+                <x-adminlte-button label="+ Reserva Hotel" data-toggle="modal" data-target="#my-modal-3" class="bg-teal"/>
             </div>
 
             <div class="col-md-6 offset-md-0">
@@ -67,7 +191,6 @@
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>Anexo</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -77,15 +200,19 @@
                             <tr>
                                 <td> {{$anexo->descricao}} </td>
                             
-                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexo->anexoHotel) }}" 
-                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                                
                                 <td>
-                                    <form action="/avs/deletarAnexoHotel/{{ $anexo->id }}/{{ $rota->id }}" method="POST">
+                                    <a href="{{ route('recuperaArquivo', [
+                                        'name' => $userAv->name,
+                                        'id' => $av->id,
+                                        'pasta' => 'null',
+                                        'anexoRelatorio' => $anexo->anexoHotel,
+                                        ]) }}"
+                                        target="_blank" class="btn btn-active btn-success btn-sm d-inline"><i class="far fa-eye"></i></a>
+
+                                    <form action="/avs/deletarAnexoHotel/{{ $anexo->id }}/{{ $rota->id }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-active btn-danger btn-sm"
-                                        style="width: 110px" > Deletar</button>
+                                        <button type="submit" class="btn btn-active btn-danger btn-sm"><i class="far fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>
@@ -117,8 +244,17 @@
                                 <td> {{$anexo->descricao}} </td>
                                 
                                 
-                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexo->anexoTransporte) }}" 
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
+                                <td>
+                    
+                                    <a href="{{ route('recuperaArquivo', [
+                                        'name' => $userAv->name,
+                                        'id' => $av->id,
+                                        'pasta' => 'null',
+                                        'anexoRelatorio' => $anexo->anexoTransporte,
+                                        ]) }}"
+                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                
+                                </td>
                                 
                                 <td>   
                                     <form action="/avs/deletarAnexoTransporte/{{ $anexo->id }}/{{ $rota->id }}" method="POST">
@@ -184,6 +320,12 @@
 
 @section('css')
     <link href="{{ asset('DataTables/datatables.min.css') }}" rel="stylesheet" />
+    <style>
+        .badge-large {
+            font-size: 1rem; /* Ajuste o tamanho conforme necessário */
+            padding: 0.5rem 1rem; /* Ajuste o preenchimento conforme necessário */
+        }
+    </style>
 @stop
 
 @section('js')

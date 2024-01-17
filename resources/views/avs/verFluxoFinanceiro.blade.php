@@ -80,38 +80,47 @@
                             <div class="col-3">
                                 <x-adminlte-button label="Adicionar Comprovante de adiantamento" data-toggle="modal" data-target="#modalCustom" class="bg-teal"/>
                             </div>
-                            <div class="col-md-6 offset-md-0" style="overflow-x: auto;">
-                                <h1 style="font-size: 24px"><strong>Comprovante de adiantamentos: </strong></h1>
-                                <table id="minhaTabela2" class="table table-hover table-bordered" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Descrição</th>
-                                            <th>Anexo</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($anexos as $anexo)
+                            @if(count($anexos) > 0)
+                                <div class="col-md-6 offset-md-0" style="overflow-x: auto;">
+                                    <h1 style="font-size: 24px"><strong>Comprovante de adiantamentos: </strong></h1>
+                                    <table id="minhaTabela2" class="table table-hover table-bordered" style="width:100%">
+                                        <thead>
                                             <tr>
-                                                <td> {{ $anexo->descricao }} </td>
-                    
-                                                <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexo->anexoFinanceiro) }}"
-                                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a> </td>
-                    
-                                                <td>
-                                                    <form action="/avs/deletarAnexoFinanceiro/{{ $anexo->id }}/{{ $av->id }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-active btn-danger btn-sm" style="width: 110px">
-                                                            Remover</button>
-                                                    </form>
-                                                </td>
+                                                <th>Descrição</th>
+                                                <th>Anexo</th>
+                                                <th>Ações</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($anexos as $anexo)
+                                                <tr>
+                                                    <td> {{ $anexo->descricao }} </td>
+                        
+                                                    <td> 
+                                                        <a href="{{ route('recuperaArquivo', [
+                                                            'name' => $userAv->name,
+                                                            'id' => $av->id,
+                                                            'pasta' => 'adiantamentos',
+                                                            'anexoRelatorio' => $anexo->anexoFinanceiro,
+                                                            ]) }}"
+                                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                                    </td>
+                        
+                                                    <td>
+                                                        <form action="/avs/deletarAnexoFinanceiro/{{ $anexo->id }}/{{ $av->id }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-active btn-danger btn-sm" style="width: 110px">
+                                                                Remover</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
 
                             <div class="col-md-12" style="overflow-x: auto;">
 
@@ -634,9 +643,13 @@
                                         extra:</strong>
                                     {{ $av->justificativaValorExtra }}</p>
                                 @if ($av->autorizacao != null)
-                                    <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Documento de
-                                        Autorização</a>
+                                    <a href="{{ route('recuperaArquivo', [
+                                        'name' => $userAv->name,
+                                        'id' => $av->id,
+                                        'pasta' => 'autorizacaoAv',
+                                        'anexoRelatorio' => $av->autorizacao,
+                                        ]) }}"
+                                        target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
                                 @endif
                             </div>
 

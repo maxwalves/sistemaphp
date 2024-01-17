@@ -277,13 +277,25 @@
                                                     <tr>
                                                         <td> {{ $hist->comentario }} </td>
                                                         @if ($hist->comentario == 'AV Internacional gerada')
-                                                            <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/internacional' . '/' . $hist->anexoRelatorio) }}"
+                                                            <td> <a href="{{ route('recuperaArquivo', [
+                                                                'name' => $userAv->name,
+                                                                'id' => $av->id,
+                                                                'pasta' => 'internacional',
+                                                                'anexoRelatorio' => $hist->anexoRelatorio,
+                                                                ]) }}"
                                                                     target="_blank" class="btn btn-active btn-success btn-sm">Abrir
                                                                     documento</a> </td>
                                                         @else
-                                                            <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}"
-                                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                                    documento</a> </td>
+                                                            <td>
+                                                                <a href="{{ route('recuperaArquivo', [
+                                                                    'name' => $userAv->name,
+                                                                    'id' => $av->id,
+                                                                    'pasta' => 'resumo',
+                                                                    'anexoRelatorio' => $hist->anexoRelatorio,
+                                                                ]) }}" target="_blank" class="btn btn-active btn-success btn-sm">
+                                                                    Abrir documento
+                                                                </a>
+                                                            </td>
                                                         @endif
                                                     </tr>
                                                 @endforeach
@@ -546,7 +558,12 @@
                                     extra:</strong>
                                 {{ $av->justificativaValorExtra }}</p>
                             @if ($av->autorizacao != null)
-                                <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}"
+                                <a href="{{ route('recuperaArquivo', [
+                                    'name' => $userAv->name,
+                                    'id' => $av->id,
+                                    'pasta' => 'autorizacaoAv',
+                                    'anexoRelatorio' => $av->autorizacao,
+                                    ]) }}"
                                     target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
                             @endif
                         </div>
@@ -942,9 +959,17 @@
                                                 @endif
                                             @endfor
                                         </td>
-                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
+                                        <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
                                                 target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                documento</a>
+                                                documento Old</a>
+
+                                            <a href="{{ route('recuperaArquivo', [
+                                                'name' => $userAv->name,
+                                                'id' => $av->id,
+                                                'pasta' => 'null',
+                                                'anexoRelatorio' => $anexoHotel->anexoHotel,
+                                                ]) }}"
+                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
                                         </td>
                                     </tr>
                                 @endif
@@ -995,9 +1020,17 @@
                                                 @endif
                                             @endfor
                                         </td>
-                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
+                                        <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
                                                 target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                documento</a>
+                                                documento Old</a>
+
+                                            <a href="{{ route('recuperaArquivo', [
+                                                'name' => $userAv->name,
+                                                'id' => $av->id,
+                                                'pasta' => 'null',
+                                                'anexoRelatorio' => $anexoTransporte->anexoTransporte,
+                                                ]) }}"
+                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
                                         </td>
                                     </tr>
                                 @endif
@@ -1023,9 +1056,18 @@
                                 <tr>
                                     <td> {{ $anexoFinanceiro->descricao }} </td>
 
-                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
+                                    <td> 
+                                        <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
                                             target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento</a>
+                                            documento Old</a>
+
+                                        <a href="{{ route('recuperaArquivo', [
+                                            'name' => $userAv->name,
+                                            'id' => $av->id,
+                                            'pasta' => 'adiantamentos',
+                                            'anexoRelatorio' => $anexoFinanceiro->anexoFinanceiro,
+                                            ]) }}"
+                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
                                     </td>
 
                                 </tr>
@@ -1049,9 +1091,18 @@
                                 <tr>
                                     <td> {{ $comp->descricao }} </td>
                                     <td> {{ $comp->valorReais }} </td>
-                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
+                                    <td> 
+                                        <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
                                             target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento</a>
+                                            documento Old</a>
+
+                                        <a href="{{ route('recuperaArquivo', [
+                                            'name' => $userAv->name,
+                                            'id' => $av->id,
+                                            'pasta' => 'comprovantesDespesa',
+                                            'anexoRelatorio' => $comp->anexoDespesa,
+                                            ]) }}"
+                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
                                     </td>
                                 </tr>
                             @endforeach

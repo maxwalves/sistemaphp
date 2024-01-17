@@ -142,10 +142,10 @@
             </tbody>
         </table>
 
+        @if(count($rotas) > 0 && $rotas[0]->isVeiculoEmpresa == 1)
         <hr>
         <span style="color: red">Comunicação com o Sistema de Reservas:</span>
         <br>
-        @if(count($rotas) > 0 && $rotas[0]->isVeiculoEmpresa == 1)
             <div class="row">
                 <div class="col-md-6">
 

@@ -31,8 +31,10 @@ use App\Http\Controllers\EventController;
 //EMAIL
 
 Route::get('/impersonate/{id}', [UsersController::class, 'impersonate'])->name('impersonate');
+Route::get('/recuperaArquivo/{name}/{id}/{pasta}/{anexoRelatorio}', [UsersController::class, 'recuperaArquivo'])->name('recuperaArquivo');
 Route::get('/termoResponsabilidade', [UsersController::class, 'termoResponsabilidade'])->name('termoResponsabilidade');
 Route::put('/aprovarTermoResponsabilidade', [UsersController::class, 'aprovarTermoResponsabilidade'])->middleware('auth');
+
 
 Route::middleware(['assinatura.termo'])->group(function () {
 

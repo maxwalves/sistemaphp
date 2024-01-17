@@ -3,16 +3,14 @@
 @section('title', 'Aprovação CAD')
 
 @section('content_header')
-    <h1>Avaliação CAD</h1>
 @stop
 
 @section('content')
 
     <div class="row justify-content-start" style="padding-left: 5%">
-        <div class="col-3">
-            <a href="/avs/autSecretaria" type="submit" class="btn btn-active btn-warning"> Voltar!</a>
-        </div>
-        <div class="col-6">
+        <div class="col-9">
+            <br>
+            <h1>Avaliação CAD</h1>
             @if ($av->isCancelado == 1 && $av->isRealizadoReserva == 1)
                 <div class="alert alert-warning">
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
@@ -24,6 +22,10 @@
                             cancelamentos.</strong></span>
                 </div>
             @endif
+        </div>
+        <div class="col-3">
+            <br>
+            <a href="/avs/autSecretaria" type="submit" class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i></a>
         </div>
     </div>
     <br>
@@ -78,21 +80,18 @@
                                 @endforeach
                             </p>
                             <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                                </ion-icon> <strong>E-mail do usuário: </strong>
-                                @foreach ($users as $u)
-                                    @if ($u->id == $av->user_id)
-                                        {{ $u->username }}
+                                </ion-icon> <strong>Objetivo: </strong>
+                                @for ($i = 0; $i < count($objetivos); $i++)
+                                    @if ($av->objetivo_id == $objetivos[$i]->id)
+                                        {{ $objetivos[$i]->nomeObjetivo }}
                                     @endif
-                                @endforeach
+                                @endfor
+
+                                @if (isset($av->outroObjetivo))
+                                    {{ $av->outroObjetivo }}
+                                @endif
                             </p>
                             <div class="col-md-12" style="overflow-x: auto;">
-                                @foreach ($av->rotas as $r)
-                                    @if ($r->isVeiculoEmpresa == true)
-                                        <x-adminlte-button label="Alocar Veículo" data-rota="{{ $r->id }}" data-toggle="modal" data-target="#modalCustom"
-                                            class="bg-teal" />
-                                    @endif
-                                    @break
-                                @endforeach
 
                                 <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
                                 <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
@@ -105,12 +104,7 @@
                                             <th>Data/Hora de chegada</th>
                                             <th>Hotel?</th>
                                             <th>Tipo de transporte</th>
-                                            @foreach($av->rotas as $rota)
-                                                    @if($rota->isVeiculoEmpresa == 1)
-                                                        <th>Veículo</th>
-                                                        @break
-                                                    @endif
-                                            @endforeach
+                                            <th>Status</th>
                                             <th>Ações</th>
                                         </tr>
                                     </thead>
@@ -183,34 +177,71 @@
                                                 {{ $rota->isAereo == 1 ? "Aéreo" : ""}}
                                                 {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
                                             </td>
-                    
-                                            @php
-                                                $achouVeiculo = false;
-                                            @endphp
-                                            @if($rota->isVeiculoEmpresa == 1)
-                                                @foreach($veiculosParanacidade as $v)
-                                                        @if($rota->veiculoParanacidade_id == $v->id)
+
+                                            <td>
+                                                @php
+                                                    $correspondenciaHotelEncontrada = false;
+                                                    $correspondenciaOnibusEncontrada = false;
+                                                    $correspondenciaAereoEncontrada = false;
+                                                @endphp
+                                               
+                                                @if($rota->isReservaHotel ==1)
+                                                    @foreach($anexosRotas as $anexo)
+                                                        @if($anexo->rota_id == $rota->id && $anexo->anexoHotel != null)
                                                             @php
-                                                                $achouVeiculo = true;
-                                                                break;
+                                                                $correspondenciaHotelEncontrada = true;
                                                             @endphp
+                                                            <span class="badge bg-success badge-large"><i class="far fa-building"></i></span>
+                                                            @break
                                                         @endif
-                                                @endforeach
-                                                @if($achouVeiculo == true)
-                                                    <td>
-                                                        {{ $v->modelo }} ({{ $v->placa }})
-                                                    </td>
+                                                    @endforeach
+                                                    @if(!$correspondenciaHotelEncontrada)
+                                                        <span class="badge bg-warning badge-large"><i class="far fa-building"></i></span>
+                                                    @endif
                                                 @else
-                                                    <td>
-                                                        A definir
-                                                    </td>
+                                                    <span class="badge bg-danger badge-large"><i class="far fa-building"></i></span>
                                                 @endif
-                                            @endif
+
+                                                @if($rota->isOnibusLeito == 1 || $av->isOnibusConvencional == 1)
+                                                    @foreach($anexosRotas as $anexo)
+                                                        @if($anexo->rota_id == $rota->id && $anexo->anexoTransporte != null)
+                                                            @php
+                                                                $correspondenciaOnibusEncontrada = true;
+                                                            @endphp
+                                                            <span class="badge bg-success badge-large"><i class="fas fa-bus"></i></span>
+                                                            @break
+                                                        @endif
+                                                    @endforeach
+                                                    @if(!$correspondenciaOnibusEncontrada)
+                                                        <span class="badge bg-warning badge-large"><i class="fas fa-bus"></i></span>
+                                                    @endif
+                                                @else
+                                                    <span class="badge bg-danger badge-large"><i class="fas fa-bus"></i></span>
+                                                @endif
+
+                                                @if($rota->isAereo == 1)
+                                                    @foreach($anexosRotas as $anexo)
+                                                        @if($anexo->rota_id == $rota->id && $anexo->anexoTransporte != null)
+                                                            @php
+                                                                $correspondenciaAereoEncontrada = true;
+                                                            @endphp
+                                                            <span class="badge bg-success badge-large"><i class="fas fa-plane"></i></span>
+                                                            @break
+                                                        @endif
+                                                    @endforeach
+                                                    @if(!$correspondenciaAereoEncontrada)
+                                                        <span class="badge bg-warning badge-large"><i class="fas fa-plane"></i></span>
+                                                    @endif
+                                                @else
+                                                    <span class="badge bg-danger badge-large"><i class="fas fa-plane"></i></span>
+                                                @endif
+                                                
+                                            </td>
                                             
                                             <td>
                                                 @if($rota->isReservaHotel == true || $rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1 || $rota->isAereo ==1)
                                                     
-                                                        <a href="/avs/realizarReservas/{{ $rota->id }}" class="btn btn-active btn-success"
+                                                        <a href="/avs/realizarReservas/{{ $rota->id }}" class="btn btn-active btn-info"
                                                             > Gerenciar Reservas</a> 
                                                 @endif
                                             </td>
@@ -218,6 +249,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <p>Legenda do status: <span class="badge bg-success">Reservado</span> <span class="badge bg-warning">Pendente</span> <span class="badge bg-danger">Não tem</span></p>
                             </div>
                             
                             <div class="row">
@@ -635,9 +667,13 @@
                                         extra:</strong>
                                     {{ $av->justificativaValorExtra }}</p>
                                 @if ($av->autorizacao != null)
-                                    <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Documento de
-                                        Autorização</a>
+                                    <a href="{{ route('recuperaArquivo', [
+                                        'name' => $userAv->name,
+                                        'id' => $av->id,
+                                        'pasta' => 'autorizacaoAv',
+                                        'anexoRelatorio' => $av->autorizacao,
+                                        ]) }}"
+                                        target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
                                 @endif
                             </div>
 
@@ -891,62 +927,16 @@
     </div>
 </div>
 
-    <x-adminlte-modal id="modalCustom" title="Escolher veículo" size="md" theme="teal"
-    icon="fas fa-bell" v-centered static-backdrop scrollable>
-        <div>
-
-            <h3 class="text-lg font-bold" style="padding-left: 10%">Selecione um veículo:</h3>
-            <div class="form-group" style="padding-left: 20px" id="selecaoVeiculoParanacidade">
-                <label for="veiculoParanacidade_id" class="control-label" required>Selecione o veículo do
-                    Paranacidade?</label>
-                <br>
-                <select class="select select-bordered w-full max-w-xs" id="veiculoParanacidade_id"
-                    name="veiculoParanacidade_id">
-                    <option value="-" name="-"> Selecione</option>
-                    <option value="0" name="0"> Nenhum</option>
-                    @for ($i = 0; $i < count($veiculosParanacidade); $i++)
-                        @if ($veiculosParanacidade[$i]->codigoRegional == $userAv->department)
-                            <div>
-                                <option value="{{ $veiculosParanacidade[$i]->id }}"
-                                    name="{{ $veiculosParanacidade[$i]->id }}">
-                                    {{ $veiculosParanacidade[$i]->modelo }}. Placa:
-                                    {{ $veiculosParanacidade[$i]->placa }} </option>
-                            </div>
-                        @endif
-
-                        @if (
-                            $veiculosParanacidade[$i]->codigoRegional == 'CWB' &&
-                                $userAv->department != 'ERCSC' &&
-                                $userAv->department != 'ERMGA' &&
-                                $userAv->department != 'ERFCB' &&
-                                $userAv->department != 'ERGUA' &&
-                                $userAv->department != 'ERLDA' &&
-                                $userAv->department != 'ERPTG')
-                            <div>
-                                <option value="{{ $veiculosParanacidade[$i]->id }}"
-                                    name="{{ $veiculosParanacidade[$i]->id }}">
-                                    {{ $veiculosParanacidade[$i]->modelo }}. Placa:
-                                    {{ $veiculosParanacidade[$i]->placa }} </option>
-                            </div>
-                        @endif
-                    @endfor
-                </select>
-                <br><br>
-                <a class="btn btn-warning btn-sm" id="btn-submit-modal" style="width: 200px"> Vincular
-                    veículo</a>
-            </div>
-        
-        </div>
-
-        <x-slot name="footerSlot">
-            <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal"/>
-        </x-slot>
-    </x-adminlte-modal>
-
 @stop
 
 @section('css')
     <link href="{{ asset('DataTables/datatables.min.css') }}" rel="stylesheet" />
+    <style>
+        .badge-large {
+            font-size: 1rem; /* Ajuste o tamanho conforme necessário */
+            padding: 0.5rem 1rem; /* Ajuste o preenchimento conforme necessário */
+        }
+    </style>
 @stop
 
 @section('js')
@@ -955,26 +945,7 @@
     <script src="{{ asset('/js/moment.js') }}"></script>
     <script type="text/javascript">
         $(function() {
-            const modal = document.querySelector('.modal');
-            const avLabels = document.querySelectorAll('.btn[data-rota]');
-
-            avLabels.forEach(function(avLabel) {
-                avLabel.addEventListener('click', function() {
-                    const rota = this.getAttribute('data-rota');
-
-                    $('#btn-submit-modal').click(function() {
-
-                        var veiculo = document.getElementById("veiculoParanacidade_id")
-                            .value;
-                        if (veiculo != '-') {
-                            window.location.href = '/avs/escolherVeiculo/' + rota + '/' +
-                                veiculo;
-                        } else {
-                            alert("Escolha um veículo!");
-                        }
-                    });
-                });
-            });
+            
         });
     </script>
 

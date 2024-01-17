@@ -196,7 +196,12 @@
         
         <div class="mb-3 col-md-6 offset-md-3">
             @if ($av->autorizacao != null)
-                <a href="{{ asset('AVs/' . $userAv->name . '/autorizacaoAv' . '/' . $av->autorizacao) }}"
+                <a href="{{ route('recuperaArquivo', [
+                    'name' => $userAv->name,
+                    'id' => $av->id,
+                    'pasta' => 'autorizacaoAv',
+                    'anexoRelatorio' => $av->autorizacao,
+                    ]) }}"
                     target="_blank" class="btn btn-active btn-success btn-sm">Documento de Autorização</a>
             @endif
         </div>
