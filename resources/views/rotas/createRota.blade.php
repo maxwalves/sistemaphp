@@ -12,15 +12,15 @@
     <form action="/rotas" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row justify-content-start">
-            <div class="col-3">
-                <br>
-                <a href="/rotas/rotas/{{ $av->id }}" type="submit" class="btn btn-warning"><i class="fas fa-arrow-left"></i></a>
-            </div>
             <div class="col-8">
                 <label for="idav"> <strong>NOVA ROTA - Autorização de Viagem nº </strong> </label>
                 <input type="text" style="width: 50px" value="{{ $av->id }}" id="idav" name="idav" readonly>
                 <br>
                 <span><strong>Data da Autorização de Viagem: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong></span>
+            </div>
+            <div class="col-3">
+                <br>
+                <a href="/rotas/rotas/{{ $av->id }}" type="submit" class="btn btn-warning"><i class="fas fa-arrow-left"></i></a>
             </div>
         </div>
         <hr>
@@ -52,9 +52,9 @@
             @endif
         </div>
         
-        <div class="row justify-content-left">
+        <div class="row">
             
-                <div class="form-group" style="padding-left: 10%">
+                <div class="form-group" style="padding-left: 1%">
                     <h3>A viagem será internacional?</h3>
                         <select class="select select-bordered w-full max-w-xs {{ $errors->has('isViagemInternacional') ? 'is-invalid' :''}}" 
                             id="isViagemInternacional" name="isViagemInternacional" onChange="gerenciaNacionalInternacional()" >
@@ -73,8 +73,8 @@
         <div id="isInternacional">
             <br>
                     
-            <div class="row justify-content-center">
-                <div class="col-5">
+            <div class="row">
+                <div class="col-12 col-md-4">
                     {{-- CAMPOS DE ORIGEM INTERNACIONAL ---------------------------------}}
                     <h3 style="color: brown"> <ion-icon name="airplane-outline"></ion-icon> VIAGEM INTERNACIONAL</h3>
                     <br>
@@ -122,7 +122,7 @@
                         <br>
                             <input class="input input-bordered input-primary w-full max-w-xs {{ $errors->has('selecaoEstadoOrigem') ? 'is-invalid' :''}}" type="text"
                             id="selecaoEstadoOrigem" name="selecaoEstadoOrigem">
-                            <h3 style="color: brown"> Obs: Caso não possua Estado/Província, preencha com o nome da cidade.</h3>
+                            <h4 style="color: brown"> Obs: Caso não possua Estado/Província, preencha com o nome da cidade.</h4>
 
                             @if ($errors->has('selecaoEstadoOrigem'))
                             <div class="invalid-feedback">
@@ -165,7 +165,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-5">
+                <div class="col-12 col-md-4">
                     {{-- CAMPOS DE DETINO INTERNACIONAL ---------------------------------}}
                     <br><br>
                     <h4 style="color: crimson"> Destino: </h4>
@@ -213,7 +213,7 @@
 
                             <input class="input input-bordered input-primary w-full max-w-xs {{ $errors->has('selecaoEstadoDestinoInternacional') ? 'is-invalid' :''}}" type="text"
                             id="selecaoEstadoDestinoInternacional" name="selecaoEstadoDestinoInternacional">
-                            <h3 style="color: brown"> Obs: Caso não possua Estado/Província, preencha com o nome da cidade.</h3>
+                            <h4 style="color: brown"> Obs: Caso não possua Estado/Província, preencha com o nome da cidade.</h4>
                             @if ($errors->has('selecaoEstadoDestinoInternacional'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('selecaoEstadoDestinoInternacional') }}
@@ -265,8 +265,8 @@
         <div id="isNacional">
             <br>    
 
-            <div class="row justify-content-center">
-                <div class="col-12 col-xl-5">
+            <div class="row">
+                <div class="col-12 col-xl-4">
                     <h3 style="color: forestgreen"> <ion-icon name="bus-outline"></ion-icon> VIAGEM NACIONAL </h3>
                     <br>   
                     <h4 style="color: darkolivegreen"> Origem: </h4>
@@ -349,7 +349,7 @@
 
                 </div>
                     
-                <div class="col-12 col-xl-5">    
+                <div class="col-12 col-xl-4">    
                     <br><br>
                     <h4 style="color: darkolivegreen"> Destino: </h4>
                     <div class="form-group">
@@ -411,7 +411,7 @@
             </div>
             <div class="divider"></div> 
             @if(count( $av->rotas ) == 0 )
-                <div class="row justify-content-center">
+                <div class="row">
                     <div class="col-10">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="flexSwitchCheckDefault"
@@ -425,7 +425,7 @@
             <?php
                 $minDate = date('Y-m-d\TH:i');
             ?>
-            <div class="row justify-content-center" id="isViagemVoltaIgualIda">
+            <div class="row" id="isViagemVoltaIgualIda">
                 <div class="col-12 col-xl-5">
                     <div class="form-group"> 
                         <div id="dataHoraSaidaVoltaNacionalDiv" class="input-append date">
@@ -454,9 +454,9 @@
             </div>
         </div>
         <br>
-        <div class="row justify-content-center" style="background-color: lightgrey">
+        <div class="row" style="background-color: lightgrey">
             
-            <div class="col-md-6 offset-md-3">
+            <div class="col-md-6">
                                         
                 <div>
                     <div id="camposFinais" hidden="true">

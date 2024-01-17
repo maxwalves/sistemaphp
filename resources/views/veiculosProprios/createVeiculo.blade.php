@@ -3,16 +3,22 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Cadastrar novo veículo próprio</h1>
 @stop
 
 @section('content')
 
-<div>
-    <a href="/veiculosProprios/veiculosProprios" class="btn btn-warning">Voltar</a>
+<div class="row">
+    <div class="col-md-6">
+        <br>
+        <h3>Cadastrar novo veículo próprio</h3>
+    </div>
+    <div class="col-md-4">
+        <br>
+        <a href="/veiculosProprios/veiculosProprios" class="btn btn-warning"><i class="fas fa-arrow-left"></i></a>
+    </div>
 </div>
 <br>
-<div id="av-create-container" class="col-md-6 offset-md-3">
+<div id="av-create-container" class="col-md-6">
     <h2>Cadastrar novo veículo!</h2>
     <form action="/veiculosProprios" method="POST" enctype="multipart/form-data">
         @csrf
@@ -38,7 +44,7 @@
         </div>
 
         <div id="btSalvarVeiculo">
-            <input style="font-size: 16px" type="submit" class="btn btn-primary btn-lg" value="Cadastrar Veículo!">
+            <input style="font-size: 16px" type="submit" class="btn btn-success btn-lg" value="Salvar!">
         </div>
         
     </form>

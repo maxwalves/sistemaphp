@@ -26,12 +26,12 @@
                 <td> {{$veiculoProprio->marca}} </td>
                 <td> {{$veiculoProprio->modelo}} </td>
                 <td> {{$veiculoProprio->placa}} </td>
-                <td> 
-                    <a href="/veiculosProprios/edit/{{ $veiculoProprio->id }}" class="btn btn-success btn-sm"> <ion-icon name="create-outline"></ion-icon> Editar</a> 
+                <td class="d-flex"> 
+                    <a href="/veiculosProprios/edit/{{ $veiculoProprio->id }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a> 
                     <form action="/veiculosProprios/{{ $veiculoProprio->id }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
+                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                     </form>
                 </td>
             </tr>
@@ -41,7 +41,7 @@
     @else
     <p>Você ainda não tem veículos, <a href="/veiculosProprios/create"> Criar novo veículo</a></p>
     @endif
-    <a style="font-size: 16px" href="/veiculosProprios/create" type="submit" class="btn btn-primary btn-lg"> Cadastrar novo veículo!</a>
+    <a style="font-size: 16px" href="/veiculosProprios/create" type="submit" class="btn btn-success btn-lg"><i class="fas fa-plus"></i></a>
 </div>
 
 @stop

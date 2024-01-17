@@ -3,13 +3,21 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Dashboard</h1>
 @stop
 
 @section('content')
-    
-<div id="av-create-container" class="col-md-6 offset-md-3">
-    <h2>Editando: {{ $veiculoProprio->modelo }}</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <br>
+        <h3>Editar veículo próprio</h3>
+    </div>
+    <div class="col-md-4">
+        <br>
+        <a href="/veiculosProprios/veiculosProprios" class="btn btn-warning"><i class="fas fa-arrow-left"></i></a>
+    </div>
+</div>
+<div id="av-create-container" class="col-md-6">
     <form action="/veiculosProprios/update/{{ $veiculoProprio->id }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -36,7 +44,7 @@
         </div>
 
 
-        <input type="submit" class="btn btn-primary" value="Salvar">
+        <input type="submit" class="btn btn-success" value="Salvar">
 
     </form>
 

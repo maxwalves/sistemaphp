@@ -3,9 +3,15 @@
 @section('title', 'Gerenciar Rotas')
 
 @section('content_header')
-    <h1>Gerenciar Rotas</h1>
-
-    <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost"><i class="fas fa-arrow-left"></i></a>
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Gerenciar Rotas</h1>
+        </div>
+        <div class="col-md-6">
+            <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost"><i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+    
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -17,15 +23,15 @@
 @section('content')
     <div>
         <div class="row">
-            <div class="col-4">
+            <div class="col-1">
                 <a href="/rotas/create/{{ $av->id }}" type="submit" class="btn btn-active btn-success" style="width: 80px"> <i class="fas fa-plus"></i> ROTA</a>
             </div>
-            <div class="col-4">
+            <div class="col-5">
                 <label for="idav" > <strong>AV nº </strong> </label>
                 <input style="width: 50px; font-size: 16px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
                 <strong style="font-size: 18px">Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong>
             </div>
-            <div style="display: flex; justify-content: space-between;">
+            <div class="col-3" style="display: flex; justify-content: space-between;">
 
                 <form action="/avs/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -43,7 +49,7 @@
         
         <br>
     </div>
-    <div class="col-md-10 offset-md-1 dashboard-avs-container">
+    <div class="col-md-10 dashboard-avs-container">
         @if(count($rotas) > 0 )
         <table id="tabelaRota" class="table table-hover display nowrap table-responsive" style="width:100%">
             <thead>

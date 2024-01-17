@@ -89,7 +89,7 @@
                                 @if($av->rotas[$i]->dataHoraChegada < date('Y-m-d H:i:s'))
                                 <div class="opcoesGerenciarAv">
                                     <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" class="btn btn-success btn-sm"
-                                        style="width: 200px"> Prestar contas</a> 
+                                        title="Prestar contas"><i class="fas fa-file-invoice-dollar"></i></a> 
                                 </div>
                                 @else
                                     Ainda não finalizou
@@ -101,11 +101,11 @@
                             ($av->isCancelado == 1 && $av->isAprovadoFinanceiro == 1 && $av->isPrestacaoContasRealizada == 1))
 
                         <a href="/avs/verDetalhesPc/{{ $av->id }}" class="btn btn-primary btn-sm"
-                            style="width: 110px"> Ver</a>
+                            title="Ver"><i class="fas fa-eye"></i></a>
 
                         @if($av->isAcertoContasRealizado == 1 && $av->isUsuarioAprovaAcertoContas != 1)
                             <a href="/avs/validarAcertoContasUsuario/{{ $av->id }}" class="btn btn-success btn-sm"
-                            style="width: 110px"> Validar PC</a>
+                            title="Validar PC"><i class="fas fa-thumbs-up"></i></a>
                         @endif
                     @endif
                 </td>

@@ -65,12 +65,12 @@
                                 @endforeach
                             </p>
                             <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                                </ion-icon> <strong>E-mail do usuário: </strong>
-                                @foreach ($users as $u)
-                                    @if ($u->id == $av->user_id)
-                                        {{ $u->username }}
+                                </ion-icon> <strong>Objetivo: </strong>
+                                @for ($i = 0; $i < count($objetivos); $i++)
+                                    @if ($av->objetivo_id == $objetivos[$i]->id)
+                                        {{ $objetivos[$i]->nomeObjetivo }}
                                     @endif
-                                @endforeach
+                                @endfor
                             </p>
                             <p class="av-owner" style="font-size: 20px; color: green"><ion-icon name="chevron-forward-circle-outline">
                                 </ion-icon> <strong>Valor do adiantamento em reais: </strong>

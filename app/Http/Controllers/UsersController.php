@@ -513,7 +513,7 @@ class UsersController extends Controller
     {
         //recupere o arquivo que está localizado no NAS no seguinte caminho: /mnt/arquivos_viagem/ . $string
         $path = '/mnt/arquivos_viagem/AVs/' . $name . '/' . $id . '/' . $pasta . '/' . $anexo;
-        if($pasta = 'null'){
+        if($pasta == 'null'){
             $path = '/mnt/arquivos_viagem/AVs/' . $name . '/' . $id . '/' . $anexo;
         }
         return response()->download($path);

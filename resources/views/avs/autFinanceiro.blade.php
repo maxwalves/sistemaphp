@@ -8,23 +8,21 @@
 
 @section('content')
 
-<div class="container">
+
+<div class="row">
     
-    <div class="row">
-        
-        <div class="col-6">
-            <p>Escritórios visíveis:</p>
-            <div class="badge bg-info" id="escCuritiba" name="escCuritiba" {{$isFinanceiroCuritiba == false ? "hidden='true'" : ""}}>Curitiba</div>
-            <div class="badge bg-info" id="escCascavel" name="escCascavel" {{$temFinanceiroCascavel == true ? "hidden='true'" : ""}}>Cascavel</div>
-            <div class="badge bg-info" id="escMaringa" name="escMaringa" {{$temFinanceiroMaringa == true ? "hidden='true'" : ""}}>Maringá</div>
-            <div class="badge bg-info" id="escFrancisco" name="escFrancisco" {{$temFinanceiroFrancisco == true ? "hidden='true'" : ""}}>Francisco Beltrão</div>
-            <div class="badge bg-info" id="escGuarapuava" name="escGuarapuava" {{$temFinanceiroGuarapuava == true ? "hidden='true'" : ""}}>Guarapuava</div>
-            <div class="badge bg-info" id="escLondrina" name="escLondrina" {{$temFinanceiroLondrina == true ? "hidden='true'" : ""}}>Londrina</div>
-            <div class="badge bg-info" id="escPontaGrossa" name="escPontaGrossa" {{$temFinanceiroPontaGrossa == true ? "hidden='true'" : ""}}>Ponta Grossa</div>
-        </div>
+    <div class="col-md-6">
+        <p>Escritórios visíveis:</p>
+        <div class="badge bg-info" id="escCuritiba" name="escCuritiba" {{$isFinanceiroCuritiba == false ? "hidden='true'" : ""}}>Curitiba</div>
+        <div class="badge bg-info" id="escCascavel" name="escCascavel" {{$temFinanceiroCascavel == true ? "hidden='true'" : ""}}>Cascavel</div>
+        <div class="badge bg-info" id="escMaringa" name="escMaringa" {{$temFinanceiroMaringa == true ? "hidden='true'" : ""}}>Maringá</div>
+        <div class="badge bg-info" id="escFrancisco" name="escFrancisco" {{$temFinanceiroFrancisco == true ? "hidden='true'" : ""}}>Francisco Beltrão</div>
+        <div class="badge bg-info" id="escGuarapuava" name="escGuarapuava" {{$temFinanceiroGuarapuava == true ? "hidden='true'" : ""}}>Guarapuava</div>
+        <div class="badge bg-info" id="escLondrina" name="escLondrina" {{$temFinanceiroLondrina == true ? "hidden='true'" : ""}}>Londrina</div>
+        <div class="badge bg-info" id="escPontaGrossa" name="escPontaGrossa" {{$temFinanceiroPontaGrossa == true ? "hidden='true'" : ""}}>Ponta Grossa</div>
     </div>
-    <br>
-</div> 
+</div>
+<br>
 
 <div class="col-md-12 dashboard-avs-container">
     @if(count($avs) > 0 )
