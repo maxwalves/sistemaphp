@@ -329,7 +329,7 @@
             @csrf
             @method('PUT')
             
-            <div class="row justify-content-center" style="padding-left: 5%">
+            <div class="row" style="padding-left: 1%">
 
                 <div class="col-12 col-md-6" >
                     <div class="form-group">
@@ -399,7 +399,7 @@
                     
                     <br>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-active btn-primary btn-lg">Enviar<i class="fas fa-paper-plane"></i></button>
+                        <button type="submit" class="btn btn-active btn-primary btn-lg">Enviar <i class="fas fa-paper-plane"></i></button>
                     </div>
                 </div>
             </div>

@@ -85,7 +85,7 @@
                 <td> 
                     <div class="opcoesGerenciarAv">
                         <a href="/avs/verFluxoFinanceiro/{{ $av->id }}" class="btn btn-primary btn-sm"
-                            style="width: 200px"> Fazer adiantamento</a> 
+                            title="Fazer adiantamento"><i class="fas fa-hand-holding-usd"></i></a> 
                         
                     </div>
                 </td>

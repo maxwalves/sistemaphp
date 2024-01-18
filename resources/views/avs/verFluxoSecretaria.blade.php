@@ -68,19 +68,17 @@
                     <div class="tab-content" id="custom-tabs-three-tabContent">
                         <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel"
                             aria-labelledby="custom-tabs-three-home-tab">
-                            <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong> {{ $av->id }}
-                            </h1>
-                            <h1 style="font-size: 24px"><strong>Status atual:</strong> {{ $av->status }}</h1>
-                            <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                                </ion-icon> <strong>Nome do usuário: </strong>
+                            <h4><strong>Autorização de viagem nº:</strong> {{ $av->id }}
+                            </h4>
+                            <h4><strong>Status atual:</strong> {{ $av->status }}</h4>
+                            <p style="font-size: 22px"><strong>Nome do usuário: </strong>
                                 @foreach ($users as $u)
                                     @if ($u->id == $av->user_id)
                                         {{ $u->name }}
                                     @endif
                                 @endforeach
                             </p>
-                            <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                                </ion-icon> <strong>Objetivo: </strong>
+                            <p style="font-size: 22px"><strong>Objetivo: </strong>
                                 @for ($i = 0; $i < count($objetivos); $i++)
                                     @if ($av->objetivo_id == $objetivos[$i]->id)
                                         {{ $objetivos[$i]->nomeObjetivo }}
@@ -202,7 +200,7 @@
                                                     <span class="badge bg-danger badge-large"><i class="far fa-building"></i></span>
                                                 @endif
 
-                                                @if($rota->isOnibusLeito == 1 || $av->isOnibusConvencional == 1)
+                                                @if($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
                                                     @foreach($anexosRotas as $anexo)
                                                         @if($anexo->rota_id == $rota->id && $anexo->anexoTransporte != null)
                                                             @php
@@ -242,7 +240,7 @@
                                                 @if($rota->isReservaHotel == true || $rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1 || $rota->isAereo ==1)
                                                     
                                                         <a href="/avs/realizarReservas/{{ $rota->id }}" class="btn btn-active btn-info"
-                                                            > Gerenciar Reservas</a> 
+                                                            title="Gerenciar Reservas"><i class="fas fa-calendar-alt"></i></a> 
                                                 @endif
                                             </td>
                                         </tr>
@@ -643,25 +641,31 @@
                                 <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                         name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
                                     {{ $av->valorReais }}</p>
-                                <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                        name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
-                                    {{ $av->valorDolar }}</p>
+                                @if($av->valorDolar != null)
+                                    <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                            name="cash-outline"></ion-icon> <strong>Valor em dólar:</strong> $
+                                        {{ $av->valorDolar }}</p>
+                                @endif
                                 <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                         name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
                                     {{ $av->valorExtraReais }}</p>
-                                <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                        name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
-                                    {{ $av->valorExtraDolar }}</p>
+                                @if($av->valorExtraDolar != null)
+                                    <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                            name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
+                                        {{ $av->valorExtraDolar }}</p>
+                                @endif
                                 <p class="av-owner" style="font-size: 20px; color: black;">
                                     <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong>
                                     R$
                                     {{ $av->valorDeducaoReais }}
                                 </p>
-                                <p class="av-owner" style="font-size: 20px; color: black;">
-                                    <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong>
-                                    $
-                                    {{ $av->valorDeducaoDolar }}
-                                </p>
+                                @if($av->valorDeducaoDolar != null)
+                                    <p class="av-owner" style="font-size: 20px; color: black;">
+                                        <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong>
+                                        $
+                                        {{ $av->valorDeducaoDolar }}
+                                    </p>
+                                @endif
                                 <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                         name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                         extra:</strong>

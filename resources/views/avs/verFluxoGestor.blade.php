@@ -3,14 +3,18 @@
 @section('title', 'Aprovação Gestor')
 
 @section('content_header')
-    <h1>Avaliação Gestor</h1>
 @stop
 
 @section('content')
 
-    <div class="row justify-content-start" style="padding-left: 5%">
-        <div class="col-3">
-            <a href="/avs/autGestor" type="submit" class="btn btn-active btn-warning"> Voltar!</a>
+    <div class="row" style="padding-left: 1%">
+        <div class="col-8">
+            <br>
+            <h3>Avaliação Gestor</h3>
+        </div>
+        <div class="col-4">
+            <br>
+            <a href="/avs/autGestor" type="submit" class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i></a>
         </div>
     </div>
     <br>
@@ -469,9 +473,6 @@
                                 </div>
                             </div>
                             
-
-                            
-
                         </div>
                         <div class="tab-pane fade" id="custom-tabs-three-historico" role="tabpanel"
                             aria-labelledby="custom-tabs-three-historico-tab">
@@ -480,7 +481,6 @@
                                 <!-- head -->
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>Data</th>
                                         <th>Ocorrência</th>
                                         <th>Comentário</th>
@@ -493,7 +493,6 @@
 
                                     @foreach ($historicos as $historico)
                                         <tr>
-                                            <td>{{ $historico->id }}</td>
                                             <td>{{ $historico->dataOcorrencia }}</td>
                                             <td>{{ $historico->tipoOcorrencia }}</td>
                                             <td>{{ $historico->comentario }}</td>
@@ -589,25 +588,31 @@
                                 <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                         name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
                                     {{ $av->valorReais }}</p>
-                                <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                        name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
-                                    {{ $av->valorDolar }}</p>
+                                @if($av->valorDolar != null)
+                                    <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                            name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
+                                        {{ $av->valorDolar }}</p>
+                                @endif
                                 <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                         name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
                                     {{ $av->valorExtraReais }}</p>
-                                <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                        name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
-                                    {{ $av->valorExtraDolar }}</p>
+                                @if($av->valorExtraDolar != null)
+                                    <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                            name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
+                                        {{ $av->valorExtraDolar }}</p>
+                                @endif
                                 <p class="av-owner" style="font-size: 20px; color: black;">
                                     <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong>
                                     R$
                                     {{ $av->valorDeducaoReais }}
                                 </p>
-                                <p class="av-owner" style="font-size: 20px; color: black;">
-                                    <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong>
-                                    $
-                                    {{ $av->valorDeducaoDolar }}
-                                </p>
+                                @if($av->valorDeducaoDolar != null)
+                                    <p class="av-owner" style="font-size: 20px; color: black;">
+                                        <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong>
+                                        $
+                                        {{ $av->valorDeducaoDolar }}
+                                    </p>
+                                @endif
                                 <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                         name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                         extra:</strong>

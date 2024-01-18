@@ -134,7 +134,7 @@
                                     <span class="badge bg-danger badge-large"><i class="far fa-building"></i></span>
                                 @endif
 
-                                @if($r->isOnibusLeito == 1 || $av->isOnibusConvencional == 1)
+                                @if($r->isOnibusLeito == 1 || $r->isOnibusConvencional == 1)
                                     @foreach($anexosRotas as $anexo)
                                         @if($anexo->rota_id == $r->id && $anexo->anexoTransporte != null)
                                             @php

@@ -91,14 +91,13 @@
                                             @endif
                                         @endforeach
                                     </p>
-                                    <p class="av-owner" style="font-size: 20px"><ion-icon
-                                            name="chevron-forward-circle-outline">
-                                        </ion-icon> <strong>E-mail do usuário: </strong>
-                                        @foreach ($users as $u)
-                                            @if ($u->id == $av->user_id)
-                                                {{ $u->username }}
+                                    <p class="av-owner" style="font-size: 20px">
+                                        <strong>Objetivo: </strong>
+                                        @for ($i = 0; $i < count($objetivos); $i++)
+                                            @if ($av->objetivo_id == $objetivos[$i]->id)
+                                                {{ $objetivos[$i]->nomeObjetivo }}
                                             @endif
-                                        @endforeach
+                                        @endfor
                                     </p>
                                 </div>
                             </div>
@@ -108,71 +107,71 @@
                             <div class="containerAcertoContas">
                                 
                                 <div class="box box-40">
-                                    <div>
-                                        <h1 style="font-size: 24px"><strong>AV:</strong></h1>
-                                        <table id="minhaTabela6" class="table table-hover table-bordered"
-                                            style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Descrição</th>
-                                                    <th>Anexo</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($historicoPc as $hist)
+                                    <div class="row">
+
+                                        <div class="col-12 col-md-6">
+                                            <h1 style="font-size: 24px"><strong>AV:</strong></h1>
+
+                                            <table id="minhaTabela6" class="table table-hover table-bordered"
+                                                style="width:100%">
+                                                <thead>
                                                     <tr>
-                                                        <td> {{ $hist->comentario }} </td>
-                                                        @if ($hist->comentario == 'AV Internacional gerada')
-                                                            <td> <a href="{{ route('recuperaArquivo', [
-                                                                'name' => $userAv->name,
-                                                                'id' => $av->id,
-                                                                'pasta' => 'internacional',
-                                                                'anexoRelatorio' => $hist->anexoRelatorio,
-                                                                ]) }}"
-                                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                                    documento</a> </td>
-                                                        @else
-                                                            <td>
-                                                                <a href="{{ route('recuperaArquivo', [
+                                                        <th>Descrição</th>
+                                                        <th>Anexo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($historicoPc as $hist)
+                                                        <tr>
+                                                            <td> {{ $hist->comentario }} </td>
+                                                            @if ($hist->comentario == 'AV Internacional gerada')
+                                                                <td> <a href="{{ route('recuperaArquivo', [
                                                                     'name' => $userAv->name,
                                                                     'id' => $av->id,
-                                                                    'pasta' => 'resumo',
+                                                                    'pasta' => 'internacional',
                                                                     'anexoRelatorio' => $hist->anexoRelatorio,
-                                                                ]) }}" target="_blank" class="btn btn-active btn-success btn-sm">
-                                                                    Abrir documento
-                                                                </a>
-                                                            </td>
-                                                        @endif
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                        
-                                    </div>
-                                    <br><br>
-                                    @if ($av->horasExtras != null || $av->minutosExtras != null || $av->justificativaHorasExtras != null)
-                                        <div style="border: 1px solid black;; color: black; width: 50%; padding-left: 10%">
-                                            <strong style="color: red">Foram realizadas horas extras:</strong> <br>
-                                            <strong>Horas:</strong> {{ $av->horasExtras }} <br>
-                                            <strong>Minutos:</strong> {{ $av->minutosExtras }} <br>
-                                            <strong>Justificativa:</strong> {{ $av->justificativaHorasExtras }} <br>
+                                                                    ]) }}"
+                                                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
+                                                                        documento</a> </td>
+                                                            @else
+                                                                <td>
+                                                                    <a href="{{ route('recuperaArquivo', [
+                                                                        'name' => $userAv->name,
+                                                                        'id' => $av->id,
+                                                                        'pasta' => 'resumo',
+                                                                        'anexoRelatorio' => $hist->anexoRelatorio,
+                                                                    ]) }}" target="_blank" class="btn btn-active btn-success btn-sm">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </a>
+                                                                </td>
+                                                            @endif
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    @endif
+                                        <div class="col-12 col-md-6">
+                                            @if ($av->horasExtras != null || $av->minutosExtras != null || $av->justificativaHorasExtras != null)
+                                                <div style="border: 1px solid black;; color: black; width: 50%; padding-left: 10%">
+                                                    <strong style="color: red">Foram realizadas horas extras:</strong> <br>
+                                                    <strong>Horas:</strong> {{ $av->horasExtras }} <br>
+                                                    <strong>Minutos:</strong> {{ $av->minutosExtras }} <br>
+                                                    <strong>Justificativa:</strong> {{ $av->justificativaHorasExtras }} <br>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="divider"></div>
-
+                            <hr>
                         </div>
 
                         <div >
 
                             @if ($av['isCancelado'] == false)
                                 <div>
-                                    <a href="/avspc/edit/{{ $av->id }}" class="btn btn-success btn-sm" style="width: 110px"> Editar
-                                        AV</a>
-                                    <a href="/rotaspc/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm" style="width: 150px">
-                                        Editar Rotas</a>
+                                    <a href="/avspc/edit/{{ $av->id }}" class="btn btn-success btn-sm"><i class="fas fa-edit"></i> AV</a>
+                                    <a href="/rotaspc/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i> ROTAS</a>
                         
                                 </div>
                             @endif
@@ -223,9 +222,7 @@
                                                     @if ($av['isCancelado'] == false)
                                                         <td> R${{ $comp->valorReais }}</td>
                                                     @endif
-                                                    <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
-                                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento Old</a>
-                                                        
+                                                    <td>
                                                         <a href="{{ route('recuperaArquivo', [
                                                             'name' => $userAv->name,
                                                             'id' => $av->id,
@@ -998,7 +995,6 @@
                         <thead>
                             <tr>
                                 <th>Descrição</th>
-                                <th>IdRota</th>
                                 <th>Rota</th>
                                 <th>Anexo</th>
                             </tr>
@@ -1009,13 +1005,6 @@
                                     <tr>
                                         <td> {{ $anexoHotel->descricao }} </td>
 
-                                        <td>
-                                            @for ($i = 0; $i < count($av->rotas); $i++)
-                                                @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
-                                                    {{ $av->rotas[$i]->id }}
-                                                @endif
-                                            @endfor
-                                        </td>
                                         <td>
                                             @for ($i = 0; $i < count($av->rotas); $i++)
                                                 @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
@@ -1031,10 +1020,7 @@
                                                 @endif
                                             @endfor
                                         </td>
-                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
-                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                documento Old</a>
-
+                                        <td> 
                                             <a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
@@ -1059,7 +1045,6 @@
                         <thead>
                             <tr>
                                 <th>Descrição</th>
-                                <th>IdRota</th>
                                 <th>Rota</th>
                                 <th>Anexo</th>
                             </tr>
@@ -1069,14 +1054,6 @@
                                 @if ($anexoTransporte->anexoTransporte != null)
                                     <tr>
                                         <td> {{ $anexoTransporte->descricao }} </td>
-
-                                        <td>
-                                            @for ($i = 0; $i < count($av->rotas); $i++)
-                                                @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
-                                                    {{ $av->rotas[$i]->id }}
-                                                @endif
-                                            @endfor
-                                        </td>
                                         <td>
                                             @for ($i = 0; $i < count($av->rotas); $i++)
                                                 @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
@@ -1092,10 +1069,7 @@
                                                 @endif
                                             @endfor
                                         </td>
-                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
-                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                documento Old</a>
-
+                                        <td>
                                             <a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
@@ -1128,10 +1102,7 @@
                                 <tr>
                                     <td> {{ $anexoFinanceiro->descricao }} </td>
 
-                                    <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-
+                                    <td>
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,

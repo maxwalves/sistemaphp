@@ -3,14 +3,18 @@
 @section('title', 'Adiantamento CFI')
 
 @section('content_header')
-    <h1>Adiantamentos - CFI</h1>
 @stop
 
 @section('content')
 
-    <div class="row justify-content-start">
-        <div class="col-3">
-            <a href="/avs/autFinanceiro" type="submit" class="btn btn-active btn-warning"> Voltar!</a>
+    <div class="row">
+        <div class="col-8">
+            <br>
+            <h3>Adiantamentos - CFI</h3>
+        </div>
+        <div class="col-4">
+            <br>
+            <a href="/avs/autFinanceiro" type="submit" class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i></a>
         </div>
     </div>
     <br>
@@ -87,7 +91,6 @@
                                         <thead>
                                             <tr>
                                                 <th>Descrição</th>
-                                                <th>Anexo</th>
                                                 <th>Ações</th>
                                             </tr>
                                         </thead>
@@ -95,29 +98,26 @@
                                             @foreach ($anexos as $anexo)
                                                 <tr>
                                                     <td> {{ $anexo->descricao }} </td>
-                        
-                                                    <td> 
+                                                    <td class="d-flex">
                                                         <a href="{{ route('recuperaArquivo', [
                                                             'name' => $userAv->name,
                                                             'id' => $av->id,
                                                             'pasta' => 'adiantamentos',
                                                             'anexoRelatorio' => $anexo->anexoFinanceiro,
-                                                            ]) }}"
-                                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
-                                                    </td>
-                        
-                                                    <td>
-                                                        <form action="/avs/deletarAnexoFinanceiro/{{ $anexo->id }}/{{ $av->id }}"
-                                                            method="POST">
+                                                        ]) }}" target="_blank" class="btn btn-active btn-success btn-sm mr-2">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                        <form action="/avs/deletarAnexoFinanceiro/{{ $anexo->id }}/{{ $av->id }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-active btn-danger btn-sm" style="width: 110px">
-                                                                Remover</button>
+                                                            <button type="submit" class="btn btn-active btn-danger btn-sm">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
                                                         </form>
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        </tbody>
+                                        </tbody>                                        
                                     </table>
                                 </div>
                             @endif
@@ -619,25 +619,31 @@
                                 <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                         name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
                                     {{ $av->valorReais }}</p>
-                                <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                        name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
-                                    {{ $av->valorDolar }}</p>
+                                @if( $av->valorDolar != null)
+                                    <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                            name="cash-outline"></ion-icon> <strong>Valor em dólar:</strong> $
+                                        {{ $av->valorDolar }}</p>
+                                @endif
                                 <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                         name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
                                     {{ $av->valorExtraReais }}</p>
-                                <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                        name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
-                                    {{ $av->valorExtraDolar }}</p>
+                                @if( $av->valorExtraDolar != null)
+                                    <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                            name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
+                                        {{ $av->valorExtraDolar }}</p>
+                                @endif
                                 <p class="av-owner" style="font-size: 20px; color: black;">
                                     <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong>
                                     R$
                                     {{ $av->valorDeducaoReais }}
                                 </p>
-                                <p class="av-owner" style="font-size: 20px; color: black;">
-                                    <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong>
-                                    $
-                                    {{ $av->valorDeducaoDolar }}
-                                </p>
+                                @if( $av->valorDeducaoDolar != null)
+                                    <p class="av-owner" style="font-size: 20px; color: black;">
+                                        <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong>
+                                        $
+                                        {{ $av->valorDeducaoDolar }}
+                                    </p>
+                                @endif
                                 <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                         name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                         extra:</strong>

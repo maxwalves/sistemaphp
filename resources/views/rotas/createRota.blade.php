@@ -426,7 +426,7 @@
                 $minDate = date('Y-m-d\TH:i');
             ?>
             <div class="row" id="isViagemVoltaIgualIda">
-                <div class="col-12 col-xl-5">
+                <div class="col-12 col-xl-4">
                     <div class="form-group"> 
                         <div id="dataHoraSaidaVoltaNacionalDiv" class="input-append date">
                             <label for="dataHoraSaidaVoltaNacional" class="control-label"><strong style="color: red">* </strong>Data/Hora de saída na volta: </label>
@@ -439,7 +439,7 @@
                     </div>
                 </div>
                 
-                <div class="col-12 col-xl-5">
+                <div class="col-12 col-xl-4">
                     <div class="form-group"> 
                         <div id="dataHoraChegadaVoltaNacionalDiv" class="input-append date">
                             <label for="dataHoraChegadaVoltaNacional" class="control-label"><strong style="color: red">* </strong>Data/Hora prevista de chegada na volta: </label>

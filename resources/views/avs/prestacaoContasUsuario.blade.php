@@ -87,10 +87,11 @@
                         @for($i = 0; $i < count($av->rotas); $i++)
                             @if($i == (count($av->rotas)-1))
                                 @if($av->rotas[$i]->dataHoraChegada < date('Y-m-d H:i:s'))
-                                <div class="opcoesGerenciarAv">
-                                    <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" class="btn btn-success btn-sm"
-                                        title="Prestar contas"><i class="fas fa-file-invoice-dollar"></i></a> 
-                                </div>
+                                {{-- @if(true) --}}
+                                    <div class="opcoesGerenciarAv">
+                                        <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" class="btn btn-success btn-sm"
+                                            title="Prestar contas"><i class="fas fa-file-invoice-dollar"></i></a> 
+                                    </div>
                                 @else
                                     Ainda não finalizou
                                 @endif

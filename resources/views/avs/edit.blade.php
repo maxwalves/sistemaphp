@@ -3,13 +3,16 @@
 @section('title', 'Criar AV')
 
 @section('content_header')
-    <h2>Cadastro de autorização de viagem:</h2>
 @stop
 
 @section('content')
+<br>
 <div class="row">
-    <div class="col-3">
-        <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost"> Voltar!</a>
+    <div class="col-md-6">
+        <h2>Edição da autorização de viagem Nr: {{ $av->id }}</h2>
+    </div>
+    <div class="col-md-3">
+        <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost"><i class="fas fa-arrow-left"></i></a>
     </div>
 </div>
 <div id="av-create-container" >
@@ -18,7 +21,7 @@
         @csrf
         @method('PUT')
         
-        <div class="form-group col-md-6 offset-md-3" id="nomeObjetivo">
+        <div class="form-group col-md-6" id="nomeObjetivo">
             <label for="objetivo_id" class="control-label" required>Qual é o Objetivo da viagem? (selecione)</label>
             <br>
                 <select class="select select-bordered w-full max-w-xs {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
@@ -38,7 +41,7 @@
                 </div>
                 @endif
         </div>
-        <div class="form-group col-md-6 offset-md-3" id="isMostrarTodos">
+        <div class="form-group col-md-6" id="isMostrarTodos">
             <span class="label-text">Mostrar todos</span> 
             <input type="checkbox" class="toggle" onChange="mostrarTodos()"/>
         </div>
@@ -122,7 +125,7 @@
             
         </div>
 
-        <div class="form-group col-md-6 offset-md-3" id="outroObjetivoCampo">
+        <div class="form-group col-md-6" id="outroObjetivoCampo">
             <label for="outro" class="control-label">Digite outro objetivo: </label>
             <div class="input-group">
                 <input type="text" class="form-control {{ $errors->has('outroObjetivo') ? 'is-invalid' :''}}" 
@@ -137,7 +140,7 @@
             @endif
         </div>
 
-        <div class="form-check form-switch col-md-6 offset-md-3" id="selecOutroObj">
+        <div class="form-check form-switch col-md-6" id="selecOutroObj">
             <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" 
             style="height: 20px; width: 40px" onChange="desativarCampoObjetivo()">
             <label class="form-check-label" for="flexSwitchCheckDefault" style="padding-left: 10px">Não achei o objetivo que desejo na lista!</label>
@@ -146,7 +149,7 @@
         <br>
         <br>
 
-        <div class="mb-3 col-md-6 offset-md-3">
+        <div class="mb-3 col-md-6">
             <label for="banco" class="form-label"><strong style="color: red">* </strong>Banco</label>
             <div class="input-group mb-3">   
                 <input type="text" class="form-control" name="banco"
@@ -155,7 +158,7 @@
             </div>
         </div>
 
-        <div class="mb-3 col-md-6 offset-md-3">
+        <div class="mb-3 col-md-6">
             <label for="agencia" class="form-label"><strong style="color: red">* </strong>Agência</label>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="agencia"
@@ -164,7 +167,7 @@
             </div>
         </div>
 
-        <div class="mb-3 col-md-6 offset-md-3">
+        <div class="mb-3 col-md-6">
             <label for="conta" class="form-label"><strong style="color: red">* </strong>Conta</label>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="conta"
@@ -173,7 +176,7 @@
             </div>
         </div>
 
-        <div class="mb-3 col-md-6 offset-md-3">
+        <div class="mb-3 col-md-6">
             <label for="pix" class="form-label">Pix</label><br>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="pix"
@@ -182,7 +185,7 @@
             </div>
         </div>
 
-        <div class="mb-3 col-md-6 offset-md-3">
+        <div class="mb-3 col-md-6">
             <label for="comentario" class="form-label">Comentários</label><br>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="comentario"
@@ -191,7 +194,7 @@
             </div>
         </div>
 
-        <div class="mb-3 col-md-6 offset-md-3">
+        <div class="mb-3 col-md-6">
             @if ($av->autorizacao != null)
                 <a href="{{ route('recuperaArquivo', [
                     'name' => $userAv->name,
@@ -203,11 +206,11 @@
             @endif
         </div>
         
-        <input type="file" id="arquivo1" style="height: 150px" name="arquivo1" class="form-control form-control-lg col-md-6 offset-md-3">
+        <input type="file" id="arquivo1" style="height: 150px" name="arquivo1" class="form-control form-control-lg col-md-6">
 
         <br>
 
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-6">
             <div id="btSalvarAv">
                 <input style="font-size: 14px" type="submit" class="btn btn-active btn-primary" value="Salvar e escolher itinerário!">
             </div>

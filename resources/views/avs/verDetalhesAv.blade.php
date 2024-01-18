@@ -3,8 +3,14 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Ver detalhes da AV</h1>
-    <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost"> Voltar!</a>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Ver detalhes da AV</h1>
+        </div>
+        <div class="col-md-4">
+            <a href="/avs/avs/" type="submit" class="btn btn-warning btn-ghost"><i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
 @stop
 
 @section('content')
@@ -101,8 +107,132 @@
                                             @endif
                                         @endforeach
                                     </p>
+
+                                    <p class="av-owner" style="font-size: 20px"><ion-icon
+                                        name="chevron-forward-circle-outline">
+                                    </ion-icon> <strong>Objetivo: </strong>
+                                    @for ($i = 0; $i < count($objetivos); $i++)
+                                        @if ($av->objetivo_id == $objetivos[$i]->id)
+                                            {{ $objetivos[$i]->nomeObjetivo }}
+                                        @endif
+                                    @endfor
+                                    </p>
                                 </div>
                             </div>
+                            @if(count($av->rotas) > 0)
+                                <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <th>Cidade de saída</th>
+                                            <th>Data/Hora de saída</th>
+                                            <th>Cidade de chegada</th>
+                                            <th>Data/Hora de chegada</th>
+                                            <th>Hotel?</th>
+                                            <th>Tipo de transporte</th>
+                                            @foreach ($av->rotas as $rota)
+                                                @if ($rota->isVeiculoEmpresa == 1)
+                                                        <th>Veículo</th>
+                                                    @break
+                                                @endif
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($av->rotas as $rota)
+                                            <tr>
+                                                <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
+                                                <td>
+                                                    @if ($rota->isAereo == 1)
+                                                        <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
+                                                    @endif
+            
+                                                    @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                                        <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                                    @endif
+            
+                                                    @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                                        <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                                    @endif
+            
+                                                    @if($rota->isOutroMeioTransporte == 1)
+                                                        <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                                    @endif
+            
+                                                    {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
+            
+                                                </td>
+                                                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+            
+                                                <td>
+                                                    @if ($rota->isAereo == 1)
+                                                        <img src="{{ asset('/img/aviaodescendo.png') }}" style="width: 40px">
+                                                    @endif
+            
+                                                    @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                                        <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                                    @endif
+            
+                                                    @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                                        <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                                    @endif
+            
+                                                    @if($rota->isOutroMeioTransporte == 1)
+                                                        <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                                    @endif
+            
+                                                    {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
+                                                </td>
+            
+                                                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
+                                                <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
+                                                <td>
+                                                    {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
+                                                    {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
+                                                    @if ($rota->isVeiculoProprio == 1)
+                                                        {{ 'Veículo próprio: ' }} <br>
+                                                        @foreach ($veiculosProprios as $v)
+                                                            @if ($v->id == $rota->veiculoProprio_id)
+                                                                {{ $v->modelo . '-' . $v->placa }}
+                                                            @endif
+                                                        @endforeach
+            
+                                                        @if (count($veiculosProprios) == 0)
+                                                            {{ 'Não encontrado' }}
+                                                        @endif
+                                                    @endif
+                                                    {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
+                                                    {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
+                                                    {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
+                                                </td>
+                                                @php
+                                                    $achouVeiculo = false;
+                                                @endphp
+                                                @if ($rota->isVeiculoEmpresa == 1)
+                                                    @foreach ($veiculosParanacidade as $v)
+                                                        @if ($rota->veiculoParanacidade_id == $v->id)
+                                                            @php
+                                                                $achouVeiculo = true;
+                                                                break;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                    @if ($achouVeiculo == true)
+                                                        <td>
+                                                            {{ $v->modelo }} ({{ $v->placa }})
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            A definir
+                                                        </td>
+                                                    @endif
+                                                @endif
+            
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
                         </div>
 
                         <div>
@@ -575,12 +705,12 @@
                         <div class="col-md-12">
 
                             <div class="timeline">
-    
+
                                 <div class="time-label">
                                     <span class="bg-red">Fases da realização da viagem</span>
                                 </div>
-    
-    
+
+
                                 <div>
                                     @if ($av->isEnviadoUsuario == 1)
                                         <i class="fas fa-caret-right bg-green"></i>
@@ -773,7 +903,7 @@
                                         </div>
                                     @endif
                                 </div>
-    
+
                                 <div>
                                     <i class="far fa-check-circle bg-green"></i>
                                 </div>
@@ -782,357 +912,246 @@
 
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-three-trajeto" role="tabpanel"
-                        aria-labelledby="custom-tabs-three-trajeto-tab">
-                        <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Trajeto: </strong></h1>
+                            aria-labelledby="custom-tabs-three-trajeto-tab">
+                            <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Trajeto: </strong></h1>
 
-                        <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
+                            
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-three-relatorio" role="tabpanel"
+                        aria-labelledby="custom-tabs-three-relatorio-tab">
+                        <h1 style="font-size: 24px"><strong>Relatório:</strong></h1>
+
+                        <div class="form-group">
+                            <label for="contatos" class="control-label">Contatos:</label><br>
+                            <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos" id="contatos"
+                                placeholder="Contatos" style="width: 100%; height: 100px" disabled>{{ $av->contatos }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="atividades" class="control-label">Atividades:</label><br>
+                            <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades" id="atividades"
+                                placeholder="Atividades" style="width: 100%; height: 100px" disabled>{{ $av->atividades }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="conclusoes" class="control-label">Conclusões:</label><br>
+                            <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes" id="conclusoes"
+                                placeholder="Conclusões" style="width: 100%; height: 100px" disabled>{{ $av->conclusoes }}</textarea>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-three-hotel" role="tabpanel"
+                        aria-labelledby="custom-tabs-three-hotel-tab">
+                        <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reserva de hotel
+                        </h3>
+                        <table id="minhaTabela1" class="table table-hover table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Tipo</th>
-                                    <th>Cidade de saída</th>
-                                    <th>Data/Hora de saída</th>
-                                    <th>Cidade de chegada</th>
-                                    <th>Data/Hora de chegada</th>
-                                    <th>Hotel?</th>
-                                    <th>Tipo de transporte</th>
-                                    @foreach ($av->rotas as $rota)
-                                        @if ($rota->isVeiculoEmpresa == 1)
-                                            <th>Veículo</th>
-                                        @break
+                                    <th>Descrição</th>
+                                    <th>IdRota</th>
+                                    <th>Rota</th>
+                                    <th>Anexo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($anexosRotas as $anexoHotel)
+                                    @if ($anexoHotel->anexoHotel != null)
+                                        <tr>
+                                            <td> {{ $anexoHotel->descricao }} </td>
+
+                                            <td>
+                                                @for ($i = 0; $i < count($av->rotas); $i++)
+                                                    @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
+                                                        {{ $av->rotas[$i]->id }}
+                                                    @endif
+                                                @endfor
+                                            </td>
+                                            <td>
+                                                @for ($i = 0; $i < count($av->rotas); $i++)
+                                                    @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
+                                                        @if ($av->rotas[$i]->isViagemInternacional == 0)
+                                                            - {{ $av->rotas[$i]->cidadeOrigemNacional }}
+                                                            -> {{ $av->rotas[$i]->cidadeDestinoNacional }}
+                                                        @endif
+
+                                                        @if ($av->rotas[$i]->isViagemInternacional == 1)
+                                                            - {{ $av->rotas[$i]->cidadeOrigemInternacional }}
+                                                            -> {{ $av->rotas[$i]->cidadeDestinoInternacional }}
+                                                        @endif
+                                                    @endif
+                                                @endfor
+                                            </td>
+                                            <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
+                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir
+                                                    documento Old</a>
+
+                                                <a href="{{ route('recuperaArquivo', [
+                                                    'name' => $userAv->name,
+                                                    'id' => $av->id,
+                                                    'pasta' => 'null',
+                                                    'anexoRelatorio' => $anexoHotel->anexoHotel,
+                                                    ]) }}"
+                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                            </td>
+                                        </tr>
                                     @endif
                                 @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($av->rotas as $rota)
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-three-transporte" role="tabpanel"
+                        aria-labelledby="custom-tabs-three-transporte-tab">
+                        <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reservas de
+                            transporte</h3>
+
+                        <table id="minhaTabela2" class="table table-hover table-bordered" style="width:100%">
+                            <thead>
                                 <tr>
-                                    <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
-                                    <td>
-                                        @if ($rota->isAereo == 1)
-                                            <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
-                                        @endif
+                                    <th>Descrição</th>
+                                    <th>IdRota</th>
+                                    <th>Rota</th>
+                                    <th>Anexo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($anexosRotas as $anexoTransporte)
+                                    @if ($anexoTransporte->anexoTransporte != null)
+                                        <tr>
+                                            <td> {{ $anexoTransporte->descricao }} </td>
 
-                                        @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                            <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
-                                        @endif
-
-                                        @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                            <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
-                                        @endif
-
-                                        @if($rota->isOutroMeioTransporte == 1)
-                                            <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
-                                        @endif
-
-                                        {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
-
-                                    </td>
-                                    <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-
-                                    <td>
-                                        @if ($rota->isAereo == 1)
-                                            <img src="{{ asset('/img/aviaodescendo.png') }}" style="width: 40px">
-                                        @endif
-
-                                        @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                            <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
-                                        @endif
-
-                                        @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                            <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
-                                        @endif
-
-                                        @if($rota->isOutroMeioTransporte == 1)
-                                            <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
-                                        @endif
-
-                                        {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
-                                    </td>
-
-                                    <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                                    <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
-                                    <td>
-                                        {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
-                                        {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
-                                        @if ($rota->isVeiculoProprio == 1)
-                                            {{ 'Veículo próprio: ' }} <br>
-                                            @foreach ($veiculosProprios as $v)
-                                                @if ($v->id == $rota->veiculoProprio_id)
-                                                    {{ $v->modelo . '-' . $v->placa }}
-                                                @endif
-                                            @endforeach
-
-                                            @if (count($veiculosProprios) == 0)
-                                                {{ 'Não encontrado' }}
-                                            @endif
-                                        @endif
-                                        {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
-                                        {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
-                                        {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
-                                    </td>
-                                    @php
-                                        $achouVeiculo = false;
-                                    @endphp
-                                    @if ($rota->isVeiculoEmpresa == 1)
-                                        @foreach ($veiculosParanacidade as $v)
-                                            @if ($rota->veiculoParanacidade_id == $v->id)
-                                                @php
-                                                    $achouVeiculo = true;
-                                                    break;
-                                                @endphp
-                                            @endif
-                                        @endforeach
-                                        @if ($achouVeiculo == true)
                                             <td>
-                                                {{ $v->modelo }} ({{ $v->placa }})
+                                                @for ($i = 0; $i < count($av->rotas); $i++)
+                                                    @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
+                                                        {{ $av->rotas[$i]->id }}
+                                                    @endif
+                                                @endfor
                                             </td>
-                                        @else
                                             <td>
-                                                A definir
+                                                @for ($i = 0; $i < count($av->rotas); $i++)
+                                                    @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
+                                                        @if ($av->rotas[$i]->isViagemInternacional == 0)
+                                                            - {{ $av->rotas[$i]->cidadeOrigemNacional }}
+                                                            -> {{ $av->rotas[$i]->cidadeDestinoNacional }}
+                                                        @endif
+
+                                                        @if ($av->rotas[$i]->isViagemInternacional == 1)
+                                                            - {{ $av->rotas[$i]->cidadeOrigemInternacional }}
+                                                            -> {{ $av->rotas[$i]->cidadeDestinoInternacional }}
+                                                        @endif
+                                                    @endif
+                                                @endfor
                                             </td>
-                                        @endif
+                                            <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
+                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir
+                                                    documento Old</a>
+
+                                                <a href="{{ route('recuperaArquivo', [
+                                                    'name' => $userAv->name,
+                                                    'id' => $av->id,
+                                                    'pasta' => 'null',
+                                                    'anexoRelatorio' => $anexoTransporte->anexoTransporte,
+                                                    ]) }}"
+                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                            </td>
+                                        </tr>
                                     @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-three-adiantamentos" role="tabpanel"
+                        aria-labelledby="custom-tabs-three-adiantamentos-tab">
+                        <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Adiantamentos
+                            realizados
+                        </h3>
 
+                        <table id="minhaTabela3" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th>Anexo</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade" id="custom-tabs-three-relatorio" role="tabpanel"
-                    aria-labelledby="custom-tabs-three-relatorio-tab">
-                    <h1 style="font-size: 24px"><strong>Relatório:</strong></h1>
-
-                    <div class="form-group">
-                        <label for="contatos" class="control-label">Contatos:</label><br>
-                        <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos" id="contatos"
-                            placeholder="Contatos" style="width: 100%; height: 100px" disabled>{{ $av->contatos }}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="atividades" class="control-label">Atividades:</label><br>
-                        <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades" id="atividades"
-                            placeholder="Atividades" style="width: 100%; height: 100px" disabled>{{ $av->atividades }}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="conclusoes" class="control-label">Conclusões:</label><br>
-                        <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes" id="conclusoes"
-                            placeholder="Conclusões" style="width: 100%; height: 100px" disabled>{{ $av->conclusoes }}</textarea>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="custom-tabs-three-hotel" role="tabpanel"
-                    aria-labelledby="custom-tabs-three-hotel-tab">
-                    <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reserva de hotel
-                    </h3>
-                    <table id="minhaTabela1" class="table table-hover table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th>IdRota</th>
-                                <th>Rota</th>
-                                <th>Anexo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($anexosRotas as $anexoHotel)
-                                @if ($anexoHotel->anexoHotel != null)
+                            </thead>
+                            <tbody>
+                                @foreach ($anexosFinanceiro as $anexoFinanceiro)
                                     <tr>
-                                        <td> {{ $anexoHotel->descricao }} </td>
+                                        <td> {{ $anexoFinanceiro->descricao }} </td>
 
-                                        <td>
-                                            @for ($i = 0; $i < count($av->rotas); $i++)
-                                                @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
-                                                    {{ $av->rotas[$i]->id }}
-                                                @endif
-                                            @endfor
-                                        </td>
-                                        <td>
-                                            @for ($i = 0; $i < count($av->rotas); $i++)
-                                                @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
-                                                    @if ($av->rotas[$i]->isViagemInternacional == 0)
-                                                        - {{ $av->rotas[$i]->cidadeOrigemNacional }}
-                                                        -> {{ $av->rotas[$i]->cidadeDestinoNacional }}
-                                                    @endif
-
-                                                    @if ($av->rotas[$i]->isViagemInternacional == 1)
-                                                        - {{ $av->rotas[$i]->cidadeOrigemInternacional }}
-                                                        -> {{ $av->rotas[$i]->cidadeDestinoInternacional }}
-                                                    @endif
-                                                @endif
-                                            @endfor
-                                        </td>
-                                        <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
+                                        <td> 
+                                            <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
                                                 target="_blank" class="btn btn-active btn-success btn-sm">Abrir
                                                 documento Old</a>
 
                                             <a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
-                                                'pasta' => 'null',
-                                                'anexoRelatorio' => $anexoHotel->anexoHotel,
+                                                'pasta' => 'adiantamentos',
+                                                'anexoRelatorio' => $anexoFinanceiro->anexoFinanceiro,
                                                 ]) }}"
                                                 target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
                                         </td>
+
                                     </tr>
-                                @endif
-                            @endforeach
-                        </tbody>
-                    </table>
-
-                </div>
-                <div class="tab-pane fade" id="custom-tabs-three-transporte" role="tabpanel"
-                    aria-labelledby="custom-tabs-three-transporte-tab">
-                    <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reservas de
-                        transporte</h3>
-
-                    <table id="minhaTabela2" class="table table-hover table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th>IdRota</th>
-                                <th>Rota</th>
-                                <th>Anexo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($anexosRotas as $anexoTransporte)
-                                @if ($anexoTransporte->anexoTransporte != null)
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-three-despesas" role="tabpanel"
+                        aria-labelledby="custom-tabs-three-despesas-tab">
+                        <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Comprovantes de despesa:</strong></h1>
+                        <table id="minhaTabela7" class="table table-hover table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th>Valor reais</th>
+                                    <th>Anexo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($comprovantes as $comp)
                                     <tr>
-                                        <td> {{ $anexoTransporte->descricao }} </td>
-
-                                        <td>
-                                            @for ($i = 0; $i < count($av->rotas); $i++)
-                                                @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
-                                                    {{ $av->rotas[$i]->id }}
-                                                @endif
-                                            @endfor
-                                        </td>
-                                        <td>
-                                            @for ($i = 0; $i < count($av->rotas); $i++)
-                                                @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
-                                                    @if ($av->rotas[$i]->isViagemInternacional == 0)
-                                                        - {{ $av->rotas[$i]->cidadeOrigemNacional }}
-                                                        -> {{ $av->rotas[$i]->cidadeDestinoNacional }}
-                                                    @endif
-
-                                                    @if ($av->rotas[$i]->isViagemInternacional == 1)
-                                                        - {{ $av->rotas[$i]->cidadeOrigemInternacional }}
-                                                        -> {{ $av->rotas[$i]->cidadeDestinoInternacional }}
-                                                    @endif
-                                                @endif
-                                            @endfor
-                                        </td>
-                                        <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
+                                        <td> {{ $comp->descricao }} </td>
+                                        <td> {{ $comp->valorReais }} </td>
+                                        <td> 
+                                            <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
                                                 target="_blank" class="btn btn-active btn-success btn-sm">Abrir
                                                 documento Old</a>
 
                                             <a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
-                                                'pasta' => 'null',
-                                                'anexoRelatorio' => $anexoTransporte->anexoTransporte,
+                                                'pasta' => 'comprovantesDespesa',
+                                                'anexoRelatorio' => $comp->anexoDespesa,
                                                 ]) }}"
                                                 target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
                                         </td>
                                     </tr>
-                                @endif
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade" id="custom-tabs-three-adiantamentos" role="tabpanel"
-                    aria-labelledby="custom-tabs-three-adiantamentos-tab">
-                    <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Adiantamentos
-                        realizados
-                    </h3>
-
-                    <table id="minhaTabela3" class="table table-hover table-bordered" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th>Anexo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($anexosFinanceiro as $anexoFinanceiro)
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-three-medicoes" role="tabpanel"
+                        aria-labelledby="custom-tabs-three-medicoes-tab">
+                        <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Medições vinculadas:</strong></h1>
+                        <table id="minhaTabela8" class="table table-hover table-bordered" style="width:100%">
+                            <thead>
                                 <tr>
-                                    <td> {{ $anexoFinanceiro->descricao }} </td>
-
-                                    <td> 
-                                        <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-
-                                        <a href="{{ route('recuperaArquivo', [
-                                            'name' => $userAv->name,
-                                            'id' => $av->id,
-                                            'pasta' => 'adiantamentos',
-                                            'anexoRelatorio' => $anexoFinanceiro->anexoFinanceiro,
-                                            ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
-                                    </td>
-
+                                    <th>Nome do município</th>
+                                    <th>Número do projeto</th>
+                                    <th>Número do lote</th>
+                                    <th>Número da medição</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade" id="custom-tabs-three-despesas" role="tabpanel"
-                    aria-labelledby="custom-tabs-three-despesas-tab">
-                    <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Comprovantes de despesa:</strong></h1>
-                    <table id="minhaTabela7" class="table table-hover table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th>Valor reais</th>
-                                <th>Anexo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($comprovantes as $comp)
-                                <tr>
-                                    <td> {{ $comp->descricao }} </td>
-                                    <td> {{ $comp->valorReais }} </td>
-                                    <td> 
-                                        <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-
-                                        <a href="{{ route('recuperaArquivo', [
-                                            'name' => $userAv->name,
-                                            'id' => $av->id,
-                                            'pasta' => 'comprovantesDespesa',
-                                            'anexoRelatorio' => $comp->anexoDespesa,
-                                            ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade" id="custom-tabs-three-medicoes" role="tabpanel"
-                    aria-labelledby="custom-tabs-three-medicoes-tab">
-                    <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Medições vinculadas:</strong></h1>
-                    <table id="minhaTabela8" class="table table-hover table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Nome do município</th>
-                                <th>Número do projeto</th>
-                                <th>Número do lote</th>
-                                <th>Número da medição</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($medicoesFiltradas as $med)
-                                <tr>
-                                    <td> {{ $med->nome_municipio }} </td>
-                                    <td> {{ $med->numero_projeto }} </td>
-                                    <td> {{ $med->numero_lote }} </td>
-                                    <td> {{ $med->numero_medicao }} </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                @foreach ($medicoesFiltradas as $med)
+                                    <tr>
+                                        <td> {{ $med->nome_municipio }} </td>
+                                        <td> {{ $med->numero_projeto }} </td>
+                                        <td> {{ $med->numero_lote }} </td>
+                                        <td> {{ $med->numero_medicao }} </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
             </div>
         </div>
 

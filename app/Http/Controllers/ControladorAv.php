@@ -4433,6 +4433,29 @@ class ControladorAv extends Controller
             }
         }
 
+        $user = User::findOrFail($avRecuperada->user_id);
+
+        if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
+        {
+            //remova o arquivo anterior
+            if($avRecuperada->autorizacao != null){
+                $path = '/mnt/arquivos_viagem/AVs/' . $user->name . '/' . $avRecuperada->id . '/' . 'autorizacaoAv' . '/' . $avRecuperada->autorizacao;
+                unlink($path);
+            }
+
+            $requestFile = $request->arquivo1;
+
+            $extension = $requestFile->extension();
+
+            $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
+            
+            $requestFile->move('/mnt/arquivos_viagem/AVs/' . $user->name . '/' . $avRecuperada->id . '/' . 'autorizacaoAv', $fileName);
+
+            $avRecuperada->autorizacao = $fileName;
+
+            $avRecuperada->save();
+        }
+
         $url = 'https://portaldosmunicipios.pr.gov.br/api/v1/medicao?status=27';
         $json = file_get_contents($url);
         $data = json_decode($json);
