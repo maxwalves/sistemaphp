@@ -12,16 +12,16 @@
         
     <form action="/rotas" method="POST" enctype="multipart/form-data">
         @csrf
-        <div class="row justify-content-start">
-            <div class="col-3">
-                <a href="/rotaspc/rotas/{{ $av->id }}" type="submit" class="btn btn-warning btn-sm"> Voltar!</a>
-            </div>
+        <div class="row">
             <div class="col-8">
                 <label for="idav"> <strong>Cadastro de nova rota da Autorização de Viagem nº </strong> </label>
                 <input type="text" style="width: 50px" value="{{ $av->id }}" id="idav" name="idav" readonly>
 
                 <h4> <strong>Data da Autorização de Viagem: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h4>
                 <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
+            </div>
+            <div class="col-3">
+                <a href="/rotaspc/rotas/{{ $av->id }}" type="submit" class="btn btn-warning"><i class="fas fa-arrow-left"></i></a>
             </div>
         </div>
         <div style="padding-left: 50px" class="form-group">
@@ -52,29 +52,29 @@
             @endif
         </div>
         
-        <div class="row justify-content-left">
+        <div class="row">
             
-                <div class="form-group" style="padding-left: 10%">
-                    <h3>A viagem será internacional?</h3>
-                        <select class="select select-bordered w-full max-w-xs {{ $errors->has('isViagemInternacional') ? 'is-invalid' :''}}" 
-                            id="isViagemInternacional" name="isViagemInternacional" onChange="gerenciaNacionalInternacional()" >
-                            <option value="" name=""> Selecione</option>
-                            <option value="0" name="0" {{ $isOrigemNacional == true ? "selected='selected'" : ""}}> Não</option>
-                            <option value="1" name="1" > Sim</option>
-                        </select>
+                <div class="form-group">
+                    <label for="isViagemInternacional" class="control-label">A viagem será internacional?</label>
+                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('isViagemInternacional') ? 'is-invalid' :''}}" 
+                        id="isViagemInternacional" name="isViagemInternacional" onChange="gerenciaNacionalInternacional()" >
+                        {{-- <option value="" name=""> Selecione</option> --}}
+                        <option value="0" name="0" {{ $isOrigemNacional == true ? "selected='selected'" : ""}}> Não</option>
+                        {{-- <option value="1" name="1" > Sim</option> --}}
+                    </select>
 
-                        @if ($errors->has('isViagemInternacional'))
+                    @if ($errors->has('isViagemInternacional'))
                         <div class="invalid-feedback">
                             {{ $errors->first('isViagemInternacional') }}
                         </div>
-                        @endif
+                    @endif
                 </div>
         </div>
         <div id="isInternacional">
             <br>
                     
-            <div class="row justify-content-center">
-                <div class="col-5">
+            <div class="row">
+                <div class="col-4">
                     {{-- CAMPOS DE ORIGEM INTERNACIONAL ---------------------------------}}
                     <h3 style="color: brown"> <ion-icon name="airplane-outline"></ion-icon> VIAGEM INTERNACIONAL</h3>
                     <br>
@@ -145,11 +145,6 @@
                             @endif
                     </div>
 
-                    <div>
-                        <input type="text" id="botaoResetOrigemInternacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemInternacional()">
-                    </div>
-
                     <br>
                     <?php
                         $minDate = date('Y-m-d\TH:i');
@@ -170,7 +165,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-5">
+                <div class="col-4">
                     {{-- CAMPOS DE DETINO INTERNACIONAL ---------------------------------}}
                     <br><br>
                     <h4 style="color: crimson"> Destino: </h4>
@@ -240,11 +235,6 @@
                             @endif
                     </div>
 
-                    <div>
-                        <input type="text" id="botaoResetDestinoInternacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoInternacional()">
-                    </div>
-
                     <br>
                     <?php
                         $minDate = date('Y-m-d\TH:i');
@@ -275,8 +265,8 @@
         <div id="isNacional">
             <br>    
 
-            <div class="row justify-content-center">
-                <div class="col-12 col-xl-5">
+            <div class="row">
+                <div class="col-12 col-xl-4">
                     <h3 style="color: forestgreen"> <ion-icon name="bus-outline"></ion-icon> VIAGEM NACIONAL </h3>
                     <br>   
                     <h4 style="color: darkolivegreen"> Origem: </h4>
@@ -357,14 +347,10 @@
                         <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de saída!</div>
                     </div>
 
-                    <div>
-                        <input type="text" id="botaoResetOrigemNacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemNacional()">
-                    </div>
                 </div>
 
                     
-                <div class="col-12 col-xl-5">    
+                <div class="col-12 col-xl-4">    
                     <br><br>
                     <h4 style="color: darkolivegreen"> Destino: </h4>
                     <div class="form-group">
@@ -421,11 +407,6 @@
                         <div class="form-text" id="basic-addon4" style="color: green">Lembre-se de informar a hora de chegada!</div>
                     </div>
 
-                    <div>
-                        <input type="text" id="botaoResetDestinoNacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoNacional()">
-                    </div>
-
                 </div>
 
             </div>
@@ -437,9 +418,9 @@
 
         </div>
         <br>
-        <div class="row justify-content-center" style="background-color: lightgrey">
+        <div class="row" style="background-color: lightgrey">
             
-            <div class="col-md-6 offset-md-3">
+            <div class="col-md-6">
                                         
                 <div>
                     <div id="camposFinais" hidden="true">

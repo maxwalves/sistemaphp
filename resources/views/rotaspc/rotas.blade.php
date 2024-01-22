@@ -17,18 +17,18 @@
   </style>
 
 <div>
-    <div class="container">
+    <div>
         <div class="row">
-            <div class="col-4" >
-                <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"> Voltar!</a>
+            <div class="col-8" >
+                <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary"><i class="fas fa-plus"></i> ROTA</a>
             </div>
-            <div class="col-4" >
-                <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary"> + CADASTRAR ROTA</a>
+            <div class="col-3" >
+                <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i></a>
             </div>
         </div>
         <br>
             
-        <div class="col-md-6 container">
+        <div class="col-md-6">
             <label for="idav" style="font-size: 24px; color: green"> <strong>AV nº </strong> </label>
             <input style="width: 50px; font-size: 24px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="idav" name="idav" disabled>
             <h2 style="font-size: 24px"> <strong>Data: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h2>
@@ -97,7 +97,7 @@
     
     <br>
 </div>
-<div class="col-md-10 offset-md-1 dashboard-avs-container">
+<div class="col-md-10">
     @if(count($rotas) > 0 )
     <table id="tabelaRota" class="table table-hover table-bordered table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl" style="width: 100%">
         <thead>
@@ -169,12 +169,14 @@
                     {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
                 </td>
                 <td> 
-                    <a href="/rotaspc/edit/{{ $rota->id }}" class="btn btn-success btn-sm" style="width: 85px"> Editar</a> 
-                    <form action="/rotaspc/{{ $rota->id }}" style="width: 85px" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm"> Deletar</button>
-                    </form>
+                    <div class="d-flex align-items-center">
+                        <a href="/rotaspc/edit/{{ $rota->id }}" class="btn btn-success btn-sm"><i class="far fa-edit"></i></a> 
+                        <form action="/rotaspc/{{ $rota->id }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @endforeach

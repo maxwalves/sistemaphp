@@ -30,7 +30,7 @@
                     @for($i = 0; $i < count($objetivos); $i++)
                         <div>
                             <option value="{{ $objetivos[$i]->id }}" 
-                                name="{{ $objetivos[$i]->id }}"> {{ $objetivos[$i] ->nomeObjetivo }} </option>
+                                name="{{ $objetivos[$i]->id }}" {{$objetivos[$i]->id == $av->objetivo_id ? 'selected' : ''}}> {{ $objetivos[$i] ->nomeObjetivo }} </option>
                         </div>
                     @endfor
                 </select>
@@ -130,7 +130,7 @@
             <div class="input-group">
                 <input type="text" class="form-control {{ $errors->has('outroObjetivo') ? 'is-invalid' :''}}" 
                 name="outroObjetivo"
-                id="outroObjetivo" placeholder="Digite outro objetivo">
+                id="outroObjetivo" placeholder="Digite outro objetivo" value="{{$av->outroObjetivo != null ? $av->outroObjetivo : ''}}">
             </div>
 
             @if ($errors->has('outroObjetivo'))
@@ -247,6 +247,19 @@
                     "search": "Pesquisar"
                 }
             });
+
+        @if($av->outroObjetivo != null)
+            var select = document.getElementById("flexSwitchCheckDefault")
+            select.checked = true;
+            document.getElementById("outroObjetivoCampo").hidden = false;
+            document.getElementById("nomeObjetivo").hidden = true;
+            document.getElementById("nomeObjetivo").value = null;
+            document.getElementById("isSelecionado").value = "1";
+        @else
+            document.getElementById("outroObjetivoCampo").hidden = true;
+            document.getElementById("nomeObjetivo").hidden = false;
+            document.getElementById("isSelecionado").value = "0";
+        @endif
     });
 
     function desativarCampoObjetivo(){
@@ -255,7 +268,6 @@
         if(seletor.checked == true) {
             document.getElementById("outroObjetivoCampo").hidden = false;
             document.getElementById("nomeObjetivo").hidden = true;
-            document.getElementById("outroObjetivo").value = "";
             document.getElementById("nomeObjetivo").value = null;
             document.getElementById("isSelecionado").value = "1";
         } else if(seletor.checked == false){
@@ -305,7 +317,6 @@
     
             //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
     $(function(){
-        document.getElementById("outroObjetivoCampo").hidden = true;
         document.getElementById("autorizacaoComissao").hidden = true;
         document.getElementById("autorizacaoComissaoTodos").hidden = true;
         document.getElementById("isMostrarTodos").hidden = true;

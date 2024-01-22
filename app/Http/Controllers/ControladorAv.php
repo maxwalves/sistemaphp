@@ -2960,6 +2960,7 @@ class ControladorAv extends Controller
     }
     
     public function concluir(Request $request){
+        
         $objetivos = Objetivo::all();
         
         $user = auth()->user();
@@ -3367,7 +3368,7 @@ class ControladorAv extends Controller
                 }
             }
         }
-
+        
         $dataInicio = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
         $dataFim = "$anoSaidaInicial-$mesChegadaFinal-$diaChegadaFinal";
 
@@ -3490,7 +3491,7 @@ class ControladorAv extends Controller
                 'valor' => $acumulado != 0 ? $acumulado : $valor,
             ];
         }
-
+        
         if(empty($arrayDiasValores)){
             $data = new DateTime($rotas[0]->dataHoraSaida);
 
@@ -3572,7 +3573,7 @@ class ControladorAv extends Controller
         //$teste += ['Data saída: ' => $valorReais];
         //$teste += ['Data chegada: ' => $anoChegada. "/" .$mesChegada. "/" .$diaChegada. "/" .$horaChegada. "/" .$minutoChegada. "/" .$segundoChegada];
         //dd($arrayDiasValores);
-
+        
         $av->valorReais = $valorReais;
         $av->valorDolar = $valorDolar;
 
@@ -3581,6 +3582,7 @@ class ControladorAv extends Controller
         if($user->id != $av->user->id) {
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
         }
+        
         if($av->isDiaria == false){
             $dados = array(
                 "valorReais" => 0,
@@ -3594,7 +3596,8 @@ class ControladorAv extends Controller
             'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal,
             'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal,
             'minutoSaidaInicial' => $minutoSaidaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial, 'minutoSaidaFinal' => $minutoSaidaFinal,
-            'minutoChegadaFinal' => $minutoChegadaFinal, 'diariaTotal' => $diariaTotal, 'meiaDiaria' => $meiaDiaria, 'mostrarValor' => $mostrarValor, 'arrayDiasValores' => $arrayDiasValores]);
+            'minutoChegadaFinal' => $minutoChegadaFinal, 'diariaTotal' => $diariaTotal, 'meiaDiaria' => $meiaDiaria, 'mostrarValor' => $mostrarValor, 
+            'arrayDiasValores' => $arrayDiasValores, 'isInternacional' => $isInternacional]);
         }
 
         //Atualiza no banco de dados o valor calculado para a diária de alimentação

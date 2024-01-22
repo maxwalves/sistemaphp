@@ -676,6 +676,7 @@ class ControladorRota extends Controller
         Rota::findOrFail($request->id)->update($dados);
 
         if($request->isPc=="sim"){
+            
             //return redirect('/rotaspc/rotas/' . $request->idav )->with('msg', 'Rota editada com sucesso!');
             $avId = $request->idav;
             $isPc = true;
@@ -700,6 +701,7 @@ class ControladorRota extends Controller
             ';
 
             // Retornar o HTML completo
+            
             return $formHtml . $scriptHtml;
         }
         else{

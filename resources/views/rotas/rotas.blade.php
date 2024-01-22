@@ -24,7 +24,7 @@
     <div>
         <div class="row">
             <div class="col-1">
-                <a href="/rotas/create/{{ $av->id }}" type="submit" class="btn btn-active btn-success" style="width: 80px"> <i class="fas fa-plus"></i> ROTA</a>
+                <a href="/rotas/create/{{ $av->id }}" type="submit" class="btn btn-active btn-success" style="width: 80px"><i class="fas fa-plus"></i> ROTA</a>
             </div>
             <div class="col-5">
                 <label for="idav" > <strong>AV nº </strong> </label>

@@ -14,16 +14,16 @@
         @csrf
         @method('PUT')
 
-        <div class="row justify-content-start">
-            <div class="col-3">
-                <a href="/rotaspc/rotas/{{ $av->id }}" type="submit" class="btn btn-warning btn-sm"> Voltar!</a>
-            </div>
-            <div class="col-8">
+        <div class="row">
+            <div class="col-md-6">
                 <label for="idav"> <strong>Edição de rota da Autorização de Viagem nº </strong> </label>
                 <input type="text" style="width: 50px" value="{{ $av->id }}" id="idav" name="idav" readonly>
 
                 <h4> <strong>Data da Autorização de Viagem: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h4>
                 <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
+            </div>
+            <div class="col-md-3">
+                <a href="/rotaspc/rotas/{{ $av->id }}" type="submit" class="btn btn-warning"><i class="fas fa-arrow-left"></i></a>
             </div>
         </div>
 
@@ -50,29 +50,29 @@
             @endif
         </div>
         
-        <div class="row justify-content-left">
+        <div class="row">
             
-                <div class="form-group" style="padding-left: 10%">
+                <div class="form-group">
                     <label for="isViagemInternacional" class="control-label">A viagem será internacional?</label>
                     <br>
-                        <select class="select select-bordered w-full max-w-xs {{ $errors->has('isViagemInternacional') ? 'is-invalid' :''}}" 
-                            id="isViagemInternacional" name="isViagemInternacional" onChange="gerenciaNacionalInternacional()" >
-                            <option value="" name=""> Selecione</option>
-                            <option value="0" name="0" {{ $rota->isViagemInternacional == "0" ? "selected='selected'" : ""}}> Não</option>
-                            <option value="1" name="1" {{ $rota->isViagemInternacional == "1" ? "selected='selected'" : ""}}> Sim</option>
-                        </select>
+                    <select class="select select-bordered w-full max-w-xs {{ $errors->has('isViagemInternacional') ? 'is-invalid' :''}}" 
+                        id="isViagemInternacional" name="isViagemInternacional" onChange="gerenciaNacionalInternacional()">
+                        {{-- <option value="" name=""> Selecione</option> --}}
+                        <option value="0" name="0" {{ $rota->isViagemInternacional == "0" ? "selected='selected'" : ""}}> Não</option>
+                        {{-- <option value="1" name="1" {{ $rota->isViagemInternacional == "1" ? "selected='selected'" : ""}}> Sim</option> --}}
+                    </select>
 
-                        @if ($errors->has('isViagemInternacional'))
+                    @if ($errors->has('isViagemInternacional'))
                         <div class="invalid-feedback">
                             {{ $errors->first('isViagemInternacional') }}
                         </div>
-                        @endif
+                    @endif
                 </div>
         </div>
         <div id="isInternacional">
             <br>
                     
-            <div class="row justify-content-center">
+            <div class="row">
                 <div class="col-5">
                     {{-- CAMPOS DE ORIGEM INTERNACIONAL ---------------------------------}}
                     <h3 style="color: brown"> <ion-icon name="airplane-outline"></ion-icon> VIAGEM INTERNACIONAL</h3>
@@ -141,13 +141,6 @@
                             </div>
                             @endif
                     </div>
-
-                    <div>
-                        <input type="text" id="botaoResetOrigemInternacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemInternacional()">
-                    </div>
-
-                    
 
                     <div class="form-group"> 
                         <div id="dataHoraSaidaInternacional" class="input-append date">
@@ -224,14 +217,7 @@
                                 {{ $errors->first('selecaoCidadeDestinoInternacional') }}
                             </div>
                             @endif
-                    </div>
-
-                    <div>
-                        <input  type="text" id="botaoResetDestinoInternacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoInternacional()">
-                    </div>
-
-                    
+                    </div>                    
 
                     <div class="form-group"> 
                         <div id="dataHoraChegadaInternacional" class="input-append date">
@@ -252,8 +238,8 @@
         <div id="isNacional">
             <br>    
 
-            <div class="row justify-content-center">
-                <div class="col-5">
+            <div class="row">
+                <div class="col-4">
                     <h3 style="color: forestgreen"> <ion-icon name="bus-outline"></ion-icon> VIAGEM NACIONAL </h3>
                     <br>   
                     <h4 style="color: darkolivegreen"> Origem: </h4>
@@ -296,14 +282,10 @@
                         </div>
                     </div>
 
-                    <div>
-                        <input type="text" id="botaoResetOrigemNacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemNacional()">
-                    </div>
                 </div>
 
                     
-                <div class="col-5">    
+                <div class="col-4">    
                     <br><br>
                     <h4 style="color: darkolivegreen"> Destino: </h4>
                     <div class="form-group">
@@ -346,18 +328,13 @@
                         </div>
                     </div>
 
-                    <div>
-                        <input type="text" id="botaoResetDestinoNacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoNacional()">
-                    </div>
-
                 </div>
             </div>
         </div>
         <br>
-        <div class="row justify-content-center" style="background-color: lightgrey">
+        <div class="row" style="background-color: lightgrey">
 
-            <div class="col-md-6 offset-md-3">
+            <div class="col-md-6">
 
                 <div>
                     <div id="camposFinais" >
@@ -749,9 +726,10 @@
         //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
     $(function(){
         
+        //Se fosse internacional
         //carregarPaises();
-        carregarPaisOrigem();
-        carregarPaisDestino();
+        // carregarPaisOrigem();
+        // carregarPaisDestino();
         gerenciaNacionalInternacional();
 
         //-------------------------------------------Define a data mínima para a chegada logo no início-------------------------------------------
