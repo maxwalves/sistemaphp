@@ -1,13 +1,21 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Acerto de Contas - Financeiro')
 
 @section('content_header')
-    <h1>Dashboard</h1>
 @stop
 
 @section('content')
-    
+
+<br>
+<div class="row">
+    <div class="col-md-8">
+        <h3>Acerto de Contas - Financeiro</h3>
+    </div>
+    <div class="col-md-4">
+        <a href="/avs/acertoContasFinanceiro" type="submit" class="btn btn-warning btn-ghost"><i class="fas fa-arrow-left"></i></a>
+    </div>
+</div>
 <div class="col-md-12 col-sm-6">
     <div class="card card-primary card-outline card-tabs">
         <div class="card-header p-0 pt-1 border-bottom-0">
@@ -90,12 +98,13 @@
                         @endforeach
                         </p>        
                         <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                        </ion-icon> <strong>E-mail do usuário: </strong> 
-                        @foreach($users as $u)
-                                @if ($u->id == $av->user_id)
-                                    {{ $u->username }}
-                                @endif
-                        @endforeach
+                        </ion-icon> <strong>Objetivo: </strong> 
+                        @for ($i = 0; $i < count($objetivos); $i++)
+                            @if ($av->objetivo_id == $objetivos[$i]->id)
+                                {{ $objetivos[$i]->nomeObjetivo }}
+                            @endif
+                        @endfor
+
                         @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                             <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
                             </ion-icon> <strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}</p>
@@ -261,43 +270,6 @@
                             @endif
                             <div class="box box-40">
                                 <div>
-                                    <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
-                                    <table id="minhaTabela6" class="table table-hover table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Descrição</th>
-                                                <th>Anexo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($historicoPc as $hist)
-                                                <tr>
-                                                    <td> {{ $hist->comentario }} </td>
-                                                    @if ($hist->comentario == 'AV Internacional gerada')
-                                                        <td> <a href="{{ route('recuperaArquivo', [
-                                                            'name' => $userAv->name,
-                                                            'id' => $av->id,
-                                                            'pasta' => 'internacional',
-                                                            'anexoRelatorio' => $hist->anexoRelatorio,
-                                                            ]) }}"
-                                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                                documento</a> </td>
-                                                    @else
-                                                        <td>
-                                                            <a href="{{ route('recuperaArquivo', [
-                                                                'name' => $userAv->name,
-                                                                'id' => $av->id,
-                                                                'pasta' => 'resumo',
-                                                                'anexoRelatorio' => $hist->anexoRelatorio,
-                                                            ]) }}" target="_blank" class="btn btn-active btn-success btn-sm">
-                                                                Abrir documento
-                                                            </a>
-                                                        </td>
-                                                    @endif
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
                                     @if ($av->isPrestacaoContasRealizada == 1)
                                         <p><strong>Resultado:</strong></p>
                                         <div class="callout callout-success">
@@ -431,16 +403,13 @@
                                             <tr>
                                                 <td> {{$hist->comentario}} </td>
                                                 <td> 
-                                                    <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}" 
-                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento Old</a>
-
                                                     <a href="{{ route('recuperaArquivo', [
                                                         'name' => $userAv->name,
                                                         'id' => $av->id,
                                                         'pasta' => 'resumo',
                                                         'anexoRelatorio' => $hist->anexoRelatorio,
                                                         ]) }}"
-                                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                                 </td>
                                                 
                                                 @if($hist->comentario != "Adiantamento realizado - valor inicial" && $hist->comentario != "Acerto de contas")
@@ -1047,17 +1016,14 @@
                                             @endif
                                         @endfor
                                     </td>
-                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-                                            
+                                    <td>
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,
                                             'pasta' => 'null',
                                             'anexoRelatorio' => $anexoHotel->anexoHotel,
                                             ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                            target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                     </td>
                                 </tr>
                             @endif
@@ -1108,17 +1074,14 @@
                                             @endif
                                         @endfor
                                     </td>
-                                    <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-
+                                    <td>
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,
                                             'pasta' => 'null',
                                             'anexoRelatorio' => $anexoTransporte->anexoTransporte,
                                             ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                            target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                     </td>
                                 </tr>
                             @endif
@@ -1145,17 +1108,13 @@
                                 <td> {{ $anexoFinanceiro->descricao }} </td>
 
                                 <td> 
-                                    <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                        documento Old</a>
-
                                     <a href="{{ route('recuperaArquivo', [
                                         'name' => $userAv->name,
                                         'id' => $av->id,
                                         'pasta' => 'adiantamentos',
                                         'anexoRelatorio' => $anexoFinanceiro->anexoFinanceiro,
                                         ]) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                 </td>
 
                             </tr>
@@ -1181,17 +1140,14 @@
                                 <td> {{ $comp->descricao }} </td>
                                 <td> {{ $comp->valorReais }} </td>
                                 <td> {{ $comp->valorDolar }} </td>
-                                <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                        documento Old</a>
-
+                                <td>
                                     <a href="{{ route('recuperaArquivo', [
                                         'name' => $userAv->name,
                                         'id' => $av->id,
                                         'pasta' => 'comprovantesDespesa',
                                         'anexoRelatorio' => $comp->anexoDespesa,
                                         ]) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                 </td>
                             </tr>
                         @endforeach

@@ -3,13 +3,18 @@
 @section('title', 'Avaliação de Prestação de Contas')
 
 @section('content_header')
-    <h1>Avaliação de Prestação de Contas - Gestor</h1>
 @stop
 
 @section('content')
 
-<div>
-    <a href="/avs/autPcGestor" class="btn btn-warning">Voltar</a>
+<br>
+<div class="row">
+    <div class="col-md-8">
+        <h3>Avaliação de Prestação de Contas - Gestor</h3>
+    </div>
+    <div class="col-md-4">
+        <a href="/avs/autPcGestor" class="btn btn-warning"><i class="fas fa-arrow-left"></i></a>
+    </div>
 </div>
 <br>
 <div class="col-md-12 col-sm-6">
@@ -94,12 +99,13 @@
                         @endforeach
                         </p>        
                         <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                        </ion-icon> <strong>E-mail do usuário: </strong> 
-                        @foreach($users as $u)
-                                @if ($u->id == $av->user_id)
-                                    {{ $u->username }}
-                                @endif
-                        @endforeach
+                        </ion-icon> <strong>Objetivo: </strong> 
+                        @for($i = 0; $i < count($objetivos); $i++)
+                            @if ($av->objetivo_id == $objetivos[$i]->id)
+                                {{ $objetivos[$i]->nomeObjetivo }}
+                            @endif
+                        @endfor
+
                         @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                             <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
                             </ion-icon> <strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}</p>
@@ -265,7 +271,7 @@
                             @endif
                             <div class="box box-40">
                                 <div>
-                                    <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
+                                    <h1 style="font-size: 24px"><strong>Documentos:</strong></h1>
                                     <table id="minhaTabela6" class="table table-hover table-bordered" style="width:100%">
                                         <thead>
                                             <tr>
@@ -294,7 +300,7 @@
                                                                 'pasta' => 'resumo',
                                                                 'anexoRelatorio' => $hist->anexoRelatorio,
                                                             ]) }}" target="_blank" class="btn btn-active btn-success btn-sm">
-                                                                Abrir documento
+                                                                <i class="fas fa-paperclip"></i>
                                                             </a>
                                                         </td>
                                                     @endif
@@ -585,23 +591,29 @@
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
                             {{ $av->valorReais }}</p>
-                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
-                            {{ $av->valorDolar }}</p>
+                        @if($av->valorDolar > 0)
+                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                    name="cash-outline"></ion-icon> <strong>Valor em dólar:</strong> $
+                                {{ $av->valorDolar }}</p>
+                        @endif
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
                             {{ $av->valorExtraReais }}</p>
-                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
-                            {{ $av->valorExtraDolar }}</p>
+                        @if($av->valorExtraDolar > 0)
+                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                    name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
+                                {{ $av->valorExtraDolar }}</p>
+                        @endif
                         <p class="av-owner" style="font-size: 20px; color: black;">
                             <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
                             {{ $av->valorDeducaoReais }}
                         </p>
-                        <p class="av-owner" style="font-size: 20px; color: black;">
-                            <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
-                            {{ $av->valorDeducaoDolar }}
-                        </p>
+                        @if($av->valorDeducaoDolar > 0)
+                            <p class="av-owner" style="font-size: 20px; color: black;">
+                                <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
+                                {{ $av->valorDeducaoDolar }}
+                            </p>
+                        @endif
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                 extra:</strong>
@@ -1007,17 +1019,13 @@
                                             @endif
                                         @endfor
                                     </td>
-                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-                                        
-                                        <a href="{{ route('recuperaArquivo', [
+                                    <td><a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,
                                             'pasta' => 'null',
                                             'anexoRelatorio' => $anexoHotel->anexoHotel,
                                             ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                            target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                     </td>
                                 </tr>
                             @endif
@@ -1068,17 +1076,14 @@
                                             @endif
                                         @endfor
                                     </td>
-                                    <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-
+                                    <td>
                                         <a href="{{ route('recuperaArquivo', [
                                         'name' => $userAv->name,
                                         'id' => $av->id,
                                         'pasta' => 'null',
                                         'anexoRelatorio' => $anexoTransporte->anexoTransporte,
                                         ]) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                     </td>
                                 </tr>
                             @endif
@@ -1104,17 +1109,14 @@
                             <tr>
                                 <td> {{ $anexoFinanceiro->descricao }} </td>
 
-                                <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                        documento Old</a>
-                                    
+                                <td>
                                     <a href="{{ route('recuperaArquivo', [
                                         'name' => $userAv->name,
                                         'id' => $av->id,
                                         'pasta' => 'adiantamentos',
                                         'anexoRelatorio' => $anexoFinanceiro->anexoFinanceiro,
                                         ]) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                 </td>
 
                             </tr>
@@ -1140,17 +1142,14 @@
                                 <td> {{ $comp->descricao }} </td>
                                 <td> {{ $comp->valorReais }} </td>
                                 <td> {{ $comp->valorDolar }} </td>
-                                <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                        documento Old</a>
-                                    
+                                <td>
                                     <a href="{{ route('recuperaArquivo', [
                                         'name' => $userAv->name,
                                         'id' => $av->id,
                                         'pasta' => 'comprovantesDespesa',
                                         'anexoRelatorio' => $comp->anexoDespesa,
                                         ]) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                 </td>
                             </tr>
                         @endforeach

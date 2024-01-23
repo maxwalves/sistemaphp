@@ -98,12 +98,12 @@
                                 </p>
                                 <p class="av-owner" style="font-size: 20px"><ion-icon
                                         name="chevron-forward-circle-outline">
-                                    </ion-icon> <strong>E-mail do usuário: </strong>
-                                    @foreach ($users as $u)
-                                        @if ($u->id == $av->user_id)
-                                            {{ $u->username }}
+                                    </ion-icon> <strong>Objetivo: </strong>
+                                    @for ($i = 0; $i < count($objetivos); $i++)
+                                        @if ($av->objetivo_id == $objetivos[$i]->id)
+                                            {{ $objetivos[$i]->nomeObjetivo }}
                                         @endif
-                                    @endforeach
+                                    @endfor
                                 </p>
                             </div>
                         </div>
@@ -958,10 +958,6 @@
                                             @endfor
                                         </td>
                                         <td> 
-                                            <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
-                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                documento Old</a>
-
                                             <a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
@@ -1020,10 +1016,6 @@
                                             @endfor
                                         </td>
                                         <td> 
-                                            <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
-                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                documento Old</a>
-                                            
                                             <a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
@@ -1057,10 +1049,6 @@
                                     <td> {{ $anexoFinanceiro->descricao }} </td>
 
                                     <td> 
-                                        <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,
@@ -1094,10 +1082,6 @@
                                     <td> {{ $comp->valorReais }} </td>
                                     <td> {{ $comp->valorDolar }} </td>
                                     <td> 
-                                        <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-                                        
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,

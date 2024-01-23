@@ -92,12 +92,13 @@
                             @endforeach
                             </p>        
                             <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                            </ion-icon> <strong>E-mail do usuário: </strong> 
-                            @foreach($users as $u)
-                                    @if ($u->id == $av->user_id)
-                                        {{ $u->username }}
-                                    @endif
-                            @endforeach
+                            </ion-icon> <strong>Objetivo: </strong>
+                            @for($i = 0; $i < count($objetivos); $i++)
+                                @if ($av->objetivo_id == $objetivos[$i]->id)
+                                    {{ $objetivos[$i]->nomeObjetivo }}
+                                @endif
+                            @endfor
+                            
                             @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                                 <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
                                 </ion-icon> <strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}</p>
@@ -263,7 +264,7 @@
                                 @endif
                                 <div class="box box-40">
                                     <div>
-                                        <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
+                                        <h1 style="font-size: 24px"><strong>Documentos:</strong></h1>
                                         <table id="minhaTabela6" class="table table-hover table-bordered" style="width:100%">
                                             <thead>
                                                 <tr>
@@ -581,23 +582,29 @@
                             <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                     name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
                                 {{ $av->valorReais }}</p>
-                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                    name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
-                                {{ $av->valorDolar }}</p>
+                            @if($av->valorDolar > 0)
+                                <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                        name="cash-outline"></ion-icon> <strong>Valor em dólar:</strong> $
+                                    {{ $av->valorDolar }}</p>
+                            @endif
                             <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                     name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
                                 {{ $av->valorExtraReais }}</p>
-                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                    name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
-                                {{ $av->valorExtraDolar }}</p>
+                            @if($av->valorExtraDolar > 0)
+                                <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                        name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
+                                    {{ $av->valorExtraDolar }}</p>
+                            @endif
                             <p class="av-owner" style="font-size: 20px; color: black;">
                                 <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
                                 {{ $av->valorDeducaoReais }}
                             </p>
-                            <p class="av-owner" style="font-size: 20px; color: black;">
-                                <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
-                                {{ $av->valorDeducaoDolar }}
-                            </p>
+                            @if($av->valorDeducaoDolar)
+                                <p class="av-owner" style="font-size: 20px; color: black;">
+                                    <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
+                                    {{ $av->valorDeducaoDolar }}
+                                </p>
+                            @endif
                             <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                     name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                     extra:</strong>
@@ -724,12 +731,21 @@
                                     @endif
                                 </div>
                                 <div>
-                                    <i class="fas fa-caret-right bg-blue"></i>
-                                    <div class="timeline-item">
-                                        <div class="timeline-header">
-                                            <a class="btn btn-primary btn-md" @readonly(true)>5 - Viagem</a>
+                                    @if ($av->isPrestacaoContasRealizada == 1)
+                                        <i class="fas fa-caret-right bg-green"></i>
+                                        <div class="timeline-item">
+                                            <div class="timeline-header">
+                                                <a class="btn btn-success btn-md" @readonly(true)>5 - Viagem</a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <i class="fas fa-caret-right bg-blue"></i>
+                                        <div class="timeline-item">
+                                            <div class="timeline-header">
+                                                <a class="btn btn-primary btn-md" @readonly(true)>5 - Viagem</a>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div>
                                     @if ($av->isPrestacaoContasRealizada == 1)
@@ -822,7 +838,7 @@
                         <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Tipo</th>
+                                    {{-- <th>Tipo</th> --}}
                                     <th>Cidade de saída</th>
                                     <th>Data/Hora de saída</th>
                                     <th>Cidade de chegada</th>
@@ -840,7 +856,7 @@
                         <tbody>
                             @foreach ($av->rotas as $rota)
                                 <tr>
-                                    <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
+                                    {{-- <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td> --}}
                                     <td>
                                         @if ($rota->isAereo == 1)
                                             <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
@@ -960,7 +976,7 @@
                         <thead>
                             <tr>
                                 <th>Descrição</th>
-                                <th>IdRota</th>
+                                {{-- <th>IdRota</th> --}}
                                 <th>Rota</th>
                                 <th>Anexo</th>
                             </tr>
@@ -971,13 +987,13 @@
                                     <tr>
                                         <td> {{ $anexoHotel->descricao }} </td>
 
-                                        <td>
+                                        {{-- <td>
                                             @for ($i = 0; $i < count($av->rotas); $i++)
                                                 @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
                                                     {{ $av->rotas[$i]->id }}
                                                 @endif
                                             @endfor
-                                        </td>
+                                        </td> --}}
                                         <td>
                                             @for ($i = 0; $i < count($av->rotas); $i++)
                                                 @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
@@ -993,10 +1009,7 @@
                                                 @endif
                                             @endfor
                                         </td>
-                                        <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
-                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento Old</a>
-
-                                            <a href="{{ route('recuperaArquivo', [
+                                        <td><a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
                                                 'pasta' => 'null',
@@ -1020,7 +1033,7 @@
                         <thead>
                             <tr>
                                 <th>Descrição</th>
-                                <th>IdRota</th>
+                                {{-- <th>IdRota</th> --}}
                                 <th>Rota</th>
                                 <th>Anexo</th>
                             </tr>
@@ -1031,13 +1044,13 @@
                                     <tr>
                                         <td> {{ $anexoTransporte->descricao }} </td>
 
-                                        <td>
+                                        {{-- <td>
                                             @for ($i = 0; $i < count($av->rotas); $i++)
                                                 @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
                                                     {{ $av->rotas[$i]->id }}
                                                 @endif
                                             @endfor
-                                        </td>
+                                        </td> --}}
                                         <td>
                                             @for ($i = 0; $i < count($av->rotas); $i++)
                                                 @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
@@ -1053,11 +1066,7 @@
                                                 @endif
                                             @endfor
                                         </td>
-                                        <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
-                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                documento Old</a>
-
-                                            <a href="{{ route('recuperaArquivo', [
+                                        <td><a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
                                                 'pasta' => 'null',
@@ -1089,11 +1098,7 @@
                                 <tr>
                                     <td> {{ $anexoFinanceiro->descricao }} </td>
 
-                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-
-                                        <a href="{{ route('recuperaArquivo', [
+                                    <td><a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,
                                             'pasta' => 'adiantamentos',
@@ -1115,7 +1120,7 @@
                             <tr>
                                 <th>Descrição</th>
                                 <th>Valor reais</th>
-                                <th>Valor dólar</th>
+                                {{-- <th>Valor dólar</th> --}}
                                 <th>Anexo</th>
                             </tr>
                         </thead>
@@ -1124,12 +1129,8 @@
                                 <tr>
                                     <td> {{ $comp->descricao }} </td>
                                     <td> {{ $comp->valorReais }} </td>
-                                    <td> {{ $comp->valorDolar }} </td>
-                                    <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-
-                                        <a href="{{ route('recuperaArquivo', [
+                                    {{-- <td> {{ $comp->valorDolar }} </td> --}}
+                                    <td><a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,
                                             'pasta' => 'comprovantesDespesa',

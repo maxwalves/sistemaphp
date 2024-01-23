@@ -40,11 +40,6 @@
                             aria-selected="false">Fases</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="custom-tabs-three-trajeto-tab" data-toggle="pill"
-                            href="#custom-tabs-three-trajeto" role="tab" aria-controls="custom-tabs-three-trajeto"
-                            aria-selected="false">Trajeto</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" id="custom-tabs-three-relatorio-tab" data-toggle="pill"
                             href="#custom-tabs-three-relatorio" role="tab" aria-controls="custom-tabs-three-relatorio"
                             aria-selected="false">Relatório</a>
@@ -95,15 +90,6 @@
                                         @foreach ($users as $u)
                                             @if ($u->id == $av->user_id)
                                                 {{ $u->name }}
-                                            @endif
-                                        @endforeach
-                                    </p>
-                                    <p class="av-owner" style="font-size: 20px"><ion-icon
-                                            name="chevron-forward-circle-outline">
-                                        </ion-icon> <strong>E-mail do usuário: </strong>
-                                        @foreach ($users as $u)
-                                            @if ($u->id == $av->user_id)
-                                                {{ $u->username }}
                                             @endif
                                         @endforeach
                                     </p>
@@ -394,7 +380,7 @@
                                 @endif
                                 <div class="box box-40">
                                     <div>
-                                        <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
+                                        <h1 style="font-size: 24px"><strong>Documentos:</strong></h1>
                                         <table id="minhaTabela6" class="table table-hover table-bordered" style="width:100%">
                                             <thead>
                                                 <tr>
@@ -978,11 +964,7 @@
                                                     @endif
                                                 @endfor
                                             </td>
-                                            <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
-                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                    documento Old</a>
-
-                                                <a href="{{ route('recuperaArquivo', [
+                                            <td><a href="{{ route('recuperaArquivo', [
                                                     'name' => $userAv->name,
                                                     'id' => $av->id,
                                                     'pasta' => 'null',
@@ -1039,11 +1021,7 @@
                                                     @endif
                                                 @endfor
                                             </td>
-                                            <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
-                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                    documento Old</a>
-
-                                                <a href="{{ route('recuperaArquivo', [
+                                            <td><a href="{{ route('recuperaArquivo', [
                                                     'name' => $userAv->name,
                                                     'id' => $av->id,
                                                     'pasta' => 'null',
@@ -1076,10 +1054,6 @@
                                         <td> {{ $anexoFinanceiro->descricao }} </td>
 
                                         <td> 
-                                            <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
-                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                documento Old</a>
-
                                             <a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
@@ -1111,10 +1085,6 @@
                                         <td> {{ $comp->descricao }} </td>
                                         <td> {{ $comp->valorReais }} </td>
                                         <td> 
-                                            <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
-                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                documento Old</a>
-
                                             <a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,

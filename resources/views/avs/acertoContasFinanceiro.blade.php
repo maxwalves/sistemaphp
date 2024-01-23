@@ -59,8 +59,7 @@
                 <td> {{$av->status}} </td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/realizarAcertoContasFinanceiro/{{ $av->id }}" class="btn btn-primary btn-sm"
-                            style="width: 230px"> Realizar Acerto de Contas</a> 
+                        <a href="/avs/realizarAcertoContasFinanceiro/{{ $av->id }}" class="btn btn-primary btn-sm"><i class="fas fa-balance-scale"></i></a> 
                         
                     </div>
                 </td>

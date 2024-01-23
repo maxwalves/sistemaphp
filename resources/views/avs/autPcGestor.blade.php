@@ -79,8 +79,7 @@
                 <td> {{$av->status}} </td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/avaliarPcGestor/{{ $av->id }}" class="btn btn-primary btn-sm"
-                            style="width: 230px"> Avaliar Prestação de Contas</a> 
+                        <a href="/avs/avaliarPcGestor/{{ $av->id }}" class="btn btn-primary btn-sm"><i class="fas fa-user-check"></i></a>
                         
                     </div>
                 </td>

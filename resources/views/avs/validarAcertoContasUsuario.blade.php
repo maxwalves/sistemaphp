@@ -1,14 +1,21 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Validar Acerto de Contas')
 
 @section('content_header')
-    <h1>Dashboard</h1>
 @stop
 
 @section('content')
     
-
+<br>
+<div class="row">
+    <div class="col-md-8">
+        <h3>Validar Acerto de Contas</h3>
+    </div>
+    <div class="col-md-4">
+        <a href="/avs/prestacaoContasUsuario" type="submit" class="btn btn-warning btn-ghost"><i class="fas fa-arrow-left"></i></a>
+    </div>
+</div>
 <div class="col-md-12 col-sm-6">
     <div class="card card-primary card-outline card-tabs">
         <div class="card-header p-0 pt-1 border-bottom-0">
@@ -90,12 +97,13 @@
                             @endforeach
                             </p>        
                             <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                            </ion-icon> <strong>E-mail do usuário: </strong> 
-                            @foreach($users as $u)
-                                    @if ($u->id == $av->user_id)
-                                        {{ $u->username }}
-                                    @endif
-                            @endforeach
+                            </ion-icon> <strong>Objetivo: </strong>
+                            @for ($i = 0; $i < count($objetivos); $i++)
+                                @if ($av->objetivo_id == $objetivos[$i]->id)
+                                    {{ $objetivos[$i]->nomeObjetivo }}
+                                @endif
+                            @endfor
+
                             @if ($errors->has('comentario'))
                                 <p style="color: red"> <strong>É necessário realizar um comentário no caso de reprovação do Acerto de Contas!</strong></p>
                             @endif
@@ -264,11 +272,12 @@
                                 <div>
                                     <div class="box box-40">
                                         <div style="overflow-x: auto;">
-                                            <h5 style="color: red">Insira o comprovante de pagamento do acerto de contas caso necessário:</h5><br>
+                                            <h5 style="color: red">Insira algum comprovante referente ao acerto de contas caso necessário:</h5><br>
                                             <div class="col-3">
                                                 <x-adminlte-button label="Adicionar" data-toggle="modal" data-target="#modalAddArquivo" class="bg-teal"/>
                                             </div>
-                                            <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
+                                            <br>
+                                            <h1 style="font-size: 24px"><strong>Documentos:</strong></h1>
                                             <table id="minhaTabela6" class="table table-hover table-bordered" style="width:100%">
                                                 <thead>
                                                     <tr>
@@ -281,16 +290,14 @@
                                                     @foreach($historicoPc as $hist)
                                                         <tr>
                                                             <td> {{$hist->comentario}} </td>
-                                                            <td> <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $hist->anexoRelatorio) }}" 
-                                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento Old</a>
-
+                                                            <td>
                                                                 <a href="{{ route('recuperaArquivo', [
                                                                     'name' => $userAv->name,
                                                                     'id' => $av->id,
                                                                     'pasta' => 'resumo',
                                                                     'anexoRelatorio' => $hist->anexoRelatorio,
                                                                     ]) }}"
-                                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                                                    target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                                             </td>
                                                             <td>
                                                                 @if($hist->comentario != "Adiantamento realizado - valor inicial" && $hist->comentario != "Acerto de contas"
@@ -852,7 +859,7 @@
                     <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Tipo</th>
+                                {{-- <th>Tipo</th> --}}
                                 <th>Cidade de saída</th>
                                 <th>Data/Hora de saída</th>
                                 <th>Cidade de chegada</th>
@@ -870,7 +877,7 @@
                     <tbody>
                         @foreach ($av->rotas as $rota)
                             <tr>
-                                <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
+                                {{-- <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td> --}}
                                 <td>
                                     @if ($rota->isAereo == 1)
                                         <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
@@ -990,7 +997,7 @@
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>IdRota</th>
+                            {{-- <th>IdRota</th> --}}
                             <th>Rota</th>
                             <th>Anexo</th>
                         </tr>
@@ -1001,13 +1008,13 @@
                                 <tr>
                                     <td> {{ $anexoHotel->descricao }} </td>
 
-                                    <td>
+                                    {{-- <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
                                                 {{ $av->rotas[$i]->id }}
                                             @endif
                                         @endfor
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
@@ -1023,17 +1030,14 @@
                                             @endif
                                         @endfor
                                     </td>
-                                    <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoHotel->anexoHotel) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-
+                                    <td>
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,
                                             'pasta' => 'null',
                                             'anexoRelatorio' => $anexoHotel->anexoHotel,
                                             ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                            target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                     </td>
                                 </tr>
                             @endif
@@ -1051,7 +1055,7 @@
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>IdRota</th>
+                            {{-- <th>IdRota</th> --}}
                             <th>Rota</th>
                             <th>Anexo</th>
                         </tr>
@@ -1062,13 +1066,13 @@
                                 <tr>
                                     <td> {{ $anexoTransporte->descricao }} </td>
 
-                                    <td>
+                                    {{-- <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
                                                 {{ $av->rotas[$i]->id }}
                                             @endif
                                         @endfor
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
@@ -1084,17 +1088,14 @@
                                             @endif
                                         @endfor
                                     </td>
-                                    <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/' . $anexoTransporte->anexoTransporte) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                            documento Old</a>
-
+                                    <td>
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,
                                             'pasta' => 'null',
                                             'anexoRelatorio' => $anexoTransporte->anexoTransporte,
                                             ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                            target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                     </td>
                                 </tr>
                             @endif
@@ -1120,17 +1121,14 @@
                             <tr>
                                 <td> {{ $anexoFinanceiro->descricao }} </td>
 
-                                <td><a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/adiantamentos' . '/' . $anexoFinanceiro->anexoFinanceiro) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                        documento Old</a>
-
+                                <td>
                                     <a href="{{ route('recuperaArquivo', [
                                         'name' => $userAv->name,
                                         'id' => $av->id,
                                         'pasta' => 'adiantamentos',
                                         'anexoRelatorio' => $anexoFinanceiro->anexoFinanceiro,
                                         ]) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                 </td>
 
                             </tr>
@@ -1155,17 +1153,13 @@
                                 <td> {{ $comp->descricao }} </td>
                                 <td> {{ $comp->valorReais }} </td>
                                 <td> 
-                                    <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                        documento Old</a>
-
                                     <a href="{{ route('recuperaArquivo', [
                                         'name' => $userAv->name,
                                         'id' => $av->id,
                                         'pasta' => 'comprovantesDespesa',
                                         'anexoRelatorio' => $comp->anexoDespesa,
                                         ]) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                 </td>
                             </tr>
                         @endforeach
