@@ -3753,20 +3753,23 @@ class ControladorAv extends Controller
         $medicoes = Medicao::all();
 
         foreach ($data as $item) {
-            $jaExiste = false;
-            foreach ($medicoes as $medicao) {
-                if (($item->municipio_id == $medicao->municipio_id) && ($item->numero_projeto == $medicao->numero_projeto)
-                && ($item->numero_lote == $medicao->numero_lote) && ($item->numero == $medicao->numero_medicao)) {
-                    $jaExiste = true;
-                }
+
+            if ($item->nome_supervisor == $user->name) { //  para teste 'Fernanda Espindola de Oliveira'
+                array_push($filtro, $item);
             }
-            if(!$jaExiste){
-                if ($item->nome_supervisor == $user->name) { //  para teste 'Fernanda Espindola de Oliveira'
-                    array_push($filtro, $item);
-                }
-                else{
-                    array_push($filtroTodos, $item);
-                }
+            else{
+                array_push($filtroTodos, $item);
+            }
+            
+        }
+
+        //filtre o $medicoes e veja qual o id da av que está na tabela medicoes é igual a av que está sendo editada
+        $medicoes = Medicao::all();
+        $idAv = $av->id;
+        $medicoesFiltradas = [];
+        foreach ($medicoes as $medicao) {
+            if($medicao->av_id == $idAv){
+                array_push($medicoesFiltradas, $medicao);
             }
         }
 
@@ -3775,7 +3778,7 @@ class ControladorAv extends Controller
         }
 
         return view('avspc.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 
-        'filtro' => $filtro, 'filtroTodos' => $filtroTodos, 'userAv' => $userAv]);
+        'filtro' => $filtro, 'filtroTodos' => $filtroTodos, 'userAv' => $userAv, 'medicoesFiltradas' => $medicoesFiltradas]);
     }
 
     public function enviarGestor(Request $request)
@@ -4422,7 +4425,7 @@ class ControladorAv extends Controller
         $request->validate($regras, $mensagens);
 
         $data = $request->all();
-        $data['isDiaria'] = $request->isDiaria == "Sim" ? true : false;
+        $data['isDiaria'] = true;
 
         $av = Av::findOrFail($request->id);
         $av->update($data);

@@ -68,8 +68,7 @@
                 <td> {{$av->status}} </td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/verFluxoDiretoria/{{ $av->id }}" class="btn btn-primary btn-sm"
-                            style="width: 110px"> Ver</a> 
+                        <a href="/avs/verFluxoDiretoria/{{ $av->id }}" class="btn btn-primary btn-sm"><i class="fas fa-user-check"></i></a> 
                         
                     </div>
                 </td>

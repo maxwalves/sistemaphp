@@ -20,7 +20,7 @@
     <div>
         <div class="row">
             <div class="col-8" >
-                <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary"><i class="fas fa-plus"></i> ROTA</a>
+                
             </div>
             <div class="col-3" >
                 <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i></a>
@@ -84,15 +84,22 @@
             </table>
         </div>
 
-        <form action="/avspc/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-            <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
-            <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
-            <div id="btSalvarRota">
-                <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-warning" value="Calcular diárias">
+        <div class="row">
+            <div class="col-4" >
+                <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary"><i class="fas fa-plus"></i> ROTA</a>
             </div>
-        </form>
+            <div class="col-4" >
+                <form action="/avspc/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
+                    <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
+                    <div id="btSalvarRota">
+                        <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-warning" value="Calcular diárias">
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
     
     <br>

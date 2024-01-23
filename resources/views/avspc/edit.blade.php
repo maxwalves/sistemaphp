@@ -3,15 +3,20 @@
 @section('title', 'Editar AV')
 
 @section('content_header')
-    <h1>Editar AV</h1>
+    
 @stop
 
 @section('content')
 
-<div class="row justify-content-start" style="padding-left: 5%">
-    <div class="col-3">
-        <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"> Voltar!</a>
+<br>
+<div class="row">
+    <div class="col-8">
+        <h3>Editar AV</h3>
     </div>
+    <div class="col-4">
+        <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i></a>
+    </div>
+    
 </div>
 
 <div id="av-create-container" >
@@ -23,6 +28,7 @@
         <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
         <div class="form-group col-md-6 offset-md-3" id="nomeObjetivo">
             <label for="objetivo_id" class="control-label" required>Qual é o Objetivo da viagem? (selecione)</label>
+            <p id="mensagemUsuario" style="color: red"></p>
             <br>
                 <select class="select select-bordered w-full max-w-xs {{ $errors->has('objetivo_id') ? 'is-invalid' :''}}" 
                     id="objetivo_id" name="objetivo_id" onChange="verificarObjetivoViagem()">
@@ -43,11 +49,14 @@
         </div>
         <div class="form-group col-md-6 offset-md-3" id="isMostrarTodos">
             <span class="label-text">Mostrar todos</span> 
-            <input type="checkbox" class="toggle" onChange="mostrarTodos()"/>
+            <input type="checkbox" class="toggle" id="checkMostrarTodos" onChange="mostrarTodos()"/>
         </div>
 
         <div id="autorizacaoComissao">
-            <h1>Lista de medições pendentes</h1>
+            <h3>Lista de medições pendentes</h3>
+            @if(count($filtro) == 0)
+                <h5>Não há medições pendetes vinculadas ao seu usuário</h5>
+            @else
             <table class="table table-sm">
                 <thead>
                     <tr>
@@ -83,10 +92,11 @@
                     @endforeach
                 </tbody>
             </table>
+            @endif
             
         </div>
         <div id="autorizacaoComissaoTodos">
-            <h1>Lista de medições pendentes</h1>
+            <h3>Lista de medições pendentes</h3>
             <table class="display nowrap" id="minhaTabela">
                 <thead>
                     <tr>
@@ -105,10 +115,27 @@
                 <tbody>
                     @foreach($filtroTodos as $item)
                     <tr>
-                        <td> 
-                            <input type="checkbox" name="todosSelecionados[]" id="todosSelecionados" 
-                            class="checkbox checkbox-md" value="{{ $item->id }}"/>
-                        </td>
+                        @php
+                            $achouMedicao = false;
+                        @endphp
+                        @foreach($medicoesFiltradas as $medF)
+                            @if($medF->numero_projeto == $item->numero_projeto && $medF->numero_lote == $item->numero_lote && $medF->numero_medicao == $item->numero)
+                                <td> 
+                                    <input type="checkbox" name="todosSelecionados[]" id="todosSelecionados" 
+                                    class="checkbox checkbox-md" value="{{ $item->id }}" checked/>
+                                    @php
+                                        $achouMedicao = true;
+                                    @endphp
+                                </td>
+                            @endif
+                        @endforeach
+                        
+                        @if($achouMedicao == false)
+                            <td> 
+                                <input type="checkbox" name="todosSelecionados[]" id="todosSelecionados" 
+                                class="checkbox checkbox-md" value="{{ $item->id }}"/>
+                            </td>
+                        @endif
                         <td> {{ $item->nome_supervisor }} </td>
                         <td> {{ $item->codigo_regional }} </td>
                         <td> {{ $item->nome_municipio }} </td>
@@ -260,6 +287,20 @@
             document.getElementById("nomeObjetivo").hidden = false;
             document.getElementById("isSelecionado").value = "0";
         @endif
+        
+        @for($i = 0; $i < count($objetivos); $i++)
+            @if($objetivos[$i]->id == $av->objetivo_id)
+                setTimeout(verificarObjetivoViagem, 500);
+                document.getElementById("mensagemUsuario").innerHTML = "Confirme a medição";
+                document.getElementById("mensagemUsuario").style.fontWeight = "bold";
+                @if(count($filtro) == 0)
+                    //deixe o checkbox checkMostrarTodos checado
+                    document.getElementById("checkMostrarTodos").checked = true;
+                    setTimeout(mostrarTodos, 500);
+                @endif
+            @endif
+        @endfor
+
     });
 
     function desativarCampoObjetivo(){
@@ -279,6 +320,7 @@
     
     function verificarObjetivoViagem(){
         var objetivo = document.getElementById("objetivo_id");
+        console.log(objetivo.value);
         
         if(objetivo.value == 3){
             document.getElementById("autorizacaoComissao").hidden = false;

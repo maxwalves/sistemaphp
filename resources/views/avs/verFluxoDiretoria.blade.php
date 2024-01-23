@@ -3,14 +3,18 @@
 @section('title', 'Avaliação DAF')
 
 @section('content_header')
-    <h1>Avaliação DAF</h1>
 @stop
 
 @section('content')
-    
-<div class="row justify-content-start">
-    <div class="col-3">
-        <a href="/avs/autDiretoria" type="submit" class="btn btn-active btn-warning"> Voltar!</a>
+
+<div class="row">
+    <div class="col-8">
+        <br>
+        <h3>Avaliação DAF</h3>
+    </div>
+    <div class="col-4">
+        <br>
+        <a href="/avs/autDiretoria" type="submit" class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i></a>
     </div>
 </div>
 
@@ -65,12 +69,12 @@
                         @endforeach
                     </p>
                     <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                        </ion-icon> <strong>E-mail do usuário: </strong>
-                        @foreach ($users as $u)
-                            @if ($u->id == $av->user_id)
-                                {{ $u->username }}
+                        </ion-icon> <strong>Objetivo: </strong>
+                        @for ($i = 0; $i < count($objetivos); $i++)
+                            @if ($av->objetivo_id == $objetivos[$i]->id)
+                                {{ $objetivos[$i]->nomeObjetivo }}
                             @endif
-                        @endforeach
+                        @endfor
                     </p>
 
                     <div class="col-md-12">
@@ -188,7 +192,7 @@
                         </tbody>
                     </table>
                     </div>
-                    <div class="container">
+                    <div>
                         <div class="stat-title">Controle de diárias:
                         </div>
                         Mês saída: {{ $mesSaidaInicial }}
@@ -407,9 +411,9 @@
 
                     <div class="divider"></div>
 
-                    <div class="container">
+                    <div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <form action="/avs/diretoriaAprovarAv" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
@@ -423,7 +427,7 @@
                                         <button type="submit" class="btn btn-active btn-success">Aprovar AV</button>
                                 </form>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <form action="/avs/diretoriaReprovarAv" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
                                     @csrf
                                     @method('PUT')

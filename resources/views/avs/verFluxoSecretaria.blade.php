@@ -10,7 +10,7 @@
     <div class="row justify-content-start" style="padding-left: 5%">
         <div class="col-9">
             <br>
-            <h1>Avaliação CAD</h1>
+            <h2>Avaliação CAD</h2>
             @if ($av->isCancelado == 1 && $av->isRealizadoReserva == 1)
                 <div class="alert alert-warning">
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
@@ -531,12 +531,12 @@
                     
                         <div class="tab-pane fade" id="custom-tabs-three-historico" role="tabpanel"
                             aria-labelledby="custom-tabs-three-historico-tab" style="overflow-x: auto;">
-                            <h3 class="text-lg font-bold" style="padding-left: 10%">Histórico</h3>
+                            <h3 class="text-lg font-bold">Histórico</h3>
                             <table id="minhaTabela" class="table table-hover table-bordered">
                                 <!-- head -->
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
+                                        {{-- <th>Id</th> --}}
                                         <th>Data</th>
                                         <th>Ocorrência</th>
                                         <th>Comentário</th>
@@ -549,8 +549,8 @@
 
                                     @foreach ($historicos as $historico)
                                         <tr>
-                                            <td>{{ $historico->id }}</td>
-                                            <td>{{ $historico->dataOcorrencia }}</td>
+                                            {{-- <td>{{ $historico->id }}</td> --}}
+                                            <td>{{ date('d/m/Y H:i', strtotime($historico->dataOcorrencia)) }}</td>
                                             <td>{{ $historico->tipoOcorrencia }}</td>
                                             <td>{{ $historico->comentario }}</td>
                                             <td>{{ $historico->perfilDonoComentario }}</td>
