@@ -3,16 +3,18 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Ver detalhes da Prestação de Contas</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Ver detalhes da Prestação de Contas</h1>
+        </div>
+        <div class="col-md-4">
+            <a href="/avs/prestacaoContasUsuario" type="submit" class="btn btn-warning btn-ghost"><i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
 @stop
 
 @section('content')
 
-    <div>
-        <a href="/avs/prestacaoContasUsuario" class="btn btn-warning"> Voltar</a>
-    </div>
-    <br>
-    
     <div class="col-md-12 col-sm-6">
         <div class="card card-primary card-outline card-tabs">
             <div class="card-header p-0 pt-1 border-bottom-0">

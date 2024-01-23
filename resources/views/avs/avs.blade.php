@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Minhas autorizações de viagens')
 
 @section('content_header')
 @stop

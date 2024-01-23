@@ -3,12 +3,12 @@
 @section('title', 'Objetivos')
 
 @section('content_header')
-    <h1>Objetivos</h1>
 @stop
 
 @section('content')
     
 <div class="col-md-10 offset-md-1 dashboard-title-container">
+    <br>
     <h2>Objetivos de viagens cadastrados</h2>
 </div>
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
@@ -25,12 +25,14 @@
             <tr>
                 <td> {{$objetivo->nomeObjetivo}} </td>
                 <td> 
-                    <a href="/objetivos/edit/{{ $objetivo->id }}" class="btn btn-success btn-sm">Editar</a> 
-                    <form action="/objetivos/{{ $objetivo->id }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
-                    </form>
+                    <div class="d-flex">
+                        <a href="/objetivos/edit/{{ $objetivo->id }}" class="btn btn-success btn-sm"><i class="fas fa-edit"></i></a> 
+                        <form action="/objetivos/{{ $objetivo->id }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @endforeach
@@ -39,7 +41,7 @@
     @else
     <p>Ainda não há objetivos cadastrados, <a href="/objetivos/create"> Criar novo objetivo!</a></p>
     @endif
-    <a style="font-size: 16px" href="/objetivos/create" type="submit" class="btn btn-primary btn-lg"> Cadastrar novo objetivo!</a>
+    <a style="font-size: 16px" href="/objetivos/create" type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i></a>
 </div>
 
 @stop
