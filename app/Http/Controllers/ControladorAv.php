@@ -2969,9 +2969,9 @@ class ControladorAv extends Controller
         $rotas = $av->rotas;//Busca as rotas da AV
 
         //se somente existir uma rota, volte uma mensagem de erro dizendo que tem que ter pelo menos duas rotas
-        if(sizeof($rotas) < 2){
-            return redirect('/rotas/rotas/' . $av->id)->with('error', 'Não é possível concluir uma AV com apenas uma rota!');
-        }
+        // if(sizeof($rotas) < 2){
+        //     return redirect('/rotas/rotas/' . $av->id)->with('error', 'Não é possível concluir uma AV com apenas uma rota!');
+        // }
 
         //Valor do cálculo de rota e verificar quanto que terá que pagar ao usuário
         $diariaTotal = 0;
@@ -3035,174 +3035,17 @@ class ControladorAv extends Controller
 
         $isInternacional = false;
         $mostrarValor = true;
-        
-        if(sizeof($rotas)==1){//Se tem apenas uma rota
-            
-            if($rotas[0]->continenteDestinoInternacional == 1 && $rotas[0]->paisDestinoInternacional !=30){//América Latina ou Amética Central
-                $diariaTotal = 100;
-                $meiaDiaria = 50;
-                $isInternacional = true;
-                $mostrarValor = false;
-            }
-            else if($rotas[0]->continenteDestinoInternacional == 2){//América do Norte
-                $diariaTotal = 150;
-                $meiaDiaria = 75;
-                $isInternacional = true;
-                $mostrarValor = false;
-            }
-            else if($rotas[0]->continenteDestinoInternacional == 3){//Europa
-                $diariaTotal = 180;
-                $meiaDiaria = 90;
-                $isInternacional = true;
-                $mostrarValor = false;
-            }
-            else if($rotas[0]->continenteDestinoInternacional == 4){//África
-                $diariaTotal = 140;
-                $meiaDiaria = 70;
-                $isInternacional = true;
-                $mostrarValor = false;
-            }
-            else if($rotas[0]->continenteDestinoInternacional == 5){//Ásia
-                $diariaTotal = 190;
-                $meiaDiaria = 95;
-                $isInternacional = true;
-                $mostrarValor = false;
-            }else if(($rotas[0]->cidadeDestinoNacional == "Curitiba" || $rotas[0]->cidadeDestinoNacional == "Foz do Iguaçu") ||
-            ($rotas[0]->paisDestinoInternacional == 30 && $rotas[0]->estadoDestinoInternacional == "Paraná" && 
-            ($rotas[0]->cidadeDestinoInternacional == "Curitiba" || $rotas[0]->cidadeDestinoInternacional == "Foz do Iguaçu"))){//Se for Curitiba ou Foz do Iguaçu
-                $diariaTotal = 65;
-                $meiaDiaria = 32.5;
-            }
-            else if($rotas[0]->estadoDestinoNacional == "Paraná" || ($rotas[0]->paisDestinoInternacional == 30 && $rotas[0]->estadoDestinoInternacional == "Paraná")){//Se for outra cidade do Paraná
-                $diariaTotal = 55;
-                $meiaDiaria = 27.5;
-            }
-            else if($rotas[0]->cidadeDestinoNacional == "Brasília" || ($rotas[0]->paisDestinoInternacional == 30 && $rotas[0]->cidadeDestinoInternacional == "Brasília")){//Se for Brasília
-                $diariaTotal = 100;
-                $meiaDiaria = 50;
-            }
-            else{//Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
-                $diariaTotal = 80;
-                $meiaDiaria = 40;
-            }
 
-            $date1 = new DateTime($rotas[0]->dataHoraSaida);//Data de saída
-            $date2 = new DateTime($rotas[0]->dataHoraChegada);//Data de chegada
-
-            $anoSaida = $date1->format('Y');
-            $mesSaida = $date1->format('m');
-            $diaSaida = $date1->format('d');
-            $horaSaida = $date1->format('H');
-            $minutoSaida = $date1->format('i');
-            $segundoSaida = $date1->format('s');
-
-            $anoChegada = $date2->format('Y');
-            $mesChegada = $date2->format('m');
-            $diaChegada = $date2->format('d');
-            $horaChegada = $date2->format('H');
-            $minutoChegada = $date2->format('i');
-            $segundoChegada = $date2->format('s');
-                
-            if($diaSaida==$diaChegada){//Sair e chegar no mesmo dia
-                if($horaSaida < 12 && $horaChegada >= 13 && $horaChegada < 19){//Se sair antes de 12 e chegar entre 13 e 19
-                    if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                    if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                }
-                else if($horaSaida >= 13 && $horaChegada >= 19){ //Se sair depois das 13 e chegar após 19
-                    if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                    if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                }
-                else if($horaSaida < 12 && $horaChegada >= 19){ // Se sair antes de 12 e chegar após 19
-                    if($isInternacional == false) {$valorReais += $diariaTotal;}
-                    if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                }
+        //itere rotas e veja se alguma é internacional
+        foreach($rotas as $rota){
+            if($rota->isViagemInternacional==true){
+                $isInternacional = true;
             }
-    
-            if($diaSaida != $diaChegada){ // Sair e chegar em dia diferente
-             
-                if($horaSaida <12){//Se no primeiro dia ele sair antes de 12 já ganha diária total
-                    if($isInternacional == false) {$valorReais += $diariaTotal;}
-                    if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                }
-                else if($horaSaida >= 13){//Se no primeiro dia ele sair após as 13, ganha meia diária
-                    if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                    if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                }
-                 
-                //Roda o laço a partir do segundo dia até o penúltimo
-                for($i = $diaSaida+1; $i < $diaChegada ; $i++){//Acrescenta uma diária completa para cada dia intermediário
-                    if($isInternacional == false) {$valorReais += $diariaTotal;}
-                    if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                }
-                
-                if($horaChegada < 13){ //Se no último dia a chegada for antes das 13, recebe meia diária
-                    if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                    if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                }
-                else if($horaChegada >= 13 && $horaChegada < 19){
-                    if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                    if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                }
-                else if($horaChegada >=19){ // Se no último dia a chegada for após as 19, recebe diária inteira
-                    if($isInternacional == false) {$valorReais += $diariaTotal;}
-                    if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                }
-            
-            }
-            
         }
-        else if(sizeof($rotas)>1){//Se existir mais de uma rota
+        
+        if(sizeof($rotas)>1){//Se existir mais de uma rota
             
             for ($i=0; $i < sizeof($rotas)-1 ; $i++) { 
-                $isInternacional = false;
-                if($rotas[$i]->continenteDestinoInternacional == 1 && $rotas[$i]->paisDestinoInternacional !=30){//América Latina ou Amética Central
-                    $diariaTotal = 100;
-                    $meiaDiaria = 50;
-                    $isInternacional = true;
-                    $mostrarValor = false;
-                }
-                else if($rotas[$i]->continenteDestinoInternacional == 2){//América do Norte
-                    $diariaTotal = 150;
-                    $meiaDiaria = 75;
-                    $isInternacional = true;
-                    $mostrarValor = false;
-                }
-                else if($rotas[$i]->continenteDestinoInternacional == 3){//Europa
-                    $diariaTotal = 180;
-                    $meiaDiaria = 90;
-                    $isInternacional = true;
-                    $mostrarValor = false;
-                }
-                else if($rotas[$i]->continenteDestinoInternacional == 4){//África
-                    $diariaTotal = 140;
-                    $meiaDiaria = 70;
-                    $isInternacional = true;
-                    $mostrarValor = false;
-                }
-                else if($rotas[$i]->continenteDestinoInternacional == 5){//Ásia
-                    $diariaTotal = 190;
-                    $meiaDiaria = 95;
-                    $isInternacional = true;
-                    $mostrarValor = false;
-                }else if(($rotas[$i]->cidadeDestinoNacional == "Curitiba" || $rotas[$i]->cidadeDestinoNacional == "Foz do Iguaçu") ||
-                ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->estadoDestinoInternacional == "Paraná" && 
-                ($rotas[$i]->cidadeDestinoInternacional == "Curitiba" || $rotas[$i]->cidadeDestinoInternacional == "Foz do Iguaçu"))){//Se for Curitiba ou Foz do Iguaçu
-                    $diariaTotal = 65;
-                    $meiaDiaria = 32.5;
-                }
-                else if($rotas[$i]->estadoDestinoNacional == "Paraná" || ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->estadoDestinoInternacional == "Paraná")){//Se for outra cidade do Paraná
-                    $diariaTotal = 55;
-                    $meiaDiaria = 27.5;
-                }
-                else if($rotas[$i]->cidadeDestinoNacional == "Brasília" || ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->cidadeDestinoInternacional == "Brasília")){//Se for Brasília
-                    $diariaTotal = 100;
-                    $meiaDiaria = 50;
-                }
-                else{//Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
-                    $diariaTotal = 80;
-                    $meiaDiaria = 40;
-                }
-                
                 
                 //Verifica quais são das datas da rota atual e da próxima
                 $dataHoraSaidaRota1 = new DateTime($rotas[$i]->dataHoraSaida);//Data de saída da rota 1
@@ -3258,120 +3101,64 @@ class ControladorAv extends Controller
                     $minutoChegadaFinal = $minutoChegadaRota2;
                 }
                 //CÁLCULOS:
-                
-                //A partir do próximo dia após a chegada da rota 1, conta até o último dia antes da partida da rota 2
-                $mesesDiferenca = 0;
-                if($mesSaidaRota1 != $mesChegadaRota2){//Verifica se as datas estão em meses diferentes
-                    $mesesDiferenca = $mesChegadaRota2-$mesSaidaRota1;
-                    
-                    $data1 = $dataHoraSaidaRota1->format('Y-m-d');
-
-                    $ultimoDiaMes1 = date('t', strtotime($data1));
-
-                    if($mesesDiferenca==1){
-                        $diasCompletos += $ultimoDiaMes1 - ($diaChegadaRota1+1);
-                        $diasCompletos += $diaSaidaRota2;
-                    }
-                    else if($mesesDiferenca==2){
-                        $diasCompletos += $ultimoDiaMes1 - ($diaChegadaRota1+1);
-
-                        $ultimoDiaMesx = date('t', strtotime($anoSaidaRota1 . '-' . $mesSaidaRota1 + 1 . '-' . $diaSaidaRota1));
-                        
-                        $diasCompletos += $ultimoDiaMesx;
-                        $diasCompletos += $diaSaidaRota2;
-                    }
-                }
-                else if($mesSaidaRota1 == $mesChegadaRota2){
-                    $diasCompletos = ($diaSaidaRota2)-($diaChegadaRota1+1);  
-                }
-                
-                if($isInternacional == false) {$valorReais += ($diariaTotal * $diasCompletos) ;}
-                if($isInternacional == true) {$valorDolar += ($diariaTotal * $diasCompletos);}
-                
-                if($diaSaidaRota1==$diaChegadaRota1){// Se a viagem de ida durar um dia
-                    
-                    if($horaSaidaRota1 < 12){//Se sair antes de 12h 
-                        if($isInternacional == false) {$valorReais += $diariaTotal;}
-                        if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                    }
-                    else if($horaSaidaRota1 >=13){//Sair depois das 13h e chegar depois das 19h
-                        if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                        if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                    }
-                } 
-                else if($diaSaidaRota1!=$diaChegadaRota1){//Se a viagem de ida demorar mais de um dia
-                    
-                    if($horaSaidaRota1 < 12){//Se sair antes de 12
-                        if($isInternacional == false) {$valorReais += $diariaTotal;}
-                        if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                    }
-                    else if($horaSaidaRota1 >=13 && $horaSaidaRota1 <19){
-                        if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                        if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                    }
-
-                    for($j = $diaSaidaRota1; $j < $diaChegadaRota1 ; $j++){//Acrescenta uma diária completa para cada dia intermediário
-                        if($isInternacional == false) {$valorReais += $diariaTotal;}
-                        if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                    }
-                }
-
-                //Soma o período antes do início de uma nova rota, caso complete meia diária ou total
-                if(!($i+1 >= sizeof($rotas)-1)){//Se não estou na última rota
-                    if($horaSaidaRota2 >= 13){
-                        if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                        if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                    }
-                    else if($horaSaidaRota2 >= 19){
-                        if($isInternacional == false) {$valorReais += $diariaTotal;}
-                        if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                    }
-                }
-                
-                if($i+1 >= sizeof($rotas)-1){//Se estou na última rota
-                    if($diaSaidaRota2==$diaChegadaRota2){// Se a viagem da rota 2 durar um dia
-                        
-                        if($horaChegadaRota2 >=19){
-                            if($isInternacional == false) {$valorReais += $diariaTotal;}
-                            if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                        }
-                        else if($horaChegadaRota2 >= 13 && $horaChegadaRota2 < 19){
-                            if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                            if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                        }
-                    } 
-                    else if($diaSaidaRota2!=$diaChegadaRota2){//Se a viagem da rota 2 demorar mais de um dia
-    
-                        if($horaSaidaRota2 < 12){//Se sair antes de 12
-                            if($isInternacional == false) {$valorReais += $diariaTotal;}
-                            if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                        }
-                        else if($horaSaidaRota2 >=13){
-                            if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                            if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                        }
-    
-                        for($j = $diaSaidaRota2+1; $j < $diaChegadaRota2 ; $j++){//Acrescenta uma diária completa para cada dia intermediário
-                            if($isInternacional == false) {$valorReais += $diariaTotal;}
-                            if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                        }
-    
-                        if($horaChegadaRota2 >=13 && $horaChegadaRota2 < 19){
-                            if($isInternacional == false) {$valorReais += $meiaDiaria;}
-                            if($isInternacional == true) {$valorDolar += $meiaDiaria;}
-                        }
-                        else if($horaChegadaRota2 >= 19){ // Se no último dia da Rota 1 a chegada for após as 19, recebe diária inteira
-                            if($isInternacional == false) {$valorReais += $diariaTotal;}
-                            if($isInternacional == true) {$valorDolar += $diariaTotal;}
-                        }
-                    }
-                }
+            
             }
+        } else{
+                         
+            //Verifica quais são das datas da rota atual e da próxima
+            $dataHoraSaidaRota1 = new DateTime($rotas[0]->dataHoraSaida);//Data de saída da rota 1
+            $dataHoraChegadaRota1 = new DateTime($rotas[0]->dataHoraChegada);//Data de chegada da rota 1
+
+            $dataHoraSaidaRota2 = new DateTime($rotas[0]->dataHoraSaida);//Data de saída da rota 2
+            $dataHoraChegadaRota2 = new DateTime($rotas[0]->dataHoraChegada);//Data de chegada da rota 2
+            
+            //DATAS ROTA 1
+            $anoSaidaRota1 = $dataHoraSaidaRota1->format('Y');
+            $mesSaidaRota1 = $dataHoraSaidaRota1->format('m');
+            $diaSaidaRota1 = $dataHoraSaidaRota1->format('d');
+            $horaSaidaRota1 = $dataHoraSaidaRota1->format('H');
+            $minutoSaidaRota1 = $dataHoraSaidaRota1->format('i');
+
+            $mesChegadaRota1 = $dataHoraChegadaRota1->format('m');
+            $diaChegadaRota1 = $dataHoraChegadaRota1->format('d');
+            $horaChegadaRota1 = $dataHoraChegadaRota1->format('H');
+            $minutoChegadaRota1 = $dataHoraChegadaRota1->format('i');
+
+            //DATAS ROTA 2
+            $mesSaidaRota2 = $dataHoraSaidaRota2->format('m');
+            $diaSaidaRota2 = $dataHoraSaidaRota2->format('d');
+            $horaSaidaRota2 = $dataHoraSaidaRota2->format('H');
+            $minutoSaidaRota2 = $dataHoraSaidaRota2->format('i');
+
+            $mesChegadaRota2 = $dataHoraChegadaRota2->format('m');
+            $diaChegadaRota2 = $dataHoraChegadaRota2->format('d');
+            $horaChegadaRota2 = $dataHoraChegadaRota2->format('H');
+            $minutoChegadaRota2 = $dataHoraChegadaRota2->format('i');
+            
+            $anoSaidaInicial = $anoSaidaRota1;
+            $mesSaidaInicial = $mesSaidaRota1;
+            $diaSaidaInicial = $diaSaidaRota1;
+            $horaSaidaInicial = $horaSaidaRota1;
+            $minutoSaidaInicial = $minutoSaidaRota1;
+
+            $mesChegadaInicial = $mesChegadaRota1;
+            $diaChegadaInicial = $diaChegadaRota1;
+            $horaChegadaInicial = $horaChegadaRota1;
+            $minutoChegadaInicial = $minutoChegadaRota1;
+
+            $mesSaidaFinal = $mesSaidaRota2;
+            $diaSaidaFinal = $diaSaidaRota2;
+            $horaSaidaFinal = $horaSaidaRota2;
+            $minutoSaidaFinal = $minutoSaidaRota2;
+
+            $mesChegadaFinal = $mesChegadaRota2;
+            $diaChegadaFinal = $diaChegadaRota2;
+            $horaChegadaFinal = $horaChegadaRota2;
+            $minutoChegadaFinal = $minutoChegadaRota2;            
         }
         
         $dataInicio = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
         $dataFim = "$anoSaidaInicial-$mesChegadaFinal-$diaChegadaFinal";
-
                        
         $arrayDiasValores = [];
                         
@@ -3380,7 +3167,6 @@ class ControladorAv extends Controller
             new DateInterval('P1D'),
             ($dataInicio != $dataFim ? (new DateTime($dataFim))->modify('+1 day') : (new DateTime($dataFim))) // Adicionar 1 dia ao fim para inclusão do último dia
         );
-                        
         foreach ($intervaloDatas as $data) {
             $dia = $data->format('Y-m-d');
             $valor = 0;
@@ -3491,91 +3277,90 @@ class ControladorAv extends Controller
                 'valor' => $acumulado != 0 ? $acumulado : $valor,
             ];
         }
-        
+
         if(empty($arrayDiasValores)){
+
             $data = new DateTime($rotas[0]->dataHoraSaida);
 
             $dia = $data->format('Y-m-d');
+
             $valor = 0;
-            $acumulado = 0;
 
-            for ($i=0; $i < sizeof($rotas)-1 ; $i++) {
-                    $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraSaida)->format('Y-m-d H:i:s');
-                    $dataSaida2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraSaida)->format('Y-m-d H:i:s');
-                    $dataChegada2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraChegada)->format('Y-m-d H:i:s');
+            $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[0]->dataHoraSaida)->format('Y-m-d H:i:s');
+            $dataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[0]->dataHoraChegada)->format('Y-m-d H:i:s');
 
-                    $dataSaidaModificado1 = new DateTime($dataSaida);//Data de saída da rota 1
-                    $dataSaidaModificado2 = new DateTime($dataSaida2);//Data de saída da rota 2
-                    $dataChegadaModificado2 = new DateTime($dataChegada2);//Data de saída da rota 2
+            $dataSaidaModificado = new DateTime($dataSaida);//Data de saída da rota 1
+            $dataChegadaModificado = new DateTime($dataChegada);//Data de saída da rota 2
 
-                    $horaSaidaRota1 = $dataSaidaModificado1->format('H');
-                    $minutoSaidaRota1 = $dataSaidaModificado1->format('i');
+            $horaSaidaRota = $dataSaidaModificado->format('H');
+            $minutoSaidaRota = $dataSaidaModificado->format('i');
 
-                    $horaSaidaRota2 = $dataSaidaModificado2->format('H');
-                    $minutoSaidaRota2 = $dataSaidaModificado2->format('i');
+            $horaChegadaRota = $dataChegadaModificado->format('H');
+            $minutoChegadaRota = $dataChegadaModificado->format('i');
 
-                    $horaChegadaRota2 = $dataChegadaModificado2->format('H');
-                    $minutoChegadaRota2 = $dataChegadaModificado2->format('i');
-
-                    $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraSaida)->format('Y-m-d');
-                    $dataSaida2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraSaida)->format('Y-m-d');
-                    $dataChegada2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraChegada)->format('Y-m-d');
-
-                    if ($dia >= $dataSaida && $dia <= $dataSaida2) {
-                        
-                        if($rotas[$i]->continenteDestinoInternacional == 1 && $rotas[$i]->paisDestinoInternacional !=30){//América Latina ou Amética Central
-                            $valor = 100;
-                        }
-                        else if($rotas[$i]->continenteDestinoInternacional == 2){//América do Norte
-                            $valor = 150;
-                        }
-                        else if($rotas[$i]->continenteDestinoInternacional == 3){//Europa
-                            $valor = 180;
-                        }
-                        else if($rotas[$i]->continenteDestinoInternacional == 4){//África
-                            $valor = 140;
-                        }
-                        else if($rotas[$i]->continenteDestinoInternacional == 5){//Ásia
-                            $valor = 190;
-                        }else if(($rotas[$i]->cidadeDestinoNacional == "Curitiba" || $rotas[$i]->cidadeDestinoNacional == "Foz do Iguaçu") ||
-                        ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->estadoDestinoInternacional == "Paraná" && 
-                        ($rotas[$i]->cidadeDestinoInternacional == "Curitiba" || $rotas[$i]->cidadeDestinoInternacional == "Foz do Iguaçu"))){//Se for Curitiba ou Foz do Iguaçu
-                            $valor = 65;
-                        }
-                        else if($rotas[$i]->estadoDestinoNacional == "Paraná" || ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->estadoDestinoInternacional == "Paraná")){//Se for outra cidade do Paraná
-                            $valor = 55;
-                        }
-                        else if($rotas[$i]->cidadeDestinoNacional == "Brasília" || ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->cidadeDestinoInternacional == "Brasília")){//Se for Brasília
-                            $valor = 100;
-                        }
-                        else{//Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
-                            $valor = 80;
-                        }
-                        if($dia == $dataSaida){
-                            if($horaSaidaRota1 >= 13 && $horaSaidaRota1 < 19){
-                                $metade = ($valor/2);
-                                if($acumulado == 0){
-                                    $acumulado = $metade;
-                                }
-                                else{
-                                    $acumulado += $metade;
-                                }
-                            }
-                        }
-                    }
+            if($rotas[0]->continenteDestinoInternacional == 1 && $rotas[0]->paisDestinoInternacional !=30){//América Latina ou Amética Central
+                $valor = 100;
             }
+            else if($rotas[0]->continenteDestinoInternacional == 2){//América do Norte
+                $valor = 150;
+            }
+            else if($rotas[0]->continenteDestinoInternacional == 3){//Europa
+                $valor = 180;
+            }
+            else if($rotas[0]->continenteDestinoInternacional == 4){//África
+                $valor = 140;
+            }
+            else if($rotas[0]->continenteDestinoInternacional == 5){//Ásia
+                $valor = 190;
+            }else if(($rotas[0]->cidadeDestinoNacional == "Curitiba" || $rotas[0]->cidadeDestinoNacional == "Foz do Iguaçu") ||
+            ($rotas[0]->paisDestinoInternacional == 30 && $rotas[0]->estadoDestinoInternacional == "Paraná" && 
+            ($rotas[0]->cidadeDestinoInternacional == "Curitiba" || $rotas[0]->cidadeDestinoInternacional == "Foz do Iguaçu"))){//Se for Curitiba ou Foz do Iguaçu
+                $valor = 65;
+            }
+            else if($rotas[0]->estadoDestinoNacional == "Paraná" || ($rotas[0]->paisDestinoInternacional == 30 && $rotas[0]->estadoDestinoInternacional == "Paraná")){//Se for outra cidade do Paraná
+                $valor = 55;
+            }
+            else if($rotas[0]->cidadeDestinoNacional == "Brasília" || ($rotas[0]->paisDestinoInternacional == 30 && $rotas[0]->cidadeDestinoInternacional == "Brasília")){//Se for Brasília
+                $valor = 100;
+            }
+            else{//Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
+                $valor = 80;
+            }
+
+            $metade = ($valor/2);
+            if($horaSaidaRota < 12 && ($horaChegadaRota < 19 || $horaChegadaRota == 19 && $minutoChegadaRota == 0) && ($horaChegadaRota > 13 || $horaChegadaRota == 13 && $minutoChegadaRota == 1)){
+                $valor = $metade;
+            }
+            else if(($horaSaidaRota > 13 || $horaSaidaRota == 13 && $minutoSaidaRota == 1) && ($horaChegadaRota > 19 || $horaChegadaRota == 19 && $minutoChegadaRota == 1)){
+                $valor = $metade;
+            }
+            else if($horaSaidaRota < 12 && ($horaChegadaRota < 13 || $horaChegadaRota == 13 && $minutoChegadaRota == 0 )){
+                $valor = 0;
+            }
+            else if(($horaSaidaRota > 13 || $horaSaidaRota == 13 && $minutoSaidaRota == 1 ) && ($horaChegadaRota < 19 || $horaChegadaRota == 19 && $minutoChegadaRota == 0 )){
+                $valor = 0;
+            }
+            
             $diaFormatado = DateTime::createFromFormat('Y-m-d', $dia);
             $arrayDiasValores[] = [
                 'dia' => $diaFormatado->format('d'),
-                'valor' => $acumulado != 0 ? $acumulado : $valor,
+                'valor' => $valor,
             ];
         }
-        //$teste += ['Data saída: ' => $valorReais];
-        //$teste += ['Data chegada: ' => $anoChegada. "/" .$mesChegada. "/" .$diaChegada. "/" .$horaChegada. "/" .$minutoChegada. "/" .$segundoChegada];
-        //dd($arrayDiasValores);
+
+        foreach ($arrayDiasValores as $diaValor) {
+            $valorReais += $diaValor['valor'];
+        }
         
-        $av->valorReais = $valorReais;
-        $av->valorDolar = $valorDolar;
+        if($isInternacional == true){
+            $valorDolar = $valorReais;
+            $av->valorDolar = $valorDolar;
+            $av->valorReais = 0;
+        }
+        else{
+            $av->valorReais = $valorReais;
+            $av->valorDolar = 0;
+        }
 
         $veiculosProprios = $user->veiculosProprios;
 

@@ -38,19 +38,8 @@ Route::get('/getAllUsers',[UsersController::class, 'getAllUsers']);
 
 Route::resource('/avs', ControladorAv::class);
 
-Route::resource('/anos', ControladorAnos::class);
-
 Route::resource('/componentes', ControladorComponentes::class);
 
-Route::resource('/subcomponentes', ControladorSubcomponentes::class);
 
 Route::get('/findComponenteById/{id}',[ControladorComponentes::class, 'findComponenteById']);
-Route::get('/findSubcomponenteByCodigoComponente/{id}',[ControladorSubcomponentes::class, 'findSubcomponenteByCodigoComponente']);
-Route::get('/findAnoPepPoaPmrByCodigoPepPoaPmr/{id}',[ControladorAnoPeppoaPmr::class, 'findAnoPepPoaPmrByCodigoPepPoaPmr']);
-
-Route::resource('/categoriasPeppoa', ControladorCategoriaPeppoa::class);
-Route::resource('/categoriasPmr', ControladorCategoriaPmr::class);
-Route::resource('/pepPoaPmr', ControladorPeppoaPmr::class);
-Route::resource('/anoPepPoaPmr', ControladorAnoPeppoaPmr::class);
-
 Route::get('/getHorasExtrasByUser/{name}',[UsersController::class, 'getHorasExtrasByUser']);

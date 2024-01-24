@@ -91,7 +91,7 @@
                 <table id="tabelaRota" class="comBordaSimples " >
                     <thead>
                         <tr>
-                            <th>Número</th>
+                            {{-- <th>Número</th> --}}
                             <th>Tipo</th>
                             <th>Cidade de saída</th>
                             <th>Data/Hora de saída</th>
@@ -105,7 +105,7 @@
                     <tbody>
                         @foreach($av->rotas as $rota)
                         <tr>
-                            <td style="text-align: center"> {{$rota->id}} </td>
+                            {{-- <td style="text-align: center"> {{$rota->id}} </td> --}}
                             <td style="text-align: center"> {{$rota->isViagemInternacional == 1 ? "Internacional" : "Nacional"}} </td>
                             <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} </td>
                             <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
@@ -146,12 +146,20 @@
                     <tbody>
                         @foreach($av->rotas as $rota)
                         <tr>
-                            <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? "Brasil" : $rota->paisOrigemInternacional}} </td>
+                            @foreach($paises as $p)
+                                @if ($p->id == $rota->paisOrigemInternacional)
+                                    <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? "Brasil" : $p->name}} </td>
+                                @endif
+                            @endforeach
                             <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->estadoOrigemNacional : $rota->estadoOrigemInternacional}} </td>
                             <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} </td>
                             <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-                            <td>-</td>
-                            <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? "Brasil" : $rota->paisDestinoInternacional}} </td>
+                            <td>></td>
+                            @foreach($paises as $p)
+                                @if ($p->id == $rota->paisDestinoInternacional)
+                                    <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? "Brasil" : $p->name}} </td>
+                                @endif
+                            @endforeach
                             <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->estadoDestinoNacional : $rota->estadoDestinoInternacional}} </td>
                             <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} </td>
                             <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
@@ -166,7 +174,7 @@
                     <!-- head -->
                     <thead>
                     <tr>
-                        <th>Id</th>
+                        {{-- <th>Id</th> --}}
                         <th>Data</th>
                         <th>Ocorrência</th>
                         <th>Comentário</th>
@@ -178,7 +186,7 @@
 
                     @for($i = 0; $i < count($historicos); $i++)
                             <tr>
-                                <td style="text-align: center">{{ $a = $i +1 }}</td>
+                                {{-- <td style="text-align: center">{{ $a = $i +1 }}</td> --}}
                                 <td style="text-align: center">{{ $historicos[$i]->dataOcorrencia }}</td>
                                 <td style="text-align: center">{{ $historicos[$i]->tipoOcorrencia }}</td>
                                 <td style="text-align: center">{{ $historicos[$i]->comentario }}</td>

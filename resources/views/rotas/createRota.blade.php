@@ -888,7 +888,7 @@
             classeDataHoraChegadaVoltaNacional.value = data2;
         });
 
-        
+        ativarCampo();
         
         
     })

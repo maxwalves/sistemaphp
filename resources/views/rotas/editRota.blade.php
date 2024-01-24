@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Editar rota')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <h1>Editar rota</h1>
 @stop
 
 @section('content')
@@ -15,14 +15,15 @@
         @method('PUT')
 
         <div class="row justify-content-start">
-            <div class="col-3">
-                <a href="/rotas/rotas/{{ $av->id }}" type="submit" class="btn btn-warning btn-sm"> Voltar!</a>
-            </div>
+            
             <div class="col-8">
                 <label for="idav"> <strong>Edição de rota da Autorização de Viagem nº </strong> </label>
                 <input type="text" style="width: 50px" value="{{ $av->id }}" id="idav" name="idav" readonly>
 
                 <h4> <strong>Data da Autorização de Viagem: {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h4>
+            </div>
+            <div class="col-3">
+                <a href="/rotas/rotas/{{ $av->id }}" type="submit" class="btn btn-warning"><i class="fas fa-arrow-left"></i></a>
             </div>
         </div>
 
@@ -51,7 +52,7 @@
         
         <div class="row justify-content-left">
             
-                <div class="form-group" style="padding-left: 10%">
+                <div class="form-group">
                     <label for="isViagemInternacional" class="control-label"><strong style="color: red">* </strong>A viagem será internacional?</label>
                     <br>
                         <select class="select select-bordered w-full max-w-xs {{ $errors->has('isViagemInternacional') ? 'is-invalid' :''}}" 
@@ -71,7 +72,7 @@
         <div id="isInternacional">
             <br>
                     
-            <div class="row justify-content-center">
+            <div class="row">
                 <div class="col-5">
                     {{-- CAMPOS DE ORIGEM INTERNACIONAL ---------------------------------}}
                     <h3 style="color: brown"> <ion-icon name="airplane-outline"></ion-icon> VIAGEM INTERNACIONAL</h3>
@@ -140,13 +141,6 @@
                             </div>
                             @endif
                     </div>
-
-                    <div>
-                        <input type="text" id="botaoResetOrigemInternacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemInternacional()">
-                    </div>
-
-                    
 
                     <div class="form-group"> 
                         <div id="dataHoraSaidaInternacional" class="input-append date">
@@ -225,13 +219,6 @@
                             @endif
                     </div>
 
-                    <div>
-                        <input  type="text" id="botaoResetDestinoInternacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoInternacional()">
-                    </div>
-
-                    
-
                     <div class="form-group"> 
                         <div id="dataHoraChegadaInternacional" class="input-append date">
                             <label for="dataHoraChegadaInternacional" class="control-label"><strong style="color: red">* </strong>Data/Hora de chegada: </label>
@@ -251,7 +238,7 @@
         <div id="isNacional">
             <br>    
 
-            <div class="row justify-content-center">
+            <div class="row">
                 <div class="col-5">
                     <h3 style="color: forestgreen"> <ion-icon name="bus-outline"></ion-icon> VIAGEM NACIONAL </h3>
                     <br>   
@@ -295,10 +282,6 @@
                         </div>
                     </div>
 
-                    <div>
-                        <input type="text" id="botaoResetOrigemNacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Origem!" onClick="resetarCampoOrigemNacional()">
-                    </div>
                 </div>
 
                     
@@ -345,18 +328,13 @@
                         </div>
                     </div>
 
-                    <div>
-                        <input type="text" id="botaoResetDestinoNacional"
-                        class="btn btn-outline btn-secondary btn-xs" value="Resetar Destino!" onClick="resetarCampoDestinoNacional()">
-                    </div>
-
                 </div>
             </div>
         </div>
         <br>
-        <div class="row justify-content-center" style="background-color: lightgrey">
+        <div class="row" style="background-color: lightgrey">
 
-            <div class="col-md-6 offset-md-3">
+            <div class="col-md-6">
 
                 <div>
                     <div id="camposFinais" >

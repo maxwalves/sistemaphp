@@ -322,7 +322,6 @@
 
 </x-adminlte-modal>
 
-
 <br>
 <div >
         <form action="/avs/enviarGestor/{{ $av->id }}" method="POST" enctype="multipart/form-data">
@@ -331,12 +330,20 @@
             
             <div class="row" style="padding-left: 1%">
 
-                <div class="col-12 col-md-6" >
+                <div class="col-12 col-md-4" >
                     <div class="form-group">
                         <label for="valorExtraReais" class="control-label">Você vai precisar de valor extra em reais?</label>
                         <input type="number" class="form-control" name="valorExtraReais" onblur="calcular()"
                             id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}">
                     </div>
+
+                    <div class="form-group">
+                        <label for="valorDeducaoReais" class="control-label">Vai ter deduções em reais?</label>
+                        <input type="number" class="form-control bg-yellow-300" name="valorDeducaoReais" onblur="calcular()"
+                            id="valorDeducaoReais" placeholder="Valor da dedução em reais">
+                    </div>
+
+                    <hr>
                     
                     @if($isInternacional == true)
                         <div class="form-group">
@@ -346,12 +353,6 @@
                         </div>
                     @endif
 
-                    <div class="form-group">
-                        <label for="valorDeducaoReais" class="control-label">Vai ter deduções em reais?</label>
-                        <input type="number" class="form-control bg-yellow-300" name="valorDeducaoReais" onblur="calcular()"
-                            id="valorDeducaoReais" placeholder="Valor da dedução em reais">
-                    </div>
-
                     @if($isInternacional == true)
                         <div class="form-group">
                             <label for="valorDeducaoDolar" class="control-label">Vai ter deduções em dólar?</label>
@@ -360,7 +361,9 @@
                         </div>
                     @endif
 
-                    <a href="#" class="btn btn-active btn-success">Calcular <i class="fas fa-calculator"></i></a>
+                    <a href="#" class="btn btn-active btn-success" onclick="calcular()">Calcular <i class="fas fa-calculator"></i></a>
+
+                    <hr><br>
 
                     <div class="form-group">
                         <label for="justificativaValorExtra" class="control-label">Justificativas</label>
@@ -374,11 +377,10 @@
                             
                             <h5><i class="icon fas fa-check"></i> Diárias de alimentação em reais: </h5>
                             <div id="valorReais" data-value="{{$av->valorReais}}"> <h2>R$ {{$av->valorReais}} </h2></div>
-                        </div>
-                        <div class="alert alert-success">
+
                             
                             <h5><i class="icon fas fa-check"></i> Total após cálculos em reais: </h5>
-                            <h3 id="result1"></h3>
+                            <h2 id="result1"></h2>
                         </div>
                         
                     </div>
@@ -387,12 +389,11 @@
                         <div class="alert alert-info">
                             
                             <h5><i class="icon fas fa-check"></i> Diárias de alimentação em dólar: </h5>
-                            <h3>$ {{$av->valorDolar}}</h3>
-                        </div>
-                        <div class="alert alert-success">
+                            <div id="valorDolar" data-value="{{$av->valorDolar}}"> <h2>$ {{$av->valorDolar}} </h2></div>
+
                             
                             <h5><i class="icon fas fa-check"></i> Total após cálculos em dólar: </h5>
-                            <h3 id="result2"></h3>
+                            <h2 id="result2"></h2>
                         </div>
                         
                     @endif
@@ -401,6 +402,7 @@
                     <div class="text-center">
                         <button type="submit" class="btn btn-active btn-primary btn-lg">Enviar <i class="fas fa-paper-plane"></i></button>
                     </div>
+                    <br><br>
                 </div>
             </div>
         </form>
@@ -456,6 +458,7 @@
             var valor2 = parseFloat(document.getElementById("valorDolar").getAttribute('data-value'));
             var valor4 = parseFloat(document.getElementById('valorExtraDolar').value);
             var valor6 = parseFloat(document.getElementById('valorDeducaoDolar').value);
+
             if(document.getElementById('valorExtraDolar').value == ""){
                 valor4 = 0;
             }
@@ -463,8 +466,11 @@
                 valor6 = 0;
             }
             var somaDolar = valor2 + valor4 - valor6;
+            
             document.getElementById('result2').innerHTML = "$ " + somaDolar;
-        } catch (error) {}
+        } catch (error) {
+            console.log(error);
+        }
         
     }  
 

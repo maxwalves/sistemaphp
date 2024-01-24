@@ -3,14 +3,14 @@
 @section('title', 'Aut Gestor')
 
 @section('content_header')
-    <h1>Aut Gestor</h1>
 @stop
 
 @section('content')
     
-<div style="padding-left: 10%" class="container">
+<div>
     
-    <div class="row justify-content-between">
+    <br>
+    <div class="row">
         
         <div class="col-12 col-md-7">
             <h4>AVs pendentes de autorização:</h4>
@@ -91,8 +91,7 @@
                 <td> {{$av->status}} </td>
                 <td> 
                     <div class="opcoesGerenciarAv">
-                        <a href="/avs/verFluxoGestor/{{ $av->id }}" class="btn btn-primary btn-sm"
-                            style="width: 110px"> Ver</a> 
+                        <a href="/avs/verFluxoGestor/{{ $av->id }}" class="btn btn-primary btn-sm" title="Verificar pendência"><i class="fas fa-user-check"></i></a>
                         
                     </div>
                 </td>
@@ -186,7 +185,7 @@
                                     row += '<td>' + av.status + '</td>';
                                     row += '<td>';
                                     row += '<div class="opcoesGerenciarAv">';
-                                    row += '<a href="/avs/verFluxoGestor/' + av.id + '" class="btn btn-secondary btn-sm" style="width: 110px">Ver</a>';
+                                    row += '<a href="/avs/verFluxoGestor/' + av.id + '" class="btn btn-primary btn-sm"><i class="fas fa-user-check"></i></a>';
                                     row += '</div>';
                                     row += '</td>';
                                     row += '</tr>';
@@ -278,7 +277,7 @@
                                     row += '<td>' + av.status + '</td>';
                                     row += '<td>';
                                     row += '<div class="opcoesGerenciarAv">';
-                                    row += '<a href="/avs/verFluxoGestor/' + av.id + '" class="btn btn-secondary btn-sm" style="width: 110px">Ver</a>';
+                                    row += '<a href="/avs/verFluxoGestor/' + av.id + '" class="btn btn-primary btn-sm"><i class="fas fa-user-check"></i></a>';
                                     row += '</div>';
                                     row += '</td>';
                                     row += '</tr>';
