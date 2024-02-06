@@ -51,6 +51,97 @@
                 </div>
             @endif
         </div>
+        @if(count($rotas) > 0)
+            <p><h4>Rotas já cadastradas</h4></p>
+            <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Cidade de saída</th>
+                        <th>Data/Hora de saída</th>
+                        <th>Cidade de chegada</th>
+                        <th>Data/Hora de chegada</th>
+                        <th>Hotel?</th>
+                        <th>Tipo de transporte</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($rotas as $rota)
+                        <tr>
+                            <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
+                            <td>
+                                @if ($rota->isAereo == 1)
+                                    <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
+                                @endif
+
+                                @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                    <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                @endif
+
+                                @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                    <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                @endif
+
+                                @if($rota->isOutroMeioTransporte == 1)
+                                    <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                @endif
+
+                                {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
+
+                            </td>
+                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+
+                            <td>
+                                @if ($rota->isAereo == 1)
+                                    <img src="{{ asset('/img/aviaodescendo.png') }}" style="width: 40px">
+                                @endif
+
+                                @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                    <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                @endif
+
+                                @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                    <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                @endif
+
+                                @if($rota->isOutroMeioTransporte == 1)
+                                    <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                @endif
+
+                                {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
+                            </td>
+
+                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
+                            <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
+                            <td>
+                                {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
+                                {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
+                                @if ($rota->isVeiculoProprio == 1)
+                                    {{ 'Veículo próprio: ' }} <br>
+                                    @foreach ($veiculosProprios as $v)
+                                        @if ($v->id == $rota->veiculoProprio_id)
+                                            {{ $v->modelo . '-' . $v->placa }}
+                                        @endif
+                                    @endforeach
+
+                                    @if (count($veiculosProprios) == 0)
+                                        {{ 'Não encontrado' }}
+                                    @endif
+                                @endif
+                                {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
+                                {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
+                                {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
+                            </td>
+                            @php
+                                $achouVeiculo = false;
+                            @endphp
+
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <hr>
+        @endif
         
         <div class="row">
             
@@ -146,9 +237,13 @@
                     </div>
 
                     <br>
-                    <?php
-                        $minDate = date('Y-m-d\TH:i');
-                    ?>
+                    @php
+                        if(count($av->rotas) > 0){
+                            $minDate = date('Y-m-d\TH:i', strtotime($rotas[count($rotas)-1]->dataHoraChegada));
+                        }else{
+                            $minDate = date('Y-m-d\TH:i');
+                        }
+                    @endphp
 
                     <div class="form-group"> 
                         <div id="dataHoraSaidaInternacional" class="input-append date" >
@@ -325,9 +420,13 @@
 
                     <br>
 
-                    <?php
-                        $minDate = date('Y-m-d\TH:i');
-                    ?>
+                    @php
+                        if(count($av->rotas) > 0){
+                            $minDate = date('Y-m-d\TH:i', strtotime($rotas[count($rotas)-1]->dataHoraChegada));
+                        }else{
+                            $minDate = date('Y-m-d\TH:i');
+                        }
+                    @endphp
 
                     <div class="form-group">
 

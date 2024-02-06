@@ -78,7 +78,7 @@ class ControladorRota extends Controller
         $curl = curl_init();
     
         curl_setopt_array($curl, [
-            CURLOPT_URL => "http://10.51.10.43/reservas/public/api/inserirReservaVeiculo",
+            CURLOPT_URL => "https://sistemas.paranacidade.org.br/reservas/public/api/inserirReservaVeiculo",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -93,6 +93,7 @@ class ControladorRota extends Controller
         ]);
     
         $response = curl_exec($curl);
+
         $err = curl_error($curl);
     
         curl_close($curl);
@@ -107,17 +108,17 @@ class ControladorRota extends Controller
         $reservas2 = [];
         $veiculos = [];
 
-        $url = 'http://10.51.10.43/reservas/public/api/getReservasAPI';
+        $url = 'https://sistemas.paranacidade.org.br/reservas/public/api/getReservasAPI';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $eventos = json_decode(curl_exec($ch));
 
-        $url = 'http://10.51.10.43/reservas/public/api/getReservasUsuarioAPI/' . $user->username;
+        $url = 'https://sistemas.paranacidade.org.br/reservas/api/getReservasUsuarioAPI/' . $user->username;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $reservas2 = json_decode(curl_exec($ch));
 
-        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $url = 'https://sistemas.paranacidade.org.br/reservas/public/api/getVeiculosAPI';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $veiculos = json_decode(curl_exec($ch));
@@ -129,9 +130,9 @@ class ControladorRota extends Controller
         $responseArray = json_decode($response, true);
 
         if(isset($responseArray['message']) && $responseArray['message'] == 'true'){
-            return redirect('/rotas/rotas/' . $request->nrAv )->with('success', 'Reserva de veículo criada com sucesso!');
+            return redirect('/avs/concluir/' . $request->nrAv . '/nao')->with('success', 'Reserva de veículo criada com sucesso!');
         } else {
-            return redirect('/rotas/rotas/' . $request->nrAv )->with('error', $responseArray['message']);
+            return redirect('/avs/concluir/' . $request->nrAv . '/nao')->with('error', $responseArray['message']);
         }
     }
 
@@ -145,7 +146,7 @@ class ControladorRota extends Controller
         $curl = curl_init();
     
         curl_setopt_array($curl, [
-            CURLOPT_URL => "http://10.51.10.43/reservas/public/api/removerReservaVeiculo",
+            CURLOPT_URL => "https://sistemas.paranacidade.org.br/reservas/public/api/removerReservaVeiculo",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -167,9 +168,9 @@ class ControladorRota extends Controller
         $responseArray = json_decode($response, true);
 
         if(isset($responseArray['message']) && $responseArray['message'] == 'true'){
-            return redirect('/rotas/rotas/' . $av )->with('success', 'Reserva de veículo excluída com sucesso!');
+            return redirect('/avs/concluir/' . $av . '/nao')->with('success', 'Reserva de veículo excluída com sucesso!');
         } else {
-            return redirect('/rotas/rotas/' . $av )->with('error', $responseArray['message']);
+            return redirect('/avs/concluir/' . $av . '/nao')->with('error', $responseArray['message']);
         }
     }
 
@@ -222,9 +223,11 @@ class ControladorRota extends Controller
             }
         }
         $veiculosProprios = $user->veiculosProprios;
+
+        $rotas = $av->rotas;
         
         return view('rotas.createRota', ['veiculosProprios' => $veiculosProprios, 'av' => $av, 'user'=> $user, 'isOrigemNacional' => $isOrigemNacional, 
-        'rotaOriginal' => $rotaOriginal, 'ultimaRotaSetada' => $ultimaRotaSetada]);
+        'rotaOriginal' => $rotaOriginal, 'ultimaRotaSetada' => $ultimaRotaSetada, 'rotas' => $rotas]);
     }
 
     public function createpc($id)//Id da AV

@@ -486,7 +486,7 @@
     
                                                     <span class="input-group-append">
                                                         @if ($av->isCancelado == 0)
-                                                            <button type="submit" class="btn btn-active btn-success">Atualizar AV</button>
+                                                            <button type="submit" class="btn btn-active btn-success">Finalizar Reservas</button>
                                                         @else
                                                             <button type="submit" class="btn btn-active btn-success">Finalizar
                                                                 AV</button>

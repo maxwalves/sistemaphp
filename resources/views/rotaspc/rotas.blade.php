@@ -89,11 +89,7 @@
                 <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary"><i class="fas fa-plus"></i> ROTA</a>
             </div>
             <div class="col-4" >
-                <form action="/avspc/concluir/{{ $av->id }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <input type="text" hidden="true" value="{{ $av->id }}" name="avId" id="avId">
-                    <input type="text" hidden="true" value="sim" name="isPc" id="isPc">
+                <form action="/avspc/concluir/{{ $av->id }}/sim" enctype="multipart/form-data">
                     <div id="btSalvarRota">
                         <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-warning" value="Calcular diárias">
                     </div>

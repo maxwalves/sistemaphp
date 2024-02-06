@@ -53,7 +53,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::put('/avs/update/{id}', [ControladorAv::class, 'update'])->middleware('auth');
     Route::put('/avs/marcarComoCancelado/{id}', [ControladorAv::class, 'marcarComoCancelado'])->middleware('auth');
     Route::put('/avs/enviarGestor/{id}', [ControladorAv::class, 'enviarGestor'])->middleware('auth');
-    Route::put('/avs/concluir/{id}', [ControladorAv::class, 'concluir'])->middleware('auth');
+    Route::get('/avs/concluir/{id}/{isPc}', [ControladorAv::class, 'concluir'])->middleware('auth');
     Route::get('/avs/fluxo/{id}', [ControladorAv::class, 'verFluxo'])->middleware('auth');
     Route::get('/avs/verFluxoGestor/{id}', [ControladorAv::class, 'verFluxoGestor'])->middleware('auth');
     Route::get('/avs/voltarAv/{id}', [ControladorAv::class, 'voltarAv'])->middleware('auth');
@@ -106,7 +106,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::delete('/rotaspc/{id}', [ControladorRota::class, 'destroyRotaPc'])->middleware('auth');
     Route::get('/rotaspc/edit/{id}', [ControladorRota::class, 'editRotaPc'])->middleware('auth');
     Route::put('/rotaspc/update/{id}', [ControladorRota::class, 'update'])->middleware('auth');
-    Route::put('/avspc/concluir/{id}', [ControladorAv::class, 'concluir'])->middleware('auth');
+    Route::get('/avspc/concluir/{id}/{isPc}', [ControladorAv::class, 'concluir'])->middleware('auth');
 
     Route::get('/avs/relatorio-pdf/{id}', [RelatorioController::class, 'gerarRelatorioPDF']);
     Route::get('/avs/relatorio/{id}', [RelatorioController::class, 'abrirPagina']);

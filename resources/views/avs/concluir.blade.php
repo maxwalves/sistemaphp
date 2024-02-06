@@ -23,6 +23,12 @@
             <x-adminlte-button label="Como é calculada a diária de alimentação?" data-toggle="modal" data-target="#my-modal-3"/>
         </div>
     </div>
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if (session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
 </div>
 
 <x-adminlte-modal id="my-modal-3" title="Cálculos" size="xl" theme="teal"
@@ -110,208 +116,60 @@
 </x-adminlte-modal>
 
 
-<x-adminlte-modal id="my-modal-5" title="Detalhamento" size="md" theme="teal"
+<x-adminlte-modal id="my-modal-5" title="Detalhamento" size="lg" theme="teal"
         icon="fas fa-bell" v-centered static-backdrop scrollable>
 
         <div class="container"> 
             <div class="stat-title">Controle de diárias:
             </div>
-                Mês saída: {{$mesSaidaInicial}} 
-                Mês chegada: {{$mesChegadaFinal}} <br>
+                {{-- Mês saída: {{$mesSaidaInicial}} 
+                Mês chegada: {{$mesChegadaFinal}} <br> --}}
                 <table class="table table-hover table-bordered" style="width: 100%">
                     <thead>
                         <tr>
                             <th>Dias</th>
-                            <th>Dados</th>
+                            <th>Trajeto Dia</th>
+                            <th>Diária Almoço</th>
+                            <th>Diária Jantar</th>
+                            <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
-        
-                        @if($mesSaidaInicial != $mesChegadaFinal)
-        
+                        @php
+                            $j=0;
+                        @endphp
+                        @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
+                                    
+                            <tr>
+                                <td>
+                                    {{$arrayDiasValores[$j]['dia']}}
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning">{{$arrayDiasValores[$j]['rotasDoDia']}}</span>
+                                </td>
+                                <td> 
+                                    @if($arrayDiasValores[$j]['valorManha']!=0)
+                                        <span class="badge bg-success">R${{$arrayDiasValores[$j]['valorManha']}}</span>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($arrayDiasValores[$j]['valorTarde']!=0)
+                                        <span class="badge bg-success">R${{$arrayDiasValores[$j]['valorTarde']}}</span>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td> 
+                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span>
+                                </td>
+                            </tr>
+
                             @php
-                                $data = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
-                                $ultimoDiaMes = date('t', strtotime($data));
-                                $j=0;
+                                $j++;
                             @endphp
-                            @for($i = $arrayDiasValores[0]['dia']; $i <= $ultimoDiaMes; $i++)
-        
-                                        @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-danger">Diária Inteira</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                        @if($i ==  $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
-                                            
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-warning">Meia Diária</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                        @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
-                                             
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-danger">Diária Inteira</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span> 
-                                                </td>
-                                            </tr> 
-                                        @endif
-                                  
-                                @php
-                                    $j++;
-                                @endphp
-                            @endfor
-                            @for($i = 1; $i <= $diaChegadaFinal; $i++)
-        
-                                        @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-danger">Diária Inteira</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span> 
-                                                </td>
-                                            </tr>
-                                        @endif
-                                        @if($i ==  $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-warning">Meia Diária</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span> 
-                                                </td>
-                                            </tr>
-                                        @endif
-                                        @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-danger">Diária Inteira</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span> 
-                                                </td>
-                                            </tr>
-                                        @endif
-        
-                                        @if($i ==  $diaChegadaFinal && $horaChegadaFinal >= 13 && $horaChegadaFinal <19)
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-warning">Meia Diária</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span> 
-                                                </td>
-                                            </tr>
-                                        @endif
-                                        @if($i ==  $diaChegadaFinal && $horaChegadaFinal >=19)
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-danger">Diária Inteira</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span> 
-                                                </td>
-                                            </tr>
-                                        @endif
-        
-                                @php
-                                    $j++;
-                                @endphp
-                            @endfor
-                        @else
-                                @php
-                                    $j=0;
-                                @endphp
-                            @for($i = $arrayDiasValores[0]['dia']; $i <= $diaChegadaFinal; $i++)
-                                
-                                        @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-danger">Diária Inteira</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                        @if(($i ==  $diaSaidaInicial && $horaSaidaInicial > 13) || ($i ==  $diaSaidaInicial && $horaSaidaInicial == 13 && $minutoSaidaInicial >= 1))
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-warning">Meia Diária</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span> 
-                                                </td>
-                                            </tr>
-                                        @endif
-                                        @if($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-danger">Diária Inteira</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span> 
-                                                </td>
-                                            </tr>
-                                        @endif
-        
-                                        @if(($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <=19 && $minutoChegadaFinal == 0) || 
-                                        ($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <19) ||
-                                        ($i ==  $diaChegadaFinal && $horaChegadaFinal == 13 && $minutoChegadaFinal >= 1 && $horaChegadaFinal <19))
-                                            <tr>
-                                                <td>
-                                                    {{$i}}
-                                                </td>
-                                                <td> 
-                                                    <span class="badge bg-warning">Meia Diária</span>
-                                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span> 
-                                                </td>
-                                            </tr>
-                                        @endif
-                                        @if($diaSaidaInicial != $diaChegadaFinal)
-                                            @if(($i ==  $diaChegadaFinal && $horaChegadaFinal >19) || ($i ==  $diaChegadaFinal && $horaChegadaFinal ==19 && $minutoChegadaFinal >= 1))
-                                                <tr>
-                                                    <td>
-                                                        {{$i}}
-                                                    </td>
-                                                    <td> 
-                                                        <span class="badge bg-danger">Diária Inteira</span>
-                                                        <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span>
-                                                    </td>
-                                                </tr> 
-                                            @endif
-                                        @endif
-                                    
-                                    
-                                @php
-                                    $j++;
-                                @endphp
-                            @endfor
-                        @endif
+                        @endfor
                     </tbody>
                 </table>
                 <br><br>
@@ -322,8 +180,232 @@
 
 </x-adminlte-modal>
 
+<x-adminlte-modal id="my-modal-1" title="Adicionar reserva" size="lg" theme="teal"
+            icon="fas fa-bell" v-centered static-backdrop scrollable>
+
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{{ route('reservasVeiculo.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <div class="col-4">
+                        <label for="nrAv" > <strong>AV nº </strong> </label>
+                        <input style="width: 50px; font-size: 16px; font-weight: bold; color: green" type="text" value="{{ $av->id }}" id="nrAv" name="nrAv" readonly>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="daterange">Intervalo de datas:</label>
+                        <div class="d-flex justify-content-center">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="width: 40px">
+                                        De
+                                    </span>
+                                </div>
+                                <input type="text" id="daterange1" name="daterange1" value="{{ date('d/m/Y H:i:s', strtotime($rotas[0]->dataHoraSaida)) }}" class="form-control text-center" />
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="width: 40px">
+                                        Até
+                                    </span>
+                                </div>
+                                <input type="text" id="daterange2" name="daterange2" value="{{ date('d/m/Y H:i:s', strtotime($rotas[count($rotas)-1]->dataHoraChegada)) }}" class="form-control text-center" />
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="idVeiculo">Veículo:</label>
+                        <select name="idVeiculo" id="idVeiculo" class="form-control" required>
+                            {{-- Inserir opções para os veículos disponíveis --}}
+                            @foreach ($veiculos as $veiculo)
+                                @php
+                                    $disponivel = 1;
+                                @endphp
+                                @foreach($eventos as $evento)
+                                    @if($evento->placa == $veiculo->placa)
+                                        @if ($evento->start <= date('Y-m-d H:i:s', strtotime($rotas[0]->dataHoraSaida)) && 
+                                             $evento->end >= date('Y-m-d H:i:s', strtotime($rotas[count($rotas)-1]->dataHoraChegada)))
+                                            @php
+                                                $disponivel = 0;
+                                            @endphp
+                                        @endif
+                                    @endif
+                                @endforeach
+
+                                @if($disponivel == 1)
+                                    <option value="{{ $veiculo->id }}">{{ $veiculo->marca }} - {{ $veiculo->modelo }} - {{ $veiculo->placa }}</option>
+                                @else
+                                    <option value="{{ $veiculo->id }}" disabled>{{ $veiculo->marca }} - {{ $veiculo->modelo }} - {{ $veiculo->placa }}</option>
+                                @endif
+                            @endforeach
+                            
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="idUsuario">Usuário:</label>
+                        {{-- Inserir opções para os usuários disponíveis --}}
+
+                        <p>{{ Auth::user()->name }}</p>
+
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </form>
+            </div>
+        </div>
+    <x-slot name="footerSlot">
+        <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal"/>
+    </x-slot>
+
+</x-adminlte-modal>
+
 <br>
 <div >
+        <span style="color: red"><h3>Rotas cadastradas:</h3></span>
+        <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Cidade de saída</th>
+                    <th>Data/Hora de saída</th>
+                    <th>Cidade de chegada</th>
+                    <th>Data/Hora de chegada</th>
+                    <th>Hotel?</th>
+                    <th>Tipo de transporte</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($rotas as $rota)
+                    <tr>
+                        <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
+                        <td>
+                            @if ($rota->isAereo == 1)
+                                <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
+                            @endif
+
+                            @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                            @endif
+
+                            @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                            @endif
+
+                            @if($rota->isOutroMeioTransporte == 1)
+                                <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                            @endif
+
+                            {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
+
+                        </td>
+                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+
+                        <td>
+                            @if ($rota->isAereo == 1)
+                                <img src="{{ asset('/img/aviaodescendo.png') }}" style="width: 40px">
+                            @endif
+
+                            @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                            @endif
+
+                            @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                            @endif
+
+                            @if($rota->isOutroMeioTransporte == 1)
+                                <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                            @endif
+
+                            {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
+                        </td>
+
+                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
+                        <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
+                        <td>
+                            {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
+                            {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
+                            @if ($rota->isVeiculoProprio == 1)
+                                {{ 'Veículo próprio: ' }} <br>
+                                @foreach ($veiculosProprios as $v)
+                                    @if ($v->id == $rota->veiculoProprio_id)
+                                        {{ $v->modelo . '-' . $v->placa }}
+                                    @endif
+                                @endforeach
+
+                                @if (count($veiculosProprios) == 0)
+                                    {{ 'Não encontrado' }}
+                                @endif
+                            @endif
+                            {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
+                            {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
+                            {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
+                        </td>
+                        @php
+                            $achouVeiculo = false;
+                        @endphp
+
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        @if(count($rotas) > 0 && $rotas[0]->isVeiculoEmpresa == 1)
+            <hr>
+            <span style="color: red"><h3>Realize a reserva do seu veículo:</h3></span>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+
+                    {{-- Faça uma lista com todos os veículos com um checkbox em cada um --}}
+                    <h3>Veículos: </h3>
+                    <div class="d-flex flex-wrap">
+                        @foreach ($veiculos as $veiculo)
+                            <div class="form-check d-inline mr-3">
+                                <input type="checkbox" id="veiculo{{ $veiculo->id }}" name="veiculos[]"
+                                    value="{{ $veiculo->marca }} - {{ $veiculo->modelo }} - {{ $veiculo->placa }}" checked>
+                                {{ $veiculo->marca }} - {{ $veiculo->modelo }} - {{ $veiculo->placa }}
+                            </div>
+                        @endforeach
+                    </div>
+
+                </div>
+                <div class="col-md-6 d-none d-sm-block" id="descricaoEvento"
+                    style="border:solid 1px #ccc; min-height: 84px">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7">
+                    <div id='calendar'></div>
+                </div>
+                <div class="col-md-5 table-responsive" id="divTabelaPrincipal">
+                    <br><br>
+                    <x-adminlte-button label="+" data-toggle="modal" data-target="#my-modal-1" class="bg-green"/>
+                    <h3><i class="fas fa-car"></i> Minhas reservas de veículos: </h3>
+                    <table id="tabelaEventos" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Data de Início</th>
+                                <th>Data de Fim</th>
+                                <th>Veículo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr><br>
+        @endif
+
+        <span style="color: red"><h3>Revise os valores e envie para o Gestor:</h3></span>
         <form action="/avs/enviarGestor/{{ $av->id }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -333,22 +415,21 @@
                 <div class="col-12 col-md-4" >
                     <div class="form-group">
                         <label for="valorExtraReais" class="control-label">Você vai precisar de valor extra em reais?</label>
-                        <input type="number" class="form-control" name="valorExtraReais" onblur="calcular()"
+                        <input type="number" class="form-control" name="valorExtraReais" oninput="calcular()"
                             id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}">
                     </div>
 
                     <div class="form-group">
                         <label for="valorDeducaoReais" class="control-label">Vai ter deduções em reais?</label>
-                        <input type="number" class="form-control bg-yellow-300" name="valorDeducaoReais" onblur="calcular()"
+                        <input type="number" class="form-control bg-yellow-300" name="valorDeducaoReais" oninput="calcular()"
                             id="valorDeducaoReais" placeholder="Valor da dedução em reais">
                     </div>
 
-                    <hr>
-                    
                     @if($isInternacional == true)
+                    <hr>
                         <div class="form-group">
                             <label for="valorExtraDolar" class="control-label">Você vai precisar de valor extra em dólar?</label>
-                            <input type="number" class="form-control" name="valorExtraDolar" onblur="calcular()"
+                            <input type="number" class="form-control" name="valorExtraDolar" oninput="calcular()"
                                 id="valorExtraDolar" placeholder="Valor Extra em dólar" value="{{$av->valorExtraDolar}}">
                         </div>
                     @endif
@@ -356,14 +437,12 @@
                     @if($isInternacional == true)
                         <div class="form-group">
                             <label for="valorDeducaoDolar" class="control-label">Vai ter deduções em dólar?</label>
-                            <input type="number" class="form-control bg-yellow-300" name="valorDeducaoDolar" onblur="calcular()"
+                            <input type="number" class="form-control bg-yellow-300" name="valorDeducaoDolar" oninput="calcular()"
                                 id="valorDeducaoDolar" placeholder="Valor da dedução em dólar">
                         </div>
                     @endif
 
-                    <a href="#" class="btn btn-active btn-success" onclick="calcular()">Calcular <i class="fas fa-calculator"></i></a>
-
-                    <hr><br>
+                    <hr>
 
                     <div class="form-group">
                         <label for="justificativaValorExtra" class="control-label">Justificativas</label>
@@ -412,12 +491,16 @@
 @stop
 
 @section('css')
-    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link href="{{asset('DataTables/datatables.min.css')}}" rel="stylesheet"/>
 @stop
 
 @section('js')
+    <script src="{{asset('/js/moment.js')}}"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.9/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.9/index.global.min.js'></script>
 <script type="text/javascript">
-
 
     function desativarCampoObjetivo(){
         var seletor = document.getElementById("flexSwitchCheckDefault")
@@ -442,6 +525,10 @@
     }
 
     function calcular(){
+
+        //deixar o foco da página sempre no final
+        window.scrollTo(0,document.body.scrollHeight);
+
         var valor1 = parseFloat(document.getElementById("valorReais").getAttribute('data-value'));
         var valor3 = parseFloat(document.getElementById('valorExtraReais').value);
         var valor5 = parseFloat(document.getElementById('valorDeducaoReais').value);
@@ -469,10 +556,42 @@
             
             document.getElementById('result2').innerHTML = "$ " + somaDolar;
         } catch (error) {
-            console.log(error);
         }
+
         
-    }  
+        
+    }
+
+    function calcularInicial(){
+        var valor1 = parseFloat(document.getElementById("valorReais").getAttribute('data-value'));
+        var valor3 = parseFloat(document.getElementById('valorExtraReais').value);
+        var valor5 = parseFloat(document.getElementById('valorDeducaoReais').value);
+        if(document.getElementById('valorExtraReais').value == ""){
+            valor3 = 0;
+        }
+        if(document.getElementById('valorDeducaoReais').value == ""){
+            valor5 = 0;
+        }
+        var somaReais = valor1 + valor3 - valor5;
+        document.getElementById('result1').innerHTML = "R$ " + somaReais;
+
+        try {
+            var valor2 = parseFloat(document.getElementById("valorDolar").getAttribute('data-value'));
+            var valor4 = parseFloat(document.getElementById('valorExtraDolar').value);
+            var valor6 = parseFloat(document.getElementById('valorDeducaoDolar').value);
+
+            if(document.getElementById('valorExtraDolar').value == ""){
+                valor4 = 0;
+            }
+            if(document.getElementById('valorDeducaoDolar').value == ""){
+                valor6 = 0;
+            }
+            var somaDolar = valor2 + valor4 - valor6;
+            
+            document.getElementById('result2').innerHTML = "$ " + somaDolar;
+        } catch (error) {
+        }
+    }
 
     $.ajaxSetup({
         headers: {
@@ -483,7 +602,7 @@
             //Assim que a tela carrega, aciona automaticamente essas funções ------------------------
     $(function(){
     //Se o campo de outro objetivo for vazio, ativa o campo de seleção de objetivo e desabilita o de outro objetivo
-        calcular();
+        calcularInicial();
 
         if(document.getElementById("outroObjetivo").value == ""){
             ativarCampoObjetivoInicial();
@@ -499,5 +618,248 @@
         }
         
     })  
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var eventos = @json($eventos); // Convertendo a variável PHP para JSON
+        var av = @json($av); // Convertendo a variável PHP para JSON
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            eventClick: function(info) {
+                var modal = document.getElementById('modalCustom');
+                if (modal) {
+                    var descricao = document.getElementById('descricaoReserva');
+                    descricao.innerHTML = '<p><strong>' + info.event.title + '</strong></p>';
+                    descricao.innerHTML += '<p><strong>Observações: </strong>' +
+                        (info.event.extendedProps.observacoes != null ? info.event.extendedProps
+                            .observacoes : "") + '</p>';
+                    console.log(info);
+                    $(modal).modal('show');
+                }
+            },
+            locale: 'pt-br',
+            initialView: 'dayGridMonth',
+            selectable: true,
+            headerToolbar: {
+                left: '',
+                center: 'title',
+                right: 'prev,next',
+            },
+            events: eventos.map(function(evento) {
+                return {
+                    title: evento.title,
+                    start: evento.start,
+                    end: evento.end,
+                    color: "#378006",
+                    observacoes: evento.observacoes
+                };
+            }),
+            eventMouseEnter: function(info) {
+                //Adicione informações do evento em descricaoEvento
+                var descricao = document.getElementById('descricaoEvento');
+                descricao.innerHTML = '<p><strong>' + info.event.title + '</strong>';
+                descricao.innerHTML += '<p><strong>Observações: </strong>' +
+                    (info.event.extendedProps.observacoes != null ? info.event.extendedProps
+                        .observacoes : "") + '</p>';
+            },
+            eventMouseLeave: function(info) {
+                //Remova a borda da div descricaoEvento
+                var descricao = document.getElementById('descricaoEvento');
+                //remova o conteúdo da div descricaoEvento
+                descricao.innerHTML = '';
+            },
+            datesSet: function(info) {
+                var start = info.startStr; // Data de início do período exibido
+                var end = info.endStr; // Data de término do período exibido
+                var reservasFiltradas = filtrarReservasPorData(start, end);
+                atualizarTabelaEventos(reservasFiltradas);
+            },
+        });
+
+        function filtrarReservasPorData(start, end) {
+            var reservasFiltradas = [];
+
+            @foreach ($reservas2 as $reserva)
+
+                var veiculo = null;
+                @foreach ($veiculos as $v)
+                    if ("{{ $reserva->idVeiculo }}" == "{{ $v->id }}") {
+                        veiculo = "{{ $v->marca }} - {{ $v->modelo }} - {{ $v->placa }}";
+                    }
+                @endforeach
+
+                if ("{{ $reserva->dataInicio }}" >= start && "{{ $reserva->dataInicio }}" <= end) {
+                    reservasFiltradas.push({
+                        id: "{{ $reserva->id }}",
+                        dataInicio: "{{ $reserva->dataInicio }}",
+                        dataFim: "{{ $reserva->dataFim }}",
+                        veiculo: {
+                            info: veiculo
+                        },
+                        usuario: {
+                            name: "{{ Auth::user()->name }}"
+                        },
+                        observacoes: "{{ $reserva->observacoes }}"
+                    });
+                }
+            @endforeach
+
+            return reservasFiltradas;
+        }
+
+        function atualizarTabelaEventos(reservas) {
+            var tabela = $('#tabelaEventos tbody');
+            tabela.empty();
+
+            reservas.forEach(function(reserva) {
+                observacao = reserva.observacoes;
+                av = "";
+                //Se a obervacao começar assim: [Reserva realizada pelo Sistema de Viagens, referente a AV:], extraia o numero da av que está na observação assim: "referente a AV: 46"
+                if(observacao != null){
+                    if(observacao.includes("referente a AV:")){
+                        //pegue somente o numero
+                        av = observacao.split("referente a AV:")[1].trim();
+                        //remova o ] do final
+                        av = av.split("]")[0].trim();
+                    }
+                }
+                if(av != ""){
+                    var linha = `
+                    <tr>
+                        <td>${moment(reserva.dataInicio).format('DD/MM/YYYY HH:mm:ss')}</td>
+                        <td>${moment(reserva.dataFim).format('DD/MM/YYYY HH:mm:ss')}</td>
+                        <td>${reserva.veiculo.info}</td>
+                        <td>
+                            <div class="d-flex">
+                                <form action="{{ url('reservasVeiculo/') }}/${reserva.id}/${av}" method="POST" style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta reserva?')"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>`;
+                    tabela.append(linha);
+                }
+                else{
+                    var linha = `
+                    <tr>
+                        <td>${moment(reserva.dataInicio).format('DD/MM/YYYY HH:mm:ss')}</td>
+                        <td>${moment(reserva.dataFim).format('DD/MM/YYYY HH:mm:ss')}</td>
+                        <td>${reserva.veiculo.info}</td>
+                        <td>
+                        </td>
+                    </tr>`;
+                    tabela.append(linha);
+                }
+                
+            });
+        }
+
+
+        calendar.render();
+
+        // Monitore o clique no checkbox e atualize o calendário
+        $('input[type="checkbox"]').click(function() {
+            var veiculos = $('input[type="checkbox"]:checked').map(function() {
+                return this.value;
+            }).get();
+
+            var eventosFiltrados = eventos.filter(function(evento) {
+                //verifique se cada item de veiculos tem em sua string o conteúdo de evento.placa
+                return veiculos.some(function(veiculo) {
+                    return evento.title.indexOf(veiculo) >= 0;
+                });
+
+            });
+
+            calendar.removeAllEvents();
+            calendar.addEventSource(eventosFiltrados.map(function(evento) {
+                return {
+                    title: evento.title,
+                    start: evento.start,
+                    end: evento.end,
+                    color: "#378006",
+                    observacoes: evento.observacoes
+                };
+            }));
+        });
+    });
+
+    // Use moment.js para obter a data atual
+    var dataHoje = moment().add(1, 'hours');
+    //pega a dataHoje e adicione mais 2 horas e atribua a dataHoje2
+    var dataHoje2 = moment().add(3, 'hours');
+
+   // Configure o daterangepicker1
+   $('input[name="daterange1"]').daterangepicker({
+        opens: 'left',
+        timePicker: true,
+        timePicker24Hour: true,
+        "singleDatePicker": true,
+        locale: {
+            format: 'DD/MM/YYYY HH:mm',
+            applyLabel: 'Escolher',
+            cancelLabel: 'Cancelar',
+            fromLabel: 'De',
+            toLabel: 'Até',
+            weekLabel: 'S',
+            customRangeLabel: 'Personalizado',
+            daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            monthNames: [
+                'Janeiro',
+                'Fevereiro',
+                'Março',
+                'Abril',
+                'Maio',
+                'Junho',
+                'Julho',
+                'Agosto',
+                'Setembro',
+                'Outubro',
+                'Novembro',
+                'Dezembro'
+            ],
+        },
+    }, function(start, end, label) {
+        console.log("Uma nova seleção de datas foi feita: " + start.format('YYYY-MM-DD HH:mm') +
+            ' a ' + end.format('YYYY-MM-DD HH:mm'));
+    });
+
+    // Configure o daterangepicker2
+    $('input[name="daterange2"]').daterangepicker({
+        opens: 'left',
+        timePicker: true,
+        timePicker24Hour: true,
+        "singleDatePicker": true,
+        locale: {
+            format: 'DD/MM/YYYY HH:mm',
+            applyLabel: 'Escolher',
+            cancelLabel: 'Cancelar',
+            fromLabel: 'De',
+            toLabel: 'Até',
+            weekLabel: 'S',
+            customRangeLabel: 'Personalizado',
+            daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            monthNames: [
+                'Janeiro',
+                'Fevereiro',
+                'Março',
+                'Abril',
+                'Maio',
+                'Junho',
+                'Julho',
+                'Agosto',
+                'Setembro',
+                'Outubro',
+                'Novembro',
+                'Dezembro'
+            ],
+        },
+    }, function(start, end, label) {
+        console.log("Uma nova seleção de datas foi feita: " + start.format('YYYY-MM-DD HH:mm') +
+            ' a ' + end.format('YYYY-MM-DD HH:mm'));
+    });
 </script>
 @stop
