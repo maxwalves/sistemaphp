@@ -184,7 +184,7 @@ class ControladorAv extends Controller
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
-        $colecao = $this->geraArrayDiasValores($av);
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
 
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
@@ -251,37 +251,10 @@ class ControladorAv extends Controller
 
         $veiculosProprios = $userAv->veiculosProprios;
 
-        $arrayDiasValores = $colecao[0];
-        $anoSaidaInicial = $colecao[1];
-        $mesSaidaInicial = $colecao[2];
-        $diaSaidaInicial = $colecao[3];
-        $horaSaidaInicial = $colecao[4];
-        $minutoSaidaInicial = $colecao[5];
-        $mesChegadaInicial = $colecao[6];
-        $diaChegadaInicial = $colecao[7];
-        $horaChegadaInicial = $colecao[8];
-        $minutoChegadaInicial = $colecao[9];
-        $mesSaidaFinal = $colecao[10];
-        $diaSaidaFinal = $colecao[11];
-        $horaSaidaFinal = $colecao[12];
-        $minutoSaidaFinal = $colecao[13];
-        $mesChegadaFinal = $colecao[14];
-        $diaChegadaFinal = $colecao[15];
-        $horaChegadaFinal = $colecao[16];
-        $minutoChegadaFinal = $colecao[17];
-        $dataInicio = $colecao[18];
-        $dataFim = $colecao[19];
-
         if($possoEditar == true){
             return view('avs.verFluxoGestor', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade,
-            'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores,
-            'anoSaidaInicial' => $anoSaidaInicial, 'mesSaidaInicial' => $mesSaidaInicial, 'diaSaidaInicial' => $diaSaidaInicial,
-            'horaSaidaInicial' => $horaSaidaInicial, 'minutoSaidaInicial' => $minutoSaidaInicial, 'mesChegadaInicial' => $mesChegadaInicial,
-            'diaChegadaInicial' => $diaChegadaInicial, 'horaChegadaInicial' => $horaChegadaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial,
-            'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal, 'minutoSaidaFinal' => $minutoSaidaFinal,
-            'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal, 'minutoChegadaFinal' => $minutoChegadaFinal,
-            'dataInicio' => $dataInicio, 'dataFim' => $dataFim]);
+            'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores]);
         }
         else{
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -330,27 +303,7 @@ class ControladorAv extends Controller
 
         $veiculosProprios = $userAv->veiculosProprios;
 
-        $colecao = $this->geraArrayDiasValores($av);
-        $arrayDiasValores = $colecao[0];
-        $anoSaidaInicial = $colecao[1];
-        $mesSaidaInicial = $colecao[2];
-        $diaSaidaInicial = $colecao[3];
-        $horaSaidaInicial = $colecao[4];
-        $minutoSaidaInicial = $colecao[5];
-        $mesChegadaInicial = $colecao[6];
-        $diaChegadaInicial = $colecao[7];
-        $horaChegadaInicial = $colecao[8];
-        $minutoChegadaInicial = $colecao[9];
-        $mesSaidaFinal = $colecao[10];
-        $diaSaidaFinal = $colecao[11];
-        $horaSaidaFinal = $colecao[12];
-        $minutoSaidaFinal = $colecao[13];
-        $mesChegadaFinal = $colecao[14];
-        $diaChegadaFinal = $colecao[15];
-        $horaChegadaFinal = $colecao[16];
-        $minutoChegadaFinal = $colecao[17];
-        $dataInicio = $colecao[18];
-        $dataFim = $colecao[19];
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
 
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
@@ -364,13 +317,7 @@ class ControladorAv extends Controller
         if($possoEditar == true){
             return view('avs.verFluxoDiretoria', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade, 
-            'anexos' => $anexos, 'arrayDiasValores' => $arrayDiasValores,
-            'anoSaidaInicial' => $anoSaidaInicial, 'mesSaidaInicial' => $mesSaidaInicial, 'diaSaidaInicial' => $diaSaidaInicial,
-            'horaSaidaInicial' => $horaSaidaInicial, 'minutoSaidaInicial' => $minutoSaidaInicial, 'mesChegadaInicial' => $mesChegadaInicial,
-            'diaChegadaInicial' => $diaChegadaInicial, 'horaChegadaInicial' => $horaChegadaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial,
-            'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal, 'minutoSaidaFinal' => $minutoSaidaFinal,
-            'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal, 'minutoChegadaFinal' => $minutoChegadaFinal,
-            'dataInicio' => $dataInicio, 'dataFim' => $dataFim, 'medicoesFiltradas' => $medicoesFiltradas]);
+            'anexos' => $anexos, 'arrayDiasValores' => $arrayDiasValores, 'medicoesFiltradas' => $medicoesFiltradas]);
         }
         else{
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -429,38 +376,12 @@ class ControladorAv extends Controller
             }
         }
 
-        $colecao = $this->geraArrayDiasValores($av);
-        $arrayDiasValores = $colecao[0];
-        $anoSaidaInicial = $colecao[1];
-        $mesSaidaInicial = $colecao[2];
-        $diaSaidaInicial = $colecao[3];
-        $horaSaidaInicial = $colecao[4];
-        $minutoSaidaInicial = $colecao[5];
-        $mesChegadaInicial = $colecao[6];
-        $diaChegadaInicial = $colecao[7];
-        $horaChegadaInicial = $colecao[8];
-        $minutoChegadaInicial = $colecao[9];
-        $mesSaidaFinal = $colecao[10];
-        $diaSaidaFinal = $colecao[11];
-        $horaSaidaFinal = $colecao[12];
-        $minutoSaidaFinal = $colecao[13];
-        $mesChegadaFinal = $colecao[14];
-        $diaChegadaFinal = $colecao[15];
-        $horaChegadaFinal = $colecao[16];
-        $minutoChegadaFinal = $colecao[17];
-        $dataInicio = $colecao[18];
-        $dataFim = $colecao[19];
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
 
         if($possoEditar == true){
             return view('avs.verFluxoSecretaria', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade,
-            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores,
-            'anoSaidaInicial' => $anoSaidaInicial, 'mesSaidaInicial' => $mesSaidaInicial, 'diaSaidaInicial' => $diaSaidaInicial,
-            'horaSaidaInicial' => $horaSaidaInicial, 'minutoSaidaInicial' => $minutoSaidaInicial, 'mesChegadaInicial' => $mesChegadaInicial,
-            'diaChegadaInicial' => $diaChegadaInicial, 'horaChegadaInicial' => $horaChegadaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial,
-            'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal, 'minutoSaidaFinal' => $minutoSaidaFinal,
-            'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal, 'minutoChegadaFinal' => $minutoChegadaFinal,
-            'dataInicio' => $dataInicio, 'dataFim' => $dataFim], ['anexosRotas' => $anexosRotas]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores], ['anexosRotas' => $anexosRotas]);
         }
         else{
             return redirect('avs/autSecretaria')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -594,7 +515,7 @@ class ControladorAv extends Controller
             if($hisPc->av_id == $av->id){
                 array_push($historicoPc, $hisPc);
             }
-            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
                 $valorRecebido = $hisPc;
             }
         }
@@ -690,7 +611,7 @@ class ControladorAv extends Controller
             if($hisPc->av_id == $av->id){
                 array_push($historicoPc, $hisPc);
             }
-            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
                 $valorRecebido = $hisPc;
             }
         }
@@ -781,7 +702,7 @@ class ControladorAv extends Controller
             if($hisPc->av_id == $av->id){
                 array_push($historicoPc, $hisPc);
             }
-            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
                 $valorRecebido = $hisPc;
             }
         }
@@ -874,7 +795,7 @@ class ControladorAv extends Controller
             if($hisPc->av_id == $av->id){
                 array_push($historicoPc, $hisPc);
             }
-            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
                 $valorRecebido = $hisPc;
             }
         }
@@ -1007,39 +928,12 @@ class ControladorAv extends Controller
             }
         }
 
-        $colecao = $this->geraArrayDiasValores($av);
-        $arrayDiasValores = $colecao[0];
-        $anoSaidaInicial = $colecao[1];
-        $mesSaidaInicial = $colecao[2];
-        $diaSaidaInicial = $colecao[3];
-        $horaSaidaInicial = $colecao[4];
-        $minutoSaidaInicial = $colecao[5];
-        $mesChegadaInicial = $colecao[6];
-        $diaChegadaInicial = $colecao[7];
-        $horaChegadaInicial = $colecao[8];
-        $minutoChegadaInicial = $colecao[9];
-        $mesSaidaFinal = $colecao[10];
-        $diaSaidaFinal = $colecao[11];
-        $horaSaidaFinal = $colecao[12];
-        $minutoSaidaFinal = $colecao[13];
-        $mesChegadaFinal = $colecao[14];
-        $diaChegadaFinal = $colecao[15];
-        $horaChegadaFinal = $colecao[16];
-        $minutoChegadaFinal = $colecao[17];
-        $dataInicio = $colecao[18];
-        $dataFim = $colecao[19];
-
-
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        
         if($possoEditar == true){
             return view('avs.verFluxoFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 
             'historicos'=> $historicos, 'anexos' => $anexos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade,
-            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores,
-            'anoSaidaInicial' => $anoSaidaInicial, 'mesSaidaInicial' => $mesSaidaInicial, 'diaSaidaInicial' => $diaSaidaInicial,
-            'horaSaidaInicial' => $horaSaidaInicial, 'minutoSaidaInicial' => $minutoSaidaInicial, 'mesChegadaInicial' => $mesChegadaInicial,
-            'diaChegadaInicial' => $diaChegadaInicial, 'horaChegadaInicial' => $horaChegadaInicial, 'minutoChegadaInicial' => $minutoChegadaInicial,
-            'mesSaidaFinal' => $mesSaidaFinal, 'diaSaidaFinal' => $diaSaidaFinal, 'horaSaidaFinal' => $horaSaidaFinal, 'minutoSaidaFinal' => $minutoSaidaFinal,
-            'mesChegadaFinal' => $mesChegadaFinal, 'diaChegadaFinal' => $diaChegadaFinal, 'horaChegadaFinal' => $horaChegadaFinal, 'minutoChegadaFinal' => $minutoChegadaFinal,
-            'dataInicio' => $dataInicio, 'dataFim' => $dataFim]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores]);
         }
         else{
             return redirect('avs/autFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -1447,7 +1341,7 @@ class ControladorAv extends Controller
             if($hisPc->av_id == $av->id){
                 array_push($historicoPc, $hisPc);
             }
-            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
                 $valorRecebido = $hisPc;
             }
         }
@@ -1538,7 +1432,7 @@ class ControladorAv extends Controller
             if($hisPc->av_id == $av->id){
                 array_push($historicoPc, $hisPc);
             }
-            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
                 $valorRecebido = $hisPc;
             }
         }
@@ -1628,7 +1522,7 @@ class ControladorAv extends Controller
             if($hisPc->av_id == $av->id){
                 array_push($historicoPc, $hisPc);
             }
-            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
                 $valorRecebido = $hisPc;
             }
         }
@@ -2007,7 +1901,7 @@ class ControladorAv extends Controller
         $timezone = new DateTimeZone('America/Sao_Paulo');
         $historico->dataOcorrencia = new DateTime('now', $timezone);
 
-        $historico->tipoOcorrencia = "Adiantamento realizado pelo Financeiro";
+        $historico->tipoOcorrencia = "Documento AV";
         $historico->comentario = $request->get('comentario');
         $historico->perfilDonoComentario = "Financeiro";
         $historico->usuario_id = $av->user_id;
@@ -2022,27 +1916,7 @@ class ControladorAv extends Controller
         $historicos = [];
         $users = User::all();
 
-        $colecao = $this->geraArrayDiasValores($av);
-        $arrayDiasValores = $colecao[0];
-        $anoSaidaInicial = $colecao[1];
-        $mesSaidaInicial = $colecao[2];
-        $diaSaidaInicial = $colecao[3];
-        $horaSaidaInicial = $colecao[4];
-        $minutoSaidaInicial = $colecao[5];
-        $mesChegadaInicial = $colecao[6];
-        $diaChegadaInicial = $colecao[7];
-        $horaChegadaInicial = $colecao[8];
-        $minutoChegadaInicial = $colecao[9];
-        $mesSaidaFinal = $colecao[10];
-        $diaSaidaFinal = $colecao[11];
-        $horaSaidaFinal = $colecao[12];
-        $minutoSaidaFinal = $colecao[13];
-        $mesChegadaFinal = $colecao[14];
-        $diaChegadaFinal = $colecao[15];
-        $horaChegadaFinal = $colecao[16];
-        $minutoChegadaFinal = $colecao[17];
-        $dataInicio = $colecao[18];
-        $dataFim = $colecao[19];
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
 
         foreach($historicosTodos as $hist){
             if($hist->av_id == $av->id){
@@ -2054,10 +1928,7 @@ class ControladorAv extends Controller
         $dompdf = new Dompdf($options);
 
         $dompdf = new Dompdf();
-        $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 'arrayDiasValores', 'anoSaidaInicial', 
-        'mesSaidaInicial', 'diaSaidaInicial', 'horaSaidaInicial', 'minutoSaidaInicial', 'mesChegadaInicial', 'diaChegadaInicial', 'horaChegadaInicial', 
-        'minutoChegadaInicial', 'mesSaidaFinal', 'diaSaidaFinal', 'horaSaidaFinal', 'minutoSaidaFinal', 'mesChegadaFinal', 'diaChegadaFinal', 'horaChegadaFinal', 
-        'minutoChegadaFinal', 'dataInicio', 'dataFim', 'isVeiculoEmpresa')));
+        $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 'arrayDiasValores', 'isVeiculoEmpresa')));
         $dompdf->render();
 
         $nomeArquivo = md5("relatorio" . strtotime("now")) . ".pdf";
@@ -2075,7 +1946,7 @@ class ControladorAv extends Controller
         $historicoPc->valorExtraReais = $av->valorExtraReais;
         $historicoPc->valorExtraDolar = $av->valorExtraDolar;
         $historicoPc->ocorrencia ="Financeiro aprovou AV";
-        $historicoPc->comentario ="Adiantamento realizado - valor inicial";
+        $historicoPc->comentario ="Documento AV";
         $historicoPc->av_id = $av->id;
 
         $historicoPc->dataOcorrencia = new DateTime('now', $timezone);
@@ -2369,10 +2240,12 @@ class ControladorAv extends Controller
         }
         
         foreach($historicoPcAll as $hisPc){
-            if($hisPc->av_id == $av->id && $hisPc->comentario == "Adiantamento realizado - valor inicial"){
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
                 $valorRecebido = $hisPc;
             }
         }
+
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
 
         //----------------------------------------------------------------------------------------------------------
         $options = new Options();
@@ -2380,7 +2253,7 @@ class ControladorAv extends Controller
         $dompdf = new Dompdf($options);
 
         $dompdf = new Dompdf();
-        $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 'valorAcertoContasReal', 'valorAcertoContasDolar')));
+        $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores')));
         $dompdf->render();
 
         $nomeArquivo = md5("relatorioAcertoContas" . strtotime("now")) . ".pdf";
@@ -3058,30 +2931,38 @@ class ControladorAv extends Controller
 
                 //DECLARAÇÃO DE VARIÁVEIS ------------------------------------------------------------------------------------
 
+                //Captura o valor para a diária da rota atual
                 $valor = $this->verificaValorRota($rota);
 
+                //Captura a rota anterior e a próxima rota
                 $rotaAnterior = isset($rotasDoDia[$indice - 1]) ? $rotasDoDia[$indice - 1] : false;
                 $proximaRota = isset($rotasDoDia[$indice + 1]) ? $rotasDoDia[$indice + 1] : null;
 
+                //Captura a data de saída e formata para DateTime
                 $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rota->dataHoraSaida)->format('Y-m-d H:i:s');
                 $dataSaidaFormatado = new DateTime($dataSaida);
 
+                //Captura a data de chegada e formata para DateTime
                 $dataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rota->dataHoraChegada)->format('Y-m-d H:i:s');
                 $dataChegadaFormatado = new DateTime($dataChegada);
 
+                //Monta um array com as rotas do dia de IDA
                 if ($dataSaidaFormatado->format('Y-m-d') == $dia) {
                     $arrayRotasDoDia[] = "Ida: [" . $rota->cidadeOrigemNacional . " (" . $dataSaidaFormatado->format('H:i') . ")" . " >";
                 }
 
+                //Monta um array com as rotas do dia de VOLTA
                 if ($dataChegadaFormatado->format('Y-m-d') == $dia) {
                     $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "]";
                 }
 
+                //Captura a data de chegada da rota anterior e formata para DateTime
                 if($rotaAnterior != false){
                     $rotaAnteriorDataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotaAnterior->dataHoraChegada)->format('Y-m-d H:i:s');
                     $rotaAnteriorDataChegadaFormatado = new DateTime($rotaAnteriorDataChegada);
                 }
 
+                //Captura a data de saída e chegada da próxima rota e formata para DateTime
                 if($proximaRota != false){
                     
                     $proximaRotaDataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $proximaRota->dataHoraSaida)->format('Y-m-d H:i:s');
@@ -3111,15 +2992,20 @@ class ControladorAv extends Controller
                             $temDiariaManha = true;
                         }
                         else if($proximaRota != false && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && 
-                                $dataSaidaFormatado->format('H:i:s') < "12:00:00" && $proximaRotaDataSaidaFormatado->format('H:i:s') > "13:01:00"){
-                        //SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E A HORA DE SAÍDA DA ROTA ATUAL FOR MENOR QUE 12:00
+                                $dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dia != $dataUltimaRota){
+                        //SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E NÃO FOR A ÚLTIMA ROTA
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if($dia != $dataPrimeiraRota && $dataSaidaFormatado->format('H:i:s') > "12:01:00"){
+                        else if($dia != $dataPrimeiraRota && $dia != $dataUltimaRota){
                         //SE O DIA ATUAL NÃO FOR O DIA DA PRIMEIRA ROTA E A HORA DE SAÍDA FOR MAIOR QUE 12:01
                             $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
                             $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
+                        }
+                        else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
+                        //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
@@ -3127,15 +3013,15 @@ class ControladorAv extends Controller
 
                     if($temDiariaTarde == false){
                         
-                        if($dataSaidaFormatado->format('H:i:s') > "13:01:00" && $dataSaidaFormatado->format('H:i:s') < "19:00:00" 
-                            && $dia != $dataUltimaRota){
+                        if($dataSaidaFormatado->format('H:i:s') >= "13:01:00" && $dataSaidaFormatado->format('H:i:s') < "19:00:00" 
+                            && $dataChegadaFormatado->format('H:i:s') >= "19:01:00" && $dia != $dataUltimaRota){
                         //SE A HORA DE SAÍDA FOR MAIOR QUE 13:01 E MENOR QUE 19:00 E A HORA DE CHEGADA FOR MAIOR QUE 19:01
                             $valorTarde = $valor/2;
                             $temDiariaTarde = true;
                         }
                         else if($proximaRota != false && 
-                                ($proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && $proximaRotaDataSaidaFormatado->format('H:i:s') > "19:01:00" ||
-                                 $proximaRotaDataChegadaFormatado->format('Y-m-d') == $dia && $proximaRotaDataChegadaFormatado->format('H:i:s') > "19:01:00")){
+                                ($proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && $proximaRotaDataSaidaFormatado->format('H:i:s') >= "19:01:00" ||
+                                 $proximaRotaDataChegadaFormatado->format('Y-m-d') == $dia && $proximaRotaDataChegadaFormatado->format('H:i:s') >= "19:01:00")){
                         //SE A PRÓXIMA ROTA FOR NO MESMO DIA E A HORA DE SAÍDA OU CHEGADA DELA FOR MAIOR QUE 19:01
                             $valorTarde = $valor/2;
                             $temDiariaTarde = true;
@@ -3168,7 +3054,7 @@ class ControladorAv extends Controller
                 $valorTarde = $valor/2;
             }
             //se o dia for diferente do primeiro e do ultimo
-            if($dia != $dataPrimeiraRota && $dia != $dataUltimaRota){
+            if($dia != $dataPrimeiraRota && $dia != $dataUltimaRota && $valorManha == 0 && $valorTarde == 0 && $valor != 0){
                 $valorManha = $valor/2;
                 $valorTarde = $valor/2;
             }
@@ -4264,192 +4150,239 @@ class ControladorAv extends Controller
         
     }
 
-    public function geraArrayDiasValores($av){
+    public function geraArrayDiasValoresCerto($av){
 
         $rotas = $av->rotas;
-        for ($i=0; $i < sizeof($rotas)-1 ; $i++) { 
-            //Verifica quais são das datas da rota atual e da próxima
-            $dataHoraSaidaRota1 = new DateTime($rotas[$i]->dataHoraSaida);//Data de saída da rota 1
-            $dataHoraChegadaRota1 = new DateTime($rotas[$i]->dataHoraChegada);//Data de chegada da rota 1
 
-            $dataHoraSaidaRota2 = new DateTime($rotas[$i + 1]->dataHoraSaida);//Data de saída da rota 2
-            $dataHoraChegadaRota2 = new DateTime($rotas[$i + 1]->dataHoraChegada);//Data de chegada da rota 2
-            
-            //DATAS ROTA 1
-            $anoSaidaRota1 = $dataHoraSaidaRota1->format('Y');
-            $mesSaidaRota1 = $dataHoraSaidaRota1->format('m');
-            $diaSaidaRota1 = $dataHoraSaidaRota1->format('d');
-            $horaSaidaRota1 = $dataHoraSaidaRota1->format('H');
-            $minutoSaidaRota1 = $dataHoraSaidaRota1->format('i');
-
-            $mesChegadaRota1 = $dataHoraChegadaRota1->format('m');
-            $diaChegadaRota1 = $dataHoraChegadaRota1->format('d');
-            $horaChegadaRota1 = $dataHoraChegadaRota1->format('H');
-            $minutoChegadaRota1 = $dataHoraChegadaRota1->format('i');
-
-            //DATAS ROTA 2
-            $mesSaidaRota2 = $dataHoraSaidaRota2->format('m');
-            $diaSaidaRota2 = $dataHoraSaidaRota2->format('d');
-            $horaSaidaRota2 = $dataHoraSaidaRota2->format('H');
-            $minutoSaidaRota2 = $dataHoraSaidaRota2->format('i');
-
-            $mesChegadaRota2 = $dataHoraChegadaRota2->format('m');
-            $diaChegadaRota2 = $dataHoraChegadaRota2->format('d');
-            $horaChegadaRota2 = $dataHoraChegadaRota2->format('H');
-            $minutoChegadaRota2 = $dataHoraChegadaRota2->format('i');
-            
-            if($i==0){
-                $anoSaidaInicial = $anoSaidaRota1;
-                $mesSaidaInicial = $mesSaidaRota1;
-                $diaSaidaInicial = $diaSaidaRota1;
-                $horaSaidaInicial = $horaSaidaRota1;
-                $minutoSaidaInicial = $minutoSaidaRota1;
-
-                $mesChegadaInicial = $mesChegadaRota1;
-                $diaChegadaInicial = $diaChegadaRota1;
-                $horaChegadaInicial = $horaChegadaRota1;
-                $minutoChegadaInicial = $minutoChegadaRota1;
-            }
-            if($i == sizeof($rotas)-2){
-                $mesSaidaFinal = $mesSaidaRota2;
-                $diaSaidaFinal = $diaSaidaRota2;
-                $horaSaidaFinal = $horaSaidaRota2;
-                $minutoSaidaFinal = $minutoSaidaRota2;
-
-                $mesChegadaFinal = $mesChegadaRota2;
-                $diaChegadaFinal = $diaChegadaRota2;
-                $horaChegadaFinal = $horaChegadaRota2;
-                $minutoChegadaFinal = $minutoChegadaRota2;
-            }
-        }
-
-        $dataInicio = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
-        $dataFim = "$anoSaidaInicial-$mesChegadaFinal-$diaChegadaFinal";
-
+        $dataInicio = date('Y-m-d', strtotime($rotas[0]->dataHoraSaida));
+        $dataFim = date('Y-m-d', strtotime($rotas[sizeof($rotas)-1]->dataHoraChegada));
                        
         $arrayDiasValores = [];
                         
         $intervaloDatas = new DatePeriod(
             new DateTime($dataInicio),
             new DateInterval('P1D'),
-            (new DateTime($dataFim))->modify('+1 day') // Adicionar 1 dia ao fim para inclusão do último dia
+            ($dataInicio != $dataFim ? (new DateTime($dataFim))->modify('+1 day') : (new DateTime($dataFim)))
         );
-                        
+
+        //------------------------------------------------------------------------------------------------------------------------------------------------------
+        
         foreach ($intervaloDatas as $data) {
+            
             $dia = $data->format('Y-m-d');
             $valor = 0;
             $acumulado = 0;
 
-            for ($i=0; $i < sizeof($rotas)-1 ; $i++) {
+            $rotasDoDia = [];
+            $dataPrimeiraRota = null;
+            $dataUltimaRota = null;
+
+            //ITERE AS ROTAS E VERIFIQUE SE O DIA ESTÁ ENTRE A DATA DE SAÍDA E A DATA DE CHEGADA-----------------------------------
+            for ($i=0; $i < sizeof($rotas) ; $i++) {
                     $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraSaida)->format('Y-m-d H:i:s');
-                    $dataSaida2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraSaida)->format('Y-m-d H:i:s');
-                    $dataChegada2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraChegada)->format('Y-m-d H:i:s');
+                    $dataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraChegada)->format('Y-m-d H:i:s');
 
-                    $dataSaidaModificado1 = new DateTime($dataSaida);//Data de saída da rota 1
-                    $dataSaidaModificado2 = new DateTime($dataSaida2);//Data de saída da rota 2
-                    $dataChegadaModificado2 = new DateTime($dataChegada2);//Data de saída da rota 2
+                    $dataSaidaFormatado = new DateTime($dataSaida);//Data de saída da rota 1
+                    $dataChegadaFormatado = new DateTime($dataChegada);//Data de chegada da rota 1
+            
+                    //verifique se a data do dia está entre a data de saída e a data de chegada
+                    if($dia >= $dataSaidaFormatado->format('Y-m-d') && $dia <= $dataChegadaFormatado->format('Y-m-d')){
+                        $rotasDoDia[] = $rotas[$i];
+                    }
 
-                    $horaSaidaRota1 = $dataSaidaModificado1->format('H');
-                    $minutoSaidaRota1 = $dataSaidaModificado1->format('i');
+                    //captura a data inicial da primeira rota
+                    if($i == 0){
+                        $dataPrimeiraRota = $dataSaidaFormatado->format('Y-m-d');
+                    }
+                    
+                    //captura a data final da ultima rota
+                    if($i == sizeof($rotas)-1){
+                        $dataUltimaRota = $dataChegadaFormatado->format('Y-m-d');
+                    }
+            }//----------------------------------------------------------------------------------------------------------------------
+            $arrayRotasDoDia = [];
+            //ISSO TRATA SITUAÇÕES ONDE NÃO HÁ ROTA NO DIA, OU SEJA O DIA ESTÁ NO INTERVALO ENTRE DUAS VIAGENS-----------------------
+            if(sizeof($rotasDoDia) == 0){
+                //procure a rota em que a dataHoraChegada é anterior ao dia atual e atribua a $rota ao dia
+                for ($i=sizeof($rotas)-1; $i >= 0 ; $i--) {
+                    $dataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraChegada)->format('Y-m-d H:i:s');
+                    $dataChegadaFormatado = new DateTime($dataChegada);
+                    
+                    if($dia > $dataChegadaFormatado->format('Y-m-d')){
+                        $valor = $this->verificaValorRota($rotas[$i]);
+                        $arrayRotasDoDia[] = $rotas[$i]->cidadeDestinoNacional;
+                        break;
+                    }
+                }
+            }//----------------------------------------------------------------------------------------------------------------------
 
-                    $horaSaidaRota2 = $dataSaidaModificado2->format('H');
-                    $minutoSaidaRota2 = $dataSaidaModificado2->format('i');
+            $temDiariaManha = false;
+            $temDiariaTarde = false;
+            $valorManha = 0;
+            $valorTarde = 0;
+            
 
-                    $horaChegadaRota2 = $dataChegadaModificado2->format('H');
-                    $minutoChegadaRota2 = $dataChegadaModificado2->format('i');
+            //AGORA VAMOS ANALISAR OS DIAS QUE POSSUEM ROTAS E CALCULAR O VALOR DA DIÁRIA-----------------------------------------------------------------
+            foreach($rotasDoDia as $indice => $rota){
 
-                    $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraSaida)->format('Y-m-d');
-                    $dataSaida2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraSaida)->format('Y-m-d');
-                    $dataChegada2 = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i + 1]->dataHoraChegada)->format('Y-m-d');
+                //DECLARAÇÃO DE VARIÁVEIS ------------------------------------------------------------------------------------
 
-                    if ($dia >= $dataSaida && $dia <= $dataSaida2) {
-                        
-                        if($rotas[$i]->continenteDestinoInternacional == 1 && $rotas[$i]->paisDestinoInternacional !=30){//América Latina ou Amética Central
-                            $valor = 100;
+                //Captura o valor para a diária da rota atual
+                $valor = $this->verificaValorRota($rota);
+
+                //Captura a rota anterior e a próxima rota
+                $rotaAnterior = isset($rotasDoDia[$indice - 1]) ? $rotasDoDia[$indice - 1] : false;
+                $proximaRota = isset($rotasDoDia[$indice + 1]) ? $rotasDoDia[$indice + 1] : null;
+
+                //Captura a data de saída e formata para DateTime
+                $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rota->dataHoraSaida)->format('Y-m-d H:i:s');
+                $dataSaidaFormatado = new DateTime($dataSaida);
+
+                //Captura a data de chegada e formata para DateTime
+                $dataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rota->dataHoraChegada)->format('Y-m-d H:i:s');
+                $dataChegadaFormatado = new DateTime($dataChegada);
+
+                //Monta um array com as rotas do dia de IDA
+                if ($dataSaidaFormatado->format('Y-m-d') == $dia) {
+                    $arrayRotasDoDia[] = "Ida: [" . $rota->cidadeOrigemNacional . " (" . $dataSaidaFormatado->format('H:i') . ")" . " >";
+                }
+
+                //Monta um array com as rotas do dia de VOLTA
+                if ($dataChegadaFormatado->format('Y-m-d') == $dia) {
+                    $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "]";
+                }
+
+                //Captura a data de chegada da rota anterior e formata para DateTime
+                if($rotaAnterior != false){
+                    $rotaAnteriorDataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotaAnterior->dataHoraChegada)->format('Y-m-d H:i:s');
+                    $rotaAnteriorDataChegadaFormatado = new DateTime($rotaAnteriorDataChegada);
+                }
+
+                //Captura a data de saída e chegada da próxima rota e formata para DateTime
+                if($proximaRota != false){
+                    
+                    $proximaRotaDataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $proximaRota->dataHoraSaida)->format('Y-m-d H:i:s');
+                    $proximaRotaDataSaidaFormatado = new DateTime($proximaRotaDataSaida);
+
+                    $proximaRotaDataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $proximaRota->dataHoraChegada)->format('Y-m-d H:i:s');
+                    $proximaRotaDataChegadaFormatado = new DateTime($proximaRotaDataChegada);
+                }
+
+                //-----------------------------------------------------------------------------------------------------------
+
+                //APENAS SE COINDICIR O DIA DA ROTA COM O DIAS DO INTERVALO, NOS DIAS INTEMEDIÁRIOS O VALOR DA DIÁRIA É O DA ÚLTIMA ROTA
+                if($dataSaidaFormatado->format('Y-m-d') == $dia){
+                    
+
+                    if($temDiariaManha == false){
+
+                        if( ($dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00")){
+                        //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MAIOR QUE 13:01
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
                         }
-                        else if($rotas[$i]->continenteDestinoInternacional == 2){//América do Norte
-                            $valor = 150;
+                        else if($dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "13:00:00"
+                                && $proximaRota == false && $dia != $dataUltimaRota){
+                        //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MENOR QUE 13:00 E NÃO TIVER PRÓXIMA ROTA NO DIA, MAS NÃO ACABOU A VIAGEM
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
                         }
-                        else if($rotas[$i]->continenteDestinoInternacional == 3){//Europa
-                            $valor = 180;
+                        else if($proximaRota != false && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && 
+                                $dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dia != $dataUltimaRota){
+                        //SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E NÃO FOR A ÚLTIMA ROTA
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
                         }
-                        else if($rotas[$i]->continenteDestinoInternacional == 4){//África
-                            $valor = 140;
+                        else if($dia != $dataPrimeiraRota && $dia != $dataUltimaRota){
+                        //SE O DIA ATUAL NÃO FOR O DIA DA PRIMEIRA ROTA E A HORA DE SAÍDA FOR MAIOR QUE 12:01
+                            $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                            $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
                         }
-                        else if($rotas[$i]->continenteDestinoInternacional == 5){//Ásia
-                            $valor = 190;
-                        }else if(($rotas[$i]->cidadeDestinoNacional == "Curitiba" || $rotas[$i]->cidadeDestinoNacional == "Foz do Iguaçu") ||
-                        ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->estadoDestinoInternacional == "Paraná" && 
-                        ($rotas[$i]->cidadeDestinoInternacional == "Curitiba" || $rotas[$i]->cidadeDestinoInternacional == "Foz do Iguaçu"))){//Se for Curitiba ou Foz do Iguaçu
-                            $valor = 65;
-                        }
-                        else if($rotas[$i]->estadoDestinoNacional == "Paraná" || ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->estadoDestinoInternacional == "Paraná")){//Se for outra cidade do Paraná
-                            $valor = 55;
-                        }
-                        else if($rotas[$i]->cidadeDestinoNacional == "Brasília" || ($rotas[$i]->paisDestinoInternacional == 30 && $rotas[$i]->cidadeDestinoInternacional == "Brasília")){//Se for Brasília
-                            $valor = 100;
-                        }
-                        else{//Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
-                            $valor = 80;
-                        }
-                        if($dia == $dataSaida){
-                            if($horaSaidaRota1 >= 13 && $horaSaidaRota1 < 19){
-                                $metade = ($valor/2);
-                                if($acumulado == 0){
-                                    $acumulado = $metade;
-                                }
-                                else{
-                                    $acumulado += $metade;
-                                }
-                            }
-                        }
-                        if(!($i == sizeof($rotas)-2)){
-                            if($dia == $dataSaida2){
-                                if($horaSaidaRota2 >= 13 && $horaSaidaRota2 < 19){
-                                    $metade = ($valor/2);
-                                    if($acumulado == 0){
-                                        $acumulado = $metade;
-                                    }
-                                    else{
-                                        $acumulado += $metade;
-                                    }
-                                }
-                            }
-                        }
-                        if($i == sizeof($rotas)-2){
-                            if($dia == $dataChegada2){
-                                if($horaChegadaRota2 >= 13 && $horaChegadaRota2 < 19){
-                                    $metade = ($valor/2);
-                                    if($acumulado == 0){
-                                        $acumulado = $metade;
-                                    }
-                                    else{
-                                        $acumulado += $metade;
-                                    }
-                                }
-                                else if($horaChegadaRota2 >= 19){
-                                    if($acumulado == 0){
-                                        $acumulado = $valor;
-                                    }
-                                    else{
-                                        $acumulado += $valor;
-                                    }
-                                }
-                            }
+                        else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
+                        //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
                         }
                     }
+
+                    if($temDiariaTarde == false){
+                        
+                        if($dataSaidaFormatado->format('H:i:s') >= "13:01:00" && $dataSaidaFormatado->format('H:i:s') < "19:00:00" 
+                            && $dataChegadaFormatado->format('H:i:s') >= "19:01:00" && $dia != $dataUltimaRota){
+                        //SE A HORA DE SAÍDA FOR MAIOR QUE 13:01 E MENOR QUE 19:00 E A HORA DE CHEGADA FOR MAIOR QUE 19:01
+                            $valorTarde = $valor/2;
+                            $temDiariaTarde = true;
+                        }
+                        else if($proximaRota != false && 
+                                ($proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && $proximaRotaDataSaidaFormatado->format('H:i:s') >= "19:01:00" ||
+                                 $proximaRotaDataChegadaFormatado->format('Y-m-d') == $dia && $proximaRotaDataChegadaFormatado->format('H:i:s') >= "19:01:00")){
+                        //SE A PRÓXIMA ROTA FOR NO MESMO DIA E A HORA DE SAÍDA OU CHEGADA DELA FOR MAIOR QUE 19:01
+                            $valorTarde = $valor/2;
+                            $temDiariaTarde = true;
+                        }
+                        else if($proximaRota == false && $dia != $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') < "24:00:00"){
+                        //NÃO TEM MAIS ROTAS NO DIA, SIGNFICA QUE JÁ CHEGOU E VAI FICAR NA CIDADE
+                            $valorTarde = $valor/2;
+                            $temDiariaTarde = true;
+                        }
+                        else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "19:01:00"){
+                        //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE CHEGADA FOR MAIOR QUE 19:01
+                            $valorTarde = $valor/2;
+                            $temDiariaTarde = true;
+                        }
+                    }
+
+                    if($temDiariaManha == true && $temDiariaTarde == true)
+                        $valor = $valorManha + $valorTarde;
+                    else if($temDiariaManha == true && $temDiariaTarde == false)
+                        $valor = $valorManha;
+                    else if($temDiariaManha == false && $temDiariaTarde == true)
+                        $valor = $valorTarde;
+                    else if($temDiariaManha == false && $temDiariaTarde == false)
+                        $valor = 0;
+                }
+
             }
+            if(sizeof($rotasDoDia) == 0 && $dia != $dataUltimaRota){
+                $valorManha = $valor/2;
+                $valorTarde = $valor/2;
+            }
+            //se o dia for diferente do primeiro e do ultimo
+            if($dia != $dataPrimeiraRota && $dia != $dataUltimaRota && $valorManha == 0 && $valorTarde == 0 && $valor != 0){
+                $valorManha = $valor/2;
+                $valorTarde = $valor/2;
+            }
+            //se for o ultimo dia
+            if($dia == $dataUltimaRota && $valorManha == 0 && $valorTarde == 0 && $valor != 0){
+                $valorManha = $valor/2;
+                $valorTarde = $valor/2;
+            }
+            
             $diaFormatado = DateTime::createFromFormat('Y-m-d', $dia);
             $arrayDiasValores[] = [
                 'dia' => $diaFormatado->format('d'),
-                'valor' => $acumulado != 0 ? $acumulado : $valor,
+                'arrayRotasDoDia' => $arrayRotasDoDia,
+                'valorManha' => $valorManha,
+                'valorTarde' => $valorTarde,
+                'valor' => $valor,
             ];
         }
-        $colecao = collect([$arrayDiasValores, $anoSaidaInicial, $mesSaidaInicial, $diaSaidaInicial, $horaSaidaInicial, $minutoSaidaInicial,
-                                                                $mesChegadaInicial, $diaChegadaInicial, $horaChegadaInicial, $minutoChegadaInicial,
-                                                                $mesSaidaFinal, $diaSaidaFinal, $horaSaidaFinal, $minutoSaidaFinal,
-                                                                $mesChegadaFinal, $diaChegadaFinal, $horaChegadaFinal, $minutoChegadaFinal,
-                                                                $dataInicio, $dataFim]);
-        return $colecao;
+        //CASO SÓ TENHA UMA ROTA
+        if(sizeof($rotas) == 1){
+            $valor = $this->verificaValorRota($rotas[0]);
+            $arrayRotasDoDia = [];
+            $arrayRotasDoDia[] = " [ " . $rotas[0]->cidadeOrigemNacional . " - " . $rotas[0]->cidadeDestinoNacional . " ] ";
+            $arrayDiasValores[] = [
+                'dia' => DateTime::createFromFormat('Y-m-d H:i:s', $rotas[0]->dataHoraSaida)->format('d'),
+                'arrayRotasDoDia' => $arrayRotasDoDia,
+                'valorManha' => $valor/2,
+                'valorTarde' => $valor/2,
+                'valor' => $valor,
+            ];
+        }
+
+        return $arrayDiasValores;
     }
 }

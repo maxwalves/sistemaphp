@@ -81,7 +81,7 @@
             </style>
             <div class="col-md-8 offset-md-0" style="font-size: 12px">
                 <h3><strong>Detalhamento: </strong></h3>
-                <table id="tabelaRota" class="comBordaSimples" >
+                <table id="tabelaRota" class="comBordaSimples" style="width: 100%">
                     <thead>
                         <tr>
                             <th>Estado de saída</th>
@@ -111,7 +111,7 @@
                 </table>
 
                 <h3><strong>Histórico: </strong></h3>
-                <table id="minhaTabela" class="comBordaSimples">
+                <table id="minhaTabela" class="comBordaSimples" style="width: 100%">
                     <!-- head -->
                     <thead>
                     <tr>
@@ -141,104 +141,64 @@
     
                     </tbody>
                 </table>
-            </div>
-            <h3 style="font-size: 12px">Controle de diárias:</h3>
-            <div class="container d-none d-sm-block" style="font-size: 12px"> 
-                    
-                    <ul class="steps">
             
-                        @if($mesSaidaInicial != $mesChegadaFinal)
-            
-                            @php
-                                $data = "$anoSaidaInicial-$mesSaidaInicial-$diaSaidaInicial";
-                                $ultimoDiaMes = date('t', strtotime($data));
-                                $j=0;
-                            @endphp
-                            @for($i = $arrayDiasValores[0]['dia']; $i <= $ultimoDiaMes; $i++)
-                                <li>
-                                    <div>
-                                        @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Diária Inteira: R${{$arrayDiasValores[$j]['valor']}}</div>
-                                        
-                                        @elseif($i ==  $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
-                                            <div class="stats stats-vertical bg-green-500 shadow rounded-none">Dia: {{$i}}. Meia Diária: R${{$arrayDiasValores[$j]['valor']}}</div>
-                                        
-                                        @elseif($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Diária Inteira: R${{$arrayDiasValores[$j]['valor']}}</div>    
-                                        @else
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Sem diária</div>
-                                        @endif
-                                    </div>
-                                </li>
-                                @php
-                                    $j++;
-                                @endphp
-                            @endfor
-                            @for($i = 1; $i <= $diaChegadaFinal; $i++)
-                                <li>
-                                    <div>
-                                        @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Diária Inteira: R${{$arrayDiasValores[$j]['valor']}}</div>
-                                        
-                                        @elseif($i ==  $diaSaidaInicial && $horaSaidaInicial >= 13 && $minutoSaidaInicial > 1)
-                                            <div class="stats stats-vertical bg-green-500 shadow rounded-none">Dia: {{$i}}. Meia Diária: R${{$arrayDiasValores[$j]['valor']}}</div>
-                                        
-                                        @elseif($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Diária Inteira: R${{$arrayDiasValores[$j]['valor']}}</div>    
-                                        
-                                        @elseif($i ==  $diaChegadaFinal && $horaChegadaFinal >= 13 && $horaChegadaFinal <19)
-                                            <div class="stats stats-vertical bg-green-500 shadow rounded-none">Dia: {{$i}}. Meia Diária: R${{$arrayDiasValores[$j]['valor']}}</div>
-                                        
-                                        @elseif($i ==  $diaChegadaFinal && $horaChegadaFinal >=19)
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Diária Inteira: R${{$arrayDiasValores[$j]['valor']}}</div>    
-                                        @else
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Sem diária</div>
-                                        @endif
-                                    </div>
-                                </li>
-                                @php
-                                    $j++;
-                                @endphp
-                            @endfor
-                        @else
-                                @php
-                                    $j=0;
-                                @endphp
-                            @for($i = $arrayDiasValores[0]['dia']; $i <= $diaChegadaFinal; $i++)
-                                
-                                <li>
-                                    <div>
-                                        @if($i ==  $diaSaidaInicial && $horaSaidaInicial < 12 )
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Diária Inteira: R${{$arrayDiasValores[$j]['valor']}}</div>
-                                        
-                                        @elseif(($i ==  $diaSaidaInicial && $horaSaidaInicial > 13) || ($i ==  $diaSaidaInicial && $horaSaidaInicial == 13 && $minutoSaidaInicial >= 1))
-                                            <div class="stats stats-vertical bg-green-500 shadow rounded-none">Dia: {{$i}}. Meia Diária: R${{$arrayDiasValores[$j]['valor']}}</div>
-                                        
-                                        @elseif($i !=  $diaSaidaInicial && $i !=  $diaChegadaFinal)
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Diária Inteira: R${{$arrayDiasValores[$j]['valor']}}</div>    
-                                       
-            
-                                        @elseif(($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <=19 && $minutoChegadaFinal == 0) || 
-                                        ($i ==  $diaChegadaFinal && $horaChegadaFinal > 13 && $horaChegadaFinal <19) ||
-                                        ($i ==  $diaChegadaFinal && $horaChegadaFinal == 13 && $minutoChegadaFinal >= 1 && $horaChegadaFinal <19))
-                                            <div class="stats stats-vertical bg-green-500 shadow rounded-none">Dia: {{$i}}. Meia Diária: R${{$arrayDiasValores[$j]['valor']}}</div>
-                                       
-                                        @elseif(($i ==  $diaChegadaFinal && $horaChegadaFinal >19) || ($i ==  $diaChegadaFinal && $horaChegadaFinal ==19 && $minutoChegadaFinal >= 1))
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Diária Inteira: R${{$arrayDiasValores[$j]['valor']}}</div>    
-                                        @else
-                                            <div class="stats stats-vertical bg-warning shadow rounded-none">Dia: {{$i}}. Sem diária</div>
-                                        @endif
+                <h3>Controle de diárias:</h3>
+                <table class="comBordaSimples" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th style="vertical-align: middle; text-align: center;">Dias</th>
+                            <th style="vertical-align: middle; text-align: center;">Trajeto Dia</th>
+                            <th style="vertical-align: middle; text-align: center;">Diária Almoço</th>
+                            <th style="vertical-align: middle; text-align: center;">Diária Jantar</th>
+                            <th style="vertical-align: middle; text-align: center;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $j=0;
+                        @endphp
+                        @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
                                     
-                                    </div>
-                                </li>
-                                @php
-                                    $j++;
-                                @endphp
-                            @endfor
-                        @endif
-                    </ul>
-            </div>
+                            <tr style="vertical-align: middle; text-align: center;">
+                                <td style="vertical-align: middle; text-align: center;">
+                                    {{$arrayDiasValores[$j]['dia']}}
+                                </td>
+                                <td style="vertical-align: middle">
+                                    @foreach($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
+                                        {{-- verifique se $r começa com "ida" --}}
+                                        @if(strpos($r, 'Ida:') !== false)
+                                            {{str_replace('Ida:', '', $r)}}
+                                        @else
+                                            {{$r}}<br>
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;"> 
+                                    @if($arrayDiasValores[$j]['valorManha'] != 0)
+                                        R${{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;">
+                                    @if($arrayDiasValores[$j]['valorTarde'] != 0)
+                                        R${{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;"> 
+                                    R${{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}
+                                </td>                                
+                            </tr>
 
+                            @php
+                                $j++;
+                            @endphp
+                        @endfor
+                    </tbody>
+                </table>
+            </div>
 
         </main>
         

@@ -1090,7 +1090,7 @@
                                             'pasta' => 'comprovantesDespesa',
                                             'anexoRelatorio' => $comp->anexoDespesa,
                                             ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                            target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

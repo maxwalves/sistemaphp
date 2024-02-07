@@ -1093,9 +1093,6 @@
                                 <td> {{ $comp->descricao }} </td>
                                 <td> {{ $comp->valorReais }} </td>
                                 <td> 
-                                    <a href="{{ asset('AVs/' . $userAv->name . '/' . $av->id . '/comprovantesDespesa' . '/' . $comp->anexoDespesa) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                        documento Old</a>
                                     
                                     <a href="{{ route('recuperaArquivo', [
                                         'name' => $userAv->name,
@@ -1103,7 +1100,7 @@
                                         'pasta' => 'comprovantesDespesa',
                                         'anexoRelatorio' => $comp->anexoDespesa,
                                         ]) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                 </td>
                             </tr>
                         @endforeach

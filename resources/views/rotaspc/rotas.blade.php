@@ -88,17 +88,74 @@
             <div class="col-4" >
                 <a href="/rotaspc/create/{{ $av->id }}" type="submit" class="btn btn-active btn-primary"><i class="fas fa-plus"></i> ROTA</a>
             </div>
-            <div class="col-4" >
+            {{-- <div class="col-4" >
                 <form action="/avspc/concluir/{{ $av->id }}/sim" enctype="multipart/form-data">
                     <div id="btSalvarRota">
                         <input style="font-size: 16px; width: 180px" type="submit" class="btn btn-active btn-warning" value="Calcular diárias">
                     </div>
                 </form>
-            </div>
+            </div> --}}
         </div>
     </div>
     
     <br>
+</div>
+<div class="col-md-10">
+    <table class="table table-hover table-bordered" style="width: 100%">
+        <thead>
+            <tr>
+                <th style="vertical-align: middle; text-align: center;">Dias</th>
+                <th style="vertical-align: middle; text-align: center;">Trajeto Dia</th>
+                <th style="vertical-align: middle; text-align: center;">Diária Almoço</th>
+                <th style="vertical-align: middle; text-align: center;">Diária Jantar</th>
+                <th style="vertical-align: middle; text-align: center;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                $j=0;
+            @endphp
+            @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
+                        
+                <tr style="vertical-align: middle; text-align: center;">
+                    <td style="vertical-align: middle; text-align: center;">
+                        {{$arrayDiasValores[$j]['dia']}}
+                    </td>
+                    <td style="vertical-align: middle">
+                        @foreach($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
+                            {{-- verifique se $r começa com "ida" --}}
+                            @if(strpos($r, 'Ida:') !== false)
+                                <span>{{str_replace('Ida:', '', $r)}}</span>
+                            @else
+                                <span>{{$r}}</span><br>
+                            @endif
+                        @endforeach
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;"> 
+                        @if($arrayDiasValores[$j]['valorManha'] != 0)
+                            <span><strong>R${{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}</strong></span>
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        @if($arrayDiasValores[$j]['valorTarde'] != 0)
+                            <span><strong>R${{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}</strong></span>
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;"> 
+                        <span><strong>R${{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}</strong></span>
+                    </td>                                
+                </tr>
+
+                @php
+                    $j++;
+                @endphp
+            @endfor
+        </tbody>
+    </table>
 </div>
 <div class="col-md-10">
     @if(count($rotas) > 0 )

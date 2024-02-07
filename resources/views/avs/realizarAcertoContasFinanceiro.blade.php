@@ -412,13 +412,12 @@
                                                         target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                                 </td>
                                                 
-                                                @if($hist->comentario != "Adiantamento realizado - valor inicial" && $hist->comentario != "Acerto de contas")
+                                                @if($hist->comentario != "Documento AV" && $hist->comentario != "Acerto de contas")
                                                     <td>
                                                         <form action="/avs/deletarComprovanteAcertoContas/{{ $hist->id }}/{{ $av->id }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-active btn-danger btn-sm"
-                                                            style="width: 110px" > Remover</button>
+                                                            <button type="submit" class="btn btn-active btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                                                         </form>
                                                     </td>
                                                 @endif

@@ -300,7 +300,7 @@
                                                                     target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                                             </td>
                                                             <td>
-                                                                @if($hist->comentario != "Adiantamento realizado - valor inicial" && $hist->comentario != "Acerto de contas"
+                                                                @if($hist->comentario != "Documento AV" && $hist->comentario != "Acerto de contas"
                                                                 && $hist->comentario != "Comprovante Acerto de Contas Financeiro")
                                                                     
                                                                         <form action="/avs/deletarComprovanteAcertoContasUsuario/{{ $hist->id }}/{{ $av->id }}" method="POST">

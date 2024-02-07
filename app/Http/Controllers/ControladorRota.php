@@ -9,6 +9,8 @@ use App\Models\VeiculoProprio;
 use Illuminate\Http\Request;
 use DateTimeZone;
 use DateTime;
+use DatePeriod;
+use DateInterval;
 
 class ControladorRota extends Controller
 {
@@ -190,7 +192,9 @@ class ControladorRota extends Controller
         $av = Av::findOrFail($id);//Busca a AV com base no ID
         $rotas = $av->rotas;//Busca as rotas da AV
 
-        return view('rotaspc.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user]);
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+
+        return view('rotaspc.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user, 'arrayDiasValores' => $arrayDiasValores]);
     }
 
     public function create($id)//Id da AV
@@ -682,15 +686,11 @@ class ControladorRota extends Controller
             
             //return redirect('/rotaspc/rotas/' . $request->idav )->with('msg', 'Rota editada com sucesso!');
             $avId = $request->idav;
-            $isPc = true;
 
-            // Construir o HTML do formulário oculto
+            // Chame <form action="/avspc/concluir/{{ $av->id }}/sim" enctype="multipart/form-data">
+            // Construir o HTML para o formulário usando apenas GET
             $formHtml = '
-                <form id="redirectForm" action="/avspc/concluir/' . $request->idav . '" method="POST">
-                    <input type="hidden" name="avId" value="' . $avId . '">
-                    <input type="hidden" name="isPc" value="sim">
-                    ' . csrf_field() . '
-                    <input type="hidden" name="_method" value="PUT">
+                <form id="redirectForm" action="/avspc/concluir/' . $avId . '/sim" method="GET" enctype="multipart/form-data">
                 </form>
             ';
 
@@ -856,5 +856,285 @@ class ControladorRota extends Controller
     {
         $rotas = Rota::all();
         return response(json_encode($rotas, JSON_PRETTY_PRINT), 200)->header('Content-Type', 'application/json');
+    }
+
+    public function geraArrayDiasValoresCerto($av){
+
+        $rotas = $av->rotas;
+
+        $dataInicio = date('Y-m-d', strtotime($rotas[0]->dataHoraSaida));
+        $dataFim = date('Y-m-d', strtotime($rotas[sizeof($rotas)-1]->dataHoraChegada));
+                       
+        $arrayDiasValores = [];
+                        
+        $intervaloDatas = new DatePeriod(
+            new DateTime($dataInicio),
+            new DateInterval('P1D'),
+            ($dataInicio != $dataFim ? (new DateTime($dataFim))->modify('+1 day') : (new DateTime($dataFim)))
+        );
+
+        //------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        foreach ($intervaloDatas as $data) {
+            
+            $dia = $data->format('Y-m-d');
+            $valor = 0;
+            $acumulado = 0;
+
+            $rotasDoDia = [];
+            $dataPrimeiraRota = null;
+            $dataUltimaRota = null;
+
+            //ITERE AS ROTAS E VERIFIQUE SE O DIA ESTÁ ENTRE A DATA DE SAÍDA E A DATA DE CHEGADA-----------------------------------
+            for ($i=0; $i < sizeof($rotas) ; $i++) {
+                    $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraSaida)->format('Y-m-d H:i:s');
+                    $dataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraChegada)->format('Y-m-d H:i:s');
+
+                    $dataSaidaFormatado = new DateTime($dataSaida);//Data de saída da rota 1
+                    $dataChegadaFormatado = new DateTime($dataChegada);//Data de chegada da rota 1
+            
+                    //verifique se a data do dia está entre a data de saída e a data de chegada
+                    if($dia >= $dataSaidaFormatado->format('Y-m-d') && $dia <= $dataChegadaFormatado->format('Y-m-d')){
+                        $rotasDoDia[] = $rotas[$i];
+                    }
+
+                    //captura a data inicial da primeira rota
+                    if($i == 0){
+                        $dataPrimeiraRota = $dataSaidaFormatado->format('Y-m-d');
+                    }
+                    
+                    //captura a data final da ultima rota
+                    if($i == sizeof($rotas)-1){
+                        $dataUltimaRota = $dataChegadaFormatado->format('Y-m-d');
+                    }
+            }//----------------------------------------------------------------------------------------------------------------------
+            $arrayRotasDoDia = [];
+            //ISSO TRATA SITUAÇÕES ONDE NÃO HÁ ROTA NO DIA, OU SEJA O DIA ESTÁ NO INTERVALO ENTRE DUAS VIAGENS-----------------------
+            if(sizeof($rotasDoDia) == 0){
+                //procure a rota em que a dataHoraChegada é anterior ao dia atual e atribua a $rota ao dia
+                for ($i=sizeof($rotas)-1; $i >= 0 ; $i--) {
+                    $dataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotas[$i]->dataHoraChegada)->format('Y-m-d H:i:s');
+                    $dataChegadaFormatado = new DateTime($dataChegada);
+                    
+                    if($dia > $dataChegadaFormatado->format('Y-m-d')){
+                        $valor = $this->verificaValorRota($rotas[$i]);
+                        $arrayRotasDoDia[] = $rotas[$i]->cidadeDestinoNacional;
+                        break;
+                    }
+                }
+            }//----------------------------------------------------------------------------------------------------------------------
+
+            $temDiariaManha = false;
+            $temDiariaTarde = false;
+            $valorManha = 0;
+            $valorTarde = 0;
+            
+
+            //AGORA VAMOS ANALISAR OS DIAS QUE POSSUEM ROTAS E CALCULAR O VALOR DA DIÁRIA-----------------------------------------------------------------
+            foreach($rotasDoDia as $indice => $rota){
+
+                //DECLARAÇÃO DE VARIÁVEIS ------------------------------------------------------------------------------------
+
+                //Captura o valor para a diária da rota atual
+                $valor = $this->verificaValorRota($rota);
+
+                //Captura a rota anterior e a próxima rota
+                $rotaAnterior = isset($rotasDoDia[$indice - 1]) ? $rotasDoDia[$indice - 1] : false;
+                $proximaRota = isset($rotasDoDia[$indice + 1]) ? $rotasDoDia[$indice + 1] : null;
+
+                //Captura a data de saída e formata para DateTime
+                $dataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rota->dataHoraSaida)->format('Y-m-d H:i:s');
+                $dataSaidaFormatado = new DateTime($dataSaida);
+
+                //Captura a data de chegada e formata para DateTime
+                $dataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rota->dataHoraChegada)->format('Y-m-d H:i:s');
+                $dataChegadaFormatado = new DateTime($dataChegada);
+
+                //Monta um array com as rotas do dia de IDA
+                if ($dataSaidaFormatado->format('Y-m-d') == $dia) {
+                    $arrayRotasDoDia[] = "Ida: [" . $rota->cidadeOrigemNacional . " (" . $dataSaidaFormatado->format('H:i') . ")" . " >";
+                }
+
+                //Monta um array com as rotas do dia de VOLTA
+                if ($dataChegadaFormatado->format('Y-m-d') == $dia) {
+                    $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "]";
+                }
+
+                //Captura a data de chegada da rota anterior e formata para DateTime
+                if($rotaAnterior != false){
+                    $rotaAnteriorDataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotaAnterior->dataHoraChegada)->format('Y-m-d H:i:s');
+                    $rotaAnteriorDataChegadaFormatado = new DateTime($rotaAnteriorDataChegada);
+                }
+
+                //Captura a data de saída e chegada da próxima rota e formata para DateTime
+                if($proximaRota != false){
+                    
+                    $proximaRotaDataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $proximaRota->dataHoraSaida)->format('Y-m-d H:i:s');
+                    $proximaRotaDataSaidaFormatado = new DateTime($proximaRotaDataSaida);
+
+                    $proximaRotaDataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $proximaRota->dataHoraChegada)->format('Y-m-d H:i:s');
+                    $proximaRotaDataChegadaFormatado = new DateTime($proximaRotaDataChegada);
+                }
+
+                //-----------------------------------------------------------------------------------------------------------
+
+                //APENAS SE COINDICIR O DIA DA ROTA COM O DIAS DO INTERVALO, NOS DIAS INTEMEDIÁRIOS O VALOR DA DIÁRIA É O DA ÚLTIMA ROTA
+                if($dataSaidaFormatado->format('Y-m-d') == $dia){
+                    
+
+                    if($temDiariaManha == false){
+
+                        if( ($dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00")){
+                        //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MAIOR QUE 13:01
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
+                        }
+                        else if($dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "13:00:00"
+                                && $proximaRota == false && $dia != $dataUltimaRota){
+                        //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MENOR QUE 13:00 E NÃO TIVER PRÓXIMA ROTA NO DIA, MAS NÃO ACABOU A VIAGEM
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
+                        }
+                        else if($proximaRota != false && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && 
+                                $dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dia != $dataUltimaRota){
+                        //SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E NÃO FOR A ÚLTIMA ROTA
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
+                        }
+                        else if($dia != $dataPrimeiraRota && $dia != $dataUltimaRota){
+                        //SE O DIA ATUAL NÃO FOR O DIA DA PRIMEIRA ROTA E A HORA DE SAÍDA FOR MAIOR QUE 12:01
+                            $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                            $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
+                        }
+                        else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
+                        //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
+                        }
+                    }
+
+                    if($temDiariaTarde == false){
+                        
+                        if($dataSaidaFormatado->format('H:i:s') >= "13:01:00" && $dataSaidaFormatado->format('H:i:s') < "19:00:00" 
+                            && $dataChegadaFormatado->format('H:i:s') >= "19:01:00" && $dia != $dataUltimaRota){
+                        //SE A HORA DE SAÍDA FOR MAIOR QUE 13:01 E MENOR QUE 19:00 E A HORA DE CHEGADA FOR MAIOR QUE 19:01
+                            $valorTarde = $valor/2;
+                            $temDiariaTarde = true;
+                        }
+                        else if($proximaRota != false && 
+                                ($proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && $proximaRotaDataSaidaFormatado->format('H:i:s') >= "19:01:00" ||
+                                 $proximaRotaDataChegadaFormatado->format('Y-m-d') == $dia && $proximaRotaDataChegadaFormatado->format('H:i:s') >= "19:01:00")){
+                        //SE A PRÓXIMA ROTA FOR NO MESMO DIA E A HORA DE SAÍDA OU CHEGADA DELA FOR MAIOR QUE 19:01
+                            $valorTarde = $valor/2;
+                            $temDiariaTarde = true;
+                        }
+                        else if($proximaRota == false && $dia != $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') < "24:00:00"){
+                        //NÃO TEM MAIS ROTAS NO DIA, SIGNFICA QUE JÁ CHEGOU E VAI FICAR NA CIDADE
+                            $valorTarde = $valor/2;
+                            $temDiariaTarde = true;
+                        }
+                        else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "19:01:00"){
+                        //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE CHEGADA FOR MAIOR QUE 19:01
+                            $valorTarde = $valor/2;
+                            $temDiariaTarde = true;
+                        }
+                    }
+
+                    if($temDiariaManha == true && $temDiariaTarde == true)
+                        $valor = $valorManha + $valorTarde;
+                    else if($temDiariaManha == true && $temDiariaTarde == false)
+                        $valor = $valorManha;
+                    else if($temDiariaManha == false && $temDiariaTarde == true)
+                        $valor = $valorTarde;
+                    else if($temDiariaManha == false && $temDiariaTarde == false)
+                        $valor = 0;
+                }
+
+            }
+            if(sizeof($rotasDoDia) == 0 && $dia != $dataUltimaRota){
+                $valorManha = $valor/2;
+                $valorTarde = $valor/2;
+            }
+            //se o dia for diferente do primeiro e do ultimo
+            if($dia != $dataPrimeiraRota && $dia != $dataUltimaRota && $valorManha == 0 && $valorTarde == 0 && $valor != 0){
+                $valorManha = $valor/2;
+                $valorTarde = $valor/2;
+            }
+            //se for o ultimo dia
+            if($dia == $dataUltimaRota && $valorManha == 0 && $valorTarde == 0 && $valor != 0){
+                $valorManha = $valor/2;
+                $valorTarde = $valor/2;
+            }
+            
+            $diaFormatado = DateTime::createFromFormat('Y-m-d', $dia);
+            $arrayDiasValores[] = [
+                'dia' => $diaFormatado->format('d'),
+                'arrayRotasDoDia' => $arrayRotasDoDia,
+                'valorManha' => $valorManha,
+                'valorTarde' => $valorTarde,
+                'valor' => $valor,
+            ];
+        }
+        //CASO SÓ TENHA UMA ROTA
+        if(sizeof($rotas) == 1){
+            $valor = $this->verificaValorRota($rotas[0]);
+            $arrayRotasDoDia = [];
+            $arrayRotasDoDia[] = " [ " . $rotas[0]->cidadeOrigemNacional . " - " . $rotas[0]->cidadeDestinoNacional . " ] ";
+            $arrayDiasValores[] = [
+                'dia' => DateTime::createFromFormat('Y-m-d H:i:s', $rotas[0]->dataHoraSaida)->format('d'),
+                'arrayRotasDoDia' => $arrayRotasDoDia,
+                'valorManha' => $valor/2,
+                'valorTarde' => $valor/2,
+                'valor' => $valor,
+            ];
+        }
+
+        return $arrayDiasValores;
+    }
+
+    public function verificaValorRota($rota){
+        if($rota->continenteDestinoInternacional == 1 && $rota->paisDestinoInternacional !=30){//América Latina ou Amética Central
+            $valor = 100;
+        }
+        else if($rota->continenteDestinoInternacional == 2){//América do Norte
+            $valor = 150;
+        }
+        else if($rota->continenteDestinoInternacional == 3){//Europa
+            $valor = 180;
+        }
+        else if($rota->continenteDestinoInternacional == 4){//África
+            $valor = 140;
+        }
+        else if($rota->continenteDestinoInternacional == 5){//Ásia
+            $valor = 190;
+        }else if(($rota->cidadeDestinoNacional == "Curitiba" || $rota->cidadeDestinoNacional == "Foz do Iguaçu") ||
+        ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná" && 
+        ($rota->cidadeDestinoInternacional == "Curitiba" || $rota->cidadeDestinoInternacional == "Foz do Iguaçu"))){//Se for Curitiba ou Foz do Iguaçu
+            $valor = 65;
+        }
+        else if($rota->estadoDestinoNacional == "Paraná" || ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná")){//Se for outra cidade do Paraná
+            $valor = 55;
+        }
+        else if($rota->cidadeDestinoNacional == "Brasília" || ($rota->paisDestinoInternacional == 30 && $rota->cidadeDestinoInternacional == "Brasília")){//Se for Brasília
+            $valor = 100;
+        }
+        else{//Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
+            $valor = 80;
+        }
+
+        return $valor;
+    }
+
+    public function buscarRotaAnterior($rota, $rotas){
+        $rotaAnterior = null;
+        for ($i=0; $i < sizeof($rotas) ; $i++) {
+            if($rota->id == $rotas[$i]->id){
+                $rotaAnterior = $rotas[$i-1];
+                break;
+            }
+        }
+        return $rotaAnterior;
     }
 }

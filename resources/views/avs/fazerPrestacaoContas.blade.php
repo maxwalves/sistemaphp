@@ -175,7 +175,7 @@
                         
                                 </div>
                             @endif
-                        
+                        <hr>
                         <br>
                             <div class="row">
                                 <div class="col-3">
@@ -204,6 +204,7 @@
                                     @else
                                         <h1 style="font-size: 24px"><strong>Comprovante de cancelamento: </strong></h1>
                                     @endif
+                                    @if(count($comprovantes) >0)
                                     <table id="minhaTabela5" class="table table-hover table-bordered" style="width:100%">
                                         <thead>
                                             <tr>
@@ -211,7 +212,6 @@
                                                 @if ($av['isCancelado'] == false)
                                                     <th>Valor em reais</th>
                                                 @endif
-                                                <th>Anexo</th>
                                                 <th>Ações</th>
                                             </tr>
                                         </thead>
@@ -223,29 +223,31 @@
                                                         <td> R${{ $comp->valorReais }}</td>
                                                     @endif
                                                     <td>
-                                                        <a href="{{ route('recuperaArquivo', [
-                                                            'name' => $userAv->name,
-                                                            'id' => $av->id,
-                                                            'pasta' => 'comprovantesDespesa',
-                                                            'anexoRelatorio' => $comp->anexoDespesa,
-                                                            ]) }}"
-                                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
-                                                    </td>
-                        
-                                                    <td>
-                                                        <form action="/avs/deletarComprovante/{{ $comp->id }}/{{ $av->id }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-active btn-danger btn-sm"
-                                                                style="width: 110px"> Deletar</button>
-                                                        </form>
+                                                        <div class="d-flex">
+                                                            <a href="{{ route('recuperaArquivo', [
+                                                                'name' => $userAv->name,
+                                                                'id' => $av->id,
+                                                                'pasta' => 'comprovantesDespesa',
+                                                                'anexoRelatorio' => $comp->anexoDespesa,
+                                                                ]) }}"
+                                                                target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
+                                                        
+                                                            <form action="/avs/deletarComprovante/{{ $comp->id }}/{{ $av->id }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-active btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                                            </form>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-
+                                    @else
+                                        <p>Nenhum comprovante adicionado</p>
+                                    @endif
+                                    <hr>
                                     <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
                                     <div class="table-responsive">
                                         <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
@@ -258,12 +260,6 @@
                                                         <th>Data/Hora de chegada</th>
                                                         <th>Hotel?</th>
                                                         <th>Tipo de transporte</th>
-                                                        @foreach ($av->rotas as $rota)
-                                                            @if ($rota->isVeiculoEmpresa == 1)
-                                                                <th>Veículo</th>
-                                                            @break
-                                                        @endif
-                                                    @endforeach
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -336,25 +332,6 @@
                                                         @php
                                                             $achouVeiculo = false;
                                                         @endphp
-                                                        @if ($rota->isVeiculoEmpresa == 1)
-                                                            @foreach ($veiculosParanacidade as $v)
-                                                                @if ($rota->veiculoParanacidade_id == $v->id)
-                                                                    @php
-                                                                        $achouVeiculo = true;
-                                                                        break;
-                                                                    @endphp
-                                                                @endif
-                                                            @endforeach
-                                                            @if ($achouVeiculo == true)
-                                                                <td>
-                                                                    {{ $v->modelo }} ({{ $v->placa }})
-                                                                </td>
-                                                            @else
-                                                                <td>
-                                                                    A definir
-                                                                </td>
-                                                            @endif
-                                                        @endif
                     
                                                     </tr>
                                                 @endforeach
@@ -1142,7 +1119,7 @@
                                             'pasta' => 'comprovantesDespesa',
                                             'anexoRelatorio' => $comp->anexoDespesa,
                                             ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                            target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

@@ -122,8 +122,6 @@
         <div class="container"> 
             <div class="stat-title">Controle de diárias:
             </div>
-                {{-- Mês saída: {{$mesSaidaInicial}} 
-                Mês chegada: {{$mesChegadaFinal}} <br> --}}
                 <table class="table table-hover table-bordered" style="width: 100%">
                     <thead>
                         <tr>
@@ -737,7 +735,9 @@
                         <td>${moment(reserva.dataInicio).format('DD/MM/YYYY HH:mm:ss')}</td>
                         <td>${moment(reserva.dataFim).format('DD/MM/YYYY HH:mm:ss')}</td>
                         <td>${reserva.veiculo.info}</td>
-                        <td>
+                        <td>`;
+                        if(av == {{$av->id}}){
+                            linha += `
                             <div class="d-flex">
                                 <form action="{{ url('reservasVeiculo/') }}/${reserva.id}/${av}" method="POST" style="display: inline-block;">
                                     @csrf
@@ -745,6 +745,9 @@
                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta reserva?')"><i class="fas fa-trash-alt"></i></button>
                                 </form>
                             </div>
+                            `;
+                        }
+                        linha += `
                         </td>
                     </tr>`;
                     tabela.append(linha);
