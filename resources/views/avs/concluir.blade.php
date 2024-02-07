@@ -127,11 +127,11 @@
                 <table class="table table-hover table-bordered" style="width: 100%">
                     <thead>
                         <tr>
-                            <th>Dias</th>
-                            <th>Trajeto Dia</th>
-                            <th>Diária Almoço</th>
-                            <th>Diária Jantar</th>
-                            <th>Total</th>
+                            <th style="vertical-align: middle; text-align: center;">Dias</th>
+                            <th style="vertical-align: middle; text-align: center;">Trajeto Dia</th>
+                            <th style="vertical-align: middle; text-align: center;">Diária Almoço</th>
+                            <th style="vertical-align: middle; text-align: center;">Diária Jantar</th>
+                            <th style="vertical-align: middle; text-align: center;">Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -140,30 +140,37 @@
                         @endphp
                         @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
                                     
-                            <tr>
-                                <td>
+                            <tr style="vertical-align: middle; text-align: center;">
+                                <td style="vertical-align: middle; text-align: center;">
                                     {{$arrayDiasValores[$j]['dia']}}
                                 </td>
-                                <td>
-                                    <span class="badge bg-warning">{{$arrayDiasValores[$j]['rotasDoDia']}}</span>
+                                <td style="vertical-align: middle">
+                                    @foreach($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
+                                        {{-- verifique se $r começa com "ida" --}}
+                                        @if(strpos($r, 'Ida:') !== false)
+                                            <span>{{str_replace('Ida:', '', $r)}}</span>
+                                        @else
+                                            <span>{{$r}}</span><br>
+                                        @endif
+                                    @endforeach
                                 </td>
-                                <td> 
-                                    @if($arrayDiasValores[$j]['valorManha']!=0)
-                                        <span class="badge bg-success">R${{$arrayDiasValores[$j]['valorManha']}}</span>
+                                <td style="vertical-align: middle; text-align: center;"> 
+                                    @if($arrayDiasValores[$j]['valorManha'] != 0)
+                                        <span><strong>R${{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}</strong></span>
                                     @else
                                         -
                                     @endif
                                 </td>
-                                <td>
-                                    @if($arrayDiasValores[$j]['valorTarde']!=0)
-                                        <span class="badge bg-success">R${{$arrayDiasValores[$j]['valorTarde']}}</span>
+                                <td style="vertical-align: middle; text-align: center;">
+                                    @if($arrayDiasValores[$j]['valorTarde'] != 0)
+                                        <span><strong>R${{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}</strong></span>
                                     @else
                                         -
                                     @endif
                                 </td>
-                                <td> 
-                                    <span class="badge bg-success">R${{$arrayDiasValores[$j]['valor']}}</span>
-                                </td>
+                                <td style="vertical-align: middle; text-align: center;"> 
+                                    <span><strong>R${{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}</strong></span>
+                                </td>                                
                             </tr>
 
                             @php
