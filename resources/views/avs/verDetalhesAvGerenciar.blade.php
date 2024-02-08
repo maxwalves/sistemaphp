@@ -10,6 +10,7 @@
 
 <div>
     <a href="/avs/gerenciarAvs" class="btn btn-warning">Voltar</a>
+    <x-adminlte-button label="Detalhar dias" data-toggle="modal" class="bg-blue" data-target="#my-modal-5"/>
 </div>
 
 <br>
@@ -1136,6 +1137,85 @@
 
 </div>
 </div>
+
+<x-adminlte-modal id="my-modal-5" title="Detalhamento" size="xl" theme="teal"
+        icon="fas fa-bell" v-centered static-backdrop scrollable>
+
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <img src="/img/valores.png" style="width: 100%;">
+            </div>
+            <div class="col-md-6 col-12">
+            
+                <table class="table table-hover table-bordered" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th style="vertical-align: middle; text-align: center;">Dias</th>
+                            <th style="vertical-align: middle; text-align: center;">Trajeto Dia</th>
+                            <th style="vertical-align: middle; text-align: center;">Diária Almoço</th>
+                            <th style="vertical-align: middle; text-align: center;">Diária Jantar</th>
+                            <th style="vertical-align: middle; text-align: center;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $j=0;
+                            $cores = ['bg-blue', 'bg-success']; // Adicione mais cores conforme necessário
+                            $corIndex = 0; // Índice inicial
+                        @endphp
+                        
+                        @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
+                            <tr style="vertical-align: middle; text-align: center;">
+                                <td style="vertical-align: middle; text-align: center;">
+                                    {{$arrayDiasValores[$j]['dia']}}
+                                </td>
+                                <td style="vertical-align: middle">
+                                    @foreach($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
+                                        {{-- Verifique se $r começa com "ida" --}}
+                                        @if(strpos($r, 'Ida:') !== false)
+                                            <span class="badge {{$cores[$corIndex]}}">{{str_replace('Ida:', '', $r)}}</span>
+                                        @else
+                                            <span class="badge {{$cores[$corIndex]}}">{{$r}}</span><br>
+                                            @php
+                                                $corIndex = ($corIndex + 1) % count($cores); // Avança para a próxima cor, voltando ao início se necessário
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;"> 
+                                    @if($arrayDiasValores[$j]['valorManha'] != 0)
+                                        <span><strong>R${{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}</strong></span>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;">
+                                    @if($arrayDiasValores[$j]['valorTarde'] != 0)
+                                        <span><strong>R${{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}</strong></span>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;"> 
+                                    <span><strong>R${{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}</strong></span>
+                                </td>
+                            </tr>
+                        
+                            @php
+                                $j++;
+                            @endphp
+                        @endfor
+                    
+                    </tbody>
+                </table>
+            </div>
+            <br><br>
+        </div>
+    <x-slot name="footerSlot">
+        <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal"/>
+    </x-slot>
+
+</x-adminlte-modal>
 
 @stop
 

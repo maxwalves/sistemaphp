@@ -116,12 +116,15 @@
 </x-adminlte-modal>
 
 
-<x-adminlte-modal id="my-modal-5" title="Detalhamento" size="lg" theme="teal"
+<x-adminlte-modal id="my-modal-5" title="Detalhamento" size="xl" theme="teal"
         icon="fas fa-bell" v-centered static-backdrop scrollable>
 
-        <div class="container"> 
-            <div class="stat-title">Controle de diárias:
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <img src="/img/valores.png" style="width: 100%;">
             </div>
+            <div class="col-md-6 col-12">
+            
                 <table class="table table-hover table-bordered" style="width: 100%">
                     <thead>
                         <tr>
@@ -135,20 +138,25 @@
                     <tbody>
                         @php
                             $j=0;
+                            $cores = ['bg-blue', 'bg-success']; // Adicione mais cores conforme necessário
+                            $corIndex = 0; // Índice inicial
                         @endphp
+                        
                         @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
-                                    
                             <tr style="vertical-align: middle; text-align: center;">
                                 <td style="vertical-align: middle; text-align: center;">
                                     {{$arrayDiasValores[$j]['dia']}}
                                 </td>
                                 <td style="vertical-align: middle">
                                     @foreach($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
-                                        {{-- verifique se $r começa com "ida" --}}
+                                        {{-- Verifique se $r começa com "ida" --}}
                                         @if(strpos($r, 'Ida:') !== false)
-                                            <span>{{str_replace('Ida:', '', $r)}}</span>
+                                            <span class="badge {{$cores[$corIndex]}}">{{str_replace('Ida:', '', $r)}}</span>
                                         @else
-                                            <span>{{$r}}</span><br>
+                                            <span class="badge {{$cores[$corIndex]}}">{{$r}}</span><br>
+                                            @php
+                                                $corIndex = ($corIndex + 1) % count($cores); // Avança para a próxima cor, voltando ao início se necessário
+                                            @endphp
                                         @endif
                                     @endforeach
                                 </td>
@@ -168,16 +176,18 @@
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;"> 
                                     <span><strong>R${{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}</strong></span>
-                                </td>                                
+                                </td>
                             </tr>
-
+                        
                             @php
                                 $j++;
                             @endphp
                         @endfor
+                    
                     </tbody>
                 </table>
-                <br><br>
+            </div>
+            <br><br>
         </div>
     <x-slot name="footerSlot">
         <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal"/>

@@ -1550,11 +1550,13 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
 
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+
         return view('avs.verDetalhesAvGerenciar', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
         'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
         'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
         'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 
-        'veiculosParanacidade' => $veiculosParanacidade, 'medicoesFiltradas' => $medicoesFiltradas]);
+        'veiculosParanacidade' => $veiculosParanacidade, 'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores]);
     }
 
     public function gestorAprovarAv(Request $request){
@@ -2948,12 +2950,12 @@ class ControladorAv extends Controller
 
                 //Monta um array com as rotas do dia de IDA
                 if ($dataSaidaFormatado->format('Y-m-d') == $dia) {
-                    $arrayRotasDoDia[] = "Ida: [" . $rota->cidadeOrigemNacional . " (" . $dataSaidaFormatado->format('H:i') . ")" . " >";
+                    $arrayRotasDoDia[] = "Ida: " . $rota->cidadeOrigemNacional . " (" . $dataSaidaFormatado->format('H:i') . ")" . " >";
                 }
 
                 //Monta um array com as rotas do dia de VOLTA
                 if ($dataChegadaFormatado->format('Y-m-d') == $dia) {
-                    $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "]";
+                    $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "";
                 }
 
                 //Captura a data de chegada da rota anterior e formata para DateTime
