@@ -204,7 +204,7 @@ class RelatorioController extends Controller
 
                     if($temDiariaManha == false){
 
-                        if( ($dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00")){
+                        if( ($dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00") && $dia != $dataUltimaRota){
                         //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MAIOR QUE 13:01
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
@@ -230,6 +230,8 @@ class RelatorioController extends Controller
                         }
                         else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
                         //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
+                            $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                            $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
@@ -243,7 +245,7 @@ class RelatorioController extends Controller
                             $valorTarde = $valor/2;
                             $temDiariaTarde = true;
                         }
-                        else if($proximaRota != false && 
+                        else if($proximaRota != false && $dia != $dataUltimaRota &&
                                 ($proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && $proximaRotaDataSaidaFormatado->format('H:i:s') >= "19:01:00" ||
                                  $proximaRotaDataChegadaFormatado->format('Y-m-d') == $dia && $proximaRotaDataChegadaFormatado->format('H:i:s') >= "19:01:00")){
                         //SE A PRÓXIMA ROTA FOR NO MESMO DIA E A HORA DE SAÍDA OU CHEGADA DELA FOR MAIOR QUE 19:01
@@ -257,6 +259,8 @@ class RelatorioController extends Controller
                         }
                         else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "19:01:00"){
                         //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE CHEGADA FOR MAIOR QUE 19:01
+                            $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                            $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
                             $valorTarde = $valor/2;
                             $temDiariaTarde = true;
                         }
