@@ -170,7 +170,7 @@
             
             <div class="col-md-8 offset-md-0" style="font-size: 12px">
                 <h3 style="font-size: 12px"><strong>Detalhamento: </strong></h3>
-                <table id="tabelaRota" class="comBordaSimples" >
+                <table id="tabelaRota" class="comBordaSimples" style="width: 100%">
                     <thead>
                         <tr>
                             <th>Estado de saída</th>
@@ -200,7 +200,7 @@
                 </table>
                 
                 <h3 style="font-size: 12px"><strong>Histórico: </strong></h3>
-                <table id="minhaTabela" class="comBordaSimples">
+                <table id="minhaTabela" class="comBordaSimples" style="width: 100%">
                     <!-- head -->
                     <thead>
                     <tr>
