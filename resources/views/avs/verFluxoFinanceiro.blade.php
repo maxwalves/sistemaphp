@@ -209,6 +209,7 @@
                                                 {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
                                                 {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
                                                 {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
+                                                {{ $rota->isOutroMeioTransporte == 2 ? "Carona" : ""}}
                                             </td>
                                             @php
                                                 $achouVeiculo = false;

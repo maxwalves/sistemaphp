@@ -369,6 +369,8 @@ class ControladorRota extends Controller
             $rota->isAereo = 1;
         } else if($request->get('tipoTransporte')==5){
             $rota->isOutroMeioTransporte = 1;
+        } else if($request->get('tipoTransporte')==6){
+            $rota->isOutroMeioTransporte = 2;
         }
         
         $mensagens = [
@@ -426,6 +428,8 @@ class ControladorRota extends Controller
                     $rota2->isAereo = 1;
                 } else if($request->get('tipoTransporte')==5){
                     $rota2->isOutroMeioTransporte = 1;
+                } else if($request->get('tipoTransporte')==6){
+                    $rota2->isOutroMeioTransporte = 2;
                 }
 
                 $rota2->av_id = $request->idav;
@@ -672,6 +676,13 @@ class ControladorRota extends Controller
             $dados["isVeiculoEmpresa"] = 0;
             $dados["isAereo"] = 0;
             $dados["isOutroMeioTransporte"] = 1;
+        } else if($request->get('tipoTransporte')==6){
+            $dados["isOnibusLeito"] = 0;
+            $dados["isOnibusConvencional"] = 0;
+            $dados["isVeiculoProprio"] = 0;
+            $dados["isVeiculoEmpresa"] = 0;
+            $dados["isAereo"] = 0;
+            $dados["isOutroMeioTransporte"] = 2;
         }
 
         $mensagens = [

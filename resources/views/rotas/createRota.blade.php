@@ -131,6 +131,7 @@
                                 {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
                                 {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
                                 {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
+                                {{ $rota->isOutroMeioTransporte == 2 ? "Carona" : ""}}
                             </td>
                             @php
                                 $achouVeiculo = false;
@@ -589,6 +590,8 @@
                                         <option value="3" name="3" {{ $ultimaRotaSetada->isVeiculoEmpresa == "1" ? "selected='selected'" : ""}}> Veículo do Paranacidade</option>
                                         <option value="4" name="4" {{ $ultimaRotaSetada->isAereo == "1" ? "selected='selected'" : ""}}> Avião</option>
                                         <option value="5" name="5" {{ $ultimaRotaSetada->isOutroMeioTransporte == "1" ? "selected='selected'" : ""}}>Outros</option>
+                                        <option value="6" name="6" {{ $ultimaRotaSetada->isOutroMeioTransporte == "2" ? "selected='selected'" : ""}}>Carona</option>
+
                                     @else
                                         <option value="0" name="0"> Onibus Leito</option>
                                         <option value="1" name="1" > Onibus convencional</option>
@@ -596,6 +599,7 @@
                                         <option value="3" name="3" > Veículo do Paranacidade</option>
                                         <option value="4" name="4" > Avião</option>
                                         <option value="5" name="5" >Outros</option>
+                                        <option value="6" name="6" >Carona</option>
                                     @endif
                                 </select>
             

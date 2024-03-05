@@ -365,6 +365,9 @@
                                     <option value="2" name="2" {{ $rota->isVeiculoProprio == "1" ? "selected='selected'" : ""}}> Veículo próprio</option>
                                     <option value="3" name="3" {{ $rota->isVeiculoEmpresa == "1" ? "selected='selected'" : ""}}> Veículo do Paranacidade</option>
                                     <option value="4" name="4" {{ $rota->isAereo == "1" ? "selected='selected'" : ""}}> Avião</option>
+                                    <option value="5" name="5" {{ $rota->isOutroMeioTransporte == "1" ? "selected='selected'" : ""}}>Outros</option>
+                                    <option value="6" name="6" {{ $rota->isOutroMeioTransporte == "2" ? "selected='selected'" : ""}}>Carona</option>
+
                                 </select>
             
                                 @if ($errors->has('tipoTransporte'))

@@ -4141,11 +4141,22 @@ class ControladorAv extends Controller
         foreach($users as $uf){//Verifica todos os usuários
             if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
-                    if(($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
-                    && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==true 
-                    && $avAtual["isGestorAprovouPC"]==true&& $avAtual["isAcertoContasRealizado"]==false && $avAtual["isCancelado"]==false) || 
-                    ($avAtual["isCancelado"]==true && $avAtual["isAprovadoFinanceiro"]==true && $avAtual["isPrestacaoContasRealizada"] == true 
-                    && $avAtual["isFinanceiroAprovouPC"] == true && $avAtual["isGestorAprovouPC"] == true && $avAtual["isAcertoContasRealizado"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
+                    if(($avAtual["isEnviadoUsuario"]==1 
+                    && $avAtual["isAprovadoGestor"]==true 
+                    && $avAtual["isRealizadoReserva"]==true 
+                    && $avAtual["isAprovadoFinanceiro"]==true
+                    && $avAtual["isPrestacaoContasRealizada"]==true 
+                    && $avAtual["isFinanceiroAprovouPC"]==true 
+                    && $avAtual["isGestorAprovouPC"]==true
+                    && $avAtual["isAcertoContasRealizado"]==false 
+                    && $avAtual["isCancelado"]==false) || 
+                    
+                    ($avAtual["isCancelado"]==true 
+                    && $avAtual["isAprovadoFinanceiro"]==true 
+                    && $avAtual["isPrestacaoContasRealizada"] == true 
+                    && $avAtual["isFinanceiroAprovouPC"] == true 
+                    && $avAtual["isGestorAprovouPC"] == true 
+                    && $avAtual["isAcertoContasRealizado"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
                         
                         array_push($avsFiltradas, $avAtual);
                     }

@@ -389,6 +389,27 @@
                                 <div class="col-3">
                                     <x-adminlte-button label="Adicionar" data-toggle="modal" data-target="#modalEnviarArquivo" class="bg-teal"/>
                                 </div>
+
+                                <br>
+                                @php
+                                    $usuarioMandouDevolucao = false;
+                                @endphp
+                                @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0)
+                                    @foreach($historicoPc as $hist)
+                                        @php
+                                            if($hist->comentario == "Comprovante Devolução Usuário"){
+                                                $usuarioMandouDevolucao = true;
+                                            }
+                                        @endphp
+                                    @endforeach
+
+                                    @if($usuarioMandouDevolucao == true && $av->status != "Aguardando envio de comprovante de devolução pelo usuário")
+                                        <h5 style="color:green"><strong>Usuário já enviou o comprovante de devolução, pode analisar e finalizar o acerto de contas</strong></h5>
+                                    @else
+                                        <h5 style="color:red"><strong>Usuário ainda não enviou o comprovante de devolução, aguarde o envio para finalizar o acerto de contas</strong></h5>
+                                    @endif
+                                @endif
+                                
                                 <br>
                                 <table id="minhaTabela6" class="table table-hover table-bordered" style="width:100%">
                                     <thead>
@@ -425,55 +446,58 @@
                                     </tbody>
                                 </table>
                                 
-                                <h1 style="font-size: 24px; padding-left: 10px"><strong>Finalizar Acerto de Contas: </strong></h1>
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <form action="/avs/financeiroRealizaAcertoContas" method="POST" enctype="multipart/form-data">
-                                                @csrf
-                                                @method('PUT')
-                                                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                                                    <label for="comentario">Enviar para validação do usuário: </label>
-                                                    <br>
-                                                    
-                                                    <div class="input-group mb-3">
-                                                        <textarea type="text" class="textarea textarea-bordered h-24" 
-                                                        name="comentario" style="width: 200px"
-                                                        id="comentario" placeholder="Comentário"></textarea>
-            
-                                                        <span class="input-group-append">
-                                                            <button type="submit" class="btn btn-active btn-success">Finalizar</button>
-                                                        </span>
-                                                    </div>
-                                            </form>
-                                        </div>
-                                        {{-- <div class="col-md-6">
-                                            <form action="/avs/financeiroReprovaPrestacaoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
-                                                @csrf
-                                                @method('PUT')
-                                                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                                                    <label for="comentario">Voltar para a prestação de contas do usuário: </label>
-                                                    <br>
-                                                    
-                                                    <div class="input-group mb-3">
-                                                        <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
+                                @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0 && $usuarioMandouDevolucao == true && $av->status != "Aguardando envio de comprovante de devolução pelo usuário"
+                                || ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) <= 0 && $usuarioMandouDevolucao == false))
+                                    <h1 style="font-size: 24px; padding-left: 10px"><strong>Finalizar Acerto de Contas: </strong></h1>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <form action="/avs/financeiroRealizaAcertoContas" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('PUT')
+                                                        <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                                                        <label for="comentario">Enviar para validação do usuário: </label>
+                                                        <br>
+                                                        
+                                                        <div class="input-group mb-3">
+                                                            <textarea type="text" class="textarea textarea-bordered h-24" 
                                                             name="comentario" style="width: 200px"
                                                             id="comentario" placeholder="Comentário"></textarea>
-            
-                                                        <span class="input-group-append">
-                                                            <button type="submit" class="btn btn-active btn-danger">Reprovar PC</button>
-                                                        </span>
-                                                    </div>
+                
+                                                            <span class="input-group-append">
+                                                                <button type="submit" class="btn btn-active btn-success">Finalizar</button>
+                                                            </span>
+                                                        </div>
+                                                </form>
+                                            </div>
+                                            {{-- <div class="col-md-6">
+                                                <form action="/avs/financeiroReprovaPrestacaoContas" method="POST" enctype="multipart/form-data" style="padding-left: 10px">
+                                                    @csrf
+                                                    @method('PUT')
+                                                        <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                                                        <label for="comentario">Voltar para a prestação de contas do usuário: </label>
+                                                        <br>
+                                                        
+                                                        <div class="input-group mb-3">
+                                                            <textarea type="text" class="textarea textarea-bordered h-24 {{ $errors->has('comentario') ? 'is-invalid' :''}}" 
+                                                                name="comentario" style="width: 200px"
+                                                                id="comentario" placeholder="Comentário"></textarea>
+                
+                                                            <span class="input-group-append">
+                                                                <button type="submit" class="btn btn-active btn-danger">Reprovar PC</button>
+                                                            </span>
+                                                        </div>
 
-                                                    @if ($errors->has('comentario'))
-                                                            <div class="invalid-feedback">
-                                                                {{ $errors->first('comentario') }}
-                                                            </div>
-                                                    @endif
-                                            </form>
-                                        </div> --}}
+                                                        @if ($errors->has('comentario'))
+                                                                <div class="invalid-feedback">
+                                                                    {{ $errors->first('comentario') }}
+                                                                </div>
+                                                        @endif
+                                                </form>
+                                            </div> --}}
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             </div>
                         </div>
                     
@@ -924,6 +948,7 @@
                                     {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
                                     {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
                                     {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
+                                    {{ $rota->isOutroMeioTransporte == 2 ? "Carona" : ""}}
                                 </td>
                                 @php
                                     $achouVeiculo = false;
