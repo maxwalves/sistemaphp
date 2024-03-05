@@ -109,6 +109,19 @@
                             title="Validar PC"><i class="fas fa-thumbs-up"></i></a>
                         @endif
                     @endif
+                    @if(($av->isEnviadoUsuario==1 
+                            && $av->isAprovadoGestor ==1 
+                            && $av->isRealizadoReserva ==1 
+                            && $av->isAprovadoFinanceiro ==1
+                            && $av->isPrestacaoContasRealizada == 1
+                            && $av->isFinanceiroAprovouPC == 1
+                            && $av->isGestorAprovouPC == 1
+                            && $av->status == "Aguardando envio de comprovante de devolução pelo usuário")
+                            )
+                        <a href="/avs/verPaginaDevolucaoPc/{{ $av->id }}" class="btn btn-danger btn-sm"
+                            title="Devolver valor não utilizado"><i class="fas fa-dollar-sign"></i></i></a>
+
+                    @endif
                 </td>
             </tr>
             @endforeach

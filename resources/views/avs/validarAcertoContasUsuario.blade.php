@@ -282,7 +282,6 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Descrição</th>
-                                                        <th>Anexo</th>
                                                         <th>Ações</th>
                                                     </tr>
                                                 </thead>
@@ -297,17 +296,15 @@
                                                                     'pasta' => 'resumo',
                                                                     'anexoRelatorio' => $hist->anexoRelatorio,
                                                                     ]) }}"
-                                                                    target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
-                                                            </td>
-                                                            <td>
+                                                                    target="_blank" class="btn btn-active btn-success btn-sm d-inline"><i class="fas fa-paperclip"></i></a>
+
                                                                 @if($hist->comentario != "Documento AV" && $hist->comentario != "Acerto de contas"
-                                                                && $hist->comentario != "Comprovante Acerto de Contas Financeiro")
+                                                                && $hist->comentario != "Comprovante Acerto de Contas Financeiro" && $hist->comentario != "Comprovante Devolução Usuário")
                                                                     
-                                                                        <form action="/avs/deletarComprovanteAcertoContasUsuario/{{ $hist->id }}/{{ $av->id }}" method="POST">
+                                                                        <form action="/avs/deletarComprovanteAcertoContasUsuario/{{ $hist->id }}/{{ $av->id }}" method="POST" class="d-inline">
                                                                             @csrf
                                                                             @method('DELETE')
-                                                                            <button type="submit" class="btn btn-active btn-danger btn-sm"
-                                                                            style="width: 110px" > Deletar</button>
+                                                                            <button type="submit" class="btn btn-active btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                                                                         </form>
                                                                     
                                                                 @endif
@@ -336,7 +333,7 @@
                                                                     $av->qtdKmVeiculoProprio * 0.49 +
                                                                     ($valorRecebido->valorExtraReais - $valorAcertoContasReal) <
                                                                     0)
-                                                                Valor que o usuário deve receber em reais
+                                                                Valor que o usuário deve ter recebido em reais
                                                             @endif
                                                             @if (
                                                                 $valorRecebido->valorReais -
@@ -344,14 +341,14 @@
                                                                     $av->qtdKmVeiculoProprio * 0.49 +
                                                                     ($valorRecebido->valorExtraReais - $valorAcertoContasReal) >
                                                                     0)
-                                                                Valor que o usuário deve pagar em reais
+                                                                Valor que o usuário deve ter pago em reais
                                                             @endif
                                                         @else
                                                             @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) < 0)
-                                                                Valor que o usuário deve receber em reais
+                                                                Valor que o usuário deve ter recebido em reais
                                                             @endif
                                                             @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0)
-                                                                Valor que o usuário deve pagar em reais
+                                                                Valor que o usuário deve ter pago em reais
                                                             @endif
                                                         @endif
                                                     </p>

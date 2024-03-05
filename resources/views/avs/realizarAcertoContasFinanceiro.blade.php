@@ -384,7 +384,7 @@
                                 @endif
 
                                 
-                                <h1 style="font-size: 24px"><strong>Pagamento inicial e pagamento acerto de contas:</strong></h1>
+                                <h1 style="font-size: 24px"><strong>Documentos relacionados:</strong></h1>
                                 <h5 style="color: red">Insira o comprovante de pagamento do acerto de contas caso necessário:</h5><br>
                                 <div class="col-3">
                                     <x-adminlte-button label="Adicionar" data-toggle="modal" data-target="#modalEnviarArquivo" class="bg-teal"/>
@@ -394,7 +394,6 @@
                                     <thead>
                                         <tr>
                                             <th>Descrição</th>
-                                            <th>Anexo</th>
                                             <th>Ações</th>
                                         </tr>
                                     </thead>
@@ -409,18 +408,18 @@
                                                         'pasta' => 'resumo',
                                                         'anexoRelatorio' => $hist->anexoRelatorio,
                                                         ]) }}"
-                                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
-                                                </td>
-                                                
-                                                @if($hist->comentario != "Documento AV" && $hist->comentario != "Acerto de contas")
-                                                    <td>
-                                                        <form action="/avs/deletarComprovanteAcertoContas/{{ $hist->id }}/{{ $av->id }}" method="POST">
+                                                        target="_blank" class="btn btn-active btn-success btn-sm d-inline"><i class="fas fa-paperclip"></i></a>
+
+                                                    @if($hist->comentario != "Documento AV" && $hist->comentario != "Acerto de contas" && $hist->comentario != "Comprovante Devolução Usuário")
+                                                        
+                                                        <form action="/avs/deletarComprovanteAcertoContas/{{ $hist->id }}/{{ $av->id }}" method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-active btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                                                         </form>
-                                                    </td>
-                                                @endif
+                                                        
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -43,6 +43,8 @@ use App\Mail\EnvioGestorToUsuarioReprovarAv;
 use App\Mail\EnvioGestorToFinanceiro;
 use App\Mail\EnvioSecretariaToUsuario;
 use App\Mail\EnvioGestorToUsuarioViagemInternacional;
+use App\Mail\EnvioGestorToUsuarioDevolverDespesas;
+use App\Mail\EnvioUsuarioToFinanceiroDevolucao;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Permission;
 
@@ -1106,6 +1108,24 @@ class ControladorAv extends Controller
         return redirect('/avs/validarAcertoContasUsuario/' . $av->id)->with('msg', 'Comprovante excluído com sucesso!');
     }
 
+    public function deletarComprovanteDevolucaoUsuario($id, $avId)
+    {
+        $av = Av::findOrFail($avId);
+        $userAv = User::findOrFail($av->user_id);
+        $historicoPc = HistoricoPc::findOrFail($id);
+
+        $fileName = $historicoPc->anexoRelatorio;
+        
+        $filePath = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/' . $fileName;
+        
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $historicoPc->delete();
+        return redirect('/avs/verPaginaDevolucaoPc/' . $av->id)->with('msg', 'Comprovante excluído com sucesso!');
+    }
+
 
     public function gravarAdiantamento(Request $request){
         
@@ -1236,6 +1256,36 @@ class ControladorAv extends Controller
         }
 
         return redirect('/avs/validarAcertoContasUsuario/' . $av->id)->with('msg', 'Comprovante salvo com sucesso!');
+    }
+
+    public function gravarComprovanteDevolucaoUsuario(Request $request){
+        
+        $av = Av::findOrFail($request->get('avId'));
+        $userAv = User::findOrFail($av->user_id);
+        $user = auth()->user();
+        $users = User::all();
+        $historicoPc = new HistoricoPc();
+        
+        if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
+        {
+            $requestFile = $request->arquivo1;
+
+            $extension = $requestFile->extension();
+
+            $fileName = md5($requestFile->getClientOriginalName() . strtotime("now")) . "." . $extension;
+            
+            $requestFile->move('/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/resumo' . '/', $fileName);
+
+            $historicoPc->anexoRelatorio = $fileName;
+            $historicoPc->av_id = $av->id;
+            $historicoPc->ocorrencia = "Usuário realizou devolução de valores";
+            $historicoPc->comentario = "Comprovante Devolução Usuário";
+            $timezone = new DateTimeZone('America/Sao_Paulo');
+            $historicoPc->dataOcorrencia = new DateTime('now', $timezone);
+            $historicoPc->save();
+        }
+
+        return redirect('/avs/verPaginaDevolucaoPc/' . $av->id)->with('msg', 'Comprovante salvo com sucesso!');
     }
 
     public function realizarReservas($id){
@@ -1467,6 +1517,97 @@ class ControladorAv extends Controller
         }
 
         return view('avs.verDetalhesPc', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
+        'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
+        'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
+        'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade,
+        'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas]);
+    }
+
+    public function verPaginaDevolucaoPc($id){
+
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $veiculosParanacidade = VeiculoParanacidade::all();
+        $users = User::all();
+        $historicos = [];
+        $anexos = [];
+        $user = auth()->user();
+        $usersFiltrados = [];
+        $possoEditar = false;
+        $veiculosProprios = $user->veiculosProprios;
+        $anexosFinanceiro = [];
+        $anexosRotas = [];
+        $comprovantesAll = ComprovanteDespesa::all();
+        $comprovantes = [];
+        $valorAcertoContasReal = 0;
+        $valorAcertoContasDolar = 0;
+        $isInternacional = false;
+
+        $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
+        $historicoPcAll = HistoricoPc::all();
+        $historicoPc = [];
+        $valorRecebido = null;
+
+        $medicoes = Medicao::all();
+        $medicoesFiltradas = [];
+
+        foreach($medicoes as $medicao){
+            if($medicao->av_id == $av->id){
+                array_push($medicoesFiltradas, $medicao); 
+            }
+        }
+
+        foreach($comprovantesAll as $comp){
+            if($comp->av_id == $av->id){
+                array_push($comprovantes, $comp);
+            }
+        }
+
+        foreach($comprovantes as $compFiltrado){
+            $valorAcertoContasReal += $compFiltrado->valorReais;
+            $valorAcertoContasDolar += $compFiltrado->valorDolar;
+        }
+        
+        foreach($historicoPcAll as $hisPc){
+            if($hisPc->av_id == $av->id){
+                array_push($historicoPc, $hisPc);
+            }
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
+                $valorRecebido = $hisPc;
+            }
+        }
+        if($valorRecebido == null){
+            $valorRecebido = new HistoricoPc();
+            $valorRecebido->valorReais = 0;
+            $valorRecebido->valorExtraReais = 0;
+            $valorRecebido->valorDolar = 0;
+            $valorRecebido->valorExtraDolar = 0;
+        }
+
+        foreach($av->rotas as $r){//Verifica todas as rotas da AV
+            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+            }
+        }
+        
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        foreach($av->anexosFinanceiro as $anexF){
+                array_push($anexosFinanceiro, $anexF);
+        }
+
+        foreach($av->rotas as $r){
+            if($r->isViagemInternacional == true){
+                $isInternacional = true;
+            }
+        }
+
+        return view('avs.verPaginaDevolucaoPc', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
         'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
         'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
         'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade,
@@ -2340,6 +2481,48 @@ class ControladorAv extends Controller
         return redirect('/avs/avs')->with('msg', 'Acerto de contas aprovado pelo Usuário!');
     }
 
+    public function enviarComprovanteDevolucaoParaCFI(Request $request){
+
+        $user = auth()->user();
+        $av = Av::findOrFail($request->get('id'));
+
+        $dados = [];
+
+        $historico = new Historico();
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $historico->dataOcorrencia = new DateTime('now', $timezone);
+        $historico->tipoOcorrencia = "Devolução enviada pelo usuário";
+        $historico->comentario = $request->get('comentario');
+        $historico->perfilDonoComentario = "Usuário";
+        $historico->usuario_id = $av->user_id;
+        $historico->usuario_comentario_id = $user->id;
+        $historico->av_id = $av->id;
+        
+
+        $dados = array(
+            "status" => "Devolução enviada pelo usuário - Aguardando Acerto de Contas do Financeiro"
+        );
+
+        Av::findOrFail($av->id)->update($dados);
+        $historico->save();
+
+        //enviar para todos do financeiro um e-mail avisando que o usuário enviou a devolução
+        $permission = Permission::where('name', 'aprov avs financeiro')->first();
+
+        $users = User::all();
+        foreach($users as $u){
+            try {
+                if($u->hasPermissionTo($permission)){
+                    Mail::to($u->username)
+                    ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u->id));
+                }
+            } catch (\Throwable $th) {
+            }
+        }
+
+        return redirect('/avs/avs')->with('msg', 'Devolução cadastrada!');
+    }
+
     public function usuarioReprovarAcertoContas(Request $request){
 
         $user = auth()->user();
@@ -2438,6 +2621,44 @@ class ControladorAv extends Controller
 
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
+        $userAv = User::findOrFail($av->user_id);
+
+        //---------AQUI VAI SER RESGATADO O VALOR EXTRA UTILIZADO E VERIRICAR SE O USUÁRIO DEVE RECEBER OU PAGAR
+        $historicoPcAll = HistoricoPc::all();
+
+        foreach($historicoPcAll as $hisPc){
+
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
+                $valorRecebido = $hisPc;
+            }
+        }
+        if($valorRecebido == null){
+            $valorRecebido = new HistoricoPc();
+            $valorRecebido->valorReais = 0;
+            $valorRecebido->valorExtraReais = 0;
+        }
+
+        $comprovantesAll = ComprovanteDespesa::all();
+        $comprovantes = [];
+
+        $valorAcertoContasReal = 0;
+
+        foreach($comprovantesAll as $comp){
+            if($comp->av_id == $av->id){
+                array_push($comprovantes, $comp);
+            }
+        }
+        foreach($comprovantes as $compFiltrado){
+            $valorAcertoContasReal += $compFiltrado->valorReais;
+        }
+        $resultadoUsuarioReceber = 0;
+        $resultadoUsuarioPagar = 0;
+
+        if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0){
+            //Valor que o usuário deve pagar em reais
+            $resultadoUsuarioPagar = $valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal);
+        }
+        //----------------------------------------------------------------------------------------------------------
 
         $dados = [];
 
@@ -2457,6 +2678,12 @@ class ControladorAv extends Controller
                 "status" => "AV Cancelada - Aguardando acerto de contas pelo financeiro"
             );
         }
+        else if($resultadoUsuarioPagar > 0){
+            $dados = array(
+                "isGestorAprovouPC" => 1,
+                "status" => "Aguardando envio de comprovante de devolução pelo usuário"
+            );
+        }
         else{
             $dados = array(
                 "isGestorAprovouPC" => 1,
@@ -2464,24 +2691,29 @@ class ControladorAv extends Controller
             );
         }
         
-
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
 
         $permission = Permission::where('name', 'aprov avs financeiro')->first();
 
-        $users = User::all();
-        foreach($users as $u){
-            try {
-                if($u->hasPermissionTo($permission)){
-                    Mail::to($u->username)
-                    ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u->id));
+        if($resultadoUsuarioPagar > 0){
+
+            Mail::to($userAv->username)
+            ->send(new EnvioGestorToUsuarioDevolverDespesas($userAv->id, $av->id));
+        }
+        else{
+            $users = User::all();
+            foreach($users as $u){
+                try {
+                    if($u->hasPermissionTo($permission)){
+                        Mail::to($u->username)
+                        ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u->id));
+                    }
+                } catch (\Throwable $th) {
                 }
-            } catch (\Throwable $th) {
             }
         }
-
-
+        
         return redirect('/avs/autPcGestor')->with('msg', 'Prestação de contas aprovado pelo Gestor!');
     }
 

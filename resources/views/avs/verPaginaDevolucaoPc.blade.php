@@ -1,9 +1,16 @@
 @extends('adminlte::page')
 
-@section('title', 'Fazer prestação de contas')
+@section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Fazer prestação de contas</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Página de devolução de valores não utilizados na viagem</h1>
+        </div>
+        <div class="col-md-4">
+            <a href="/avs/prestacaoContasUsuario" type="submit" class="btn btn-warning btn-ghost"><i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
 @stop
 
 @section('content')
@@ -75,435 +82,443 @@
                 <div class="tab-content" id="custom-tabs-three-tabContent">
                     <div class="tab-pane fade active show" id="custom-tabs-three-home" role="tabpanel"
                         aria-labelledby="custom-tabs-three-home-tab">
-                        <div>
 
-                            <div class="containerAcertoContas">
-                                <div class="box box-90">
-                                    <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong>
-                                        {{ $av->id }}</h1>
-                                    <h1 style="font-size: 24px"><strong>Status atual:</strong> {{ $av->status }}</h1>
-                                    <p class="av-owner" style="font-size: 20px"><ion-icon
-                                            name="chevron-forward-circle-outline">
-                                        </ion-icon> <strong>Nome do usuário: </strong>
-                                        @foreach ($users as $u)
-                                            @if ($u->id == $av->user_id)
-                                                {{ $u->name }}
-                                            @endif
-                                        @endforeach
-                                    </p>
-                                    <p class="av-owner" style="font-size: 20px">
-                                        <strong>Objetivo: </strong>
-                                        @for ($i = 0; $i < count($objetivos); $i++)
-                                            @if ($av->objetivo_id == $objetivos[$i]->id)
-                                                {{ $objetivos[$i]->nomeObjetivo }}
-                                            @endif
-                                        @endfor
-                                    </p>
-                                </div>
+
+                        <div class="containerAcertoContas">
+                            <div class="box box-90">
+                                <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong>
+                                    {{ $av->id }}</h1>
+                                <h1 style="font-size: 24px"><strong>Status atual:</strong> {{ $av->status }}</h1>
+                                <p class="av-owner" style="font-size: 20px"><ion-icon
+                                        name="chevron-forward-circle-outline">
+                                    </ion-icon> <strong>Nome do usuário: </strong>
+                                    @foreach ($users as $u)
+                                        @if ($u->id == $av->user_id)
+                                            {{ $u->name }}
+                                        @endif
+                                    @endforeach
+                                </p>
+                                <p class="av-owner" style="font-size: 20px"><ion-icon
+                                        name="chevron-forward-circle-outline">
+                                    </ion-icon> <strong>Objetivo: </strong>
+                                    @for ($i = 0; $i < count($objetivos); $i++)
+                                        @if ($av->objetivo_id == $objetivos[$i]->id)
+                                            {{ $objetivos[$i]->nomeObjetivo }}
+                                        @endif
+                                    @endfor
+                                </p>
                             </div>
                         </div>
 
                         <div>
                             <div class="containerAcertoContas">
-                                
-                                <div class="box box-40">
-                                    <div class="row">
-
-                                        <div class="col-12 col-md-6">
-                                            <h1 style="font-size: 24px"><strong>AV:</strong></h1>
-
-                                            <table id="minhaTabela6" class="table table-hover table-bordered"
-                                                style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Descrição</th>
-                                                        <th>Anexo</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($historicoPc as $hist)
-                                                        <tr>
-                                                            <td> {{ $hist->comentario }} </td>
-                                                            @if ($hist->comentario == 'AV Internacional gerada')
-                                                                <td> <a href="{{ route('recuperaArquivo', [
-                                                                    'name' => $userAv->name,
-                                                                    'id' => $av->id,
-                                                                    'pasta' => 'internacional',
-                                                                    'anexoRelatorio' => $hist->anexoRelatorio,
-                                                                    ]) }}"
-                                                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir
-                                                                        documento</a> </td>
-                                                            @else
-                                                                <td>
-                                                                    <a href="{{ route('recuperaArquivo', [
-                                                                        'name' => $userAv->name,
-                                                                        'id' => $av->id,
-                                                                        'pasta' => 'resumo',
-                                                                        'anexoRelatorio' => $hist->anexoRelatorio,
-                                                                    ]) }}" target="_blank" class="btn btn-active btn-success btn-sm">
-                                                                        <i class="fas fa-eye"></i>
-                                                                    </a>
-                                                                </td>
-                                                            @endif
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            @if ($av->horasExtras != null || $av->minutosExtras != null || $av->justificativaHorasExtras != null)
-                                                <div style="border: 1px solid black;; color: black; width: 50%; padding-left: 10%">
-                                                    <strong style="color: red">Foram realizadas horas extras:</strong> <br>
-                                                    <strong>Horas:</strong> {{ $av->horasExtras }} <br>
-                                                    <strong>Minutos:</strong> {{ $av->minutosExtras }} <br>
-                                                    <strong>Justificativa:</strong> {{ $av->justificativaHorasExtras }} <br>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                        </div>
-
-                        <div >
-
-                            @if ($av['isCancelado'] == false)
-                                <div>
-                                    <a href="/avspc/edit/{{ $av->id }}" class="btn btn-success btn-sm"><i class="fas fa-edit"></i> AV</a>
-                                    <a href="/rotaspc/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i> ROTAS</a>
+                                @if ($av->isPrestacaoContasRealizada == 1)
+                                    <div class="box box-40">
+                                        <div class="col-md-12 offset-md-0">
+                                            <h1 style="font-size: 24px"><strong>Resumo: </strong></h1>
+                                            <br>
+                                            <p><strong> <span style="color: red">A:</span> Recebido antes da viagem</strong></p>
+                                            <div class="callout callout-info">
                         
-                                </div>
-                            @endif
-                        <hr>
-                        <br>
-                            <div class="row">
-                                <div class="col-3">
-                                    <x-adminlte-button label="Adicionar" data-toggle="modal" data-target="#modalAdd" class="bg-teal"/>
-                                </div>
-                                @if ($av->isCancelado == true)
-                                    <div class="col-8">
-                                        <div class="alert alert-warning">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                            </svg>
-                                            <span>A AV está cancelada. Justifique o cancelamento no campo de comentário. Se necessário, anexo um
-                                                arquivo!</span>
+                                                <div class="stat">
+                                                    <div class="stat-title">Valor em Reais</div>
+                                                    <div class="stat-value text-primary">R$ {{ $valorRecebido->valorReais }}</div>
+                                                </div>
+                                                <div class="stat">
+                                                    <div class="stat-title">Valor extra em Reais</div>
+                                                    <div class="stat-value text-primary">R$
+                                                        {{ $valorRecebido->valorExtraReais != null ? $valorRecebido->valorExtraReais : 0 }}
+                                                    </div>
+                                                </div>
+                                                @if ($av->valorDeducaoReais > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title">Dedução em Reais</div>
+                                                        <div class="stat-value text-primary">- R$ {{ $av->valorDeducaoReais }}</div>
+                                                    </div>
+                                                @endif
+                                                @if ($av->valorDeducaoDolar > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title">Dedução em dólar</div>
+                                                        <div class="stat-value text-primary">$ {{ $av->valorDeducaoDolar }}</div>
+                                                    </div>
+                                                @endif
+                                                @if ($valorRecebido->valorDolar > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title">Valor em dólar</div>
+                                                        <div class="stat-value text-primary">$ {{ $valorRecebido->valorDolar }}</div>
+                                                    </div>
+                                                @endif
+                                                @if ($valorRecebido->valorExtraDolar > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title">Valor extra em dólar</div>
+                                                        <div class="stat-value text-primary">$ {{ $valorRecebido->valorExtraDolar }}</div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="callout callout-success">
+                                                <div class="stat">
+                                                    <div class="stat-title">Resultado em Reais</div>
+                                                    <div class="stat-value text-primary">R$
+                                                        {{ $valorRecebido->valorReais + $valorRecebido->valorExtraReais - $av->valorDeducaoReais }}
+                                                    </div>
+                                                </div>
+                                                @if ($valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title">Resultado em Dólar</div>
+                                                        <div class="stat-value text-primary">R$
+                                                            {{ $valorRecebido->valorDolar + $valorRecebido->valorExtraDolar - $av->valorDeducaoDolar }}
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <br><br>
+                                            <p><strong> <span style="color: green">B:</span> Informado na prestação de contas</strong></p>
+                                            <div class="callout callout-info">
+                        
+                                                <div class="stat">
+                                                    <div class="stat-title">Valor em Reais</div>
+                                                    <div class="stat-value text-primary">R$ {{ $av->valorReais }}
+                                                        {{ $av->isAprovadoCarroDiretoriaExecutiva == true ? '+ R$ ' . $av->qtdKmVeiculoProprio * 0.49 : '' }}
+                                                    </div>
+                                                </div>
+                                                <div class="stat">
+                                                    <div class="stat-title">Valor extra em Reais</div>
+                                                    <div class="stat-value text-primary">R$ {{ $valorAcertoContasReal }}</div>
+                                                </div>
+                                                @if ($av->valorDeducaoReais > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title">Dedução em Reais</div>
+                                                        <div class="stat-value text-primary">- R$ {{ $av->valorDeducaoReais }}</div>
+                                                    </div>
+                                                @endif
+                                                @if ($av->valorDeducaoDolar > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title">Dedução em dólar</div>
+                                                        <div class="stat-value text-primary">$ {{ $av->valorDeducaoDolar }}</div>
+                                                    </div>
+                                                @endif
+                                                @if ($av->valorDolar > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title">Valor em dólar</div>
+                                                        <div class="stat-value text-primary">$ {{ $av->valorDolar }}</div>
+                                                    </div>
+                                                @endif
+                                                @if ($valorAcertoContasDolar > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title">Valor extra em dólar</div>
+                                                        <div class="stat-value text-primary">$ {{ $valorAcertoContasDolar }}</div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="callout callout-success">
+                                                <div class="stat">
+                                                    <div class="stat-title">Resultado em Reais</div>
+                                                    <div class="stat-value text-primary">R$
+                                                        {{ $av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais }}</div>
+                                                </div>
+                                                @if ($av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title">Resultado em Dólar</div>
+                                                        <div class="stat-value text-primary">R$
+                                                            {{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar }}</div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <br><br>
+                                            <p><strong> <span style="color: red">A</span> - <span style="color: green">B</span>: Acerto de
+                                                    contas:</strong></p>
+                                            <div class="callout callout-success">
+                                                @if ($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                                    <div class="stat">
+                                                        <div class="stat-title" style="color: black">Valor em Reais</div>
+                                                        <div class="stat-value text-gray-950">R$
+                                                            {{ $valorRecebido->valorReais - $av->valorReais - $av->qtdKmVeiculoProprio * 0.49 }}
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    <div class="stat">
+                                                        <div class="stat-title" style="color: black">Valor em Reais</div>
+                                                        <div class="stat-value text-gray-950">R$
+                                                            {{ $valorRecebido->valorReais - $av->valorReais }}</div>
+                                                    </div>
+                                                @endif
+                        
+                                                <div class="stat">
+                                                    <div class="stat-title" style="color: black">Valor extra em Reais</div>
+                                                    <div class="stat-value text-gray-950">R$
+                                                        {{ $valorRecebido->valorExtraReais - $valorAcertoContasReal }}</div>
+                                                </div>
+                        
+                                                @if ($valorRecebido->valorDolar - $av->valorDolar > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title" style="color: black">Valor em dólar</div>
+                                                        <div class="stat-value text-gray-950">$
+                                                            {{ $valorRecebido->valorDolar - $av->valorDolar }}</div>
+                                                    </div>
+                                                @endif
+                                                @if ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar > 0)
+                                                    <div class="stat">
+                                                        <div class="stat-title" style="color: black">Valor extra em dólar</div>
+                                                        <div class="stat-value text-gray-950">$
+                                                            {{ $valorRecebido->valorExtraDolar - $valorAcertoContasDolar }}</div>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 @endif
-                            </div>
-                        
-                            <div class="row" style="overflow-x: auto;">
-                                <div class="col-12 col-xl-6" style="overflow-x: auto;">
-                                    
-                                    @if ($av['isCancelado'] == false)
-                                        <h1 style="font-size: 24px"><strong>Comprovante de despesa: </strong></h1>
-                                    @else
-                                        <h1 style="font-size: 24px"><strong>Comprovante de cancelamento: </strong></h1>
-                                    @endif
-                                    @if(count($comprovantes) >0)
-                                    <table id="minhaTabela5" class="table table-hover table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Descrição</th>
-                                                @if ($av['isCancelado'] == false)
-                                                    <th>Valor em reais</th>
-                                                @endif
-                                                <th>Ações</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($comprovantes as $comp)
-                                                <tr>
-                                                    <td> {{ $comp->descricao }} </td>
-                                                    @if ($av['isCancelado'] == false)
-                                                        <td> R${{ $comp->valorReais }}</td>
-                                                    @endif
-                                                    <td>
-                                                        <div class="d-flex">
-                                                            <a href="{{ route('recuperaArquivo', [
-                                                                'name' => $userAv->name,
-                                                                'id' => $av->id,
-                                                                'pasta' => 'comprovantesDespesa',
-                                                                'anexoRelatorio' => $comp->anexoDespesa,
-                                                                ]) }}"
-                                                                target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
-                                                        
-                                                            <form action="/avs/deletarComprovante/{{ $comp->id }}/{{ $av->id }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-active btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                                            </form>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                    @else
-                                        <p>Nenhum comprovante adicionado</p>
-                                    @endif
-                                    <hr>
-                                    <h1 style="font-size: 24px"><strong>Trajeto: </strong></h1>
-                                    <div class="table-responsive">
-                                        <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
+                                <div class="box box-40">
+                                    <div>
+                                        <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
+                                        <table id="minhaTabela6" class="table table-hover table-bordered" style="width:100%">
                                             <thead>
-                                                    <tr>
-                                                        {{-- <th>Tipo</th> --}}
-                                                        <th>Cidade de saída</th>
-                                                        <th>Data/Hora de saída</th>
-                                                        <th>Cidade de chegada</th>
-                                                        <th>Data/Hora de chegada</th>
-                                                        <th>Hotel?</th>
-                                                        <th>Tipo de transporte</th>
+                                                <tr>
+                                                    <th>Descrição</th>
+                                                    <th>Anexo</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($av->rotas as $rota)
+                                                @foreach ($historicoPc as $hist)
                                                     <tr>
-                                                        {{-- <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td> --}}
-                                                        <td>
-                                                            @if ($rota->isAereo == 1)
-                                                                <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
-                                                            @endif
-                    
-                                                            @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                                                <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
-                                                            @endif
-                    
-                                                            @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                                                <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
-                                                            @endif
-
-                                                            @if($rota->isOutroMeioTransporte == 1)
-                                                                <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
-                                                            @endif
-                    
-                                                            {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
-                    
-                                                        </td>
-                                                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-                    
-                                                        <td>
-                                                            @if ($rota->isAereo == 1)
-                                                                <img src="{{ asset('/img/aviaodescendo.png') }}" style="width: 40px">
-                                                            @endif
-                    
-                                                            @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                                                <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
-                                                            @endif
-                    
-                                                            @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                                                <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
-                                                            @endif
-
-                                                            @if($rota->isOutroMeioTransporte == 1)
-                                                                <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
-                                                            @endif
-                    
-                                                            {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
-                                                        </td>
-                    
-                                                        <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                                                        <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
-                                                        <td>
-                                                            {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
-                                                            {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
-                                                            @if ($rota->isVeiculoProprio == 1)
-                                                                {{ 'Veículo próprio: ' }} <br>
-                                                                @foreach ($veiculosProprios as $v)
-                                                                    @if ($v->id == $rota->veiculoProprio_id)
-                                                                        {{ $v->modelo . '-' . $v->placa }}
-                                                                    @endif
-                                                                @endforeach
-                    
-                                                                @if (count($veiculosProprios) == 0)
-                                                                    {{ 'Não encontrado' }}
-                                                                @endif
-                                                            @endif
-                                                            {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
-                                                            {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
-                                                            {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
-                                                        </td>
-                                                        @php
-                                                            $achouVeiculo = false;
-                                                        @endphp
-                    
+                                                        <td> {{ $hist->comentario }} </td>
+                                                        @if ($hist->comentario == 'AV Internacional gerada')
+                                                            <td> <a href="{{ route('recuperaArquivo', [
+                                                                'name' => $userAv->name,
+                                                                'id' => $av->id,
+                                                                'pasta' => 'internacional',
+                                                                'anexoRelatorio' => $hist->anexoRelatorio,
+                                                                ]) }}"
+                                                                    target="_blank" class="btn btn-active btn-success btn-sm">Abrir
+                                                                    documento</a> </td>
+                                                        @else
+                                                            <td>
+                                                                <a href="{{ route('recuperaArquivo', [
+                                                                    'name' => $userAv->name,
+                                                                    'id' => $av->id,
+                                                                    'pasta' => 'resumo',
+                                                                    'anexoRelatorio' => $hist->anexoRelatorio,
+                                                                ]) }}" target="_blank" class="btn btn-active btn-success btn-sm">
+                                                                    Abrir documento
+                                                                </a>
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-xl-6">
-                                    <form action="/avs/usuarioEnviarPrestacaoContas" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PUT')
+                                        @if ($av->isPrestacaoContasRealizada == 1)
+                                            <p><strong>Resultado:</strong></p>
+                                            <div class="callout callout-success">
                         
-                        
-                                        @if ($av['isCancelado'] == false)
-                        
-                                            @foreach ($av->rotas as $r)
-                                                @if ($r->isVeiculoProprio == true)
-                                                        <p style="color: red">DIGITAR APENAS NÚMEROS, SEM PONTOS.</p>
-                                                        <div class="form-group">
-                                                            <label for="odometroIda"
-                                                                class="control-label {{ $errors->has('odometroIda') ? 'is-invalid' : '' }}">Odômetro
-                                                                ida:</label><br>
-                                                            <input type="number" class="form-control" name="odometroIda" id="odometroIda"
-                                                                placeholder="Odômetro ida" style="width: 100%">
-                                                            @if ($errors->has('odometroIda'))
-                                                                <div class="invalid-feedback">
-                                                                    {{ $errors->first('odometroIda') }}
-                                                                </div>
+                                                <div class="stat">
+                                                    <div class="stat-title">
+                                                        <p>
+                                                            @if ($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                                                @if (
+                                                                    $valorRecebido->valorReais -
+                                                                        $av->valorReais -
+                                                                        $av->qtdKmVeiculoProprio * 0.49 +
+                                                                        ($valorRecebido->valorExtraReais - $valorAcertoContasReal) <
+                                                                        0)
+                                                                    Valor que o usuário deve receber em reais
+                                                                @endif
+                                                                @if (
+                                                                    $valorRecebido->valorReais -
+                                                                        $av->valorReais -
+                                                                        $av->qtdKmVeiculoProprio * 0.49 +
+                                                                        ($valorRecebido->valorExtraReais - $valorAcertoContasReal) >
+                                                                        0)
+                                                                    Valor que o usuário deve pagar em reais
+                                                                @endif
+                                                            @else
+                                                                @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) < 0)
+                                                                    Valor que o usuário deve receber em reais
+                                                                @endif
+                                                                @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0)
+                                                                    Valor que o usuário deve pagar em reais
+                                                                @endif
                                                             @endif
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="odometroVolta"
-                                                                class="control-label {{ $errors->has('odometroVolta') ? 'is-invalid' : '' }}">Odômetro
-                                                                volta:</label><br>
-                                                            <input type="number" class="form-control" name="odometroVolta" id="odometroVolta"
-                                                                placeholder="Odômetro volta" style="width: 100%">
-                                                            @if ($errors->has('odometroVolta'))
-                                                                <div class="invalid-feedback">
-                                                                    {{ $errors->first('odometroVolta') }}
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    @break
-                                                @endif
-                                            @endforeach
-                        
-                                            <div style="padding-left: 50px" class="form-group">
-                        
-                                                @if ($errors->has('horas') || $errors->has('minutos') || $errors->has('justificativa'))
-                                                    <div>
-                                                        <p style="color: red"> <strong>Os campos de hora extra não foram preenchidos!</strong>
                                                         </p>
                                                     </div>
-                                                @endif
-                                            </div>
                         
-                                            <div class="form-check form-switch" id="isHorasExtras" style="display: none">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="isSelecionado"
-                                                    name="isSelecionado" style="height: 20px; width: 40px"
-                                                    onChange="mostrarCampoJustificativa()">
-                                                <label class="form-check-label" for="isSelecionado" style="padding-left: 10px">Foram realizadas
-                                                    horas extras?</label>
-                                            </div>
-                                            <div class="form-group" id="justificativaHorasExtras" style="display: none;">
-                        
-                                                <label for="horas_extras">* Horas Extras:</label>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <input type="number" name="horas" id="horas"
-                                                            class="form-control {{ $errors->has('horas') ? 'is-invalid' : '' }}"
-                                                            placeholder="Horas">
-                        
-                                                        @if ($errors->has('horas'))
-                                                            <div class="invalid-feedback">
-                                                                {{ $errors->first('horas') }}
+                                                    @if ($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                                        @if (
+                                                            $valorRecebido->valorReais -
+                                                                $av->valorReais +
+                                                                ($valorRecebido->valorExtraReais - $valorAcertoContasReal) -
+                                                                $av->qtdKmVeiculoProprio * 0.49 <
+                                                                0)
+                                                            <div class="stat-value text-green-500">
+                                                                R$
+                                                                {{ ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) - $av->qtdKmVeiculoProprio * 0.49) * -1 }}
                                                             </div>
                                                         @endif
-                                                    </div>
-                                                    <div class="col">
-                                                        <input type="number" name="minutos" id="minutos"
-                                                            class="form-control {{ $errors->has('minutos') ? 'is-invalid' : '' }}"
-                                                            placeholder="Minutos">
-                        
-                                                        @if ($errors->has('minutos'))
-                                                            <div class="invalid-feedback">
-                                                                {{ $errors->first('minutos') }}
+                                                        @if (
+                                                            $valorRecebido->valorReais -
+                                                                $av->valorReais +
+                                                                ($valorRecebido->valorExtraReais - $valorAcertoContasReal) -
+                                                                $av->qtdKmVeiculoProprio * 0.49 >
+                                                                0)
+                                                            <div class="stat-value text-error">
+                                                                R$
+                                                                {{ ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) - $av->qtdKmVeiculoProprio * 0.49) * -1 }}
                                                             </div>
                                                         @endif
+                                                    @else
+                                                        @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) < 0)
+                                                            <div class="stat-value text-green-500">
+                                                                R$
+                                                                {{ ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal)) * -1 }}
+                                                            </div>
+                                                        @endif
+                                                        @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0)
+                                                            <div class="stat-value text-error">
+                                                                R$
+                                                                {{ $valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) }}
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                        
+                                                </div>
+                                                <div class="stat">
+                                                    <div class="stat-title">
+                                                        <p>
+                                                            @if ($valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar) < 0)
+                                                                Valor que o usuário deve receber em dólar
+                                                            @endif
+                                                            @if ($valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar) > 0)
+                                                                Valor que o usuário deve pagar em dólar
+                                                            @endif
+                                                        </p>
                                                     </div>
+                                                    @if ($valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar) < 0)
+                                                        <div class="stat-value text-green-500">
+                        
+                                                            $
+                                                            {{ ($valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar)) * -1 }}
+                                                        </div>
+                                                    @endif
+                                                    @if ($valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar) > 0)
+                                                        <div class="stat-value text-error">
+                                                            $
+                                                            {{ $valorRecebido->valorDolar - $av->valorDolar + ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar) }}
+                                                        </div>
+                                                    @endif
                                                 </div>
                         
-                                                <label for="justificativa" class="control-label">* Digite a justificativa: </label>
-                                                <div class="input-group">
-                                                    <input type="text"
-                                                        class="form-control {{ $errors->has('justificativa') ? 'is-invalid' : '' }}"
-                                                        name="justificativa" id="justificativa" placeholder="Digite a justificativa">
-                                                </div>
-                        
-                                                @if ($errors->has('justificativa'))
-                                                    <div class="invalid-feedback">
-                                                        {{ $errors->first('justificativa') }}
-                                                    </div>
-                                                @endif
                                             </div>
-                        
-                                            <div class="form-group">
-                                                <label for="contatos"
-                                                    class="control-label {{ $errors->has('contatos') ? 'is-invalid' : '' }}">*
-                                                    Contatos:</label><br>
-                                                <textarea type="textarea" class="textarea textarea-secondary textarea-lg" name="contatos" id="contatos"
-                                                    placeholder="Contatos" style="width: 100%; height: 100px">{{ $av->contatos }}</textarea>
-                        
-                                                @if ($errors->has('contatos'))
-                                                    <div class="invalid-feedback">
-                                                        {{ $errors->first('contatos') }}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="atividades"
-                                                    class="control-label {{ $errors->has('atividades') ? 'is-invalid' : '' }}">*
-                                                    Atividades:</label><br>
-                                                <textarea type="text" class="textarea textarea-secondary textarea-lg" name="atividades" id="atividades"
-                                                    placeholder="Atividades" style="width: 100%; height: 100px">{{ $av->atividades }}</textarea>
-                        
-                                                @if ($errors->has('atividades'))
-                                                    <div class="invalid-feedback">
-                                                        {{ $errors->first('atividades') }}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="conclusoes"
-                                                    class="control-label {{ $errors->has('conclusoes') ? 'is-invalid' : '' }}">*
-                                                    Conclusões:</label><br>
-                                                <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes" id="conclusoes"
-                                                    placeholder="Conclusões" style="width: 100%; height: 100px">{{ $av->conclusoes }}</textarea>
-                        
-                                                @if ($errors->has('conclusoes'))
-                                                    <div class="invalid-feedback">
-                                                        {{ $errors->first('conclusoes') }}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <p style="color: red">* Preenchimento obrigatório</p>
                                         @endif
-                        
-                                        <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
-                                        <label for="comentario">Enviar PC para aprovação do Financeiro: </label>
-                                        <br>
-                                        
-                                        <div class="input-group mb-3">
-                                            <textarea type="text" class="textarea textarea-bordered h-24" name="comentario" style="width: 200px"
-                                            id="comentario" placeholder="Comentário"></textarea>
-
-                                            <span class="input-group-append">
-                                                <button type="submit" class="btn btn-active btn-success">Enviar PC</button>
-                                            </span>
+                                    </div>
+                                    <br><br>
+                                    @if ($av->horasExtras != null || $av->minutosExtras != null || $av->justificativaHorasExtras != null)
+                                        <div class="callout callout-danger">
+                                            <strong style="color: red">Foram realizadas horas extras:</strong> <br>
+                                            <strong>Horas:</strong> {{ $av->horasExtras }} <br>
+                                            <strong>Minutos:</strong> {{ $av->minutosExtras }} <br>
+                                            <strong>Justificativa:</strong> {{ $av->justificativaHorasExtras }} <br>
                                         </div>
-                                    </form>
+                                    @endif
                                 </div>
                             </div>
+
+                            <div class="box box-40">
+                                <div style="overflow-x: auto;">
+                                    <h5 style="color: red">Insira o comprovante de DEVOLUÇÃO:</h5><br>
+                                    <div class="col-3">
+                                        <x-adminlte-button label="Adicionar" data-toggle="modal" data-target="#modalAddArquivo" class="bg-teal"/>
+                                    </div>
+                                    <br>
+                                    <h1 style="font-size: 24px"><strong>Documentos:</strong></h1>
+                                    <table id="minhaTabela6" class="table table-hover table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($historicoPc as $hist)
+                                                @if($hist->comentario != "Documento AV" && $hist->comentario != "Acerto de contas"
+                                                            && $hist->comentario != "Comprovante Acerto de Contas Financeiro")
+                                                    <tr>
+                                                        <td> {{$hist->comentario}} </td>
+                                                        <td>
+                                                            <a href="{{ route('recuperaArquivo', [
+                                                                'name' => $userAv->name,
+                                                                'id' => $av->id,
+                                                                'pasta' => 'resumo',
+                                                                'anexoRelatorio' => $hist->anexoRelatorio,
+                                                                ]) }}"
+                                                                target="_blank" class="btn btn-active btn-success btn-sm d-inline"><i class="fas fa-paperclip"></i></a>
+
+                                                            <form action="/avs/deletarComprovanteDevolucaoUsuario/{{ $hist->id }}/{{ $av->id }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-active btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+            
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="container">
+                                <div class="row">
+                                    @php
+                                        $podeEnviar = false;
+                                    @endphp
+                                    @foreach($historicoPc as $hist)
+                                        @if($hist->comentario != "Documento AV" && $hist->comentario != "Acerto de contas"
+                                                    && $hist->comentario != "Comprovante Acerto de Contas Financeiro")
+                                            @php
+                                                $podeEnviar = true;
+                                            @endphp
+                                        @endif
+                                    @endforeach
+
+                                    @if($podeEnviar == true)
+                                        <div class="col-md-6">
+                                            <form action="/avs/enviarComprovanteDevolucaoParaCFI" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                    <input type="text" hidden="true" id="id" name="id" value="{{ $av->id }}">
+                                                    <label for="comentario">Enviar comprovante de devolução para CFI: </label>
+                                                    <br>
+                                                    
+                                                    <div class="input-group mb-3">
+                                                        <textarea type="text" class="textarea textarea-bordered h-24" 
+                                                        name="comentario" style="width: 200px"
+                                                        id="comentario" placeholder="Comentário"></textarea>
+            
+                                                        <span class="input-group-append">
+                                                            <button type="submit" class="btn btn-active btn-success">Enviar</button>
+                                                        </span>
+                                                    </div>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <h4 style="color: red"><strong>Para enviar para o CFI, cadastre pelo menos um registro de devolução.</strong></h4>
+                                    @endif
+                                </div>
+                            </div>
+                        
+                            <div class="divider"></div>
+                        
                         </div>
+
+
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-three-historico" role="tabpanel"
-                        aria-labelledby="custom-tabs-three-historico-tab" style="overflow-x: auto;">
+                        aria-labelledby="custom-tabs-three-historico-tab">
                         <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Histórico</h3>
                         <table id="minhaTabela" class="table table-hover table-bordered">
                             <!-- head -->
                             <thead>
                                 <tr>
-                                    {{-- <th>Id</th> --}}
                                     <th>Data</th>
                                     <th>Ocorrência</th>
                                     <th>Comentário</th>
@@ -516,8 +531,7 @@
 
                                 @foreach ($historicos as $historico)
                                     <tr>
-                                        {{-- <td>{{ $historico->id }}</td> --}}
-                                        <td>{{ date('d/m/Y H:i', strtotime($historico->dataOcorrencia)) }}</td>
+                                        <td>{{ date('d/m/Y', strtotime($historico->dataOcorrencia)) }}</td>
                                         <td>{{ $historico->tipoOcorrencia }}</td>
                                         <td>{{ $historico->comentario }}</td>
                                         <td>{{ $historico->perfilDonoComentario }}</td>
@@ -608,11 +622,21 @@
                                     name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
                                 {{ $av->valorReais }}</p>
                             <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                    name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
+                                {{ $av->valorDolar }}</p>
+                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                     name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
                                 {{ $av->valorExtraReais }}</p>
+                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                    name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
+                                {{ $av->valorExtraDolar }}</p>
                             <p class="av-owner" style="font-size: 20px; color: black;">
                                 <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
                                 {{ $av->valorDeducaoReais }}
+                            </p>
+                            <p class="av-owner" style="font-size: 20px; color: black;">
+                                <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
+                                {{ $av->valorDeducaoDolar }}
                             </p>
                             <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                     name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
@@ -636,12 +660,12 @@
                         <div class="col-md-12">
 
                             <div class="timeline">
-
+    
                                 <div class="time-label">
                                     <span class="bg-red">Fases da realização da viagem</span>
                                 </div>
-
-
+    
+    
                                 <div>
                                     @if ($av->isEnviadoUsuario == 1)
                                         <i class="fas fa-caret-right bg-green"></i>
@@ -687,6 +711,7 @@
                                             <div class="timeline-header">
                                                 <a class="btn btn-success btn-lg" @readonly(true)>3 - DAF - Avalia
                                                     pedido</a>
+                                                <span class="badge bg-warning float-right">Se carro particular ou viagem internacional</span>
                                             </div>
                                         </div>
                                     @else
@@ -695,6 +720,7 @@
                                             <div class="timeline-header">
                                                 <a class="btn btn-primary btn-md" @readonly(true)>3 - DAF - Avalia
                                                     pedido</a>
+                                                <span class="badge bg-warning float-right">Se carro particular ou viagem internacional</span>
                                             </div>
                                         </div>
                                     @endif
@@ -712,7 +738,8 @@
                                         <i class="fas fa-caret-right bg-blue"></i>
                                         <div class="timeline-item">
                                             <div class="timeline-header">
-                                                <a class="btn btn-primary btn-md" @readonly(true)>4 - CAD - Coordenadoria
+                                                <a class="btn btn-primary btn-md" @readonly(true)>4 - CAD -
+                                                    Coordenadoria
                                                     Administrativa - Realiza reservas</a>
                                             </div>
                                         </div>
@@ -723,7 +750,8 @@
                                         <i class="fas fa-caret-right bg-green"></i>
                                         <div class="timeline-item">
                                             <div class="timeline-header">
-                                                <a class="btn btn-success btn-lg" @readonly(true)>4 - CFI - Coordenadoria
+                                                <a class="btn btn-success btn-lg" @readonly(true)>4 - CFI -
+                                                    Coordenadoria
                                                     Financeira - Adiantamento</a>
                                             </div>
                                         </div>
@@ -738,12 +766,21 @@
                                     @endif
                                 </div>
                                 <div>
-                                    <i class="fas fa-caret-right bg-green"></i>
-                                    <div class="timeline-item">
-                                        <div class="timeline-header">
-                                            <a class="btn btn-success btn-lg" @readonly(true)>5 - Viagem</a>
+                                    @if ($av->isPrestacaoContasRealizada == 1)
+                                        <i class="fas fa-caret-right bg-green"></i>
+                                        <div class="timeline-item">
+                                            <div class="timeline-header">
+                                                <a class="btn btn-success btn-md" @readonly(true)>5 - Viagem</a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <i class="fas fa-caret-right bg-blue"></i>
+                                        <div class="timeline-item">
+                                            <div class="timeline-header">
+                                                <a class="btn btn-primary btn-md" @readonly(true)>5 - Viagem</a>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div>
                                     @if ($av->isPrestacaoContasRealizada == 1)
@@ -821,7 +858,7 @@
                                         </div>
                                     @endif
                                 </div>
-
+    
                                 <div>
                                     <i class="far fa-check-circle bg-green"></i>
                                 </div>
@@ -830,13 +867,13 @@
 
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-three-trajeto" role="tabpanel"
-                        aria-labelledby="custom-tabs-three-trajeto-tab" style="overflow-x: auto;">
+                        aria-labelledby="custom-tabs-three-trajeto-tab">
                         <h1 style="font-size: 24px; padding-bottom: 20px"><strong>Trajeto: </strong></h1>
 
                         <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-                                    {{-- <th>Tipo</th> --}}
+                                    <th>Tipo</th>
                                     <th>Cidade de saída</th>
                                     <th>Data/Hora de saída</th>
                                     <th>Cidade de chegada</th>
@@ -854,7 +891,7 @@
                         <tbody>
                             @foreach ($av->rotas as $rota)
                                 <tr>
-                                    {{-- <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td> --}}
+                                    <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
                                     <td>
                                         @if ($rota->isAereo == 1)
                                             <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
@@ -974,6 +1011,7 @@
                         <thead>
                             <tr>
                                 <th>Descrição</th>
+                                <th>IdRota</th>
                                 <th>Rota</th>
                                 <th>Anexo</th>
                             </tr>
@@ -984,6 +1022,13 @@
                                     <tr>
                                         <td> {{ $anexoHotel->descricao }} </td>
 
+                                        <td>
+                                            @for ($i = 0; $i < count($av->rotas); $i++)
+                                                @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
+                                                    {{ $av->rotas[$i]->id }}
+                                                @endif
+                                            @endfor
+                                        </td>
                                         <td>
                                             @for ($i = 0; $i < count($av->rotas); $i++)
                                                 @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
@@ -1024,6 +1069,7 @@
                         <thead>
                             <tr>
                                 <th>Descrição</th>
+                                <th>IdRota</th>
                                 <th>Rota</th>
                                 <th>Anexo</th>
                             </tr>
@@ -1033,6 +1079,14 @@
                                 @if ($anexoTransporte->anexoTransporte != null)
                                     <tr>
                                         <td> {{ $anexoTransporte->descricao }} </td>
+
+                                        <td>
+                                            @for ($i = 0; $i < count($av->rotas); $i++)
+                                                @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
+                                                    {{ $av->rotas[$i]->id }}
+                                                @endif
+                                            @endfor
+                                        </td>
                                         <td>
                                             @for ($i = 0; $i < count($av->rotas); $i++)
                                                 @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
@@ -1048,7 +1102,7 @@
                                                 @endif
                                             @endfor
                                         </td>
-                                        <td>
+                                        <td> 
                                             <a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
@@ -1081,7 +1135,7 @@
                                 <tr>
                                     <td> {{ $anexoFinanceiro->descricao }} </td>
 
-                                    <td>
+                                    <td> 
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,
@@ -1104,6 +1158,7 @@
                             <tr>
                                 <th>Descrição</th>
                                 <th>Valor reais</th>
+                                <th>Valor dólar</th>
                                 <th>Anexo</th>
                             </tr>
                         </thead>
@@ -1112,7 +1167,8 @@
                                 <tr>
                                     <td> {{ $comp->descricao }} </td>
                                     <td> {{ $comp->valorReais }} </td>
-                                    <td>
+                                    <td> {{ $comp->valorDolar }} </td>
+                                    <td> 
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
                                             'id' => $av->id,
@@ -1158,37 +1214,22 @@
     </div>
 </div>
 
-<div class="row justify-content-start" style="padding-left: 5%">
-
-</div>
-
-
-<x-adminlte-modal id="modalAdd" title="Adicionar comprovante de despesa" size="lg" theme="teal"
+<x-adminlte-modal id="modalAddArquivo" title="Enviar arquivo" size="lg" theme="teal"
     icon="fas fa-bell" v-centered static-backdrop scrollable>
 
-    <form action="/avs/gravarComprovante" method="POST" enctype="multipart/form-data">
+    <form action="/avs/gravarComprovanteDevolucaoUsuario" method="POST" enctype="multipart/form-data">
         @csrf
-        <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
-        <input type="text" hidden="true" id="avId" name="avId"
-            value="{{ $av->id }}">
-        <br><br>
-        <label for="descricao">Descrição</label><br>
-        <input type="text" id="descricao" name="descricao"
-            class="input input-bordered input-secondary w-full max-w-xs"><br>
-        @if ($av['isCancelado'] == false)
-            <label for="valorReais">Valor em reais utilizado: </label><br>
-            <input type="text" id="valorReais" name="valorReais"
-                class="input input-bordered input-secondary w-full max-w-xs"><br>
-        @endif
-        <br><br>
-        <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar
-            arquivo</button>
+            <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
+            <input type="text" hidden="true" id="avId" name="avId" value="{{ $av->id }}">
+            <br><br>
+            <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
     </form>
 
     <x-slot name="footerSlot">
         <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal"/>
     </x-slot>
 </x-adminlte-modal>
+
 
 @stop
 
@@ -1200,50 +1241,21 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function() {
+
+    $(function(){
         
-        @if(session('error'))
-
-            Swal.fire({
-                html: '<i class="fas fa-exclamation-triangle"></i> {{ session('error') }}',
-                title: 'Oops...',
-            })
-        @endif
-
-        @if(session('msg'))
-
-            Swal.fire({
-                title: '{{ session('msg') }}',
-                text: '',
-            })
-        @endif
-    });
-
-
-    $(function() {
-
 
         const input = document.getElementById('arquivo1');
         const botaoEnviar = document.getElementById('botaoEnviarArquivo1');
 
         input.addEventListener('change', (event) => {
             if (event.target.value !== '') {
-                botaoEnviar.removeAttribute('disabled');
+            botaoEnviar.removeAttribute('disabled');
             }
         });
 
-    })
+    });
 
-    function mostrarCampoJustificativa() {
-        var checkbox = document.getElementById("isSelecionado");
-        var divJustificativa = document.getElementById("justificativaHorasExtras");
-
-        if (checkbox.checked) {
-            divJustificativa.style.display = "block";
-        } else {
-            divJustificativa.style.display = "none";
-        }
-    }
 </script>
 
 @stop

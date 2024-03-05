@@ -233,7 +233,6 @@
                     <thead>
                         <tr>
                             <th>Número</th>
-                            <th>Anexo</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -243,7 +242,6 @@
                             <tr>
                                 <td> {{$anexo->descricao}} </td>
                                 
-                                
                                 <td>
                     
                                     <a href="{{ route('recuperaArquivo', [
@@ -252,18 +250,14 @@
                                         'pasta' => 'null',
                                         'anexoRelatorio' => $anexo->anexoTransporte,
                                         ]) }}"
-                                        target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
-                                
-                                </td>
-                                
-                                <td>   
-                                    <form action="/avs/deletarAnexoTransporte/{{ $anexo->id }}/{{ $rota->id }}" method="POST">
+                                        target="_blank" class="btn btn-active btn-success btn-sm d-inline"><i class="far fa-eye"></i></a>
+
+                                    <form action="/avs/deletarAnexoTransporte/{{ $anexo->id }}/{{ $rota->id }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-active btn-danger btn-sm"
-                                        style="width: 110px" > Deletar</button>
+                                        <button type="submit" class="btn btn-active btn-danger btn-sm"><i class="far fa-trash-alt"></i></button>
                                     </form>
-                                </td>   
+                                </td>
                             </tr>
                         @endif
                         @endforeach
