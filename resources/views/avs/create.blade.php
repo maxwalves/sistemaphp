@@ -7,6 +7,13 @@
 
 @section('content')
 
+<div class="tab-pane fade show active" id="custom-tabs-five-overlay" role="tabpanel" aria-labelledby="custom-tabs-five-overlay-tab" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: none">
+    <div class="overlay-wrapper" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #ffffff;">
+            <i class="fas fa-3x fa-sync-alt fa-spin" style="margin-bottom: 10px;"></i>
+            <div class="text-bold pt-2">Carregando...</div>
+    </div>
+</div>
+
 <div id="av-create-container" >
     <br>
     <div class="row">
@@ -263,7 +270,7 @@
 
         <div class="col-md-6">
             <div id="btSalvarAv">
-                <input style="font-size: 14px" type="submit" class="btn btn-active btn-primary" value="Salvar e escolher itinerário!">
+                <input style="font-size: 14px" id="salvarAvBt" type="submit" class="btn btn-active btn-primary" value="Salvar e escolher itinerário!">
             </div>
         </div>
     </form>
@@ -281,6 +288,11 @@
     <script src="{{asset('DataTables/datatables.min.js')}}"></script>
     <script src="{{asset('/js/moment.js')}}"></script>
     <script type="text/javascript">
+
+        $('#salvarAvBt').on('click', function() {
+                // Altera o estilo da <div> para "block"
+                $('#custom-tabs-five-overlay').css('display', 'block');
+        });
 
         $(document).ready(function(){
             $('#minhaTabela').DataTable({

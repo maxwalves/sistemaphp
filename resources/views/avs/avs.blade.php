@@ -6,6 +6,14 @@
 @stop
 
 @section('content')
+
+<div class="tab-pane fade show active" id="custom-tabs-five-overlay" role="tabpanel" aria-labelledby="custom-tabs-five-overlay-tab" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: none">
+    <div class="overlay-wrapper" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #ffffff;">
+            <i class="fas fa-3x fa-sync-alt fa-spin" style="margin-bottom: 10px;"></i>
+            <div class="text-bold pt-2">Carregando...</div>
+    </div>
+</div>
+
     <div>
         
         <div class="row justify-content-between">
@@ -102,7 +110,7 @@
                                 <a href="/avs/cancelarAv/{{ $av->id }}" class="btn btn-danger btn-error btn-sm" title="Cancelar AV">
                                     <i class="fas fa-window-close"></i></a>
                             @endif
-                            <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-info btn-sm" title="Ver AV">
+                            <a href="/avs/verDetalhesAv/{{ $av->id }}" class="btn btn-info btn-sm" title="Ver AV" onclick="verBt()">
                                 <i class="far fa-eye"></i></a> 
                             
                         @endif
@@ -145,6 +153,10 @@
     <script src="{{asset('DataTables/datatables.min.js')}}"></script>
     <script src="{{asset('/js/moment.js')}}"></script>
     <script type="text/javascript">
+
+        function verBt() {
+            $('#custom-tabs-five-overlay').css('display', 'block');
+        }
 
         function abrirModalVoltarAv(av) {
 

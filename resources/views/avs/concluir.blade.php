@@ -10,6 +10,14 @@
 @stop
 
 @section('content')
+
+<div class="tab-pane fade show active" id="custom-tabs-five-overlay" role="tabpanel" aria-labelledby="custom-tabs-five-overlay-tab" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: none">
+    <div class="overlay-wrapper" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #ffffff;">
+            <i class="fas fa-3x fa-sync-alt fa-spin" style="margin-bottom: 10px;"></i>
+            <div class="text-bold pt-2">Carregando...</div>
+    </div>
+</div>
+
 <div>
     <div class="row">
         
@@ -495,7 +503,7 @@
                     
                     <br>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-active btn-primary btn-lg">Enviar <i class="fas fa-paper-plane"></i></button>
+                        <button type="submit" id="salvarBt" class="btn btn-active btn-primary btn-lg">Enviar <i class="fas fa-paper-plane"></i></button>
                     </div>
                     <br><br>
                 </div>
@@ -517,6 +525,11 @@
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.9/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.9/index.global.min.js'></script>
 <script type="text/javascript">
+
+    $('#salvarBt').on('click', function() {
+        // Altera o estilo da <div> para "block"
+        $('#custom-tabs-five-overlay').css('display', 'block');
+    });
 
     function desativarCampoObjetivo(){
         var seletor = document.getElementById("flexSwitchCheckDefault")

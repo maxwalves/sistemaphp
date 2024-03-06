@@ -7,6 +7,14 @@
 
 @section('content')
 
+<div class="tab-pane fade show active" id="custom-tabs-five-overlay" role="tabpanel" aria-labelledby="custom-tabs-five-overlay-tab" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: none">
+    <div class="overlay-wrapper" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #ffffff;">
+            <i class="fas fa-3x fa-sync-alt fa-spin" style="margin-bottom: 10px;"></i>
+            <div class="text-bold pt-2">Carregando...</div>
+    </div>
+</div>
+
+
     <div class="row" style="padding-left: 1%">
         <div class="col-8">
             <br>
@@ -279,7 +287,7 @@
                                                         id="comentario" placeholder="Comentário"></textarea>
     
                                                     <span class="input-group-append">
-                                                        <button type="submit" class="btn btn-active btn-success">Aprovar
+                                                        <button type="submit" class="btn btn-active btn-success" onclick="exibirLoader()">Aprovar
                                                             AV</button>
                                                     </span>
                                                 </div>
@@ -298,7 +306,7 @@
                                                         name="comentario" style="width: 200px" id="comentario" placeholder="Comentário"></textarea>
     
                                                     <span class="input-group-append">
-                                                        <button type="submit" class="btn btn-active btn-danger">Reprovar
+                                                        <button type="submit" class="btn btn-active btn-danger" onclick="exibirLoader()">Reprovar
                                                             AV</button>
                                                     </span>
                                                 </div>
@@ -747,6 +755,10 @@
 
 <script src="{{ asset('DataTables/datatables.min.js') }}"></script>
 <script src="{{ asset('/js/moment.js') }}"></script>
-<script type="text/javascript"></script>
+<script type="text/javascript">
+    function exibirLoader() {
+        $('#custom-tabs-five-overlay').css('display', 'block');
+    }
+</script>
 
 @stop
