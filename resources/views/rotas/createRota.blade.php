@@ -367,17 +367,16 @@
     
         <div id="isNacional">
             <br>    
-
+            <h3 style="color: forestgreen"> <ion-icon name="bus-outline"></ion-icon> VIAGEM NACIONAL </h3>
             <div class="row">
                 <div class="col-12 col-xl-4">
-                    <h3 style="color: forestgreen"> <ion-icon name="bus-outline"></ion-icon> VIAGEM NACIONAL </h3>
-                    <br>   
+                    <br>
                     <h4 style="color: darkolivegreen"> Origem: </h4>
                     <div class="form-group">
                         <label for="selecaoEstadoOrigemNacional" class="control-label"><strong style="color: red">* </strong>Selecione o estado origem:</label>
                         <br>
                         
-                            <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoEstadoOrigemNacional') ? 'is-invalid' :''}}" 
+                            <select class="select select-bordered w-full max-w-xs selecaoChosen {{ $errors->has('selecaoEstadoOrigemNacional') ? 'is-invalid' :''}}" 
                                 id="selecaoEstadoOrigemNacional" name="selecaoEstadoOrigemNacional" onChange="carregarCidadesOrigemNacional()">
                                 @if($ultimaRotaSetada !=null)
                                     <option value="{{ $ultimaRotaSetada->estadoDestinoNacional}}" selected></option>
@@ -396,7 +395,7 @@
                     <div class="form-group">
                         <label for="selecaoCidadeOrigemNacional" class="control-label"><strong style="color: red">* </strong>Selecione a cidade origem:</label>
                         <br>
-                            <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoCidadeOrigemNacional') ? 'is-invalid' :''}}" 
+                            <select class="select select-bordered w-full max-w-xs selecaoChosen {{ $errors->has('selecaoCidadeOrigemNacional') ? 'is-invalid' :''}}" 
                                 id="selecaoCidadeOrigemNacional" name="selecaoCidadeOrigemNacional" >
                                 @if($ultimaRotaSetada !=null)
                                     <option value="{{ $ultimaRotaSetada->cidadeDestinoNacional}}" selected></option>
@@ -457,13 +456,13 @@
                 </div>
                     
                 <div class="col-12 col-xl-4">    
-                    <br><br>
+                    <br>
                     <h4 style="color: darkolivegreen"> Destino: </h4>
                     <div class="form-group">
                         <label for="selecaoEstadoDestinoNacional" class="control-label"><strong style="color: red">* </strong>Selecione o estado destino</label>
                         <br>
                             
-                            <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoEstadoDestinoNacional') ? 'is-invalid' :''}}" 
+                            <select class="select select-bordered w-full max-w-xs selecaoChosen {{ $errors->has('selecaoEstadoDestinoNacional') ? 'is-invalid' :''}}" 
                                 id="selecaoEstadoDestinoNacional" name="selecaoEstadoDestinoNacional" onChange="carregarCidadesDestinoNacional()">
 
                                 <option value="Paraná" selected></option>
@@ -481,7 +480,7 @@
                         <br>
                             <input type="text" id="cidadeOrigemGeral" name="cidadeOrigemGeral" value="{{ count($av->rotas) > 0 ? $rotaOriginal->cidadeOrigemNacional : "" }}" hidden="true">
 
-                            <select class="select select-bordered w-full max-w-xs {{ $errors->has('selecaoCidadeDestinoNacional') ? 'is-invalid' :''}}" 
+                            <select class="select select-bordered w-full max-w-xs selecaoChosen {{ $errors->has('selecaoCidadeDestinoNacional') ? 'is-invalid' :''}}" 
                                 id="selecaoCidadeDestinoNacional" name="selecaoCidadeDestinoNacional" onChange="verificaSeCidadeOrigem()">
 
                             </select>
@@ -652,11 +651,23 @@
 @stop
 
 @section('css')
-    
+
+    <link href="{{ asset('/chosen/chosen.min.css') }}" rel="stylesheet">
+
 @stop
 
 @section('js')
+<script src="{{asset('/chosen/chosen.proto.min.js')}}"></script>
+<script src="{{asset('/chosen/chosen.jquery.min.js')}}"></script>
+
 <script type="text/javascript">
+
+    //espera 5 segundos
+    setTimeout(function() {
+        $(".selecaoChosen").chosen({
+            width: "95%",
+        });
+    }, 2000);
 
     $('#salvarBt').on('click', function() {
             // Altera o estilo da <div> para "block"
@@ -776,6 +787,7 @@
                 }
             }
         });
+
     }
 
     function popularEstadoDestinoNacional(){
@@ -810,6 +822,7 @@
                 }
             }
         });
+
     }
 
     function carregarCidadesOrigemNacional(){
@@ -843,6 +856,14 @@
                 }
             }
         });
+
+        setTimeout(function() {
+            $(".selecaoChosen").chosen("destroy");
+            $(".selecaoChosen").chosen({
+                width: "95%",
+            });
+        }, 500);
+        
     }
 
     function carregarCidadesDestinoNacional(){
@@ -860,14 +881,22 @@
         
         $.getJSON('/cities', function(data){
         
-        for(i=0; i<data.length; i++){
+            for(i=0; i<data.length; i++){
 
-            if(data[i].state_id == objeto.id ){
-                opcao = '<option value="' + data[i].name + '">' + data[i].name + '</option>';
-                $('#selecaoCidadeDestinoNacional').append(opcao);
+                if(data[i].state_id == objeto.id ){
+                    opcao = '<option value="' + data[i].name + '">' + data[i].name + '</option>';
+                    $('#selecaoCidadeDestinoNacional').append(opcao);
+                }
             }
-        }
-    });
+        });
+
+        setTimeout(function() {
+            $(".selecaoChosen").chosen("destroy");
+            $(".selecaoChosen").chosen({
+                width: "95%",
+            });
+        }, 500);
+
     }
 
     function carregarCidadesOrigemInternacional(){
@@ -1004,7 +1033,6 @@
         });
 
         ativarCampo();
-        
         
     })
 </script>
