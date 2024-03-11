@@ -3616,6 +3616,17 @@ class ControladorAv extends Controller
         $reservas2 = [];
         $veiculos = [];
 
+        $departmentUser = auth()->user()->department;
+        $isCuritiba = false;
+        if($departmentUser != "ERCSC"
+        && $departmentUser != "ERMGA"
+        && $departmentUser != "ERFCB"
+        && $departmentUser != "ERGUA"
+        && $departmentUser != "ERLDA"
+        && $departmentUser != "ERPTG"){
+            $isCuritiba = true;
+        }
+
         $url = 'http://10.51.10.43/reservas/public/api/getReservasAPI';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -3625,13 +3636,43 @@ class ControladorAv extends Controller
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        $reservas2 = $reservas2->filter(function ($reserva) use ($departmentUser, $isCuritiba) {
+
+            $userReservaTemp = User::where('id', $reserva->idUsuario)->first();
+            
+            if($isCuritiba && $userReservaTemp->department != "ERCSC" && $userReservaTemp->department != "ERMGA" && $userReservaTemp->department != "ERFCB" && $userReservaTemp->department != "ERGUA" && $userReservaTemp->department != "ERLDA" && $userReservaTemp->department != "ERPTG"){
+                return true;
+            }
+            else if($userReservaTemp->department == $departmentUser){
+                return true;
+            }
+            else{
+                return false;
+            }
+        });
 
         $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
 
-        
+        //filtre os veículos de acordo com o departamento do usuário, a coluna a ser filtrada é codigoRegional de veículo
+        $veiculos = $veiculos->filter(function ($veiculo) use ($departmentUser, $isCuritiba) {
+            if($isCuritiba && $veiculo->codigoRegional == "CWB"){
+                return true;
+            }
+            else if($veiculo->codigoRegional == $departmentUser){
+                return true;
+            }
+            else{
+                return false;
+            }
+        });
 
         if($isPc=="sim"){
 
