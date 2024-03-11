@@ -14,12 +14,12 @@
     <div class="col-md-6">
         <p>Escritórios visíveis:</p>
         <div class="badge bg-info" id="escCuritiba" name="escCuritiba" {{$isFinanceiroCuritiba == false ? "hidden='true'" : ""}}>Curitiba</div>
-        <div class="badge bg-info" id="escCascavel" name="escCascavel" {{$temFinanceiroCascavel == true ? "hidden='true'" : ""}}>Cascavel</div>
-        <div class="badge bg-info" id="escMaringa" name="escMaringa" {{$temFinanceiroMaringa == true ? "hidden='true'" : ""}}>Maringá</div>
-        <div class="badge bg-info" id="escFrancisco" name="escFrancisco" {{$temFinanceiroFrancisco == true ? "hidden='true'" : ""}}>Francisco Beltrão</div>
-        <div class="badge bg-info" id="escGuarapuava" name="escGuarapuava" {{$temFinanceiroGuarapuava == true ? "hidden='true'" : ""}}>Guarapuava</div>
-        <div class="badge bg-info" id="escLondrina" name="escLondrina" {{$temFinanceiroLondrina == true ? "hidden='true'" : ""}}>Londrina</div>
-        <div class="badge bg-info" id="escPontaGrossa" name="escPontaGrossa" {{$temFinanceiroPontaGrossa == true ? "hidden='true'" : ""}}>Ponta Grossa</div>
+        <div class="badge bg-info" id="escCascavel" name="escCascavel" {{$temFinanceiroCascavel == false ? "hidden='true'" : ""}}>Cascavel</div>
+        <div class="badge bg-info" id="escMaringa" name="escMaringa" {{$temFinanceiroMaringa == false ? "hidden='true'" : ""}}>Maringá</div>
+        <div class="badge bg-info" id="escFrancisco" name="escFrancisco" {{$temFinanceiroFrancisco == false ? "hidden='true'" : ""}}>Francisco Beltrão</div>
+        <div class="badge bg-info" id="escGuarapuava" name="escGuarapuava" {{$temFinanceiroGuarapuava == false ? "hidden='true'" : ""}}>Guarapuava</div>
+        <div class="badge bg-info" id="escLondrina" name="escLondrina" {{$temFinanceiroLondrina == false ? "hidden='true'" : ""}}>Londrina</div>
+        <div class="badge bg-info" id="escPontaGrossa" name="escPontaGrossa" {{$temFinanceiroPontaGrossa == false ? "hidden='true'" : ""}}>Ponta Grossa</div>
     </div>
 </div>
 <br>

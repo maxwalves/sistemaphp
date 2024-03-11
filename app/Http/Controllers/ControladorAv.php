@@ -1830,8 +1830,15 @@ class ControladorAv extends Controller
             foreach($users as $u2){
                 try {
                     if($u2->hasPermissionTo($permission3)){
-                        Mail::to($u2->username)
-                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                        //verifique se u2 é da mesma regional que $userAv
+                        if($u2->department == $userAv->department){
+                            Mail::to($u2->username)
+                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                        }
+                        else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                            Mail::to($u2->username)
+                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                        }
                     }
                 } catch (\Throwable $th) {
                 }
@@ -3312,7 +3319,7 @@ class ControladorAv extends Controller
                 'valor' => $valor,
             ];
         }
-
+        
         //Se a viagem for somente no mesmo dia
         if(iterator_count($intervaloDatas) == 0){
 
@@ -3523,6 +3530,7 @@ class ControladorAv extends Controller
                 'valor' => $valor,
             ];
         }
+        
         //CASO SÓ TENHA UMA ROTA
         if(sizeof($rotas) == 1){
             $valor = $this->verificaValorRota($rotas[0]);
@@ -3589,6 +3597,8 @@ class ControladorAv extends Controller
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $veiculos = json_decode(curl_exec($ch));
+
+        
 
         if($isPc=="sim"){
 
@@ -4150,8 +4160,10 @@ class ControladorAv extends Controller
         if($userAtual->hasPermissionTo($permission)){
             if($user->department == "ERCSC"){
                 foreach($users as $uf){
-                    if($uf->department == "ERCSC"){
+                    if($uf->department == "ERCSC" || $uf->department == "ERFCB"){
                         array_push($usersFiltrados, $uf);
+                        $temFinanceiroCascavel = true;
+                        $temFinanceiroFrancisco = true;
                     }
                 }
             }
@@ -4159,20 +4171,22 @@ class ControladorAv extends Controller
                 foreach($users as $uf){
                     if($uf->department == "ERMGA"){
                         array_push($usersFiltrados, $uf);
+                        $temFinanceiroMaringa = true;
                     }
                 }
             }
-            else if($user->department == "ERFCB"){
-                foreach($users as $uf){
-                    if($uf->department == "ERFCB"){
-                        array_push($usersFiltrados, $uf);
-                    }
-                }
-            }
+            // else if($user->department == "ERFCB"){
+            //     foreach($users as $uf){
+            //         if($uf->department == "ERFCB"){
+            //             array_push($usersFiltrados, $uf);
+            //         }
+            //     }
+            // }
             else if($user->department == "ERGUA"){
                 foreach($users as $uf){
                     if($uf->department == "ERGUA"){
                         array_push($usersFiltrados, $uf);
+                        $temFinanceiroGuarapuava = true;
                     }
                 }
             }
@@ -4180,6 +4194,7 @@ class ControladorAv extends Controller
                 foreach($users as $uf){
                     if($uf->department == "ERLDA"){
                         array_push($usersFiltrados, $uf);
+                        $temFinanceiroLondrina = true;
                     }
                 }
             }
@@ -4187,6 +4202,7 @@ class ControladorAv extends Controller
                 foreach($users as $uf){
                     if($uf->department == "ERPTG"){
                         array_push($usersFiltrados, $uf);
+                        $temFinanceiroPontaGrossa = true;
                     }
                 }
             }
@@ -4194,13 +4210,20 @@ class ControladorAv extends Controller
                 $isFinanceiroCuritiba = true;
             }
         }
+        $existeResponsavelFinanceiroCascavel = false;
+        $existeResponsavelFinanceiroMaringa = false;
+        $existeResponsavelFinanceiroFrancisco = false;
+        $existeResponsavelFinanceiroGuarapuava = false;
+        $existeResponsavelFinanceiroLondrina = false;
+        $existeResponsavelFinanceiroPontaGrossa = false;
         
         if($isFinanceiroCuritiba == true){
             foreach($users as $uf){
                 if($uf->department == "ERCSC"){
                     try {
                         if($uf->hasPermissionTo($permission)){
-                            $temFinanceiroCascavel = true;
+                            $existeResponsavelFinanceiroCascavel = true;
+                            $existeResponsavelFinanceiroFrancisco = true;
                         }
                     } catch (\Throwable $th) {
                     }
@@ -4208,23 +4231,23 @@ class ControladorAv extends Controller
                 else if($uf->department == "ERMGA"){
                     try {
                         if($uf->hasPermissionTo($permission)){
-                            $temFinanceiroMaringa = true;
+                            $existeResponsavelFinanceiroMaringa = true;
                         }
                     } catch (\Throwable $th) {
                     }
                 }
-                else if($uf->department == "ERFCB"){
-                    try {
-                        if($uf->hasPermissionTo($permission)){
-                            $temFinanceiroFrancisco = true;
-                        }
-                    } catch (\Throwable $th) {
-                    }
-                }
+                // else if($uf->department == "ERFCB"){
+                //     try {
+                //         if($uf->hasPermissionTo($permission)){
+                //             $temFinanceiroFrancisco = true;
+                //         }
+                //     } catch (\Throwable $th) {
+                //     }
+                // }
                 else if($uf->department == "ERGUA"){
                     try {
                         if($uf->hasPermissionTo($permission)){
-                            $temFinanceiroGuarapuava = true;
+                            $existeResponsavelFinanceiroGuarapuava = true;
                         }
                     } catch (\Throwable $th) {
                     }
@@ -4232,7 +4255,7 @@ class ControladorAv extends Controller
                 else if($uf->department == "ERLDA"){
                     try {
                         if($uf->hasPermissionTo($permission)){
-                            $temFinanceiroLondrina = true;
+                            $existeResponsavelFinanceiroLondrina = true;
                         }
                     } catch (\Throwable $th) {
                     }
@@ -4240,7 +4263,7 @@ class ControladorAv extends Controller
                 else if($uf->department == "ERPTG"){
                     try {
                         if($uf->hasPermissionTo($permission)){
-                            $temFinanceiroPontaGrossa = true;
+                            $existeResponsavelFinanceiroPontaGrossa = true;
                         }
                     } catch (\Throwable $th) {
                     }
@@ -4248,32 +4271,32 @@ class ControladorAv extends Controller
             }
             
             foreach($users as $uf){
-                if($temFinanceiroCascavel == false){
+                if($existeResponsavelFinanceiroCascavel == false){
                     if($uf->department == "ERCSC"){
                         array_push($usersFiltrados, $uf);
                     }
                 }
-                if($temFinanceiroMaringa == false){
+                if($existeResponsavelFinanceiroMaringa == false){
                     if($uf->department == "ERMGA"){
                         array_push($usersFiltrados, $uf);
                     }
                 }
-                if($temFinanceiroFrancisco == false){
+                if($existeResponsavelFinanceiroFrancisco == false){
                     if($uf->department == "ERFCB"){
                         array_push($usersFiltrados, $uf);
                     }
                 }
-                if($temFinanceiroGuarapuava == false){
+                if($existeResponsavelFinanceiroGuarapuava == false){
                     if($uf->department == "ERGUA"){
                         array_push($usersFiltrados, $uf);
                     }
                 }
-                if($temFinanceiroLondrina == false){
+                if($existeResponsavelFinanceiroLondrina == false){
                     if($uf->department == "ERLDA"){
                         array_push($usersFiltrados, $uf);
                     }
                 }
-                if($temFinanceiroPontaGrossa == false){
+                if($existeResponsavelFinanceiroPontaGrossa == false){
                     if($uf->department == "ERPTG"){
                         array_push($usersFiltrados, $uf);
                     }
