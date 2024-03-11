@@ -709,30 +709,32 @@
         function filtrarReservasPorData(start, end) {
             var reservasFiltradas = [];
 
-            @foreach ($reservas2 as $reserva)
+            @if(isset($reservas2))
+                @foreach ($reservas2 as $reserva)
 
-                var veiculo = null;
-                @foreach ($veiculos as $v)
-                    if ("{{ $reserva->idVeiculo }}" == "{{ $v->id }}") {
-                        veiculo = "{{ $v->marca }} - {{ $v->modelo }} - {{ $v->placa }}";
+                    var veiculo = null;
+                    @foreach ($veiculos as $v)
+                        if ("{{ $reserva->idVeiculo }}" == "{{ $v->id }}") {
+                            veiculo = "{{ $v->marca }} - {{ $v->modelo }} - {{ $v->placa }}";
+                        }
+                    @endforeach
+
+                    if ("{{ $reserva->dataInicio }}" >= start && "{{ $reserva->dataInicio }}" <= end) {
+                        reservasFiltradas.push({
+                            id: "{{ $reserva->id }}",
+                            dataInicio: "{{ $reserva->dataInicio }}",
+                            dataFim: "{{ $reserva->dataFim }}",
+                            veiculo: {
+                                info: veiculo
+                            },
+                            usuario: {
+                                name: "{{ Auth::user()->name }}"
+                            },
+                            observacoes: "{{ $reserva->observacoes }}"
+                        });
                     }
                 @endforeach
-
-                if ("{{ $reserva->dataInicio }}" >= start && "{{ $reserva->dataInicio }}" <= end) {
-                    reservasFiltradas.push({
-                        id: "{{ $reserva->id }}",
-                        dataInicio: "{{ $reserva->dataInicio }}",
-                        dataFim: "{{ $reserva->dataFim }}",
-                        veiculo: {
-                            info: veiculo
-                        },
-                        usuario: {
-                            name: "{{ Auth::user()->name }}"
-                        },
-                        observacoes: "{{ $reserva->observacoes }}"
-                    });
-                }
-            @endforeach
+            @endif
 
             return reservasFiltradas;
         }
