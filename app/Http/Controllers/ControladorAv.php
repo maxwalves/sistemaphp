@@ -4419,11 +4419,175 @@ class ControladorAv extends Controller
 
     public function autPcFinanceiro(){
         $user = auth()->user();
+        $userAtual = User::findOrFail($user->id);
         $avs = Av::all();
         $users = User::all();
 
+        $usersFiltrados = [];
+
+        $isFinanceiroCuritiba = false;
+        $temFinanceiroCascavel = false;
+        $temFinanceiroMaringa = false;
+        $temFinanceiroFrancisco = false;
+        $temFinanceiroGuarapuava = false;
+        $temFinanceiroLondrina = false;
+        $temFinanceiroPontaGrossa = false;
+
+        $permission = Permission::where('name', 'aprov avs financeiro')->first();
+        
+        if($userAtual->hasPermissionTo($permission)){
+            if($user->department == "ERCSC"){
+                foreach($users as $uf){
+                    if($uf->department == "ERCSC" || $uf->department == "ERFCB"){
+                        array_push($usersFiltrados, $uf);
+                        $temFinanceiroCascavel = true;
+                        $temFinanceiroFrancisco = true;
+                    }
+                }
+            }
+            else if($user->department == "ERMGA"){
+                foreach($users as $uf){
+                    if($uf->department == "ERMGA"){
+                        array_push($usersFiltrados, $uf);
+                        $temFinanceiroMaringa = true;
+                    }
+                }
+            }
+            // else if($user->department == "ERFCB"){
+            //     foreach($users as $uf){
+            //         if($uf->department == "ERFCB"){
+            //             array_push($usersFiltrados, $uf);
+            //         }
+            //     }
+            // }
+            else if($user->department == "ERGUA"){
+                foreach($users as $uf){
+                    if($uf->department == "ERGUA"){
+                        array_push($usersFiltrados, $uf);
+                        $temFinanceiroGuarapuava = true;
+                    }
+                }
+            }
+            else if($user->department == "ERLDA"){
+                foreach($users as $uf){
+                    if($uf->department == "ERLDA"){
+                        array_push($usersFiltrados, $uf);
+                        $temFinanceiroLondrina = true;
+                    }
+                }
+            }
+            else if($user->department == "ERPTG"){
+                foreach($users as $uf){
+                    if($uf->department == "ERPTG"){
+                        array_push($usersFiltrados, $uf);
+                        $temFinanceiroPontaGrossa = true;
+                    }
+                }
+            }
+            else{
+                $isFinanceiroCuritiba = true;
+            }
+        }
+        $existeResponsavelFinanceiroCascavel = false;
+        $existeResponsavelFinanceiroMaringa = false;
+        $existeResponsavelFinanceiroFrancisco = false;
+        $existeResponsavelFinanceiroGuarapuava = false;
+        $existeResponsavelFinanceiroLondrina = false;
+        $existeResponsavelFinanceiroPontaGrossa = false;
+        
+        if($isFinanceiroCuritiba == true){
+            foreach($users as $uf){
+                if($uf->department == "ERCSC"){
+                    try {
+                        if($uf->hasPermissionTo($permission)){
+                            $existeResponsavelFinanceiroCascavel = true;
+                            $existeResponsavelFinanceiroFrancisco = true;
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                else if($uf->department == "ERMGA"){
+                    try {
+                        if($uf->hasPermissionTo($permission)){
+                            $existeResponsavelFinanceiroMaringa = true;
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                // else if($uf->department == "ERFCB"){
+                //     try {
+                //         if($uf->hasPermissionTo($permission)){
+                //             $temFinanceiroFrancisco = true;
+                //         }
+                //     } catch (\Throwable $th) {
+                //     }
+                // }
+                else if($uf->department == "ERGUA"){
+                    try {
+                        if($uf->hasPermissionTo($permission)){
+                            $existeResponsavelFinanceiroGuarapuava = true;
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                else if($uf->department == "ERLDA"){
+                    try {
+                        if($uf->hasPermissionTo($permission)){
+                            $existeResponsavelFinanceiroLondrina = true;
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                else if($uf->department == "ERPTG"){
+                    try {
+                        if($uf->hasPermissionTo($permission)){
+                            $existeResponsavelFinanceiroPontaGrossa = true;
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+            }
+            
+            foreach($users as $uf){
+                if($existeResponsavelFinanceiroCascavel == false){
+                    if($uf->department == "ERCSC"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($existeResponsavelFinanceiroMaringa == false){
+                    if($uf->department == "ERMGA"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($existeResponsavelFinanceiroFrancisco == false){
+                    if($uf->department == "ERFCB"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($existeResponsavelFinanceiroGuarapuava == false){
+                    if($uf->department == "ERGUA"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($existeResponsavelFinanceiroLondrina == false){
+                    if($uf->department == "ERLDA"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($existeResponsavelFinanceiroPontaGrossa == false){
+                    if($uf->department == "ERPTG"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($uf->department != "ERCSC" && $uf->department != "ERMGA" && $uf->department != "ERFCB" && $uf->department != "ERGUA" 
+                && $uf->department != "ERLDA" && $uf->department != "ERPTG"){
+                    array_push($usersFiltrados, $uf);
+                }
+            }
+        }
+
         $avsFiltradas = [];
-        foreach($users as $uf){//Verifica todos os usuários
+        foreach($usersFiltrados as $uf){//Verifica todos os usuários
             if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
                     if(($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
@@ -4443,11 +4607,175 @@ class ControladorAv extends Controller
 
     public function acertoContasFinanceiro(){
         $user = auth()->user();
+        $userAtual = User::findOrFail($user->id);
         $avs = Av::all();
         $users = User::all();
 
+        $usersFiltrados = [];
+
+        $isFinanceiroCuritiba = false;
+        $temFinanceiroCascavel = false;
+        $temFinanceiroMaringa = false;
+        $temFinanceiroFrancisco = false;
+        $temFinanceiroGuarapuava = false;
+        $temFinanceiroLondrina = false;
+        $temFinanceiroPontaGrossa = false;
+
+        $permission = Permission::where('name', 'aprov avs financeiro')->first();
+        
+        if($userAtual->hasPermissionTo($permission)){
+            if($user->department == "ERCSC"){
+                foreach($users as $uf){
+                    if($uf->department == "ERCSC" || $uf->department == "ERFCB"){
+                        array_push($usersFiltrados, $uf);
+                        $temFinanceiroCascavel = true;
+                        $temFinanceiroFrancisco = true;
+                    }
+                }
+            }
+            else if($user->department == "ERMGA"){
+                foreach($users as $uf){
+                    if($uf->department == "ERMGA"){
+                        array_push($usersFiltrados, $uf);
+                        $temFinanceiroMaringa = true;
+                    }
+                }
+            }
+            // else if($user->department == "ERFCB"){
+            //     foreach($users as $uf){
+            //         if($uf->department == "ERFCB"){
+            //             array_push($usersFiltrados, $uf);
+            //         }
+            //     }
+            // }
+            else if($user->department == "ERGUA"){
+                foreach($users as $uf){
+                    if($uf->department == "ERGUA"){
+                        array_push($usersFiltrados, $uf);
+                        $temFinanceiroGuarapuava = true;
+                    }
+                }
+            }
+            else if($user->department == "ERLDA"){
+                foreach($users as $uf){
+                    if($uf->department == "ERLDA"){
+                        array_push($usersFiltrados, $uf);
+                        $temFinanceiroLondrina = true;
+                    }
+                }
+            }
+            else if($user->department == "ERPTG"){
+                foreach($users as $uf){
+                    if($uf->department == "ERPTG"){
+                        array_push($usersFiltrados, $uf);
+                        $temFinanceiroPontaGrossa = true;
+                    }
+                }
+            }
+            else{
+                $isFinanceiroCuritiba = true;
+            }
+        }
+        $existeResponsavelFinanceiroCascavel = false;
+        $existeResponsavelFinanceiroMaringa = false;
+        $existeResponsavelFinanceiroFrancisco = false;
+        $existeResponsavelFinanceiroGuarapuava = false;
+        $existeResponsavelFinanceiroLondrina = false;
+        $existeResponsavelFinanceiroPontaGrossa = false;
+        
+        if($isFinanceiroCuritiba == true){
+            foreach($users as $uf){
+                if($uf->department == "ERCSC"){
+                    try {
+                        if($uf->hasPermissionTo($permission)){
+                            $existeResponsavelFinanceiroCascavel = true;
+                            $existeResponsavelFinanceiroFrancisco = true;
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                else if($uf->department == "ERMGA"){
+                    try {
+                        if($uf->hasPermissionTo($permission)){
+                            $existeResponsavelFinanceiroMaringa = true;
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                // else if($uf->department == "ERFCB"){
+                //     try {
+                //         if($uf->hasPermissionTo($permission)){
+                //             $temFinanceiroFrancisco = true;
+                //         }
+                //     } catch (\Throwable $th) {
+                //     }
+                // }
+                else if($uf->department == "ERGUA"){
+                    try {
+                        if($uf->hasPermissionTo($permission)){
+                            $existeResponsavelFinanceiroGuarapuava = true;
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                else if($uf->department == "ERLDA"){
+                    try {
+                        if($uf->hasPermissionTo($permission)){
+                            $existeResponsavelFinanceiroLondrina = true;
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                else if($uf->department == "ERPTG"){
+                    try {
+                        if($uf->hasPermissionTo($permission)){
+                            $existeResponsavelFinanceiroPontaGrossa = true;
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+            }
+            
+            foreach($users as $uf){
+                if($existeResponsavelFinanceiroCascavel == false){
+                    if($uf->department == "ERCSC"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($existeResponsavelFinanceiroMaringa == false){
+                    if($uf->department == "ERMGA"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($existeResponsavelFinanceiroFrancisco == false){
+                    if($uf->department == "ERFCB"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($existeResponsavelFinanceiroGuarapuava == false){
+                    if($uf->department == "ERGUA"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($existeResponsavelFinanceiroLondrina == false){
+                    if($uf->department == "ERLDA"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($existeResponsavelFinanceiroPontaGrossa == false){
+                    if($uf->department == "ERPTG"){
+                        array_push($usersFiltrados, $uf);
+                    }
+                }
+                if($uf->department != "ERCSC" && $uf->department != "ERMGA" && $uf->department != "ERFCB" && $uf->department != "ERGUA" 
+                && $uf->department != "ERLDA" && $uf->department != "ERPTG"){
+                    array_push($usersFiltrados, $uf);
+                }
+            }
+        }
+
         $avsFiltradas = [];
-        foreach($users as $uf){//Verifica todos os usuários
+        foreach($usersFiltrados as $uf){//Verifica todos os usuários
             if($uf->id != $user->id){//Se  o usuário não for você
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
                     if(($avAtual["isEnviadoUsuario"]==1 

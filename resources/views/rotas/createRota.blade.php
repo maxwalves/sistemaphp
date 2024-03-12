@@ -667,7 +667,7 @@
         $(".selecaoChosen").chosen({
             width: "95%",
         });
-    }, 2000);
+    }, 400);
 
     $('#salvarBt').on('click', function() {
             // Altera o estilo da <div> para "block"
