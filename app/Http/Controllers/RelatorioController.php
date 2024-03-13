@@ -230,8 +230,12 @@ class RelatorioController extends Controller
                         }
                         else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
                         //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
-                            $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
-                            $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            try {
+                                $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                                $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            } catch (\Throwable $th) {
+                                $valor = $this->verificaValorRota($rota);
+                            }
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
@@ -259,8 +263,12 @@ class RelatorioController extends Controller
                         }
                         else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "19:01:00"){
                         //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE CHEGADA FOR MAIOR QUE 19:01
-                            $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
-                            $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            try {
+                                $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                                $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            } catch (\Throwable $th) {
+                                $valor = $this->verificaValorRota($rota);
+                            }
                             $valorTarde = $valor/2;
                             $temDiariaTarde = true;
                         }
@@ -449,8 +457,12 @@ class RelatorioController extends Controller
                         }
                         else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
                         //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
-                            $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
-                            $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            try {
+                                $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                                $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            } catch (\Throwable $th) {
+                                $valor = $this->verificaValorRota($rota);
+                            }
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
@@ -478,8 +490,12 @@ class RelatorioController extends Controller
                         }
                         else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "19:01:00"){
                         //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE CHEGADA FOR MAIOR QUE 19:01
-                            $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
-                            $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            try {
+                                $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                                $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            } catch (\Throwable $th) {
+                                $valor = $this->verificaValorRota($rota);
+                            }
                             $valorTarde = $valor/2;
                             $temDiariaTarde = true;
                         }
