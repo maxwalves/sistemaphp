@@ -3380,7 +3380,7 @@ class ControladorAv extends Controller
         
         //Se a viagem for somente no mesmo dia
         if(iterator_count($intervaloDatas) == 0){
-
+            
             //Captura a data de $intervaloData e atribua a variável $data
             $data = new DateTime($dataInicio);
 
@@ -3487,7 +3487,6 @@ class ControladorAv extends Controller
 
                 //APENAS SE COINDICIR O DIA DA ROTA COM O DIAS DO INTERVALO, NOS DIAS INTEMEDIÁRIOS O VALOR DA DIÁRIA É O DA ÚLTIMA ROTA
                 if($dataSaidaFormatado->format('Y-m-d') == $dia){
-                    
 
                     if($temDiariaManha == false){
 
@@ -3515,9 +3514,8 @@ class ControladorAv extends Controller
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
+                        else if($dia == $dataUltimaRota && $dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
                         //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
-                            
                             try {
                                 $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
                                 $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
