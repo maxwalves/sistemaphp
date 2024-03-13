@@ -888,6 +888,7 @@ class ControladorRota extends Controller
         
         foreach ($intervaloDatas as $data) {
             
+            
             $dia = $data->format('Y-m-d');
             $valor = 0;
             $acumulado = 0;
@@ -943,7 +944,7 @@ class ControladorRota extends Controller
 
             //AGORA VAMOS ANALISAR OS DIAS QUE POSSUEM ROTAS E CALCULAR O VALOR DA DIÁRIA-----------------------------------------------------------------
             foreach($rotasDoDia as $indice => $rota){
-
+                
                 //DECLARAÇÃO DE VARIÁVEIS ------------------------------------------------------------------------------------
 
                 //Captura o valor para a diária da rota atual
@@ -963,12 +964,12 @@ class ControladorRota extends Controller
 
                 //Monta um array com as rotas do dia de IDA
                 if ($dataSaidaFormatado->format('Y-m-d') == $dia) {
-                    $arrayRotasDoDia[] = "Ida: [" . $rota->cidadeOrigemNacional . " (" . $dataSaidaFormatado->format('H:i') . ")" . " >";
+                    $arrayRotasDoDia[] = "Ida: " . $rota->cidadeOrigemNacional . " (" . $dataSaidaFormatado->format('H:i') . ")" . " >";
                 }
 
                 //Monta um array com as rotas do dia de VOLTA
                 if ($dataChegadaFormatado->format('Y-m-d') == $dia) {
-                    $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "]";
+                    $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "";
                 }
 
                 //Captura a data de chegada da rota anterior e formata para DateTime
@@ -992,22 +993,21 @@ class ControladorRota extends Controller
                 //APENAS SE COINDICIR O DIA DA ROTA COM O DIAS DO INTERVALO, NOS DIAS INTEMEDIÁRIOS O VALOR DA DIÁRIA É O DA ÚLTIMA ROTA
                 if($dataSaidaFormatado->format('Y-m-d') == $dia){
                     
-
                     if($temDiariaManha == false){
 
-                        if( ($dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00") && $dia != $dataUltimaRota){
+                        if( ($dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00") && $dia != $dataUltimaRota){
                         //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MAIOR QUE 13:01
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if($dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "13:00:00"
+                        else if($dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "13:00:00"
                                 && $proximaRota == false && $dia != $dataUltimaRota){
                         //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MENOR QUE 13:00 E NÃO TIVER PRÓXIMA ROTA NO DIA, MAS NÃO ACABOU A VIAGEM
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
                         else if($proximaRota != false && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && 
-                                $dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dia != $dataUltimaRota){
+                                $dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dia != $dataUltimaRota){
                         //SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E NÃO FOR A ÚLTIMA ROTA
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
@@ -1066,8 +1066,17 @@ class ControladorRota extends Controller
                     else if($temDiariaManha == false && $temDiariaTarde == false)
                         $valor = 0;
                 }
+                else if($dia == $dataUltimaRota && $dataSaidaFormatado->format('Y-m-d') != $dia){
+                    if($dataChegadaFormatado->format('H:i:s') >= "13:01:00" && $dataChegadaFormatado->format('H:i:s') < "19:00:00"){
+                        $valorManha = $valor/2;
+                    }
+                    else if($dataChegadaFormatado->format('H:i:s') >= "19:01:00"){
+                        $valorTarde = $valor/2;
+                    }
+                }
 
             }
+
             if(sizeof($rotasDoDia) == 0 && $dia != $dataUltimaRota){
                 $valorManha = $valor/2;
                 $valorTarde = $valor/2;
@@ -1079,8 +1088,7 @@ class ControladorRota extends Controller
             }
             //se for o ultimo dia
             if($dia == $dataUltimaRota && $valorManha == 0 && $valorTarde == 0 && $valor != 0){
-                $valorManha = $valor/2;
-                $valorTarde = $valor/2;
+                $valor = 0;
             }
             
             $diaFormatado = DateTime::createFromFormat('Y-m-d', $dia);
@@ -1206,19 +1214,19 @@ class ControladorRota extends Controller
 
                     if($temDiariaManha == false){
 
-                        if( ($dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00") && $dia != $dataUltimaRota){
+                        if( ($dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00") && $dia != $dataUltimaRota){
                         //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MAIOR QUE 13:01
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if($dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "13:00:00"
+                        else if($dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "13:00:00"
                                 && $proximaRota == false && $dia != $dataUltimaRota){
                         //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MENOR QUE 13:00 E NÃO TIVER PRÓXIMA ROTA NO DIA, MAS NÃO ACABOU A VIAGEM
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
                         else if($proximaRota != false && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && 
-                                $dataSaidaFormatado->format('H:i:s') < "12:00:00" && $dia != $dataUltimaRota){
+                                $dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dia != $dataUltimaRota){
                         //SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E NÃO FOR A ÚLTIMA ROTA
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
@@ -1277,6 +1285,14 @@ class ControladorRota extends Controller
                     else if($temDiariaManha == false && $temDiariaTarde == false)
                         $valor = 0;
                 }
+                else if($dia == $dataUltimaRota && $dataSaidaFormatado->format('Y-m-d') != $dia){
+                    if($dataChegadaFormatado->format('H:i:s') >= "13:01:00" && $dataChegadaFormatado->format('H:i:s') < "19:00:00"){
+                        $valorManha = $valor/2;
+                    }
+                    else if($dataChegadaFormatado->format('H:i:s') >= "19:01:00"){
+                        $valorTarde = $valor/2;
+                    }
+                }
 
             }
             if(sizeof($rotasDoDia) == 0 && $dia != $dataUltimaRota){
@@ -1290,8 +1306,7 @@ class ControladorRota extends Controller
             }
             //se for o ultimo dia
             if($dia == $dataUltimaRota && $valorManha == 0 && $valorTarde == 0 && $valor != 0){
-                $valorManha = $valor/2;
-                $valorTarde = $valor/2;
+                $valor = 0;
             }
             
             $diaFormatado = DateTime::createFromFormat('Y-m-d', $dia);
