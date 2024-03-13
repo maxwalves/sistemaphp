@@ -546,14 +546,14 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
 
-        if($userAv->id != $user->id){
-            if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
-                    && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==false && $av["isCancelado"]==false) || 
-                    ($av["isCancelado"]==true && $av["isAprovadoFinanceiro"]==true && $av["isPrestacaoContasRealizada"] == true 
-                    && $av["isFinanceiroAprovouPC"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor
-                $possoEditar = true;
-            }
+        
+        if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
+                && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==false && $av["isCancelado"]==false) || 
+                ($av["isCancelado"]==true && $av["isAprovadoFinanceiro"]==true && $av["isPrestacaoContasRealizada"] == true 
+                && $av["isFinanceiroAprovouPC"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor
+            $possoEditar = true;
         }
+        
         
         if($possoEditar == true){
             return view('avs.avaliarPcFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
@@ -635,14 +635,12 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
         
-        if($userAv->id != $user->id){//Se  o usuário não for você
-            if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
-                    && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true 
-                    && $av["isGestorAprovouPC"]==true&& $av["isAcertoContasRealizado"]==false && $av["isCancelado"]==false) || 
-                    ($av["isCancelado"]==true && $av["isAprovadoFinanceiro"]==true && $av["isPrestacaoContasRealizada"] == true 
-                    && $av["isFinanceiroAprovouPC"] == true && $av["isGestorAprovouPC"] == true && $av["isAcertoContasRealizado"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor
-                $possoEditar = true;
-            }
+        if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
+                && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true 
+                && $av["isGestorAprovouPC"]==true&& $av["isAcertoContasRealizado"]==false && $av["isCancelado"]==false) || 
+                ($av["isCancelado"]==true && $av["isAprovadoFinanceiro"]==true && $av["isPrestacaoContasRealizada"] == true 
+                && $av["isFinanceiroAprovouPC"] == true && $av["isGestorAprovouPC"] == true && $av["isAcertoContasRealizado"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor
+            $possoEditar = true;
         }
 
         if($possoEditar == true){
@@ -926,9 +924,9 @@ class ControladorAv extends Controller
         }
 
         if($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isAprovadoFinanceiro"]==false && $av["isCancelado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor
-            if( $av->user_id != $user->id){//Verifica se não é vc mesmo
+            
                 $possoEditar = true;
-            }
+            
         }
 
         $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
