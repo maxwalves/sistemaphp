@@ -101,6 +101,7 @@
                 <th style="width: 50px">Nr</th>
                 <th>Ver</th>
                 <th>Nome</th>
+                <th>Status</th>
                 <th>Objetivo</th>
                 <th>Rota</th>
                 <th>Data AV</th>
@@ -108,7 +109,6 @@
                 <th>Data retorno</th>
                 <th>Valor total em reais</th>
                 <th>Valor total em dólar</th>
-                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -129,6 +129,7 @@
 
                     @endfor
                 </td>
+                <td> {{$av->status}} </td>
                 <td>
                     @for($i = 0; $i < count($objetivos); $i++)
 
@@ -175,7 +176,6 @@
                 <td>
                         $ {{$av->valorDolar + $av->valorExtraDolar}}
                 </td>
-                <td> {{$av->status}} </td>
             </tr>
             @endforeach
         </tbody>
