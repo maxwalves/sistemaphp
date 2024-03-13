@@ -4428,7 +4428,7 @@ class ControladorAv extends Controller
 
         $avsFiltradas = [];
         foreach($usersFiltrados as $uf){//Verifica todos os usuários
-            if($uf->id != $user->id){//Se  o usuário não for você
+            
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
                     if($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isAprovadoFinanceiro"]==false 
                     && $avAtual["isCancelado"]==false){ //Se a av dele já foi enviada e autorizada pelo Gestor, adiciona ao array de avs filtradas
@@ -4450,7 +4450,7 @@ class ControladorAv extends Controller
                         }
                     }
                 }
-            }
+            
         }
 
         $avs = $avsFiltradas;
@@ -4632,7 +4632,7 @@ class ControladorAv extends Controller
 
         $avsFiltradas = [];
         foreach($usersFiltrados as $uf){//Verifica todos os usuários
-            if($uf->id != $user->id){//Se  o usuário não for você
+            
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
                     if(($avAtual["isEnviadoUsuario"]==1 && $avAtual["isAprovadoGestor"]==true && $avAtual["isRealizadoReserva"]==true && $avAtual["isAprovadoFinanceiro"]==true
                     && $avAtual["isPrestacaoContasRealizada"]==true && $avAtual["isFinanceiroAprovouPC"]==false && $avAtual["isCancelado"]==false) || 
@@ -4642,7 +4642,7 @@ class ControladorAv extends Controller
                         array_push($avsFiltradas, $avAtual);
                     }
                 }
-            }
+            
         }
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();
@@ -4820,7 +4820,7 @@ class ControladorAv extends Controller
 
         $avsFiltradas = [];
         foreach($usersFiltrados as $uf){//Verifica todos os usuários
-            if($uf->id != $user->id){//Se  o usuário não for você
+            
                 foreach($uf->avs as $avAtual){//Percorre todas as Avs do usuário encontrado
                     if(($avAtual["isEnviadoUsuario"]==1 
                     && $avAtual["isAprovadoGestor"]==true 
@@ -4842,7 +4842,7 @@ class ControladorAv extends Controller
                         array_push($avsFiltradas, $avAtual);
                     }
                 }
-            }
+            
         }
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();
