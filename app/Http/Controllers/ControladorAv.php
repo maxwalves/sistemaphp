@@ -1720,6 +1720,7 @@ class ControladorAv extends Controller
         $historico->usuario_id = $av->user_id;
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
+        $historico->save();
 
         foreach($av->rotas as $rota){
             if($rota["isVeiculoProprio"]==1){
@@ -1803,8 +1804,7 @@ class ControladorAv extends Controller
         }
 
         Av::findOrFail($av->id)->update($dados);
-        $historico->save();
-
+        
         $permissionDir = Permission::where('name', 'aprov avs diretoria')->first();
         $permission2 = Permission::where('name', 'aprov avs secretaria')->first();
         $permission3 = Permission::where('name', 'aprov avs financeiro')->first();
