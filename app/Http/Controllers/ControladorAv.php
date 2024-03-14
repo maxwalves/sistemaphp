@@ -3487,7 +3487,7 @@ class ControladorAv extends Controller
                 if($dataSaidaFormatado->format('Y-m-d') == $dia){
 
                     if($temDiariaManha == false){
-
+                        
                         if( ($dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00") && $dia != $dataUltimaRota){
                         //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MAIOR QUE 13:01
                             $valorManha = $valor/2;
@@ -3512,7 +3512,21 @@ class ControladorAv extends Controller
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if($dia == $dataUltimaRota && $dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
+                        else if($dia == $dataUltimaRota && $dataSaidaFormatado->format('H:i:s') <= "12:00:00" 
+                                && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
+                        //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
+                            try {
+                                $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                                $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            } catch (\Throwable $th) {
+                                $valor = $this->verificaValorRota($rota);
+                            }
+                            
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
+                        }
+                        else if($dia == $dataUltimaRota && $dataSaidaFormatado->format('H:i:s') <= "12:00:00" 
+                                && $proximaRota != false && $proximaRotaDataChegadaFormatado->format('H:i:s') >= "13:01:00"){
                         //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
                             try {
                                 $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
@@ -5453,7 +5467,8 @@ class ControladorAv extends Controller
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
+                        else if($dia == $dataUltimaRota && $dataSaidaFormatado->format('H:i:s') <= "12:00:00" 
+                                && $dataChegadaFormatado->format('H:i:s') >= "13:01:00"){
                         //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
                             try {
                                 $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
@@ -5461,6 +5476,20 @@ class ControladorAv extends Controller
                             } catch (\Throwable $th) {
                                 $valor = $this->verificaValorRota($rota);
                             }
+                            
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
+                        }
+                        else if($dia == $dataUltimaRota && $dataSaidaFormatado->format('H:i:s') <= "12:00:00" 
+                                && $proximaRota != false && $proximaRotaDataChegadaFormatado->format('H:i:s') >= "13:01:00"){
+                        //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
+                            try {
+                                $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                                $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            } catch (\Throwable $th) {
+                                $valor = $this->verificaValorRota($rota);
+                            }
+                            
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
