@@ -2179,6 +2179,7 @@ class ControladorAv extends Controller
 
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
+        $userAv = User::findOrFail($av->user_id);
 
         $dados = [];
 
@@ -2266,15 +2267,55 @@ class ControladorAv extends Controller
         $permission = Permission::where('name', 'aprov avs financeiro')->first();
         
         $users = User::all();
-            foreach($users as $u){
-                try {
-                    if($u->hasPermissionTo($permission)){
-                        Mail::to($u->username)
-                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u->id));
+        foreach($users as $u2){
+            try {
+                if($u2->hasPermissionTo($permission)){
+                    //verifique se u2 é da mesma regional que $userAv
+                    if(
+                    ($u2->department != "ERCSC" 
+                    && $u2->department != "ERMGA" 
+                    && $u2->department != "ERFCB" 
+                    && $u2->department != "ERGUA" 
+                    && $u2->department != "ERLDA" 
+                    && $u2->department != "ERPTG")
+                    &&
+                    ($userAv->department != "ERCSC"
+                    && $userAv->department != "ERMGA"
+                    && $userAv->department != "ERFCB"
+                    && $userAv->department != "ERGUA"
+                    && $userAv->department != "ERLDA"
+                    && $userAv->department != "ERPTG")
+                    )
+                    {
+                        Mail::to($u2->username)
+                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id));
                     }
-                } catch (\Throwable $th) {
+                    else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                        Mail::to($u2->username)
+                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id));
+                    }
+                    else if
+                    (
+                    ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
+                    ||
+                    ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
+                    ||
+                    ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
+                    ||
+                    ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
+                    ||
+                    ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
+                    ||
+                    ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
+                    )
+                    {
+                        Mail::to($u2->username)
+                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id));
+                    }
                 }
+            } catch (\Throwable $th) {
             }
+        }
 
         return redirect('/avs/prestacaoContasUsuario')->with('msg', 'Prestação de contas realizada!');
     }
@@ -2533,6 +2574,7 @@ class ControladorAv extends Controller
 
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
+        $userAv = User::findOrFail($av->user_id);
 
         $dados = [];
 
@@ -2558,11 +2600,52 @@ class ControladorAv extends Controller
         $permission = Permission::where('name', 'aprov avs financeiro')->first();
 
         $users = User::all();
-        foreach($users as $u){
+        
+        foreach($users as $u2){
             try {
-                if($u->hasPermissionTo($permission)){
-                    Mail::to($u->username)
-                    ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u->id));
+                if($u2->hasPermissionTo($permission)){
+                    //verifique se u2 é da mesma regional que $userAv
+                    if(
+                    ($u2->department != "ERCSC" 
+                    && $u2->department != "ERMGA" 
+                    && $u2->department != "ERFCB" 
+                    && $u2->department != "ERGUA" 
+                    && $u2->department != "ERLDA" 
+                    && $u2->department != "ERPTG")
+                    &&
+                    ($userAv->department != "ERCSC"
+                    && $userAv->department != "ERMGA"
+                    && $userAv->department != "ERFCB"
+                    && $userAv->department != "ERGUA"
+                    && $userAv->department != "ERLDA"
+                    && $userAv->department != "ERPTG")
+                    )
+                    {
+                        Mail::to($u2->username)
+                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id));
+                    }
+                    else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                        Mail::to($u2->username)
+                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id));
+                    }
+                    else if
+                    (
+                    ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
+                    ||
+                    ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
+                    ||
+                    ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
+                    ||
+                    ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
+                    ||
+                    ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
+                    ||
+                    ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
+                    )
+                    {
+                        Mail::to($u2->username)
+                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id));
+                    }
                 }
             } catch (\Throwable $th) {
             }
@@ -2575,6 +2658,7 @@ class ControladorAv extends Controller
 
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
+        $userAv = User::findOrFail($av->user_id);
 
         $dados = [];
 
@@ -2610,11 +2694,52 @@ class ControladorAv extends Controller
         $permission = Permission::where('name', 'aprov avs financeiro')->first();
 
         $users = User::all();
-        foreach($users as $u){
+
+        foreach($users as $u2){
             try {
-                if($u->hasPermissionTo($permission)){
-                    Mail::to($u->username)
-                    ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u->id));
+                if($u2->hasPermissionTo($permission)){
+                    //verifique se u2 é da mesma regional que $userAv
+                    if(
+                    ($u2->department != "ERCSC" 
+                    && $u2->department != "ERMGA" 
+                    && $u2->department != "ERFCB" 
+                    && $u2->department != "ERGUA" 
+                    && $u2->department != "ERLDA" 
+                    && $u2->department != "ERPTG")
+                    &&
+                    ($userAv->department != "ERCSC"
+                    && $userAv->department != "ERMGA"
+                    && $userAv->department != "ERFCB"
+                    && $userAv->department != "ERGUA"
+                    && $userAv->department != "ERLDA"
+                    && $userAv->department != "ERPTG")
+                    )
+                    {
+                        Mail::to($u2->username)
+                        ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u2->id));
+                    }
+                    else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                        Mail::to($u2->username)
+                        ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u2->id));
+                    }
+                    else if
+                    (
+                    ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
+                    ||
+                    ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
+                    ||
+                    ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
+                    ||
+                    ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
+                    ||
+                    ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
+                    ||
+                    ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
+                    )
+                    {
+                        Mail::to($u2->username)
+                        ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u2->id));
+                    }
                 }
             } catch (\Throwable $th) {
             }
@@ -2751,11 +2876,51 @@ class ControladorAv extends Controller
         }
         else{
             $users = User::all();
-            foreach($users as $u){
+            foreach($users as $u2){
                 try {
-                    if($u->hasPermissionTo($permission)){
-                        Mail::to($u->username)
-                        ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u->id));
+                    if($u2->hasPermissionTo($permission)){
+                        //verifique se u2 é da mesma regional que $userAv
+                        if(
+                        ($u2->department != "ERCSC" 
+                        && $u2->department != "ERMGA" 
+                        && $u2->department != "ERFCB" 
+                        && $u2->department != "ERGUA" 
+                        && $u2->department != "ERLDA" 
+                        && $u2->department != "ERPTG")
+                        &&
+                        ($userAv->department != "ERCSC"
+                        && $userAv->department != "ERMGA"
+                        && $userAv->department != "ERFCB"
+                        && $userAv->department != "ERGUA"
+                        && $userAv->department != "ERLDA"
+                        && $userAv->department != "ERPTG")
+                        )
+                        {
+                            Mail::to($u2->username)
+                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id));
+                        }
+                        else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                            Mail::to($u2->username)
+                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id));
+                        }
+                        else if
+                        (
+                        ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
+                        ||
+                        ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
+                        ||
+                        ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
+                        ||
+                        ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
+                        ||
+                        ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
+                        ||
+                        ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
+                        )
+                        {
+                            Mail::to($u2->username)
+                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id));
+                        }
                     }
                 } catch (\Throwable $th) {
                 }
@@ -2885,8 +3050,48 @@ class ControladorAv extends Controller
         foreach($users as $u2){
             try {
                 if($u2->hasPermissionTo($permission2)){
-                    Mail::to($u2->username)
-                    ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                    //verifique se u2 é da mesma regional que $userAv
+                    if(
+                    ($u2->department != "ERCSC" 
+                    && $u2->department != "ERMGA" 
+                    && $u2->department != "ERFCB" 
+                    && $u2->department != "ERGUA" 
+                    && $u2->department != "ERLDA" 
+                    && $u2->department != "ERPTG")
+                    &&
+                    ($userAv->department != "ERCSC"
+                    && $userAv->department != "ERMGA"
+                    && $userAv->department != "ERFCB"
+                    && $userAv->department != "ERGUA"
+                    && $userAv->department != "ERLDA"
+                    && $userAv->department != "ERPTG")
+                    )
+                    {
+                        Mail::to($u2->username)
+                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                    }
+                    else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                        Mail::to($u2->username)
+                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                    }
+                    else if
+                    (
+                    ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
+                    ||
+                    ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
+                    ||
+                    ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
+                    ||
+                    ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
+                    ||
+                    ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
+                    ||
+                    ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
+                    )
+                    {
+                        Mail::to($u2->username)
+                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                    }
                 }
             } catch (\Throwable $th) {
             }
@@ -4856,7 +5061,7 @@ class ControladorAv extends Controller
         }
         $avs = $avsFiltradas;
         $objetivos = Objetivo::all();
-        return view('avs.acertoContasFinanceiro', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
+        return view('avs.acertoContasFinanceiro', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos, 'users'=> $users]);
     }
 
     public function autPcGestor(){
