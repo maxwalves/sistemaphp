@@ -5439,7 +5439,6 @@ class ControladorAv extends Controller
 
                 //APENAS SE COINDICIR O DIA DA ROTA COM O DIAS DO INTERVALO, NOS DIAS INTEMEDIÁRIOS O VALOR DA DIÁRIA É O DA ÚLTIMA ROTA
                 if($dataSaidaFormatado->format('Y-m-d') == $dia){
-                    
 
                     if($temDiariaManha == false){
 

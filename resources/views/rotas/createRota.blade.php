@@ -999,10 +999,49 @@
             
             // Obter o valor do campo datetime-local
             var valor = inputDatetimeLocal.value;
-            data1 = valor;
+
+            //adiciona uma hora
+            var dataAdaptada = new Date(valor);
             
-            inputDatetimeLocal2.min = valor;
-            inputDatetimeLocal2.value = valor;
+            // Adicionar 1 hora localmente
+            dataAdaptada.setHours(dataAdaptada.getHours(), dataAdaptada.getMinutes() + 30);
+            
+            // Formatar a nova data e hora para o formato apropriado
+            var dataFormatada = dataAdaptada.getFullYear() + '-' + 
+                            ('0' + (dataAdaptada.getMonth() + 1)).slice(-2) + '-' + 
+                            ('0' + dataAdaptada.getDate()).slice(-2) + 'T' + 
+                            ('0' + dataAdaptada.getHours()).slice(-2) + ':' + 
+                            ('0' + dataAdaptada.getMinutes()).slice(-2);
+            
+            data1 = dataFormatada;
+            
+            inputDatetimeLocal2.min = data1;
+            inputDatetimeLocal2.value = data1;
+        });
+        dataHoraSaidaNacional.addEventListener('click', function() {
+            var inputDatetimeLocal = document.querySelector('.classeDataHoraSaidaNacional');
+            var inputDatetimeLocal2 = document.querySelector('.classeDataHoraChegadaNacional');
+            
+            // Obter o valor do campo datetime-local
+            var valor = inputDatetimeLocal.value;
+
+            //adiciona uma hora
+            var dataAdaptada = new Date(valor);
+            
+            // Adicionar 1 hora localmente
+            dataAdaptada.setHours(dataAdaptada.getHours(), dataAdaptada.getMinutes() + 30);
+            
+            // Formatar a nova data e hora para o formato apropriado
+            var dataFormatada = dataAdaptada.getFullYear() + '-' + 
+                            ('0' + (dataAdaptada.getMonth() + 1)).slice(-2) + '-' + 
+                            ('0' + dataAdaptada.getDate()).slice(-2) + 'T' + 
+                            ('0' + dataAdaptada.getHours()).slice(-2) + ':' + 
+                            ('0' + dataAdaptada.getMinutes()).slice(-2);
+            
+            data1 = dataFormatada;
+            
+            inputDatetimeLocal2.min = data1;
+            inputDatetimeLocal2.value = data1;
         });
 
 //Se clicar no campo dataHoraChegadaNacional, seta o valor minimo do campo dataHoraSaidaVoltaNacional
@@ -1013,7 +1052,47 @@
             
             // Obter o valor do campo datetime-local
             var valor2 = inputDatetimeChegadaNacional.value;
-            data2 = valor2;
+
+            //adiciona uma hora
+            var dataAdaptada = new Date(valor2);
+
+            // Adicionar 1 hora localmente
+            dataAdaptada.setHours(dataAdaptada.getHours(), dataAdaptada.getMinutes() + 30);
+
+            // Formatar a nova data e hora para o formato apropriado
+            var dataFormatada = dataAdaptada.getFullYear() + '-' + 
+                            ('0' + (dataAdaptada.getMonth() + 1)).slice(-2) + '-' + 
+                            ('0' + dataAdaptada.getDate()).slice(-2) + 'T' + 
+                            ('0' + dataAdaptada.getHours()).slice(-2) + ':' + 
+                            ('0' + dataAdaptada.getMinutes()).slice(-2);
+            
+            data2 = dataFormatada;
+
+            var inputVolta1 = document.getElementById('dataHoraSaidaVoltaNacional');
+            inputVolta1.min = data2;
+            inputVolta1.value = data2;
+        });
+        dataHoraChegadaNacional.addEventListener('click', function() {
+
+            var inputDatetimeChegadaNacional= document.querySelector('.classeDataHoraChegadaNacional');
+
+            // Obter o valor do campo datetime-local
+            var valor2 = inputDatetimeChegadaNacional.value;
+
+            //adiciona uma hora
+            var dataAdaptada = new Date(valor2);
+
+            // Adicionar 1 hora localmente
+            dataAdaptada.setHours(dataAdaptada.getHours(), dataAdaptada.getMinutes() + 30);
+
+            // Formatar a nova data e hora para o formato apropriado
+            var dataFormatada = dataAdaptada.getFullYear() + '-' + 
+                            ('0' + (dataAdaptada.getMonth() + 1)).slice(-2) + '-' + 
+                            ('0' + dataAdaptada.getDate()).slice(-2) + 'T' + 
+                            ('0' + dataAdaptada.getHours()).slice(-2) + ':' + 
+                            ('0' + dataAdaptada.getMinutes()).slice(-2);
+
+            data2 = dataFormatada;
 
             var inputVolta1 = document.getElementById('dataHoraSaidaVoltaNacional');
             inputVolta1.min = data2;
@@ -1027,6 +1106,45 @@
             var classeDataHoraChegadaVoltaNacional= document.querySelector('.classeDataHoraChegadaVoltaNacional');
 
             data2 = dataHoraSaidaVoltaNacional.value;
+
+            //adiciona uma hora
+            var dataAdaptada = new Date(data2);
+
+            // Adicionar 1 hora localmente
+            dataAdaptada.setHours(dataAdaptada.getHours(), dataAdaptada.getMinutes() + 30);
+
+            // Formatar a nova data e hora para o formato apropriado
+            var dataFormatada = dataAdaptada.getFullYear() + '-' + 
+                            ('0' + (dataAdaptada.getMonth() + 1)).slice(-2) + '-' + 
+                            ('0' + dataAdaptada.getDate()).slice(-2) + 'T' + 
+                            ('0' + dataAdaptada.getHours()).slice(-2) + ':' + 
+                            ('0' + dataAdaptada.getMinutes()).slice(-2);
+
+            data2 = dataFormatada;
+
+            classeDataHoraChegadaVoltaNacional.min = data2;
+            classeDataHoraChegadaVoltaNacional.value = data2;
+        });
+        dataHoraSaidaVoltaNacional.addEventListener('click', function() {
+
+            var classeDataHoraChegadaVoltaNacional= document.querySelector('.classeDataHoraChegadaVoltaNacional');
+
+            data2 = dataHoraSaidaVoltaNacional.value;
+
+            //adiciona uma hora
+            var dataAdaptada = new Date(data2);
+
+            // Adicionar 1 hora localmente
+            dataAdaptada.setHours(dataAdaptada.getHours(), dataAdaptada.getMinutes() + 30);
+
+            // Formatar a nova data e hora para o formato apropriado
+            var dataFormatada = dataAdaptada.getFullYear() + '-' + 
+                            ('0' + (dataAdaptada.getMonth() + 1)).slice(-2) + '-' + 
+                            ('0' + dataAdaptada.getDate()).slice(-2) + 'T' + 
+                            ('0' + dataAdaptada.getHours()).slice(-2) + ':' + 
+                            ('0' + dataAdaptada.getMinutes()).slice(-2);
+
+            data2 = dataFormatada;
 
             classeDataHoraChegadaVoltaNacional.min = data2;
             classeDataHoraChegadaVoltaNacional.value = data2;
