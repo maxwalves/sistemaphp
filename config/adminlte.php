@@ -445,6 +445,14 @@ return [
             'id'          => 'gerenciarProgramaLink',
             'can'         => '',
         ],
+        [
+            'text'       => 'Reservas de Veículos',
+            'icon_color' => 'purple',
+            'url'        => 'https://sistemas.paranacidade.org.br/reservas/public/',
+            'id'          => '',
+            'can'         => '',
+            'target'     => '_blank',
+        ],
     ],
 
     /*
