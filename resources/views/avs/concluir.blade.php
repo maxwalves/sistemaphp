@@ -408,7 +408,10 @@
                 </div>
                 <div class="col-md-5 table-responsive" id="divTabelaPrincipal">
                     <br><br>
-                    <x-adminlte-button label="+" data-toggle="modal" data-target="#my-modal-1" class="bg-green"/>
+                    <h4>
+                        <x-adminlte-button label="+" data-toggle="modal" data-target="#my-modal-1" class="bg-green"/>
+                        <i class="fas fa-arrow-left" id="texto-reserva"> Faça sua reserva de veículo aqui</i>
+                    </h4>                    
                     <h3><i class="fas fa-car"></i> Minhas reservas de veículos: </h3>
                     <table id="tabelaEventos" class="table table-hover table-bordered">
                         <thead>
@@ -517,6 +520,20 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link href="{{asset('DataTables/datatables.min.css')}}" rel="stylesheet"/>
+
+    <style>
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        .blink {
+            animation: blink 1s infinite;
+        }
+    </style>
+    
+    
 @stop
 
 @section('js')
@@ -525,6 +542,8 @@
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.9/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.9/index.global.min.js'></script>
 <script type="text/javascript">
+
+    document.getElementById("texto-reserva").classList.add("blink");
 
     $('#salvarBt').on('click', function() {
         // Altera o estilo da <div> para "block"
