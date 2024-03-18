@@ -3886,7 +3886,7 @@ class ControladorAv extends Controller
             $isCuritiba = true;
         }
 
-        $url = 'http://10.51.10.43/reservas/public/api/getReservasAPI';
+        $url = 'http://10.51.10.43/reservas/public/api/getReservasAPI/' . $user->department;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $eventos = json_decode(curl_exec($ch));
@@ -3897,21 +3897,6 @@ class ControladorAv extends Controller
         $reservas2 = json_decode(curl_exec($ch));
         //crie uma coleção de $reservas2
         $reservas2 = collect($reservas2);
-
-        $reservas2 = $reservas2->filter(function ($reserva) use ($departmentUser, $isCuritiba) {
-
-            $userReservaTemp = User::where('id', $reserva->idUsuario)->first();
-            
-            if($isCuritiba && $userReservaTemp->department != "ERCSC" && $userReservaTemp->department != "ERMGA" && $userReservaTemp->department != "ERFCB" && $userReservaTemp->department != "ERGUA" && $userReservaTemp->department != "ERLDA" && $userReservaTemp->department != "ERPTG"){
-                return true;
-            }
-            else if($userReservaTemp->department == $departmentUser){
-                return true;
-            }
-            else{
-                return false;
-            }
-        });
 
         $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
         $ch = curl_init($url);
