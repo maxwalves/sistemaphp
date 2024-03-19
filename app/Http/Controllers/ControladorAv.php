@@ -4034,21 +4034,33 @@ class ControladorAv extends Controller
     {
 
         $user = auth()->user();
-
-        $search = request('search');
-
-        if ($search) {
-            $avs = Av::where([
-                ['title', 'like', '%'.$search. '%']
-            ])->get();
-        } else {
-            $avs = Av::all();
-        }
-
-        $user = auth()->user();
         $avs = $user->avs;
 
-        return view('welcome', ['avs' => $avs, 'search' => $search, 'user'=> $user]);
+        $managerDN = $user->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+        // Dividir a string em partes usando o caractere de vírgula como delimitador
+        $parts = explode(',', $managerDN);
+
+        // Extrair o nome do gerente da primeira parte
+        $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+
+        $isCuritiba = false;
+
+        if($user->department != "ERCSC" 
+        && $user->department != "ERMGA" 
+        && $user->department != "ERFCB" 
+        && $user->department != "ERGUA" 
+        && $user->department != "ERLDA" 
+        && $user->department != "ERPTG"){
+            $isCuritiba = true;
+        }
+        
+        if ($user->dataAssinaturaTermo == null) {
+            return view('termoResponsabilidade', ['user'=> $user]);
+        }
+        else{
+            return view('welcome', ['avs' => $avs, 'user'=> $user, 'managerName' => $managerName, 'isCuritiba' => $isCuritiba]);
+        }
     }
 
     public function destroy($id)
