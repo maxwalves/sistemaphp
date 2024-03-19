@@ -338,6 +338,9 @@
                                                             @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0)
                                                                 Valor que o usuário deve pagar em reais
                                                             @endif
+                                                            @if($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) == 0)
+                                                                O somatório dos valores das diárias da Viagem informada na AV não foi alterado na PC.
+                                                            @endif
                                                         @endif
                                                     </p>
                                                 </div>
