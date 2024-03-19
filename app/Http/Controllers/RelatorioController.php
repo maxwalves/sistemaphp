@@ -9,6 +9,8 @@ use App\Models\Country;
 use App\Models\Objetivo;
 use App\Models\Historico;
 use App\Models\User;
+use App\Models\HistoricoPc;
+use App\Models\ComprovanteDespesa;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -46,6 +48,59 @@ class RelatorioController extends Controller
         $dompdf->loadHtml(view('relatorioViagemInternacional', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 
         'valorRecebido', 'valorReais', 'valorAcertoContasReal', 'valorAcertoContasDolar', 'paises')));
 
+        $dompdf->render();
+
+        return $dompdf->stream('relatorio.pdf');
+    }
+
+    public function gerarRelatorioPDFAcertoContas($id)
+    {
+        $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $users = User::all();
+        $historicos = [];
+
+        $historicoPcAll = HistoricoPc::all();
+        $valorRecebido = null;
+        
+        $comprovantesAll = ComprovanteDespesa::all();
+        $comprovantes = [];
+
+        $valorAcertoContasReal = 0;
+        $valorAcertoContasDolar = 0;
+
+        foreach($comprovantesAll as $comp){
+            if($comp->av_id == $av->id){
+                array_push($comprovantes, $comp);
+            }
+        }
+        foreach($comprovantes as $compFiltrado){
+            $valorAcertoContasReal += $compFiltrado->valorReais;
+            $valorAcertoContasDolar += $compFiltrado->valorDolar;
+        }
+
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+        
+        foreach($historicoPcAll as $hisPc){
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
+                $valorRecebido = $hisPc;
+            }
+        }
+
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        
+        $options = new Options();
+        $options->set('defaultFont', 'sans-serif');
+        $dompdf = new Dompdf($options);
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores')));
         $dompdf->render();
 
         return $dompdf->stream('relatorio.pdf');
