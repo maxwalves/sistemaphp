@@ -12,7 +12,33 @@
         <div class="col-12 col-xl-4">
             <div class= "card" >
                 <div class="card-body">
-                    Seja bem-vindo ao Sistema de Controle de Viagens!
+                    <h5>Seja bem-vindo ao Sistema de Controle de Viagens!</h5>
+                </div> 
+                <div class="card-body">
+                    <h5><strong>E-mail: </strong> {{ $user->username }}</h5>
+                    <h5><strong>Setor/Regional: </strong>
+                        @if($isCuritiba)
+                            Curitiba
+                        @elseif($user->department == "ERCSC")
+                            Cascavel
+                        @elseif($user->department == "ERMGA")
+                            Maringá
+                        @elseif($user->department == "ERFCB")
+                            Francisco Beltrão
+                        @elseif($user->department == "ERGUA")
+                            Guarapuava
+                        @elseif($user->department == "ERLDA")
+                            Londrina
+                        @elseif($user->department == "ERPTG")
+                            Ponta Grossa
+                        @else
+                            Não encontrado
+                        @endif
+                    </h5>                    
+                    <h5><strong>Matrícula: </strong> {{ $user->employeeNumber }}</h5>
+                    <h5><strong>Setor: </strong> {{ $user->nomeSetor }}</h5>
+                    <h5><strong>Coordenador: </strong> {{ $managerName }}</h5>
+                    <h5><strong>Quantidade de AVs cadastradas: </strong> {{ count($avs) }}</h5>
                 </div> 
             </div>
         </div>
