@@ -267,7 +267,7 @@ class ControladorRota extends Controller
         $veiculosProprios = $user->veiculosProprios;
         
         return view('rotaspc.createRota', ['veiculosProprios' => $veiculosProprios, 'av' => $av, 'user'=> $user, 'isOrigemNacional' => $isOrigemNacional, 
-        'rotaOriginal' => $rotaOriginal, 'ultimaRotaSetada' => $ultimaRotaSetada]);
+        'rotaOriginal' => $rotaOriginal, 'ultimaRotaSetada' => $ultimaRotaSetada, 'rotas' => $rotas]);
     }
 
     public function store(Request $request)
@@ -440,7 +440,29 @@ class ControladorRota extends Controller
         }
 
         if($request->isPc=="sim"){
-            return redirect('/rotaspc/rotas/' . $request->idav )->with('msg', 'Rota criada com sucesso!');
+            
+            //return redirect('/rotaspc/rotas/' . $request->idav )->with('msg', 'Rota editada com sucesso!');
+            $avId = $request->idav;
+
+            // Chame <form action="/avspc/concluir/{{ $av->id }}/sim" enctype="multipart/form-data">
+            // Construir o HTML para o formulário usando apenas GET
+            $formHtml = '
+                <form id="redirectForm" action="/avspc/concluir/' . $avId . '/sim" method="GET" enctype="multipart/form-data">
+                </form>
+            ';
+
+            // Construir o JavaScript para fazer o submit automático do formulário
+            $scriptHtml = '
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        document.getElementById("redirectForm").submit();
+                    });
+                </script>
+            ';
+
+            // Retornar o HTML completo
+            
+            return $formHtml . $scriptHtml;
         }
         else{
             return redirect('/rotas/rotas/' . $request->idav )->with('msg', 'Rota criada com sucesso!');
@@ -472,7 +494,25 @@ class ControladorRota extends Controller
         $idAv = $rota->av_id;
         $rota->delete();
 
-        return redirect('/rotaspc/rotas/'  . $idAv)->with('msg', 'Rota excluída com sucesso!');
+        // Chame <form action="/avspc/concluir/{{ $av->id }}/sim" enctype="multipart/form-data">
+        // Construir o HTML para o formulário usando apenas GET
+        $formHtml = '
+            <form id="redirectForm" action="/avspc/concluir/' . $idAv . '/sim" method="GET" enctype="multipart/form-data">
+            </form>
+        ';
+
+        // Construir o JavaScript para fazer o submit automático do formulário
+        $scriptHtml = '
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    document.getElementById("redirectForm").submit();
+                });
+            </script>
+        ';
+
+        // Retornar o HTML completo
+        
+        return $formHtml . $scriptHtml;
     }
 
     public function edit($id)
@@ -492,9 +532,11 @@ class ControladorRota extends Controller
             return redirect('/avs/avs/')->with('msg', 'Você não tem autorização para editar uma rota de AV de outro usuário!');
         }
 
+        $rotas = $av->rotas;
+
         $veiculosProprios = $user->veiculosProprios;
 
-        return view('rotas.editRota', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
+        return view('rotas.editRota', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
     }
 
     public function editNovaData($id)
@@ -531,9 +573,10 @@ class ControladorRota extends Controller
             return redirect('/rotas/rotas/' . $idAv)->with('msg', 'Você não tem autorização para editar uma rota de AV de outro usuário!');
         }
 
+        $rotas = $av->rotas;
         $veiculosProprios = $user->veiculosProprios;
 
-        return view('rotaspc.editRota', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user]);
+        return view('rotaspc.editRota', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
     }
 
     public function update(Request $request)

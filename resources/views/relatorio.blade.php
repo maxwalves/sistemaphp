@@ -198,6 +198,33 @@
                         @endfor
                     </tbody>
                 </table>
+
+                <br><br>
+                @if(count($medicoesFiltradas) > 0)
+                    <h3 style="font-size: 12px"><strong>Medições: </strong></h3>
+                    <table class="comBordaSimples" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th style="vertical-align: middle; text-align: center;">Nome do município</th>
+                                <th style="vertical-align: middle; text-align: center;">Número do projeto</th>
+                                <th style="vertical-align: middle; text-align: center;">Número do lote</th>
+                                <th style="vertical-align: middle; text-align: center;">Número da medição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($medicoesFiltradas as $med)
+                                <tr style="vertical-align: middle; text-align: center;">
+                                    <td style="vertical-align: middle; text-align: center;"> {{ $med->nome_municipio }} </td>
+                                    <td style="vertical-align: middle; text-align: center;"> {{ $med->numero_projeto }} </td>
+                                    <td style="vertical-align: middle; text-align: center;"> {{ $med->numero_lote }} </td>
+                                    <td style="vertical-align: middle; text-align: center;"> {{ $med->numero_medicao }} </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+
+                <h3 style="font-size: 12px"><strong>Data de geração do documento AV: {{$dataFormatadaAtual}} </strong></h3>
             </div>
 
         </main>

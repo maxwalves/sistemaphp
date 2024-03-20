@@ -32,7 +32,7 @@
             <div style="font-size: 12px">
                 
                 <div class="row">
-                    
+                    <br><br>
                     <h3 >Dados básicos:</h3>
                     <div style="border: 1px solid black; padding-left:10px">
 
@@ -201,7 +201,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                
+                <br><br><br><br>
                 <h3 style="font-size: 12px"><strong>Histórico: </strong></h3>
                 <table id="minhaTabela" class="comBordaSimples" style="width: 100%">
                     <!-- head -->
@@ -290,6 +290,32 @@
                         @endfor
                     </tbody>
                 </table>
+                <br><br>
+                @if(count($medicoesFiltradas) > 0)
+                    <h3 style="font-size: 12px"><strong>Medições: </strong></h3>
+                    <table class="comBordaSimples" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th style="vertical-align: middle; text-align: center;">Nome do município</th>
+                                <th style="vertical-align: middle; text-align: center;">Número do projeto</th>
+                                <th style="vertical-align: middle; text-align: center;">Número do lote</th>
+                                <th style="vertical-align: middle; text-align: center;">Número da medição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($medicoesFiltradas as $med)
+                                <tr style="vertical-align: middle; text-align: center;">
+                                    <td style="vertical-align: middle; text-align: center;"> {{ $med->nome_municipio }} </td>
+                                    <td style="vertical-align: middle; text-align: center;"> {{ $med->numero_projeto }} </td>
+                                    <td style="vertical-align: middle; text-align: center;"> {{ $med->numero_lote }} </td>
+                                    <td style="vertical-align: middle; text-align: center;"> {{ $med->numero_medicao }} </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+
+                <h3 style="font-size: 12px"><strong>Data de geração do documento PC: {{$dataFormatadaAtual}} </strong></h3>
             </div>
             
         </main>

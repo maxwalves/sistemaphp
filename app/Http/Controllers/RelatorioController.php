@@ -11,6 +11,7 @@ use App\Models\Historico;
 use App\Models\User;
 use App\Models\HistoricoPc;
 use App\Models\ComprovanteDespesa;
+use App\Models\Medicao;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -94,13 +95,28 @@ class RelatorioController extends Controller
         }
 
         $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+
+        $medicoes = Medicao::all();
+        $medicoesFiltradas = [];
+
+        foreach($medicoes as $medicao){
+            if($medicao->av_id == $av->id){
+                array_push($medicoesFiltradas, $medicao); 
+            }
+        }
+
+        $timezone = new \DateTimeZone('America/Sao_Paulo');
+        $dataAtual = new DateTime('now', $timezone);
+        //formate para o seguinte formato: 01/01/2021 00:00:00
+        $dataFormatadaAtual = $dataAtual->format('d/m/Y H:i:s');
         
         $options = new Options();
         $options->set('defaultFont', 'sans-serif');
         $dompdf = new Dompdf($options);
 
         $dompdf = new Dompdf();
-        $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores')));
+        $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 
+        'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores', 'medicoesFiltradas', 'dataFormatadaAtual')));
         $dompdf->render();
 
         return $dompdf->stream('relatorio.pdf');

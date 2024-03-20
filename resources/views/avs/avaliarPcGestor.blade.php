@@ -115,7 +115,7 @@
 
                         @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                             <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                            </ion-icon> <strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}</p>
+                                <p class="av-owner" style="font-size: 20px"><strong>Valor calculado de reembolso de combustível: </strong> R${{$av->qtdKmVeiculoProprio * 0.49}} ([Qtd de Km] * 0,49)</p>
                         @endif
                     </div>
 
@@ -862,12 +862,6 @@
                                 <th>Data/Hora de chegada</th>
                                 <th>Hotel?</th>
                                 <th>Tipo de transporte</th>
-                                @foreach ($av->rotas as $rota)
-                                    @if ($rota->isVeiculoEmpresa == 1)
-                                        <th>Veículo</th>
-                                    @break
-                                @endif
-                            @endforeach
                         </tr>
                     </thead>
                     <tbody>
@@ -941,25 +935,6 @@
                                 @php
                                     $achouVeiculo = false;
                                 @endphp
-                                @if ($rota->isVeiculoEmpresa == 1)
-                                    @foreach ($veiculosParanacidade as $v)
-                                        @if ($rota->veiculoParanacidade_id == $v->id)
-                                            @php
-                                                $achouVeiculo = true;
-                                                break;
-                                            @endphp
-                                        @endif
-                                    @endforeach
-                                    @if ($achouVeiculo == true)
-                                        <td>
-                                            {{ $v->modelo }} ({{ $v->placa }})
-                                        </td>
-                                    @else
-                                        <td>
-                                            A definir
-                                        </td>
-                                    @endif
-                                @endif
 
                             </tr>
                         @endforeach

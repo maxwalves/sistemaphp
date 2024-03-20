@@ -2129,17 +2129,32 @@ class ControladorAv extends Controller
 
         $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
 
+        $medicoes = Medicao::all();
+        $medicoesFiltradas = [];
+
+        foreach($medicoes as $medicao){
+            if($medicao->av_id == $av->id){
+                array_push($medicoesFiltradas, $medicao); 
+            }
+        }
+
         foreach($historicosTodos as $hist){
             if($hist->av_id == $av->id){
                 array_push($historicos, $hist);
             }
         }
+
+        $dataAtual = new DateTime('now', $timezone);
+        //formate para o seguinte formato: 01/01/2021 00:00:00
+        $dataFormatadaAtual = $dataAtual->format('d/m/Y H:i:s');
+
         $options = new Options();
         $options->set('defaultFont', 'sans-serif');
         $dompdf = new Dompdf($options);
 
         $dompdf = new Dompdf();
-        $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 'arrayDiasValores', 'isVeiculoEmpresa')));
+        $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 'arrayDiasValores', 
+        'isVeiculoEmpresa', 'medicoesFiltradas', 'dataFormatadaAtual')));
         $dompdf->render();
 
         $nomeArquivo = md5("relatorio" . strtotime("now")) . ".pdf";
@@ -2499,13 +2514,27 @@ class ControladorAv extends Controller
 
         $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
 
+        $medicoes = Medicao::all();
+        $medicoesFiltradas = [];
+
+        foreach($medicoes as $medicao){
+            if($medicao->av_id == $av->id){
+                array_push($medicoesFiltradas, $medicao); 
+            }
+        }
+
+        $dataAtual = new DateTime('now', $timezone);
+        //formate para o seguinte formato: 01/01/2021 00:00:00
+        $dataFormatadaAtual = $dataAtual->format('d/m/Y H:i:s');
+
         //----------------------------------------------------------------------------------------------------------
         $options = new Options();
         $options->set('defaultFont', 'sans-serif');
         $dompdf = new Dompdf($options);
 
         $dompdf = new Dompdf();
-        $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores')));
+        $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 
+        'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores', 'medicoesFiltradas', 'dataFormatadaAtual')));
         $dompdf->render();
 
         $nomeArquivo = md5("relatorioAcertoContas" . strtotime("now")) . ".pdf";
@@ -4308,6 +4337,12 @@ class ControladorAv extends Controller
             }
         }
         $avs = $avsFiltradas;
+
+        //$avs é um array, ordene pelo id em ordem decrescente
+        usort($avs, function($a, $b) {
+            return $b->id <=> $a->id;
+        });
+        
         $objetivos = Objetivo::all();
         return view('avs.autGestor', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos, 'users' => $users, 
         'avsTodas' => $avsTodas, 'usersFiltrados' => $usersFiltrados]);

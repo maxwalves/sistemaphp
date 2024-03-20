@@ -107,8 +107,8 @@
                             @endfor
                             
                             @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                                <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                                </ion-icon> <strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}</p>
+                                <p class="av-owner" style="font-size: 20px"><strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}</p>
+                                <p class="av-owner" style="font-size: 20px"><strong>Valor calculado de reembolso de combustível: </strong> R${{$av->qtdKmVeiculoProprio * 0.49}} ([Qtd de Km] * 0,49)</p>
                             @endif
                         </div>
 

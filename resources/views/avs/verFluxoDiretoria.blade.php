@@ -90,12 +90,6 @@
                                     <th>Data/Hora de chegada</th>
                                     <th>Hotel?</th>
                                     <th>Tipo de transporte</th>
-                                    @foreach ($av->rotas as $rota)
-                                        @if ($rota->isVeiculoEmpresa == 1)
-                                            <th>Veículo</th>
-                                        @break
-                                    @endif
-                                @endforeach
                             </tr>
                         </thead>
                         <tbody>
@@ -169,25 +163,6 @@
                                     @php
                                         $achouVeiculo = false;
                                     @endphp
-                                    @if ($rota->isVeiculoEmpresa == 1)
-                                        @foreach ($veiculosParanacidade as $v)
-                                            @if ($rota->veiculoParanacidade_id == $v->id)
-                                                @php
-                                                    $achouVeiculo = true;
-                                                    break;
-                                                @endphp
-                                            @endif
-                                        @endforeach
-                                        @if ($achouVeiculo == true)
-                                            <td>
-                                                {{ $v->modelo }} ({{ $v->placa }})
-                                            </td>
-                                        @else
-                                            <td>
-                                                A definir
-                                            </td>
-                                        @endif
-                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

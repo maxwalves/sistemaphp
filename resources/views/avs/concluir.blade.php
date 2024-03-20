@@ -543,7 +543,9 @@
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.9/index.global.min.js'></script>
 <script type="text/javascript">
 
-    document.getElementById("texto-reserva").classList.add("blink");
+    @if(count($rotas) > 0 && $rotas[0]->isVeiculoEmpresa == 1)
+        document.getElementById("texto-reserva").classList.add("blink");
+    @endif
 
     $('#salvarBt').on('click', function() {
         // Altera o estilo da <div> para "block"
@@ -650,6 +652,7 @@
             //Assim que a tela carrega, aciona automaticamente essas funções ------------------------
     $(function(){
     //Se o campo de outro objetivo for vazio, ativa o campo de seleção de objetivo e desabilita o de outro objetivo
+        //espera meio segundo
         calcularInicial();
 
         if(document.getElementById("outroObjetivo").value == ""){
@@ -666,255 +669,256 @@
         }
         
     })  
+    @if(count($rotas) > 0 && $rotas[0]->isVeiculoEmpresa == 1)
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
 
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
+            var eventos = @json($eventos); // Convertendo a variável PHP para JSON
+            var av = @json($av); // Convertendo a variável PHP para JSON
 
-        var eventos = @json($eventos); // Convertendo a variável PHP para JSON
-        var av = @json($av); // Convertendo a variável PHP para JSON
-
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            eventClick: function(info) {
-                var modal = document.getElementById('modalCustom');
-                if (modal) {
-                    var descricao = document.getElementById('descricaoReserva');
-                    descricao.innerHTML = '<p><strong>' + info.event.title + '</strong></p>';
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                eventClick: function(info) {
+                    var modal = document.getElementById('modalCustom');
+                    if (modal) {
+                        var descricao = document.getElementById('descricaoReserva');
+                        descricao.innerHTML = '<p><strong>' + info.event.title + '</strong></p>';
+                        descricao.innerHTML += '<p><strong>Observações: </strong>' +
+                            (info.event.extendedProps.observacoes != null ? info.event.extendedProps
+                                .observacoes : "") + '</p>';
+                        console.log(info);
+                        $(modal).modal('show');
+                    }
+                },
+                locale: 'pt-br',
+                initialView: 'dayGridMonth',
+                selectable: true,
+                headerToolbar: {
+                    left: '',
+                    center: 'title',
+                    right: 'prev,next',
+                },
+                events: eventos.map(function(evento) {
+                    return {
+                        title: evento.title,
+                        start: evento.start,
+                        end: evento.end,
+                        color: "#378006",
+                        observacoes: evento.observacoes
+                    };
+                }),
+                eventMouseEnter: function(info) {
+                    //Adicione informações do evento em descricaoEvento
+                    var descricao = document.getElementById('descricaoEvento');
+                    descricao.innerHTML = '<p><strong>' + info.event.title + '</strong>';
                     descricao.innerHTML += '<p><strong>Observações: </strong>' +
                         (info.event.extendedProps.observacoes != null ? info.event.extendedProps
                             .observacoes : "") + '</p>';
-                    console.log(info);
-                    $(modal).modal('show');
-                }
-            },
-            locale: 'pt-br',
-            initialView: 'dayGridMonth',
-            selectable: true,
-            headerToolbar: {
-                left: '',
-                center: 'title',
-                right: 'prev,next',
-            },
-            events: eventos.map(function(evento) {
-                return {
-                    title: evento.title,
-                    start: evento.start,
-                    end: evento.end,
-                    color: "#378006",
-                    observacoes: evento.observacoes
-                };
-            }),
-            eventMouseEnter: function(info) {
-                //Adicione informações do evento em descricaoEvento
-                var descricao = document.getElementById('descricaoEvento');
-                descricao.innerHTML = '<p><strong>' + info.event.title + '</strong>';
-                descricao.innerHTML += '<p><strong>Observações: </strong>' +
-                    (info.event.extendedProps.observacoes != null ? info.event.extendedProps
-                        .observacoes : "") + '</p>';
-            },
-            eventMouseLeave: function(info) {
-                //Remova a borda da div descricaoEvento
-                var descricao = document.getElementById('descricaoEvento');
-                //remova o conteúdo da div descricaoEvento
-                descricao.innerHTML = '';
-            },
-            datesSet: function(info) {
-                var start = info.startStr; // Data de início do período exibido
-                var end = info.endStr; // Data de término do período exibido
-                var reservasFiltradas = filtrarReservasPorData(start, end);
-                atualizarTabelaEventos(reservasFiltradas);
-            },
-        });
+                },
+                eventMouseLeave: function(info) {
+                    //Remova a borda da div descricaoEvento
+                    var descricao = document.getElementById('descricaoEvento');
+                    //remova o conteúdo da div descricaoEvento
+                    descricao.innerHTML = '';
+                },
+                datesSet: function(info) {
+                    var start = info.startStr; // Data de início do período exibido
+                    var end = info.endStr; // Data de término do período exibido
+                    var reservasFiltradas = filtrarReservasPorData(start, end);
+                    atualizarTabelaEventos(reservasFiltradas);
+                },
+            });
 
-        function filtrarReservasPorData(start, end) {
-            var reservasFiltradas = [];
+            function filtrarReservasPorData(start, end) {
+                var reservasFiltradas = [];
 
-            @if(isset($reservas2))
-                @foreach ($reservas2 as $reserva)
+                @if(isset($reservas2))
+                    @foreach ($reservas2 as $reserva)
 
-                    var veiculo = null;
-                    @foreach ($veiculos as $v)
-                        if ("{{ $reserva->idVeiculo }}" == "{{ $v->id }}") {
-                            veiculo = "{{ $v->marca }} - {{ $v->modelo }} - {{ $v->placa }}";
+                        var veiculo = null;
+                        @foreach ($veiculos as $v)
+                            if ("{{ $reserva->idVeiculo }}" == "{{ $v->id }}") {
+                                veiculo = "{{ $v->marca }} - {{ $v->modelo }} - {{ $v->placa }}";
+                            }
+                        @endforeach
+
+                        if ("{{ $reserva->dataInicio }}" >= start && "{{ $reserva->dataInicio }}" <= end) {
+                            reservasFiltradas.push({
+                                id: "{{ $reserva->id }}",
+                                dataInicio: "{{ $reserva->dataInicio }}",
+                                dataFim: "{{ $reserva->dataFim }}",
+                                veiculo: {
+                                    info: veiculo
+                                },
+                                usuario: {
+                                    name: "{{ Auth::user()->name }}"
+                                },
+                                observacoes: "{{ $reserva->observacoes }}"
+                            });
                         }
                     @endforeach
+                @endif
 
-                    if ("{{ $reserva->dataInicio }}" >= start && "{{ $reserva->dataInicio }}" <= end) {
-                        reservasFiltradas.push({
-                            id: "{{ $reserva->id }}",
-                            dataInicio: "{{ $reserva->dataInicio }}",
-                            dataFim: "{{ $reserva->dataFim }}",
-                            veiculo: {
-                                info: veiculo
-                            },
-                            usuario: {
-                                name: "{{ Auth::user()->name }}"
-                            },
-                            observacoes: "{{ $reserva->observacoes }}"
-                        });
-                    }
-                @endforeach
-            @endif
+                return reservasFiltradas;
+            }
 
-            return reservasFiltradas;
-        }
+            function atualizarTabelaEventos(reservas) {
+                var tabela = $('#tabelaEventos tbody');
+                tabela.empty();
 
-        function atualizarTabelaEventos(reservas) {
-            var tabela = $('#tabelaEventos tbody');
-            tabela.empty();
-
-            reservas.forEach(function(reserva) {
-                observacao = reserva.observacoes;
-                av = "";
-                //Se a obervacao começar assim: [Reserva realizada pelo Sistema de Viagens, referente a AV:], extraia o numero da av que está na observação assim: "referente a AV: 46"
-                if(observacao != null){
-                    if(observacao.includes("referente a AV:")){
-                        //pegue somente o numero
-                        av = observacao.split("referente a AV:")[1].trim();
-                        //remova o ] do final
-                        av = av.split("]")[0].trim();
-                    }
-                }
-                if(av != ""){
-                    var linha = `
-                    <tr>
-                        <td>${moment(reserva.dataInicio).format('DD/MM/YYYY HH:mm:ss')}</td>
-                        <td>${moment(reserva.dataFim).format('DD/MM/YYYY HH:mm:ss')}</td>
-                        <td>${reserva.veiculo.info}</td>
-                        <td>`;
-                        if(av == {{$av->id}}){
-                            linha += `
-                            <div class="d-flex">
-                                <form action="{{ url('reservasVeiculo/') }}/${reserva.id}/${av}" method="POST" style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta reserva?')"><i class="fas fa-trash-alt"></i></button>
-                                </form>
-                            </div>
-                            `;
+                reservas.forEach(function(reserva) {
+                    observacao = reserva.observacoes;
+                    av = "";
+                    //Se a obervacao começar assim: [Reserva realizada pelo Sistema de Viagens, referente a AV:], extraia o numero da av que está na observação assim: "referente a AV: 46"
+                    if(observacao != null){
+                        if(observacao.includes("referente a AV:")){
+                            //pegue somente o numero
+                            av = observacao.split("referente a AV:")[1].trim();
+                            //remova o ] do final
+                            av = av.split("]")[0].trim();
                         }
-                        linha += `
-                        </td>
-                    </tr>`;
-                    tabela.append(linha);
-                }
-                else{
-                    var linha = `
-                    <tr>
-                        <td>${moment(reserva.dataInicio).format('DD/MM/YYYY HH:mm:ss')}</td>
-                        <td>${moment(reserva.dataFim).format('DD/MM/YYYY HH:mm:ss')}</td>
-                        <td>${reserva.veiculo.info}</td>
-                        <td>
-                        </td>
-                    </tr>`;
-                    tabela.append(linha);
-                }
-                
-            });
-        }
+                    }
+                    if(av != ""){
+                        var linha = `
+                        <tr>
+                            <td>${moment(reserva.dataInicio).format('DD/MM/YYYY HH:mm:ss')}</td>
+                            <td>${moment(reserva.dataFim).format('DD/MM/YYYY HH:mm:ss')}</td>
+                            <td>${reserva.veiculo.info}</td>
+                            <td>`;
+                            if(av == {{$av->id}}){
+                                linha += `
+                                <div class="d-flex">
+                                    <form action="{{ url('reservasVeiculo/') }}/${reserva.id}/${av}" method="POST" style="display: inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta reserva?')"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                </div>
+                                `;
+                            }
+                            linha += `
+                            </td>
+                        </tr>`;
+                        tabela.append(linha);
+                    }
+                    else{
+                        var linha = `
+                        <tr>
+                            <td>${moment(reserva.dataInicio).format('DD/MM/YYYY HH:mm:ss')}</td>
+                            <td>${moment(reserva.dataFim).format('DD/MM/YYYY HH:mm:ss')}</td>
+                            <td>${reserva.veiculo.info}</td>
+                            <td>
+                            </td>
+                        </tr>`;
+                        tabela.append(linha);
+                    }
+                    
+                });
+            }
 
 
-        calendar.render();
+            calendar.render();
 
-        // Monitore o clique no checkbox e atualize o calendário
-        $('input[type="checkbox"]').click(function() {
-            var veiculos = $('input[type="checkbox"]:checked').map(function() {
-                return this.value;
-            }).get();
+            // Monitore o clique no checkbox e atualize o calendário
+            $('input[type="checkbox"]').click(function() {
+                var veiculos = $('input[type="checkbox"]:checked').map(function() {
+                    return this.value;
+                }).get();
 
-            var eventosFiltrados = eventos.filter(function(evento) {
-                //verifique se cada item de veiculos tem em sua string o conteúdo de evento.placa
-                return veiculos.some(function(veiculo) {
-                    return evento.title.indexOf(veiculo) >= 0;
+                var eventosFiltrados = eventos.filter(function(evento) {
+                    //verifique se cada item de veiculos tem em sua string o conteúdo de evento.placa
+                    return veiculos.some(function(veiculo) {
+                        return evento.title.indexOf(veiculo) >= 0;
+                    });
+
                 });
 
+                calendar.removeAllEvents();
+                calendar.addEventSource(eventosFiltrados.map(function(evento) {
+                    return {
+                        title: evento.title,
+                        start: evento.start,
+                        end: evento.end,
+                        color: "#378006",
+                        observacoes: evento.observacoes
+                    };
+                }));
             });
-
-            calendar.removeAllEvents();
-            calendar.addEventSource(eventosFiltrados.map(function(evento) {
-                return {
-                    title: evento.title,
-                    start: evento.start,
-                    end: evento.end,
-                    color: "#378006",
-                    observacoes: evento.observacoes
-                };
-            }));
         });
-    });
 
-    // Use moment.js para obter a data atual
-    var dataHoje = moment().add(1, 'hours');
-    //pega a dataHoje e adicione mais 2 horas e atribua a dataHoje2
-    var dataHoje2 = moment().add(3, 'hours');
+        // Use moment.js para obter a data atual
+        var dataHoje = moment().add(1, 'hours');
+        //pega a dataHoje e adicione mais 2 horas e atribua a dataHoje2
+        var dataHoje2 = moment().add(3, 'hours');
 
-   // Configure o daterangepicker1
-   $('input[name="daterange1"]').daterangepicker({
-        opens: 'left',
-        timePicker: true,
-        timePicker24Hour: true,
-        "singleDatePicker": true,
-        locale: {
-            format: 'DD/MM/YYYY HH:mm',
-            applyLabel: 'Escolher',
-            cancelLabel: 'Cancelar',
-            fromLabel: 'De',
-            toLabel: 'Até',
-            weekLabel: 'S',
-            customRangeLabel: 'Personalizado',
-            daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-            monthNames: [
-                'Janeiro',
-                'Fevereiro',
-                'Março',
-                'Abril',
-                'Maio',
-                'Junho',
-                'Julho',
-                'Agosto',
-                'Setembro',
-                'Outubro',
-                'Novembro',
-                'Dezembro'
-            ],
-        },
-    }, function(start, end, label) {
-        console.log("Uma nova seleção de datas foi feita: " + start.format('YYYY-MM-DD HH:mm') +
-            ' a ' + end.format('YYYY-MM-DD HH:mm'));
-    });
+    // Configure o daterangepicker1
+    $('input[name="daterange1"]').daterangepicker({
+            opens: 'left',
+            timePicker: true,
+            timePicker24Hour: true,
+            "singleDatePicker": true,
+            locale: {
+                format: 'DD/MM/YYYY HH:mm',
+                applyLabel: 'Escolher',
+                cancelLabel: 'Cancelar',
+                fromLabel: 'De',
+                toLabel: 'Até',
+                weekLabel: 'S',
+                customRangeLabel: 'Personalizado',
+                daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                monthNames: [
+                    'Janeiro',
+                    'Fevereiro',
+                    'Março',
+                    'Abril',
+                    'Maio',
+                    'Junho',
+                    'Julho',
+                    'Agosto',
+                    'Setembro',
+                    'Outubro',
+                    'Novembro',
+                    'Dezembro'
+                ],
+            },
+        }, function(start, end, label) {
+            console.log("Uma nova seleção de datas foi feita: " + start.format('YYYY-MM-DD HH:mm') +
+                ' a ' + end.format('YYYY-MM-DD HH:mm'));
+        });
 
-    // Configure o daterangepicker2
-    $('input[name="daterange2"]').daterangepicker({
-        opens: 'left',
-        timePicker: true,
-        timePicker24Hour: true,
-        "singleDatePicker": true,
-        locale: {
-            format: 'DD/MM/YYYY HH:mm',
-            applyLabel: 'Escolher',
-            cancelLabel: 'Cancelar',
-            fromLabel: 'De',
-            toLabel: 'Até',
-            weekLabel: 'S',
-            customRangeLabel: 'Personalizado',
-            daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-            monthNames: [
-                'Janeiro',
-                'Fevereiro',
-                'Março',
-                'Abril',
-                'Maio',
-                'Junho',
-                'Julho',
-                'Agosto',
-                'Setembro',
-                'Outubro',
-                'Novembro',
-                'Dezembro'
-            ],
-        },
-    }, function(start, end, label) {
-        console.log("Uma nova seleção de datas foi feita: " + start.format('YYYY-MM-DD HH:mm') +
-            ' a ' + end.format('YYYY-MM-DD HH:mm'));
-    });
+        // Configure o daterangepicker2
+        $('input[name="daterange2"]').daterangepicker({
+            opens: 'left',
+            timePicker: true,
+            timePicker24Hour: true,
+            "singleDatePicker": true,
+            locale: {
+                format: 'DD/MM/YYYY HH:mm',
+                applyLabel: 'Escolher',
+                cancelLabel: 'Cancelar',
+                fromLabel: 'De',
+                toLabel: 'Até',
+                weekLabel: 'S',
+                customRangeLabel: 'Personalizado',
+                daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                monthNames: [
+                    'Janeiro',
+                    'Fevereiro',
+                    'Março',
+                    'Abril',
+                    'Maio',
+                    'Junho',
+                    'Julho',
+                    'Agosto',
+                    'Setembro',
+                    'Outubro',
+                    'Novembro',
+                    'Dezembro'
+                ],
+            },
+        }, function(start, end, label) {
+            console.log("Uma nova seleção de datas foi feita: " + start.format('YYYY-MM-DD HH:mm') +
+                ' a ' + end.format('YYYY-MM-DD HH:mm'));
+        });
+    @endif
 </script>
 @stop
