@@ -110,6 +110,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::get('/avspc/concluir/{id}/{isPc}', [ControladorAv::class, 'concluir'])->middleware('auth');
 
     Route::get('/avs/relatorio-pdf/{id}', [RelatorioController::class, 'gerarRelatorioPDF']);
+    Route::get('/avs/relatorioPdfAv/{id}', [RelatorioController::class, 'gerarRelatorioPDFAv']);
     Route::get('/avs/relatorioPdfAcertoContas/{id}', [RelatorioController::class, 'gerarRelatorioPDFAcertoContas']);
     Route::get('/avs/relatorio/{id}', [RelatorioController::class, 'abrirPagina']);
     Route::post('/avs/gravarComprovante', [ControladorAv::class,'gravarComprovante'])->middleware('auth');
