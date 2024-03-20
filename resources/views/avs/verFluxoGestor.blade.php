@@ -334,12 +334,13 @@
                                                         <button type="submit" class="btn btn-active btn-danger" onclick="exibirLoader()">Reprovar
                                                             AV</button>
                                                     </span>
+                                                    @if ($errors->has('comentario'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('comentario') }}
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                                @if ($errors->has('comentario'))
-                                                    <div class="invalid-feedback">
-                                                        {{ $errors->first('comentario') }}
-                                                    </div>
-                                                @endif
+                                                
     
                                             </form>
                                         </div>
