@@ -58,6 +58,7 @@
             <table class="table table-sm">
                 <thead>
                     <tr>
+                        <th>Selecione</th>
                         <th>Nome do supervisor</th>
                         <th>Regional</th>
                         <th>Município</th>
@@ -67,12 +68,15 @@
                         <th>Tipo medição</th>
                         <th>Valor da medição</th>
                         <th>Descrição do componente</th>
-                        <th>Selecione</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($filtro as $item)
                     <tr>
+                        <td>
+                            <input type="checkbox" name="medicoesUsuarioSelecionadas[]" id="medicoesUsuarioSelecionadas" 
+                            class="checkbox checkbox-md" value="{{ $item->id }}"/>
+                        </td>
                         <td> {{ $item->nome_supervisor }} </td>
                         <td> {{ $item->codigo_regional }} </td>
                         <td> {{ $item->nome_municipio }} </td>
@@ -82,10 +86,6 @@
                         <td> {{ $item->tipo_medicao }} </td>
                         <td>R$ {{ number_format($item->valor_medicao_sam, 2, ',', '.') }}</td>
                         <td> {{ $item->descricao_componente }} </td>
-                        <td> 
-                            <input type="radio" name="medicoesUsuarioSelecionadas[]" id="medicoesUsuarioSelecionadas" 
-                            class="radio radio-error" value="{{ $item->id }}"/>
-                        </td>
                     </tr>
                     @endforeach
                 </tbody>
