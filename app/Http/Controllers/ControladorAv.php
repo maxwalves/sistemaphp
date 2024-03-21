@@ -1197,7 +1197,13 @@ class ControladorAv extends Controller
 
             $comprovante->anexoDespesa = $fileName;
             $comprovante->av_id = $av->id;
-            $comprovante->descricao = $request->descricao;
+            
+            if($av->isCancelado == true){
+                $comprovante->descricao = "Cancelamento de viagem";
+            }
+            else{
+                $comprovante->descricao = $request->descricao;
+            }
 
             if($request->valorReais != null){
                 $valorReaisFiltrado = str_replace(',', '.', $request->valorReais);
@@ -2233,15 +2239,21 @@ class ControladorAv extends Controller
         $somaDespesasReal = 0;
         $somaDespesasDolar = 0;
 
-        $regras = [
-            'contatos' => 'required',
-            'atividades' => 'required',
-            'conclusoes' => 'required',
-        ];
+        if($av->isCancelado != true){
+            $regras = [
+                'contatos' => 'required',
+                'atividades' => 'required',
+                'conclusoes' => 'required',
+            ];
 
-        $mensagens = [
-            'required' => 'Este campo não pode estar em branco',
-        ];
+            $mensagens = [
+                'required' => 'Este campo não pode estar em branco',
+            ];
+        }
+        else{
+            $regras = [];
+            $mensagens = [];
+        }
 
         foreach($comprovantes as $c){
             if($c->av_id == $av->id){
