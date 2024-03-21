@@ -1152,12 +1152,16 @@
             value="{{ $av->id }}">
         <br><br>
         <label for="descricao">Descrição</label><br>
-        <input type="text" id="descricao" name="descricao"
-            class="input input-bordered input-secondary w-full max-w-xs"><br>
+        
         @if ($av['isCancelado'] == false)
-            <label for="valorReais">Valor em reais utilizado: </label><br>
+            <input type="text" id="descricao" name="descricao"
+                class="input input-bordered input-secondary w-full max-w-xs">
+            <br>
+            <label for="valorReais">Valor em reais utilizado: </label>
+            <br>
             <input type="text" id="valorReais" name="valorReais"
-                class="input input-bordered input-secondary w-full max-w-xs"><br>
+                class="input input-bordered input-secondary w-full max-w-xs">
+            <br>
         @endif
         <br><br>
         <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar

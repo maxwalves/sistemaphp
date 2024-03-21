@@ -107,11 +107,15 @@
                         </p>        
                         <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
                         </ion-icon> <strong>Objetivo: </strong> 
-                        @for($i = 0; $i < count($objetivos); $i++)
+                        @for ($i = 0; $i < count($objetivos); $i++)
                             @if ($av->objetivo_id == $objetivos[$i]->id)
                                 {{ $objetivos[$i]->nomeObjetivo }}
                             @endif
                         @endfor
+
+                        @if (isset($av->outroObjetivo))
+                            {{ $av->outroObjetivo }}
+                        @endif
 
                         @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                             <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
@@ -311,6 +315,31 @@
                                                             </a>
                                                         </td>
                                                     @endif
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
+                                    <table id="minhaTabela7" class="table table-hover table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th>Anexo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($comprovantes as $comp)
+                                                <tr>
+                                                    <td> {{ $comp->descricao }} </td>
+                                                    <td>
+                                                        <a href="{{ route('recuperaArquivo', [
+                                                            'name' => $userAv->name,
+                                                            'id' => $av->id,
+                                                            'pasta' => 'comprovantesDespesa',
+                                                            'anexoRelatorio' => $comp->anexoDespesa,
+                                                            ]) }}"
+                                                            target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
