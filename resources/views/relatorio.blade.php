@@ -50,10 +50,10 @@
 
                     <h3 >Adiantamentos:</h3>
                     <div style="border: 1px solid black; padding-left:10px">
-                        <p> <strong>Valor:</strong> R$ {{ $av->valorReais }} 
-                            <strong> Valor extra:</strong> R$ {{ $av->valorExtraReais }}
-                            <strong> Dedução:</strong> R$ {{ $av->valorDeducaoReais }}
-                            <strong> Valor TOTAL:</strong> R$ {{ $av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais }}</p>
+                        <p> <strong>Valor:</strong> R$ {{ number_format($av->valorReais, 2, ',', '.') }} 
+                            <strong> Valor extra:</strong> R$ {{ number_format($av->valorExtraReais, 2, ',', '.') }}
+                            <strong> Dedução:</strong> R$ {{ number_format($av->valorDeducaoReais, 2, ',', '.') }}
+                            <strong> Valor TOTAL:</strong> R$ {{ number_format($av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais, 2, ',', '.') }}</p>
 {{-- 
                         <p><strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
                         <p><strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>

@@ -70,16 +70,17 @@
 
                     <h3 >Pagamento realizado no acerto de contas:</h3>
                     <div style="border: 1px solid black; padding-left:10px">
-                        <p><strong>Valor:</strong> R$ {{ $av->valorReais }}
-                        <strong>Valor extra:</strong> R$ {{ $av->valorExtraReais }}
-                        <strong>Dedução:</strong> R$ {{ $av->valorDeducaoReais }}</p>
+                        <p><strong>Valor:</strong> R$ {{ number_format($av->valorReais, 2, ',', '.') }}</p>
+                        <p><strong>Valor extra:</strong> R$ {{ number_format($av->valorExtraReais, 2, ',', '.') }}</p>
+                        <p><strong>Dedução:</strong> R$ {{ number_format($av->valorDeducaoReais, 2, ',', '.') }}</p>
 
                         @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                            <p><strong>Valor referente a {{$av->qtdKmVeiculoProprio}} Km: </strong> R$ {{ $av->qtdKmVeiculoProprio * 0.49 }}</p>
-                            <p><strong>Valor TOTAL reais:</strong> $ {{ $av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais + ($av->qtdKmVeiculoProprio * 0.49)}}</p>
+                            <p><strong>Valor referente a {{$av->qtdKmVeiculoProprio}} Km: </strong> R$ {{ number_format($av->qtdKmVeiculoProprio * 0.49, 2, ',', '.') }}</p>
+                            <p><strong>Valor TOTAL reais:</strong> R$ {{ number_format($av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais + ($av->qtdKmVeiculoProprio * 0.49), 2, ',', '.') }}</p>
                         @else
-                            <p><strong>Valor TOTAL reais:</strong> $ {{ $av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais }}</p>
+                            <p><strong>Valor TOTAL reais:</strong> R$ {{ number_format($av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais, 2, ',', '.') }}</p>
                         @endif
+
                         {{-- <p><strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
                         <p><strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
                         <p><strong>Dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
@@ -89,7 +90,7 @@
                     </div>
                 </div>
             </div>
-            <h3 style="font-size: 12px">Resultado:</h3>
+            <h3>Resultado:</h3>
             <div style="border: 1px solid black; padding-left:10px">
 
                 <div class="stats shadow">
@@ -121,23 +122,23 @@
                         @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                             @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) <0))
                                 <div class="stat-value text-green-500">
-                                        R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
+                                        R$ {{number_format((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1), 2, ',', '.') }}
                                 </div>
                             @endif
                             @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) >0))
                                 <div class="stat-value text-error">
-                                        R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1) }}
+                                        R$ {{number_format((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1), 2, ',', '.') }}
                                 </div>
                             @endif
                         @else
                             @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))<0)
                                 <div class="stat-value text-green-500">
-                                        R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal)) * (-1)}}
+                                        R$ {{number_format((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal)) * (-1), 2, ',', '.')}}
                                 </div>
                             @endif
                             @if((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))>0)
                                 <div class="stat-value text-error">
-                                        R$ {{(($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal))}}
+                                        R$ {{number_format((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal)), 2, ',', '.')}}
                                 </div>
                             @endif
                         @endif
@@ -172,7 +173,7 @@
             <br><br>
             
             <div class="col-md-8 offset-md-0" style="font-size: 12px">
-                <h3 style="font-size: 12px"><strong>Detalhamento: </strong></h3>
+                <h3><strong>Detalhamento: </strong></h3>
                 <table id="tabelaRota" class="comBordaSimples" style="width: 100%">
                     <thead>
                         <tr>
@@ -202,7 +203,7 @@
                     </tbody>
                 </table>
                 <br><br><br><br>
-                <h3 style="font-size: 12px"><strong>Histórico: </strong></h3>
+                <h3><strong>Histórico: </strong></h3>
                 <table id="minhaTabela" class="comBordaSimples" style="width: 100%">
                     <!-- head -->
                     <thead>
@@ -234,7 +235,7 @@
                     </tbody>
                 </table>
 
-                <h3 style="font-size: 12px"><strong>Detalhamento de valores: </strong></h3>
+                <h3><strong>Detalhamento de valores: </strong></h3>
                 <table class="comBordaSimples" style="width: 100%">
                     <thead>
                         <tr>
@@ -292,7 +293,7 @@
                 </table>
                 <br><br>
                 @if(count($medicoesFiltradas) > 0)
-                    <h3 style="font-size: 12px"><strong>Medições: </strong></h3>
+                    <h3><strong>Medições: </strong></h3>
                     <table class="comBordaSimples" style="width: 100%">
                         <thead>
                             <tr>

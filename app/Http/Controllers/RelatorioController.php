@@ -54,6 +54,54 @@ class RelatorioController extends Controller
         return $dompdf->stream('relatorio.pdf');
     }
 
+    public function gerarRelatorioPDFAv($id)
+    {
+        $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
+        $avs = Av::all();
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $historicos = [];
+        $users = User::all();
+        $isVeiculoEmpresa = false;
+
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+
+
+        $medicoes = Medicao::all();
+        $medicoesFiltradas = [];
+
+        foreach($medicoes as $medicao){
+            if($medicao->av_id == $av->id){
+                array_push($medicoesFiltradas, $medicao); 
+            }
+        }
+
+        foreach($historicosTodos as $hist){
+            if($hist->av_id == $av->id){
+                array_push($historicos, $hist);
+            }
+        }
+
+        $timezone = new \DateTimeZone('America/Sao_Paulo');
+        $dataAtual = new DateTime('now', $timezone);
+        //formate para o seguinte formato: 01/01/2021 00:00:00
+        $dataFormatadaAtual = $dataAtual->format('d/m/Y H:i:s');
+
+
+        $options = new Options();
+        $options->set('defaultFont', 'sans-serif');
+        $dompdf = new Dompdf($options);
+        
+        
+        $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 'arrayDiasValores', 
+        'isVeiculoEmpresa', 'medicoesFiltradas', 'dataFormatadaAtual')));
+
+        $dompdf->render();
+
+        return $dompdf->stream('relatorio.pdf');
+    }
+
     public function gerarRelatorioPDFAcertoContas($id)
     {
         $av = Av::findOrFail($id);
