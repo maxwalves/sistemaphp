@@ -16,13 +16,15 @@ class EnvioDiretoriaToSecretaria extends Mailable
 
     public $user;
     public $userSecretaria;
+    public $idAv;
     /**
      * Create a new message instance.
      */
-    public function __construct(int $userId, int $userSecretariaId)
+    public function __construct(int $userId, int $userSecretariaId, $idAv)
     {
         $this->user = User::findOrFail($userId);
         $this->userSecretaria = User::findOrFail($userSecretariaId);
+        $this->idAv = $idAv;
     }
 
     /**

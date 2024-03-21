@@ -87,7 +87,7 @@
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="left" class="esd-block-text es-p10t">
-                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">O usuário {{ $user->name }}, membro de sua equipe, realizou a Prestação de Contas de uma viagem e precisa da sua avaliação.</p>
+                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">O usuário {{ $user->name }}, membro de sua equipe, realizou a Prestação de Contas da viagem referente à AV Nr: {{ $idAv }} e precisa da sua avaliação.</p>
 
                                                                                         <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o Sistema de viagens para verificar a pendência: <a href="http://10.51.10.16/login">Sistema de Viagens</a>  </p>
                                                                                     </td>

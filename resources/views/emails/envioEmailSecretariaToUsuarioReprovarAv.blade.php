@@ -87,7 +87,7 @@
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="left" class="esd-block-text es-p10t">
-                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">A Secretaria reprovou a sua autorização de viagem. Realize a correção e submeta novamente para validação!</p>
+                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">A Secretaria reprovou a sua autorização de viagem de Nr {{ $idAv }}. Realize a correção e submeta novamente para validação!</p>
 
                                                                                         <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o sistema para verificar a pendência: <a href="http://10.51.10.16/login">Sistema de Controle de Viagens</a>  </p>
                                                                                     </td>

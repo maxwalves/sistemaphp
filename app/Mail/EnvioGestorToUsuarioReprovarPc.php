@@ -15,12 +15,14 @@ class EnvioGestorToUsuarioReprovarPc extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+    public $idAv;
     /**
      * Create a new message instance.
      */
-    public function __construct(int $userId)
+    public function __construct(int $userId, $idAv)
     {
         $this->user = User::findOrFail($userId);
+        $this->idAv = $idAv;
     }
 
     /**

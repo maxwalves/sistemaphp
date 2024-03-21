@@ -87,7 +87,7 @@
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="left" class="esd-block-text es-p10t">
-                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">O Financeiro reprovou a sua prestação de contas. Realize a correção e submeta novamente para validação!</p>
+                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">O Financeiro reprovou a sua prestação de contas Nr {{ $idAv }}. Realize a correção e submeta novamente para validação!</p>
 
                                                                                         <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o sistema para verificar a pendência: <a href="http://10.51.10.16/login">Sistema de Controle de Viagens</a>  </p>
                                                                                     </td>

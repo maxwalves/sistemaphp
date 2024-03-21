@@ -16,13 +16,15 @@ class EnvioGestorToFinanceiroAcertoContas extends Mailable
 
     public $user;
     public $financeiro;
+    public $idAv;
     /**
      * Create a new message instance.
      */
-    public function __construct(int $userId, int $financeiroId)
+    public function __construct(int $userId, int $financeiroId, $idAv)
     {
         $this->user = User::findOrFail($userId);
         $this->financeiro = User::findOrFail($financeiroId);
+        $this->idAv = $idAv;
     }
 
     /**

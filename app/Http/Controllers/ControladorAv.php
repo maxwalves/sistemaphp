@@ -1830,7 +1830,7 @@ class ControladorAv extends Controller
         if($isInternacional==true){
             
             Mail::to($userAv->username)
-                        ->send(new EnvioGestorToUsuarioViagemInternacional($userAv->id));
+                        ->send(new EnvioGestorToUsuarioViagemInternacional($userAv->id, $av->id));
         }
         else if($isVeiculoProprio == true){
             $users = User::all();
@@ -1850,7 +1850,7 @@ class ControladorAv extends Controller
                 try {
                     if($u->hasPermissionTo($permission2)){
                         Mail::to($u->username)
-                        ->send(new EnvioGestorToSecretaria($av->user_id, $u->id));
+                        ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
                     }
                 } catch (\Throwable $th) {
                 }
@@ -1876,11 +1876,11 @@ class ControladorAv extends Controller
                         )
                         {
                             Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
                         }
                         else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
                             Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
                         }
                         else if
                         (
@@ -1898,7 +1898,7 @@ class ControladorAv extends Controller
                         )
                         {
                             Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
                         }
                     }
                 } catch (\Throwable $th) {
@@ -1950,7 +1950,7 @@ class ControladorAv extends Controller
         $historico->save();
 
         Mail::to($userAv->username)
-                        ->send(new EnvioGestorToUsuarioReprovarAv($userAv->id));
+                        ->send(new EnvioGestorToUsuarioReprovarAv($userAv->id, $av->id));
 
         return redirect('/avs/autGestor')->with('msg', 'AV reprovada!');
     }
@@ -2045,7 +2045,7 @@ class ControladorAv extends Controller
             $userAv = User::findOrFail($av->user_id);
             try {
                     Mail::to($userAv->username)
-                    ->send(new EnvioSecretariaToUsuario($userAv->id));
+                    ->send(new EnvioSecretariaToUsuario($userAv->id, $av->id));
                 
             } catch (\Throwable $th) {
             }
@@ -2095,7 +2095,7 @@ class ControladorAv extends Controller
         $historico->save();
 
         Mail::to($userAv->username)
-                        ->send(new EnvioSecretariaToUsuarioReprovarAv($userAv->id));
+                        ->send(new EnvioSecretariaToUsuarioReprovarAv($userAv->id, $av->id));
 
         return redirect('/avs/autSecretaria')->with('msg', 'AV reprovada pelo CAD!');
     }
@@ -2205,7 +2205,7 @@ class ControladorAv extends Controller
         $permission = Permission::where('name', 'aprov avs frota')->first();
 
         Mail::to($userAv->username)
-                        ->send(new EnvioFinanceiroToUsuarioAdiantamento($userAv->id));
+                        ->send(new EnvioFinanceiroToUsuarioAdiantamento($userAv->id, $av->id));
     
         return redirect('/avs/autFinanceiro')->with('msg', 'AV aprovada pelo financeiro!');
     }
@@ -2323,11 +2323,11 @@ class ControladorAv extends Controller
                     )
                     {
                         Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id));
+                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id, $av->id));
                     }
                     else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
                         Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id));
+                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id, $av->id));
                     }
                     else if
                     (
@@ -2345,7 +2345,7 @@ class ControladorAv extends Controller
                     )
                     {
                         Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id));
+                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id, $av->id));
                     }
                 }
             } catch (\Throwable $th) {
@@ -2396,7 +2396,7 @@ class ControladorAv extends Controller
         $historico->save();
 
         Mail::to($userAv->username)
-                        ->send(new EnvioFinanceiroToUsuarioReprovarAv($userAv->id));
+                        ->send(new EnvioFinanceiroToUsuarioReprovarAv($userAv->id, $av->id));
 
         return redirect('/avs/autFinanceiro')->with('msg', 'AV reprovada pelo financeiro!');
     }
@@ -2454,7 +2454,7 @@ class ControladorAv extends Controller
         }
 
         Mail::to($email)
-            ->send(new EnvioFinanceiroToGestorPc($user->id, $usermanager->id));
+            ->send(new EnvioFinanceiroToGestorPc($userAv->id, $usermanager->id, $av->id));
 
         return redirect('/avs/autPcFinanceiro')->with('msg', 'Prestação de contas aprovado pelo Financeiro!');
     }
@@ -2578,7 +2578,7 @@ class ControladorAv extends Controller
         $historico->save();
 
         Mail::to($userAv->username)
-                        ->send(new EnvioFinanceiroToUsuarioAcertoContas($userAv->id));
+                        ->send(new EnvioFinanceiroToUsuarioAcertoContas($userAv->id, $av->id));
 
         return redirect('/avs/acertoContasFinanceiro')->with('msg', 'Acerto de contas realizado pelo Financeiro!');
     }
@@ -2671,11 +2671,11 @@ class ControladorAv extends Controller
                     )
                     {
                         Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id));
+                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id, $av->id));
                     }
                     else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
                         Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id));
+                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id, $av->id));
                     }
                     else if
                     (
@@ -2693,7 +2693,7 @@ class ControladorAv extends Controller
                     )
                     {
                         Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id));
+                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id, $av->id));
                     }
                 }
             } catch (\Throwable $th) {
@@ -2765,11 +2765,11 @@ class ControladorAv extends Controller
                     )
                     {
                         Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u2->id));
+                        ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
                     }
                     else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
                         Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u2->id));
+                        ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
                     }
                     else if
                     (
@@ -2787,7 +2787,7 @@ class ControladorAv extends Controller
                     )
                     {
                         Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u2->id));
+                        ->send(new EnvioUsuarioToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
                     }
                 }
             } catch (\Throwable $th) {
@@ -2834,7 +2834,7 @@ class ControladorAv extends Controller
         $historico->save();
 
         Mail::to($userAv->username)
-                        ->send(new EnvioFinanceiroToUsuarioReprovarAcertoContas($userAv->id));
+                        ->send(new EnvioFinanceiroToUsuarioReprovarAcertoContas($userAv->id, $av->id));
 
         return redirect('/avs/autPcFinanceiro')->with('msg', 'Prestação de contas reprovado pelo Financeiro!');
     }
@@ -2946,11 +2946,11 @@ class ControladorAv extends Controller
                         )
                         {
                             Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id));
+                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
                         }
                         else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
                             Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id));
+                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
                         }
                         else if
                         (
@@ -2968,7 +2968,7 @@ class ControladorAv extends Controller
                         )
                         {
                             Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id));
+                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
                         }
                     }
                 } catch (\Throwable $th) {
@@ -3015,7 +3015,7 @@ class ControladorAv extends Controller
         $historico->save();
 
         Mail::to($userAv->username)
-                        ->send(new EnvioGestorToUsuarioReprovarPc($userAv->id));
+                        ->send(new EnvioGestorToUsuarioReprovarPc($userAv->id, $av->id));
 
         return redirect('/avs/autPcGestor')->with('msg', 'Prestação de contas reprovado pelo Gestor!');
     }
@@ -3091,7 +3091,7 @@ class ControladorAv extends Controller
             try {
                 if($u->hasPermissionTo($permission)){
                     Mail::to($u->username)
-                    ->send(new EnvioDiretoriaToSecretaria($av->user_id, $u->id));
+                    ->send(new EnvioDiretoriaToSecretaria($av->user_id, $u->id, $av->id));
                 }
             } catch (\Throwable $th) {
             }
@@ -3117,11 +3117,11 @@ class ControladorAv extends Controller
                     )
                     {
                         Mail::to($u2->username)
-                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
                     }
                     else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
                         Mail::to($u2->username)
-                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
                     }
                     else if
                     (
@@ -3139,7 +3139,7 @@ class ControladorAv extends Controller
                     )
                     {
                         Mail::to($u2->username)
-                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id));
+                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
                     }
                 }
             } catch (\Throwable $th) {
@@ -3180,7 +3180,7 @@ class ControladorAv extends Controller
         $historico->save();
 
         Mail::to($userAv->username)
-                        ->send(new EnvioDiretoriaToUsuarioReprovarAv($userAv->id));
+                        ->send(new EnvioDiretoriaToUsuarioReprovarAv($userAv->id, $av->id));
 
         return redirect('/avs/autDiretoria')->with('msg', 'AV reprovada!');
     }
@@ -4260,7 +4260,7 @@ class ControladorAv extends Controller
         }
 
         Mail::to($email)
-            ->send(new EnvioEmailGestor($user->id, $usermanager->id));
+            ->send(new EnvioEmailGestor($user->id, $usermanager->id, $av->id));
 
         Av::findOrFail($request->id)->update($dados);
         $historico->save();

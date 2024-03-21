@@ -16,13 +16,15 @@ class EnvioFinanceiroToGestorPc extends Mailable
 
     public $user;
     public $manager;
+    public $idAv;
     /**
      * Create a new message instance.
      */
-    public function __construct(int $userId, int $managerId)
+    public function __construct(int $userId, int $managerId, $idAv)
     {
         $this->user = User::findOrFail($userId);
         $this->manager = User::findOrFail($managerId);
+        $this->idAv = $idAv;
     }
 
     /**
