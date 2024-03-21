@@ -328,7 +328,7 @@ class RelatorioController extends Controller
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if($dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "13:00:00"
+                        else if($dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "19:00:00"
                                 && $proximaRota == false && $dia != $dataUltimaRota){
                         //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MENOR QUE 13:00 E NÃO TIVER PRÓXIMA ROTA NO DIA, MAS NÃO ACABOU A VIAGEM
                             $valorManha = $valor/2;
@@ -555,7 +555,7 @@ class RelatorioController extends Controller
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if($dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "13:00:00"
+                        else if($dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "19:00:00"
                                 && $proximaRota == false && $dia != $dataUltimaRota){
                         //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MENOR QUE 13:00 E NÃO TIVER PRÓXIMA ROTA NO DIA, MAS NÃO ACABOU A VIAGEM
                             $valorManha = $valor/2;
