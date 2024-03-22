@@ -400,7 +400,7 @@ return [
             'label'       => '',
             'label_color' => '',
             'id'          => 'gerenciarProgramaLink',
-            'can'         => 'aprov avs financeiro',
+            'can'         => ['aprov avs financeiro', 'aprov avs gestor'],
         ],
         ['header' => 'DAF',
          'can'    => 'aprov avs diretoria',
