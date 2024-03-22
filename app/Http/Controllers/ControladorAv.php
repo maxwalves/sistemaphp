@@ -2601,7 +2601,6 @@ class ControladorAv extends Controller
         $dataFormatadaAtual = $dataAtual->format('d/m/Y H:i:s');
 
         //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
-        $eventos = [];
         $reservas2 = [];
         $veiculos = [];
 
@@ -3026,6 +3025,45 @@ class ControladorAv extends Controller
         //formate para o seguinte formato: 01/01/2021 00:00:00
         $dataFormatadaAtual = $dataAtual->format('d/m/Y H:i:s');
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+
         //----------------------------------------------------------------------------------------------------------
         $options = new Options();
         $options->set('defaultFont', 'sans-serif');
@@ -3033,7 +3071,7 @@ class ControladorAv extends Controller
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 
-        'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores', 'medicoesFiltradas', 'dataFormatadaAtual')));
+        'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores', 'medicoesFiltradas', 'dataFormatadaAtual', 'reservas2')));
         $dompdf->render();
 
         $nomeArquivo = md5("relatorioAcertoContas" . strtotime("now")) . ".pdf";
