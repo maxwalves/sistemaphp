@@ -436,6 +436,29 @@
         <form action="/avs/enviarGestor/{{ $av->id }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+
+            @if(count($rotas) > 0 && $rotas[0]->isOutroMeioTransporte == 2)
+                <div class="form-group" id="selecaoReserva">
+                    <label for="reservaVeiculo_id" class="control-label" required>Selecione a reserva de veículo que você vai de carona:</label>
+                    <br>
+                        <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('reservaVeiculo_id') ? 'is-invalid' :''}}" 
+                            id="reservaVeiculo_id" name="reservaVeiculo_id">
+                            <option value="" name=""> Selecione</option>
+                            @foreach($reservas3 as $r)
+                                <div>
+                                    <option value="{{ $r->id }}" 
+                                        name="{{ $r->id }}"> Reserva {{$r->id}} - {{date('d/m/Y H:i', strtotime($r->dataInicio))}} até {{date('d/m/Y H:i', strtotime($r->dataFim))}} - {{$r->observacoes}} - {{$r->veiculo->marca}} - {{$r->veiculo->modelo}} - {{$r->veiculo->placa}} - {{$r->usuario->name}} </option>
+                                </div>
+                            @endforeach
+                        </select>
+
+                        @if ($errors->has('reservaVeiculo_id'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('reservaVeiculo_id') }}
+                        </div>
+                        @endif
+                </div>
+            @endif
             
             <div class="row" style="padding-left: 1%">
 

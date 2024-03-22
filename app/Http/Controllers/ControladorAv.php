@@ -4504,6 +4504,71 @@ class ControladorAv extends Controller
             }
         });
 
+        //captura dados de reserva para popular a lista de possibilidade de ir de carona
+        $reservas3 = [];
+        $veiculos2 = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos2
+        $veiculos2 = collect($veiculos2);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas3 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas3
+        $reservas3 = collect($reservas3);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodosUsuariosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $usuariosReservas = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas3
+        $usuariosReservas = collect($usuariosReservas);
+
+        if(count($veiculos2) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas3 e adicione uma nova coluna chamada veiculo
+            $reservas3 = $reservas3->map(function ($reserva) use ($veiculos2) {
+                $veiculo = $veiculos2->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+
+        if(count($usuariosReservas) > 0){
+            //verifique qual é o usuário da reserva pela coluna username de $reservas3 e adicione uma nova coluna chamada usuario
+            $reservas3 = $reservas3->map(function ($reserva) use ($usuariosReservas) {
+                $usuario = $usuariosReservas->where('id', $reserva->idUsuario)->first();
+                $reserva->usuario = $usuario;
+                return $reserva;
+            });
+        }
+
+        //filtre as reservas para pegar somente as reservas em que dataInicio maior ou igual a data atual
+        $reservas3 = $reservas3->filter(function ($reserva) {
+            $dataInicio = new DateTime($reserva->dataInicio);
+            $dataInicio->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+            $dataAtual = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+            return $dataInicio >= $dataAtual;
+        });
+
+        $reservas3 = $reservas3->filter(function ($reserva) use ($departmentUser, $isCuritiba) {
+            if($isCuritiba && $reserva->usuario->department == "CWB"){
+                return true;
+            }
+            else if($reserva->usuario->department == $departmentUser){
+                return true;
+            }
+            else{
+                return false;
+            }
+        });
+
+        //---------------------------------------------------------------------------------------------------------------------
+
         if($isPc=="sim"){
 
             $historico = new Historico();
@@ -4524,7 +4589,8 @@ class ControladorAv extends Controller
         else{
             return view('avs.concluir', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas,
             'diariaTotal' => $diariaTotal, 'meiaDiaria' => $meiaDiaria, 'mostrarValor' => $mostrarValor, 'diaChegadaFinal' => $diaChegadaFinal,
-            'arrayDiasValores' => $arrayDiasValores, 'isInternacional' => $isInternacional, 'reservas2' => $reservas2, 'eventos' => $eventos, 'veiculos' => $veiculos]);
+            'arrayDiasValores' => $arrayDiasValores, 'isInternacional' => $isInternacional, 'reservas2' => $reservas2, 'eventos' => $eventos, 
+            'veiculos' => $veiculos, 'reservas3' => $reservas3]);
         }
     }
 
@@ -4741,7 +4807,8 @@ class ControladorAv extends Controller
             "valorExtraReais" => $request->valorExtraReais,
             "valorExtraDolar" => $request->valorExtraDolar,
             "justificativaValorExtra"=>$request->justificativaValorExtra,
-            "status"=>"AV aguardando aprovação do Gestor"
+            "status"=>"AV aguardando aprovação do Gestor",
+            "idReservaVeiculo" => $request->reservaVeiculo_id,
         );
 
         $cidadeOrigem = null;
