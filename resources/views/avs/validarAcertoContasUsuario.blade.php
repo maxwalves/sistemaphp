@@ -321,6 +321,31 @@
                                                 </tbody>
                                             </table>
                     
+                                            <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
+                                            <table id="minhaTabela7" class="table table-hover table-bordered" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Descrição</th>
+                                                        <th>Anexo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($comprovantes as $comp)
+                                                        <tr>
+                                                            <td> {{ $comp->descricao }} </td>
+                                                            <td>
+                                                                <a href="{{ route('recuperaArquivo', [
+                                                                    'name' => $userAv->name,
+                                                                    'id' => $av->id,
+                                                                    'pasta' => 'comprovantesDespesa',
+                                                                    'anexoRelatorio' => $comp->anexoDespesa,
+                                                                    ]) }}"
+                                                                    target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
 

@@ -401,7 +401,7 @@
                                 @php
                                     $usuarioMandouDevolucao = false;
                                 @endphp
-                                @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0)
+                                @if (($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0) && $av->isCancelado == false)
                                     @foreach($historicoPc as $hist)
                                         @php
                                             if($hist->comentario == "Comprovante Devolução Usuário"){
@@ -418,6 +418,7 @@
                                 @endif
                                 
                                 <br>
+                                <h1 style="font-size: 24px"><strong>Documentos:</strong></h1>
                                 <table id="minhaTabela6" class="table table-hover table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
@@ -452,9 +453,36 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <br>
+                                <h1 style="font-size: 24px"><strong>Comprovantes:</strong></h1>
+                                <table id="minhaTabela7" class="table table-hover table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Descrição</th>
+                                            <th>Anexo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($comprovantes as $comp)
+                                            <tr>
+                                                <td> {{ $comp->descricao }} </td>
+                                                <td>
+                                                    <a href="{{ route('recuperaArquivo', [
+                                                        'name' => $userAv->name,
+                                                        'id' => $av->id,
+                                                        'pasta' => 'comprovantesDespesa',
+                                                        'anexoRelatorio' => $comp->anexoDespesa,
+                                                        ]) }}"
+                                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                                 
                                 @if ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0 && $usuarioMandouDevolucao == true && $av->status != "Aguardando envio de comprovante de devolução pelo usuário"
-                                || ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) <= 0 && $usuarioMandouDevolucao == false))
+                                || ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) <= 0 && $usuarioMandouDevolucao == false)
+                                || (($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) > 0 && $usuarioMandouDevolucao == false) && $av->isCancelado == true))
                                     <h1 style="font-size: 24px; padding-left: 10px"><strong>Finalizar Acerto de Contas: </strong></h1>
                                     <div class="container">
                                         <div class="row">
