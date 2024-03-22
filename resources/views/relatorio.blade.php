@@ -223,6 +223,36 @@
                         </tbody>
                     </table>
                 @endif
+                <br><br><br>
+                @if($av->idReservaVeiculo != null)
+                    <h3 style="font-size: 12px"><strong>Reserva de veículo no sistema de reservas:</strong></h3>
+                    @if(count($reservas2) > 0)
+                        <table class="comBordaSimples" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th style="vertical-align: middle; text-align: center;">Nr Reserva</th>
+                                    <th style="vertical-align: middle; text-align: center;">Data Início</th>
+                                    <th style="vertical-align: middle; text-align: center;">Data Fim</th>
+                                    <th style="vertical-align: middle; text-align: center;">Descrição</th>
+                                    <th style="vertical-align: middle; text-align: center;">Veículo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($reservas2 as $r)
+                                    <tr>
+                                        <td style="vertical-align: middle; text-align: center;">{{$r->id}}</td>
+                                        <td style="vertical-align: middle; text-align: center;">{{date('d/m/Y H:i', strtotime($r->dataInicio))}}</td>
+                                        <td style="vertical-align: middle; text-align: center;">{{date('d/m/Y H:i', strtotime($r->dataFim))}}</td>
+                                        <td style="vertical-align: middle; text-align: center;">{{$r->observacoes}}</td>
+                                        <td style="vertical-align: middle; text-align: center;">{{$r->veiculo->marca}} - {{$r->veiculo->modelo}} - {{$r->veiculo->placa}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p>Nenhuma reserva encontrada</p>
+                    @endif
+                @endif
 
                 <h3 style="font-size: 12px"><strong>Data de geração do documento AV: {{$dataFormatadaAtual}} </strong></h3>
             </div>

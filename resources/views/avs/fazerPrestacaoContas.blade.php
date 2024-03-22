@@ -340,6 +340,38 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
+
+                                        @if($av->idReservaVeiculo != null)
+                                            <h1 style="font-size: 24px"><strong>Reserva de veículo no sistema de reservas:</strong></h1>
+                                            @if(count($reservas2) > 0)
+                                                <table class="table table-hover table-bordered" style="width: 100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nr Reserva</th>
+                                                            <th>Data Início</th>
+                                                            <th>Data Fim</th>
+                                                            <th>Descrição</th>
+                                                            <th>Veículo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($reservas2 as $r)
+                                                            <tr>
+                                                                <td>{{$r->id}}</td>
+                                                                <td>{{date('d/m/Y H:i', strtotime($r->dataInicio))}}</td>
+                                                                <td>{{date('d/m/Y H:i', strtotime($r->dataFim))}}</td>
+                                                                <td>{{$r->observacoes}}</td>
+                                                                <td>{{$r->veiculo->marca}} - {{$r->veiculo->modelo}} - {{$r->veiculo->placa}}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            @else
+                                                <p>Nenhuma reserva encontrada</p>
+                                            @endif
+                                            <h5 style="color: red">Obs: Se for necessário ajustar os dados da reserva de veículo, entre no sistema de reservas e efetue o ajuste.</h5>
+                                            <h5><a href="https://sistemas.paranacidade.org.br/reservas/public/login" target="_blank">Ir para o sistema de reservas</a></h5>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-12 col-xl-6">

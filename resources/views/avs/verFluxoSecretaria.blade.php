@@ -260,8 +260,37 @@
                             
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="stat-title">Controle de diárias:
-                                    </div>
+                                    @if($av->idReservaVeiculo != null)
+                                        <h1 style="font-size: 24px"><strong>Reserva de veículo no sistema de reservas:</strong></h1>
+                                        @if(count($reservas2) > 0)
+                                            <table class="table table-hover table-bordered" style="width: 100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nr Reserva</th>
+                                                        <th>Data Início</th>
+                                                        <th>Data Fim</th>
+                                                        <th>Descrição</th>
+                                                        <th>Veículo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($reservas2 as $r)
+                                                        <tr>
+                                                            <td>{{$r->id}}</td>
+                                                            <td>{{date('d/m/Y H:i', strtotime($r->dataInicio))}}</td>
+                                                            <td>{{date('d/m/Y H:i', strtotime($r->dataFim))}}</td>
+                                                            <td>{{$r->observacoes}}</td>
+                                                            <td>{{$r->veiculo->marca}} - {{$r->veiculo->modelo}} - {{$r->veiculo->placa}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        @else
+                                            <p>Nenhuma reserva encontrada</p>
+                                        @endif
+                                    @endif
+
+                                    <h1 style="font-size: 24px"><strong>Controle de diárias:</strong></h1>
                                     <table class="table table-hover table-bordered" style="width: 100%">
                                         <thead>
                                             <tr>

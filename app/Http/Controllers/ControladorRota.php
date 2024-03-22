@@ -74,7 +74,7 @@ class ControladorRota extends Controller
             "daterange1" => $request->daterange1,
             "daterange2" => $request->daterange2,
             "idVeiculo" => $request->idVeiculo,
-            "observacoes" => "[Reserva realizada pelo Sistema de Viagens, referente a AV: " . $request->nrAv . "] "
+            "observacoes" => "[Reserva realizada pelo Sistema de Viagens, referente a AV: " . $request->nrAv . "]"
         ];
     
         $curl = curl_init();
@@ -115,10 +115,26 @@ class ControladorRota extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $eventos = json_decode(curl_exec($ch));
 
-        $url = 'https://sistemas.paranacidade.org.br/reservas/api/getReservasUsuarioAPI/' . $user->username;
+        $url = 'http://10.51.10.43/reservas/public/api/getReservasUsuarioAPI/' . $user->username;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        //procura a reserva em que observacao == "[Reserva realizada pelo Sistema de Viagens, referente a AV: " . $request->nrAv . "]" e pega o id
+        $idReserva = null;
+        if(count($reservas2) > 0){
+            foreach($reservas2 as $reserva){
+                if($reserva->observacoes == "[Reserva realizada pelo Sistema de Viagens, referente a AV: " . $request->nrAv . "]"){
+                    $idReserva = $reserva->id;
+                }
+            }
+        }
+
+        //atualiza a av na coluna idReservaVeiculo com o id da reserva
+        $av->idReservaVeiculo = $idReserva;
+        $av->save();
 
         $url = 'https://sistemas.paranacidade.org.br/reservas/public/api/getVeiculosAPI';
         $ch = curl_init($url);
@@ -166,6 +182,11 @@ class ControladorRota extends Controller
         $err = curl_error($curl);
     
         curl_close($curl);
+
+        //marque o campo idReservaVeiculo da av como null
+        $avEncontrada = Av::findOrFail($av);//Busca a AV com base no ID
+        $avEncontrada->idReservaVeiculo = null;
+        $avEncontrada->save();
             
         $responseArray = json_decode($response, true);
 

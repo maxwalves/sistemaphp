@@ -274,10 +274,52 @@ class ControladorAv extends Controller
 
         $veiculosProprios = $userAv->veiculosProprios;
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $eventos = [];
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
+
         if($possoEditar == true){
             return view('avs.verFluxoGestor', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade,
-            'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores]);
+            'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores,
+            'eventos' => $eventos, 'reservas2' => $reservas2, 'veiculos' => $veiculos]);
         }
         else{
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -401,10 +443,52 @@ class ControladorAv extends Controller
 
         $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $eventos = [];
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
+
         if($possoEditar == true){
             return view('avs.verFluxoSecretaria', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade,
-            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores], ['anexosRotas' => $anexosRotas]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores,
+            'reservas2' => $reservas2], ['anexosRotas' => $anexosRotas]);
         }
         else{
             return redirect('avs/autSecretaria')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -469,6 +553,46 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $eventos = [];
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
 
         if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
         && $av["isPrestacaoContasRealizada"]==false && $av["isCancelado"]==false) || 
@@ -481,7 +605,7 @@ class ControladorAv extends Controller
             return view('avs.fazerPrestacaoContas', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes,
-            'medicoesFiltradas' => $medicoesFiltradas, 'veiculosParanacidade' => $veiculosParanacidade]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'veiculosParanacidade' => $veiculosParanacidade, 'reservas2' => $reservas2]);
         }
         else{
             return redirect('avs/autFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -566,6 +690,45 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
         
         if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
                 && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==false && $av["isCancelado"]==false) || 
@@ -580,7 +743,7 @@ class ControladorAv extends Controller
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes,
             'medicoesFiltradas' => $medicoesFiltradas, 'valorRecebido' => $valorRecebido, 'valorAcertoContasReal' => $valorAcertoContasReal,
-            'valorAcertoContasDolar' => $valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade]);
+            'valorAcertoContasDolar' => $valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade, 'reservas2' => $reservas2]);
         }
         else{
             return redirect('avs/autPcFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -654,6 +817,46 @@ class ControladorAv extends Controller
         foreach($av->anexosFinanceiro as $anexF){
                 array_push($anexosFinanceiro, $anexF);
         }
+
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
         
         if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
                 && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true 
@@ -668,7 +871,7 @@ class ControladorAv extends Controller
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
             'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'medicoesFiltradas' => $medicoesFiltradas, 
-            'veiculosParanacidade' => $veiculosParanacidade]);
+            'veiculosParanacidade' => $veiculosParanacidade, 'reservas2' => $reservas2]);
         }
         else{
             return redirect('avs/autPcFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -744,6 +947,45 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
 
         if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
                     && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true 
@@ -759,7 +1001,7 @@ class ControladorAv extends Controller
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
             'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'medicoesFiltradas' => $medicoesFiltradas, 
-            'veiculosParanacidade' => $veiculosParanacidade]);
+            'veiculosParanacidade' => $veiculosParanacidade, 'reservas2' => $reservas2]);
         }
         else{
             return redirect('avs/avs')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -844,6 +1086,46 @@ class ControladorAv extends Controller
                 array_push($anexosFinanceiro, $anexF);
         }
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
+
         if($userAv->id != $user->id){//Se  o usuário não for você
             if(($av["isEnviadoUsuario"]==1 && $av["isAprovadoGestor"]==true && $av["isRealizadoReserva"]==true && $av["isAprovadoFinanceiro"]==true
                 && $av["isPrestacaoContasRealizada"]==true && $av["isFinanceiroAprovouPC"]==true  && $av["isGestorAprovouPC"]==false
@@ -859,7 +1141,7 @@ class ControladorAv extends Controller
             'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
             'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes,
             'medicoesFiltradas' => $medicoesFiltradas, 'valorRecebido' => $valorRecebido, 'valorAcertoContasReal' => $valorAcertoContasReal,
-            'valorAcertoContasDolar' => $valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade]);
+            'valorAcertoContasDolar' => $valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade, 'reservas2' => $reservas2]);
         }
         else{
             return redirect('avs/autPcGestor')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -950,11 +1232,52 @@ class ControladorAv extends Controller
         }
 
         $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $eventos = [];
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
         
         if($possoEditar == true){
             return view('avs.verFluxoFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 
             'historicos'=> $historicos, 'anexos' => $anexos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade,
-            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores, 'reservas2' => $reservas2]);
         }
         else{
             return redirect('avs/autFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -1450,11 +1773,52 @@ class ControladorAv extends Controller
             }
         }
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $eventos = [];
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
+
         return view('avs.verDetalhesAv', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
         'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
         'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
         'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade,
-        'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas]);
+        'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas, 'reservas2' => $reservas2]);
     }
 
     public function verDetalhesPc($id){
@@ -1632,11 +1996,51 @@ class ControladorAv extends Controller
             }
         }
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
+
         return view('avs.verPaginaDevolucaoPc', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
         'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
         'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
         'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 'veiculosParanacidade' => $veiculosParanacidade,
-        'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas]);
+        'isInternacional' => $isInternacional, 'medicoesFiltradas' => $medicoesFiltradas, 'reservas2' => $reservas2]);
     }
 
     public function verDetalhesAvGerenciar($id){
@@ -1718,11 +2122,53 @@ class ControladorAv extends Controller
 
         $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $eventos = [];
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
+
         return view('avs.verDetalhesAvGerenciar', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
         'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
         'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
         'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 
-        'veiculosParanacidade' => $veiculosParanacidade, 'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores]);
+        'veiculosParanacidade' => $veiculosParanacidade, 'medicoesFiltradas' => $medicoesFiltradas, 
+        'arrayDiasValores' => $arrayDiasValores, 'reservas2' => $reservas2]);
     }
 
     public function gestorAprovarAv(Request $request){
@@ -2154,13 +2600,54 @@ class ControladorAv extends Controller
         //formate para o seguinte formato: 01/01/2021 00:00:00
         $dataFormatadaAtual = $dataAtual->format('d/m/Y H:i:s');
 
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $eventos = [];
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
+
         $options = new Options();
         $options->set('defaultFont', 'sans-serif');
         $dompdf = new Dompdf($options);
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('relatorio', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 'arrayDiasValores', 
-        'isVeiculoEmpresa', 'medicoesFiltradas', 'dataFormatadaAtual')));
+        'isVeiculoEmpresa', 'medicoesFiltradas', 'dataFormatadaAtual', 'reservas2')));
         $dompdf->render();
 
         $nomeArquivo = md5("relatorio" . strtotime("now")) . ".pdf";

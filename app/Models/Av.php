@@ -74,7 +74,8 @@ class Av extends Model
         'odometroVolta',
         'horasExtras',
         'minutosExtras',
-        'justificativaHorasExtras'
+        'justificativaHorasExtras',
+        'idReservaVeiculo'
     ];
 
     protected $dates = ['dataCriacao', 'dataAutorizacaoVeiculoProprio', 'deleted_at'];
