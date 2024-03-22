@@ -408,7 +408,7 @@
                 </div>
                 <div class="col-md-5 table-responsive" id="divTabelaPrincipal">
                     <br><br>
-                    <h4>
+                    <h4 id="botaoAdicionarReserva">
                         <x-adminlte-button label="+" data-toggle="modal" data-target="#my-modal-1" class="bg-green"/>
                         <i class="fas fa-arrow-left" id="texto-reserva"> Faça sua reserva de veículo aqui</i>
                     </h4>                    
@@ -654,6 +654,11 @@
     //Se o campo de outro objetivo for vazio, ativa o campo de seleção de objetivo e desabilita o de outro objetivo
         //espera meio segundo
         calcularInicial();
+
+        @if(count($reservas2) > 0)
+            //esconda o elemento de id botaoAdicionarReserva
+            document.getElementById("botaoAdicionarReserva").hidden = true;
+        @endif
 
         if(document.getElementById("outroObjetivo").value == ""){
             ativarCampoObjetivoInicial();
