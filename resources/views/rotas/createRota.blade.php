@@ -7,12 +7,12 @@
 
 @section('content')
 
-{{-- <div class="tab-pane fade show active" id="custom-tabs-five-overlay" role="tabpanel" aria-labelledby="custom-tabs-five-overlay-tab" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: none">
+<div class="tab-pane fade show active" id="custom-tabs-five-overlay" role="tabpanel" aria-labelledby="custom-tabs-five-overlay-tab" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: none">
     <div class="overlay-wrapper" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #ffffff;">
             <i class="fas fa-3x fa-sync-alt fa-spin" style="margin-bottom: 10px;"></i>
             <div class="text-bold pt-2">Carregando...</div>
     </div>
-</div> --}}
+</div>
 
 <div id="container">
         
@@ -625,7 +625,7 @@
                                     @for($i = 0; $i < count($veiculosProprios); $i++)
                                         <div>
                                             <option value="{{ $veiculosProprios[$i]->id }}" 
-                                                name="{{ $veiculosProprios[$i]->id }}"> {{ $veiculosProprios[$i] ->modelo }} - {{ $veiculosProprios[$i] ->placa }} </option>
+                                                name="{{ $veiculosProprios[$i]->id }}"> {{ $veiculosProprios[$i]->modelo }} - {{ $veiculosProprios[$i]->placa }} </option>
                                         </div>
                                     @endfor
                                 </select>
@@ -661,13 +661,15 @@
 <script src="{{asset('/chosen/chosen.jquery.min.js')}}"></script>
 
 <script type="text/javascript">
+    $('#custom-tabs-five-overlay').css('display', 'block');
 
     //espera 5 segundos
     setTimeout(function() {
         $(".selecaoChosen").chosen({
             width: "95%",
         });
-    }, 400);
+        $('#custom-tabs-five-overlay').css('display', 'none');
+    }, 500);
 
     // $('#salvarBt').on('click', function() {
     //         // Altera o estilo da <div> para "block"
@@ -697,7 +699,7 @@
     });
 
     function gerenciaNacionalInternacional(){
-        
+        $('#custom-tabs-five-overlay').css('display', 'block');
         var isViagemInternacional = document.getElementById("isViagemInternacional");
         
         document.getElementById("camposFinais").hidden = false;
@@ -724,6 +726,12 @@
             document.getElementById("isInternacional").hidden = true;
             
         }
+        setTimeout(function() {
+            $(".selecaoChosen").chosen({
+                width: "95%",
+            });
+            $('#custom-tabs-five-overlay').css('display', 'none');
+        }, 500);
     }
 
     function verificaSeCidadeOrigem(){
