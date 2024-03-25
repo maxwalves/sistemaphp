@@ -73,57 +73,57 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($rotas as $rota)
+                    @foreach ($rotas as $rotaExibicao)
                         <tr>
-                            <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
+                            <td> {{ $rotaExibicao->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
                             <td>
-                                @if ($rota->isAereo == 1)
+                                @if ($rotaExibicao->isAereo == 1)
                                     <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
                                 @endif
 
-                                @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                @if ($rotaExibicao->isVeiculoProprio == 1 || $rotaExibicao->isVeiculoEmpresa == 1)
                                     <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
                                 @endif
 
-                                @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                @if ($rotaExibicao->isOnibusLeito == 1 || $rotaExibicao->isOnibusConvencional == 1)
                                     <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
                                 @endif
 
-                                @if($rota->isOutroMeioTransporte == 1)
+                                @if($rotaExibicao->isOutroMeioTransporte == 1)
                                     <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
                                 @endif
 
-                                {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
+                                {{ $rotaExibicao->isViagemInternacional == 0 ? $rotaExibicao->cidadeOrigemNacional : $rotaExibicao->cidadeOrigemInternacional }}
 
                             </td>
-                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+                            <td> {{ date('d/m/Y H:i', strtotime($rotaExibicao->dataHoraSaida)) }} </td>
 
                             <td>
-                                @if ($rota->isAereo == 1)
+                                @if ($rotaExibicao->isAereo == 1)
                                     <img src="{{ asset('/img/aviaodescendo.png') }}" style="width: 40px">
                                 @endif
 
-                                @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                @if ($rotaExibicao->isVeiculoProprio == 1 || $rotaExibicao->isVeiculoEmpresa == 1)
                                     <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
                                 @endif
 
-                                @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                @if ($rotaExibicao->isOnibusLeito == 1 || $rotaExibicao->isOnibusConvencional == 1)
                                     <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
                                 @endif
 
-                                @if($rota->isOutroMeioTransporte == 1)
+                                @if($rotaExibicao->isOutroMeioTransporte == 1)
                                     <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
                                 @endif
 
-                                {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
+                                {{ $rotaExibicao->isViagemInternacional == 0 ? $rotaExibicao->cidadeDestinoNacional : $rotaExibicao->cidadeDestinoInternacional }}
                             </td>
 
-                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                            <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
+                            <td> {{ date('d/m/Y H:i', strtotime($rotaExibicao->dataHoraChegada)) }} </td>
+                            <td> {{ $rotaExibicao->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
                             <td>
-                                {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
-                                {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
-                                @if ($rota->isVeiculoProprio == 1)
+                                {{ $rotaExibicao->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
+                                {{ $rotaExibicao->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
+                                @if ($rotaExibicao->isVeiculoProprio == 1)
                                     {{ 'Veículo próprio: ' }} <br>
                                     @foreach ($veiculosProprios as $v)
                                         @if ($v->id == $rota->veiculoProprio_id)
@@ -135,10 +135,10 @@
                                         {{ 'Não encontrado' }}
                                     @endif
                                 @endif
-                                {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
-                                {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
-                                {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
-                                {{ $rota->isOutroMeioTransporte == 2 ? "Carona" : ""}}
+                                {{ $rotaExibicao->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
+                                {{ $rotaExibicao->isAereo == 1 ? 'Aéreo' : '' }}
+                                {{ $rotaExibicao->isOutroMeioTransporte == 1 ? "Outros" : ""}}
+                                {{ $rotaExibicao->isOutroMeioTransporte == 2 ? "Carona" : ""}}
                             </td>
                             @php
                                 $achouVeiculo = false;
