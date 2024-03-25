@@ -137,19 +137,19 @@
                                                     <div class="stat-value text-primary">- R$ {{ $av->valorDeducaoReais }}</div>
                                                 </div>
                                             @endif
-                                            @if ($av->valorDeducaoDolar > 0)
+                                            @if ($av->valorDeducaoDolar > 0 && $av->valorDeducaoDolar != null)
                                                 <div class="stat">
                                                     <div class="stat-title">Dedução em dólar</div>
                                                     <div class="stat-value text-primary">$ {{ $av->valorDeducaoDolar }}</div>
                                                 </div>
                                             @endif
-                                            @if ($valorRecebido->valorDolar > 0)
+                                            @if ($valorRecebido->valorDolar > 0 && $valorRecebido->valorDolar != null)
                                                 <div class="stat">
                                                     <div class="stat-title">Valor em dólar</div>
                                                     <div class="stat-value text-primary">$ {{ $valorRecebido->valorDolar }}</div>
                                                 </div>
                                             @endif
-                                            @if ($valorRecebido->valorExtraDolar > 0)
+                                            @if ($valorRecebido->valorExtraDolar > 0 && $valorRecebido->valorExtraDolar != null)
                                                 <div class="stat">
                                                     <div class="stat-title">Valor extra em dólar</div>
                                                     <div class="stat-value text-primary">$ {{ $valorRecebido->valorExtraDolar }}</div>
@@ -570,23 +570,29 @@
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
                             {{ $av->valorReais }}</p>
-                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
-                            {{ $av->valorDolar }}</p>
+                        @if($av->valorDolar > 0 && $av->valorDolar != null)
+                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                    name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
+                                {{ $av->valorDolar }}</p>
+                        @endif
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
                             {{ $av->valorExtraReais }}</p>
-                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
-                            {{ $av->valorExtraDolar }}</p>
+                        @if($av->valorExtraDolar > 0 && $av->valorExtraDolar != null)
+                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                    name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
+                                {{ $av->valorExtraDolar }}</p>
+                        @endif
                         <p class="av-owner" style="font-size: 20px; color: black;">
                             <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
                             {{ $av->valorDeducaoReais }}
                         </p>
-                        <p class="av-owner" style="font-size: 20px; color: black;">
-                            <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
-                            {{ $av->valorDeducaoDolar }}
-                        </p>
+                        @if($av->valorDeducaoDolar > 0 && $av->valorDeducaoDolar != null)
+                            <p class="av-owner" style="font-size: 20px; color: black;">
+                                <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
+                                {{ $av->valorDeducaoDolar }}
+                            </p>
+                        @endif
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                 extra:</strong>
@@ -821,92 +827,100 @@
 
                     <table id="tabelaRota" class="table table-hover table-bordered" style="width:100%">
                         <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Cidade de saída</th>
-                                <th>Data/Hora de saída</th>
-                                <th>Cidade de chegada</th>
-                                <th>Data/Hora de chegada</th>
-                                <th>Hotel?</th>
-                                <th>Tipo de transporte</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($av->rotas as $rota)
-                            <tr>
-                                <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
-                                <td>
-                                    @if ($rota->isAereo == 1)
-                                        <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
-                                    @endif
-
-                                    @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                        <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
-                                    @endif
-
-                                    @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                        <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
-                                    @endif
-
-                                    @if($rota->isOutroMeioTransporte == 1)
-                                        <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
-                                    @endif
-
-                                    {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
-
-                                </td>
-                                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-
-                                <td>
-                                    @if ($rota->isAereo == 1)
-                                        <img src="{{ asset('/img/aviaodescendo.png') }}" style="width: 40px">
-                                    @endif
-
-                                    @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
-                                        <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
-                                    @endif
-
-                                    @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
-                                        <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
-                                    @endif
-
-                                    @if($rota->isOutroMeioTransporte == 1)
-                                        <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
-                                    @endif
-
-                                    {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
-                                </td>
-
-                                <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                                <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
-                                <td>
-                                    {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
-                                    {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
-                                    @if ($rota->isVeiculoProprio == 1)
-                                        {{ 'Veículo próprio: ' }} <br>
-                                        @foreach ($veiculosProprios as $v)
-                                            @if ($v->id == $rota->veiculoProprio_id)
-                                                {{ $v->modelo . '-' . $v->placa }}
-                                            @endif
-                                        @endforeach
-
-                                        @if (count($veiculosProprios) == 0)
-                                            {{ 'Não encontrado' }}
-                                        @endif
-                                    @endif
-                                    {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
-                                    {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
-                                    {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
-                                    {{ $rota->isOutroMeioTransporte == 2 ? "Carona" : ""}}
-                                </td>
-                                @php
-                                    $achouVeiculo = false;
-                                @endphp
-
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Cidade de saída</th>
+                                    <th>Estado de saída</th>
+                                    <th style="border-right: 1px solid black;">Data/Hora de saída</th>
+                                    <th>Cidade de chegada</th>
+                                    <th>Estado de chegada</th>
+                                    <th>Data/Hora de chegada</th>
+                                    <th>Hotel?</th>
+                                    <th>Tipo de transporte</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($av->rotas as $rota)
+                                <tr>
+                                    <td> {{ $rota->isViagemInternacional == 1 ? 'Internacional' : 'Nacional' }} </td>
+                                    <td>
+                                        @if ($rota->isAereo == 1)
+                                            <img src="{{ asset('/img/aviaosubindo.png') }}" style="width: 40px">
+                                        @endif
+
+                                        @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                            <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                        @endif
+
+                                        @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                            <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                        @endif
+
+                                        @if($rota->isOutroMeioTransporte == 1)
+                                            <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                        @endif
+
+                                        {{ $rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional }}
+
+                                    </td>
+                                    <td>
+                                        {{ $rota->isViagemInternacional == 0 ? $rota->estadoOrigemNacional : $rota->estadoOrigemInternacional }}
+                                    </td>
+                                    <td style="border-right: 1px solid black;"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+
+                                    <td>
+                                        @if ($rota->isAereo == 1)
+                                            <img src="{{ asset('/img/aviaodescendo.png') }}" style="width: 40px">
+                                        @endif
+
+                                        @if ($rota->isVeiculoProprio == 1 || $rota->isVeiculoEmpresa == 1)
+                                            <img src="{{ asset('/img/carro.png') }}" style="width: 40px">
+                                        @endif
+
+                                        @if ($rota->isOnibusLeito == 1 || $rota->isOnibusConvencional == 1)
+                                            <img src="{{ asset('/img/onibus.png') }}" style="width: 40px">
+                                        @endif
+
+                                        @if($rota->isOutroMeioTransporte == 1)
+                                            <img src="{{asset('/img/outros.png')}}" style="width: 40px" >
+                                        @endif
+
+                                        {{ $rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional }}
+                                    </td>
+                                    <td>
+                                        {{ $rota->isViagemInternacional == 0 ? $rota->estadoDestinoNacional : $rota->estadoDestinoInternacional }}
+                                    </td>
+
+                                    <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
+                                    <td> {{ $rota->isReservaHotel == 1 ? 'Sim' : 'Não' }}</td>
+                                    <td>
+                                        {{ $rota->isOnibusLeito == 1 ? 'Onibus leito' : '' }}
+                                        {{ $rota->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
+                                        @if ($rota->isVeiculoProprio == 1)
+                                            {{ 'Veículo próprio: ' }} <br>
+                                            @foreach ($veiculosProprios as $v)
+                                                @if ($v->id == $rota->veiculoProprio_id)
+                                                    {{ $v->modelo . '-' . $v->placa }}
+                                                @endif
+                                            @endforeach
+
+                                            @if (count($veiculosProprios) == 0)
+                                                {{ 'Não encontrado' }}
+                                            @endif
+                                        @endif
+                                        {{ $rota->isVeiculoEmpresa == 1 ? 'Veículo empresa' : '' }}
+                                        {{ $rota->isAereo == 1 ? 'Aéreo' : '' }}
+                                        {{ $rota->isOutroMeioTransporte == 1 ? "Outros" : ""}}
+                                        {{ $rota->isOutroMeioTransporte == 2 ? "Carona" : ""}}
+                                    </td>
+                                    @php
+                                        $achouVeiculo = false;
+                                    @endphp
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
             </div>
             <div class="tab-pane fade" id="custom-tabs-three-relatorio" role="tabpanel"
                 aria-labelledby="custom-tabs-three-relatorio-tab">

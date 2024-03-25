@@ -309,7 +309,7 @@
             // Custom range filtering function
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
                 var min = minEl.val();
-                var age = data[3] || 0; // use data for the age column
+                var age = data[2] || 0; // use data for the age column
 
                 if (min == age || min == "Todos"){
                     return true;
@@ -336,6 +336,8 @@
 
                 data1 = moment(data1).format('DD/MM/YYYY H:m');
                 
+                console.log(data1);
+                console.log(dataViagem);
                 if (isDataMaior(dataViagem, data1) || isDataIgual(dataViagem, data1) || data1 == "Invalid date"){
                     return true;
                 }

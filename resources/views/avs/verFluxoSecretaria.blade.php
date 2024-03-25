@@ -103,10 +103,12 @@
                                     <thead>
                                         <tr>
                                             <th>Tipo</th>
-                                            <th>Cidade de saída</th>
-                                            <th>Data/Hora de saída</th>
-                                            <th>Cidade de chegada</th>
-                                            <th>Data/Hora de chegada</th>
+                                            <th>Cidade saída</th>
+                                            <th>Estado saída</th>
+                                            <th style="border-right: 1px solid black;">Data/Hora de saída</th>
+                                            <th>Cidade chegada</th>
+                                            <th>Estado chegada</th>
+                                            <th>Data/Hora chegada</th>
                                             <th>Hotel?</th>
                                             <th>Tipo de transporte</th>
                                             <th>Status</th>
@@ -137,7 +139,10 @@
                                                 {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} 
                                                 
                                             </td>
-                                            <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+                                            <td>
+                                                {{ $rota->isViagemInternacional == 0 ? $rota->estadoOrigemNacional : $rota->estadoOrigemInternacional }}
+                                            </td>
+                                            <td style="border-right: 1px solid black;"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
                             
                                             <td> 
                                                 @if($rota->isAereo == 1)
@@ -157,6 +162,9 @@
                                                 @endif
                             
                                                 {{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} 
+                                            </td>
+                                            <td>
+                                                {{ $rota->isViagemInternacional == 0 ? $rota->estadoDestinoNacional : $rota->estadoDestinoInternacional }}
                                             </td>
                             
                                             <td> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
