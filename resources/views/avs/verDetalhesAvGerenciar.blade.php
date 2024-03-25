@@ -950,7 +950,7 @@
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>IdRota</th>
+                            {{-- <th>IdRota</th> --}}
                             <th>Rota</th>
                             <th>Anexo</th>
                         </tr>
@@ -961,13 +961,13 @@
                                 <tr>
                                     <td> {{ $anexoHotel->descricao }} </td>
 
-                                    <td>
+                                    {{-- <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
                                                 {{ $av->rotas[$i]->id }}
                                             @endif
                                         @endfor
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
@@ -1008,7 +1008,7 @@
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>IdRota</th>
+                            {{-- <th>IdRota</th> --}}
                             <th>Rota</th>
                             <th>Anexo</th>
                         </tr>
@@ -1019,13 +1019,13 @@
                                 <tr>
                                     <td> {{ $anexoTransporte->descricao }} </td>
 
-                                    <td>
+                                    {{-- <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
                                                 {{ $av->rotas[$i]->id }}
                                             @endif
                                         @endfor
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
