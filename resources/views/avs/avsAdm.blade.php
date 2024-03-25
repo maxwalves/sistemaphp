@@ -17,24 +17,24 @@
                     <tr>
                         <td style="padding-left: 10px"><strong>Data viagem:</strong></td>
                         <td>
-                            <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataInicialFiltro1" style="border-width: 1px; border-color: black; width: 150px;"
+                            <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataInicialFiltro1" style="border-width: 1px; border-color: black; width: 200px;"
                                     id="dataInicialFiltro1" placeholder="Data/Hora inicial">
                         </td>
                         <td style="padding-left: 10px"><strong>até: </strong></td>
                         <td>
-                            <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataFinalFiltro1" style="border-width: 1px; border-color: black; width: 150px;"
+                            <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataFinalFiltro1" style="border-width: 1px; border-color: black; width: 200px;"
                                     id="dataFinalFiltro1" placeholder="Data/Hora final">
                         </td>
                     </tr>
                     <tr>
                             <td style="padding-left: 10px"><strong>Data retorno:</strong></td>
                             <td>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataInicialFiltro2" style="border-width: 1px; border-color: black; width: 150px;"
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataInicialFiltro2" style="border-width: 1px; border-color: black; width: 200px;"
                                         id="dataInicialFiltro2" placeholder="Data/Hora inicial">
                             </td>
                             <td style="padding-left: 10px"><strong>até: </strong></td>
                             <td>
-                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataFinalFiltro2" style="border-width: 1px; border-color: black; width: 150px;"
+                                <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataFinalFiltro2" style="border-width: 1px; border-color: black; width: 200px;"
                                         id="dataFinalFiltro2" placeholder="Data/Hora final">
                             </td>
                     </tr>
@@ -328,16 +328,19 @@
 
         $(document).ready(function () {
             var dataInicialFiltro = $('#dataInicialFiltro1');
+            //sete a data inicial para o primeiro dia do mês
+            var data = new Date();
+            var primeiroDia = new Date(data.getFullYear(), data.getMonth(), 1);
+            dataInicialFiltro.val(primeiroDia.toISOString().substring(0, 16));
         
             // Custom range filtering function
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                dataInicialFiltro = $('#dataInicialFiltro1');
                 var data1 = dataInicialFiltro.val();
                 var dataViagem = data[7] || 0; // use data for the age column
 
                 data1 = moment(data1).format('DD/MM/YYYY H:m');
                 
-                console.log(data1);
-                console.log(dataViagem);
                 if (isDataMaior(dataViagem, data1) || isDataIgual(dataViagem, data1) || data1 == "Invalid date"){
                     return true;
                 }
@@ -355,6 +358,10 @@
 
         $(document).ready(function () {
             var dataFinalFiltro = $('#dataFinalFiltro1');
+            //sete a data inicial para o último dia do mês
+            var data = new Date();
+            var ultimoDia = new Date(data.getFullYear(), data.getMonth() + 1, 15);
+            dataFinalFiltro.val(ultimoDia.toISOString().substring(0, 16));
             
             // Custom range filtering function
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
@@ -381,6 +388,11 @@
 
         $(document).ready(function () {
             var dataInicialFiltro = $('#dataInicialFiltro2');
+
+            //sete a data inicial para o primeiro dia do mês
+            var data = new Date();
+            var primeiroDia = new Date(data.getFullYear(), data.getMonth(), 1);
+            dataInicialFiltro.val(primeiroDia.toISOString().substring(0, 16));
         
             // Custom range filtering function
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
@@ -406,6 +418,11 @@
 
         $(document).ready(function () {
             var dataFinalFiltro = $('#dataFinalFiltro2');
+
+            //sete a data inicial para o último dia do mês
+            var data = new Date();
+            var ultimoDia = new Date(data.getFullYear(), data.getMonth() + 1, 15);
+            dataFinalFiltro.val(ultimoDia.toISOString().substring(0, 16));
         
             // Custom range filtering function
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
@@ -447,33 +464,44 @@
             const date1 = toDate(data1);
             const date2 = toDate(data2);
 
-            // Comparar as datas
-            if (date1.getFullYear() == date2.getFullYear()) {
-                if(date1.getMonth() == date2.getMonth()){
-                    if(date1.getDate() == date2.getDate()){
-                        return true;
-                    }
-                }
-            } else {
+            if(date1 == null || date2 == null){
                 return false;
+            }
+            else{
+                // Comparar as datas
+                if (date1.getFullYear() == date2.getFullYear()) {
+                    if(date1.getMonth() == date2.getMonth()){
+                        if(date1.getDate() == date2.getDate()){
+                            return true;
+                        }
+                    }
+                } else {
+                    return false;
+                }
             }
         }
 
         function toDate(data) {
-            // Extrair os componentes da data e hora
-            const partes = data.split(' ');
-            const dataPartes = partes[0].split('/');
-            const horaPartes = partes[1].split(':');
+            //verifique se data existe
+            if (!data) {
+                return null;
+            }
+            else{
+                // Extrair os componentes da data e hora
+                const partes = data.split(' ');
+                const dataPartes = partes[0].split('/');
+                const horaPartes = partes[1].split(':');
 
-            // Criar o objeto Date com os componentes extraídos
-            const ano = parseInt(dataPartes[2], 10);
-            const mes = parseInt(dataPartes[1], 10) - 1; // Os meses no objeto Date começam em zero
-            const dia = parseInt(dataPartes[0], 10);
-            const hora = parseInt(horaPartes[0], 10);
-            const minuto = parseInt(horaPartes[1], 10);
-            const dataObj = new Date(ano, mes, dia, hora, minuto);
+                // Criar o objeto Date com os componentes extraídos
+                const ano = parseInt(dataPartes[2], 10);
+                const mes = parseInt(dataPartes[1], 10) - 1; // Os meses no objeto Date começam em zero
+                const dia = parseInt(dataPartes[0], 10);
+                const hora = parseInt(horaPartes[0], 10);
+                const minuto = parseInt(horaPartes[1], 10);
+                const dataObj = new Date(ano, mes, dia, hora, minuto);
 
-            return dataObj;
+                return dataObj;
+            }
         }
 
     </script>
