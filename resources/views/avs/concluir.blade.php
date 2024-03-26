@@ -465,7 +465,7 @@
                 <div class="col-12 col-md-4" >
                     <div class="form-group">
                         <label for="valorExtraReais" class="control-label">Você vai precisar de valor extra em reais?</label>
-                        <input type="number" class="form-control" name="valorExtraReais" oninput="calcular()"
+                        <input type="text" class="form-control" name="valorExtraReais" oninput="calcular()"
                             id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}">
                     </div>
 
@@ -564,6 +564,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.9/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.9/index.global.min.js'></script>
+    <script src="{{ asset('js/jquery.maskMoney.min.js') }}"></script>
 <script type="text/javascript">
 
     @if(count($rotas) > 0 && $rotas[0]->isVeiculoEmpresa == 1)
@@ -953,5 +954,16 @@
         // Altera o estilo da <div> para "block"
         $('#custom-tabs-five-overlay').css('display', 'block');
     }
+
+    $(document).ready(function() {
+        // $('#valorExtraReais').maskMoney({
+        //     prefix: 'R$ ', // Adiciona o prefixo 'R$'
+        //     thousands: '.', // Usa ponto como separador de milhares
+        //     decimal: ',', // Usa vírgula como separador decimal
+        //     allowZero: true, // Permite que o valor comece com zero
+        //     precision: 2, // Define 2 casas decimais
+        //     allowNegative: false // Não permite valores negativos
+        // });
+    });
 </script>
 @stop
