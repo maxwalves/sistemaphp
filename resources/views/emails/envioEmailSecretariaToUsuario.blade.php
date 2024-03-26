@@ -89,7 +89,7 @@
                                                                                     <td align="left" class="esd-block-text es-p10t">
                                                                                         <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">A CAD - (Coordenadoria Administrativa) realizou as reservas pendentes na sua Autorização de Viagem de Nr {{ $idAv }}.</p>
 
-                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o Sistema de viagens para verificar as reservas: <a href="http://10.51.10.16/login">Sistema de Viagens</a>  </p>
+                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o Sistema de viagens para verificar as reservas: <a href="https://viagem.paranacidade.org.br/">Sistema de Viagens</a>  </p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>

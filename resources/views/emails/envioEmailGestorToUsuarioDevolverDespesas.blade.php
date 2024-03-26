@@ -89,7 +89,7 @@
                                                                                     <td align="left" class="esd-block-text es-p10t">
                                                                                         <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">A Prestação de Contas referente a AV Nr {{ $av->id }} foi aprovada pelo Gestor e está pendente a devolução dos valores extras não utilizados e envio do comprovante.</p>
 
-                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o Sistema de viagens para verificar a pendência: <a href="http://10.51.10.16/login">Sistema de Viagens</a>  </p>
+                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o Sistema de viagens para verificar a pendência: <a href="https://viagem.paranacidade.org.br/">Sistema de Viagens</a>  </p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>

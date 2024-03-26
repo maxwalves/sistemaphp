@@ -89,7 +89,7 @@
                                                                                     <td align="left" class="esd-block-text es-p10t">
                                                                                         <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Existe um novo acerto de contas realizado pelo Financeiro no Sistema de Controle de Viagens! PC Nr: {{ $idAv }}.</p>
 
-                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o sistema para verificar o resultado: <a href="http://10.51.10.16/login">Sistema de Controle de Viagens</a>  </p>
+                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o sistema para verificar o resultado: <a href="https://viagem.paranacidade.org.br/">Sistema de Controle de Viagens</a>  </p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
