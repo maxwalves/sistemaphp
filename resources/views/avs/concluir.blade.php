@@ -276,7 +276,7 @@
 
                     </div>
                     
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="submit" class="btn btn-primary" onclick="abrirOverlay()">Salvar</button>
                 </form>
             </div>
         </div>
@@ -678,10 +678,10 @@
         //espera meio segundo
         calcularInicial();
 
-        @if(count($reservas2) > 0)
-            //esconda o elemento de id botaoAdicionarReserva
-            document.getElementById("botaoAdicionarReserva").hidden = true;
-        @endif
+        // @if(count($reservas2) > 0)
+        //     //esconda o elemento de id botaoAdicionarReserva
+        //     document.getElementById("botaoAdicionarReserva").hidden = true;
+        // @endif
 
         if(document.getElementById("outroObjetivo").value == ""){
             ativarCampoObjetivoInicial();
@@ -948,5 +948,10 @@
                 ' a ' + end.format('YYYY-MM-DD HH:mm'));
         });
     @endif
+
+    function abrirOverlay(){
+        // Altera o estilo da <div> para "block"
+        $('#custom-tabs-five-overlay').css('display', 'block');
+    }
 </script>
 @stop

@@ -12,7 +12,7 @@
         <div class="col-12 col-xl-4">
             <div class= "card" >
                 <div class="card-body">
-                    <h5>Seja bem-vindo ao Sistema de Controle de Viagens!</h5>
+                    <h5>Seja bem-vindo(a) ao Sistema de Controle de Viagens!</h5>
                 </div> 
                 <div class="card-body">
                     <h5><strong>E-mail: </strong> {{ $user->username }}</h5>
