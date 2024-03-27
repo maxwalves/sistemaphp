@@ -39,7 +39,16 @@
                     <h5><strong>Setor: </strong> {{ $user->nomeSetor }}</h5>
                     <h5><strong>Coordenador: </strong> {{ $managerName }}</h5>
                     <h5><strong>Quantidade de AVs cadastradas: </strong> {{ count($avs) }}</h5>
-                </div> 
+                </div>
+            </div>
+            <div class= "card" >
+                <div class="card-body">
+                    <h5>Tutoriais: </h5>
+                </div>
+                <div class="card-body">
+                    <h5><strong>1. Como cadastrar uma nova AV: </strong> <a href="https://paranacidade-my.sharepoint.com/:v:/g/personal/maximiliano_alves_paranacidade_org_br/EZEG2wIEthdBmE-ML6XFdRUBF38uBq3lx8CRfwT0bAOAzQ?e=D4rxJt" target="_blank">Clique aqui</a></h5>
+                    <h5><strong>2. Como fazer a Prestação de Contas: </strong> <a href="https://paranacidade-my.sharepoint.com/:v:/g/personal/maximiliano_alves_paranacidade_org_br/Eb9S9jOoly5Lgo9QWVIVk8sBiq7xsnN0_BW7Olw68NUfOg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&e=GOWRzD" target="_blank">Clique aqui</a></h5>
+                </div>
             </div>
         </div>
     </div>

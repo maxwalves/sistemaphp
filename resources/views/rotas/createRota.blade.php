@@ -665,9 +665,9 @@
 
     //espera 5 segundos
     setTimeout(function() {
-        $(".selecaoChosen").chosen({
-            width: "95%",
-        });
+        // $(".selecaoChosen").chosen({
+        //     width: "95%",
+        // });
         $('#custom-tabs-five-overlay').css('display', 'none');
     }, 500);
 
@@ -727,9 +727,9 @@
             
         }
         setTimeout(function() {
-            $(".selecaoChosen").chosen({
-                width: "95%",
-            });
+            // $(".selecaoChosen").chosen({
+            //     width: "95%",
+            // });
             $('#custom-tabs-five-overlay').css('display', 'none');
         }, 500);
     }
@@ -865,12 +865,12 @@
             }
         });
 
-        setTimeout(function() {
-            $(".selecaoChosen").chosen("destroy");
-            $(".selecaoChosen").chosen({
-                width: "95%",
-            });
-        }, 500);
+        // setTimeout(function() {
+            
+        //     $(".selecaoChosen").chosen({
+        //         width: "95%",
+        //     });
+        // }, 500);
         
     }
 
@@ -898,12 +898,12 @@
             }
         });
 
-        setTimeout(function() {
-            $(".selecaoChosen").chosen("destroy");
-            $(".selecaoChosen").chosen({
-                width: "95%",
-            });
-        }, 500);
+        // setTimeout(function() {
+            
+        //     $(".selecaoChosen").chosen({
+        //         width: "95%",
+        //     });
+        // }, 500);
 
     }
 
