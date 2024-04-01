@@ -480,7 +480,7 @@
 
                             @foreach ($historicos as $historico)
                                 <tr>
-                                    <td>{{ date('d/m/Y', strtotime($historico->dataOcorrencia)) }}</td>
+                                    <td>{{ date('d/m/Y H:i', strtotime($historico->dataOcorrencia)) }}</td>
                                     <td>{{ $historico->tipoOcorrencia }}</td>
                                     <td>{{ $historico->comentario }}</td>
                                     <td>{{ $historico->perfilDonoComentario }}</td>
