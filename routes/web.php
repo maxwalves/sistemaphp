@@ -30,14 +30,15 @@ use App\Http\Controllers\EventController;
 
 //EMAIL
 
-Route::get('/impersonate/{id}', [UsersController::class, 'impersonate'])->name('impersonate');
-Route::get('/recuperaArquivo/{name}/{id}/{pasta}/{anexoRelatorio}', [UsersController::class, 'recuperaArquivo'])->name('recuperaArquivo');
+
 Route::get('/termoResponsabilidade', [UsersController::class, 'termoResponsabilidade'])->name('termoResponsabilidade');
 Route::put('/aprovarTermoResponsabilidade', [UsersController::class, 'aprovarTermoResponsabilidade'])->middleware('auth');
 
 
 Route::middleware(['assinatura.termo'])->group(function () {
 
+    Route::get('/recuperaArquivo/{name}/{id}/{pasta}/{anexoRelatorio}', [UsersController::class, 'recuperaArquivo'])->name('recuperaArquivo');
+    Route::get('/impersonate/{id}', [UsersController::class, 'impersonate'])->name('impersonate');
     Route::get('/email/envioEmail', [ControladorAv::class, 'envioEmail'])->middleware('auth');
 // ROTAS PARA AVS
     Route::get('/', [ControladorAv::class, 'index'])->middleware('auth');
@@ -274,9 +275,9 @@ Route::middleware(['assinatura.termo'])->group(function () {
         // Route::delete('/delete/{id}', [ArquivosController::class, 'destroy']);
 
 
-        Route::get('/relatoriosDss/paranaUrbanoIII/', [DssController::class,'paranaUrbanoIII']);
-        Route::get('/relatoriosDss/parametros/', [DssController::class,'parametros']);
-        Route::get('/relatoriosDss/controlePepPoaPmr/', [DssController::class,'controlePepPoaPmr']);
+        // Route::get('/relatoriosDss/paranaUrbanoIII/', [DssController::class,'paranaUrbanoIII']);
+        // Route::get('/relatoriosDss/parametros/', [DssController::class,'parametros']);
+        // Route::get('/relatoriosDss/controlePepPoaPmr/', [DssController::class,'controlePepPoaPmr']);
 
         //faça uma rota post reservasVeiculo.store
         Route::post('/reservasVeiculo', [ControladorRota::class, 'registrarReservaVeiculo'])->middleware('auth')->name('reservasVeiculo.store');
