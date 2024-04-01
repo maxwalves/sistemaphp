@@ -425,7 +425,8 @@ class UsersController extends Controller
         
         User::findOrFail($user->id)->update($data);
 
-        return view('welcome', ['avs' => $avs, 'user'=> $user]);
+        //return view('welcome', ['avs' => $avs, 'user'=> $user]);
+        return redirect('/')->with(['msg' => 'Termo de responsabilidade aprovado com sucesso!', 'user' => $user, 'avs' => $avs]);
     }
     
     public function termoResponsabilidade(){
