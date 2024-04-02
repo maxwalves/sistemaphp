@@ -471,15 +471,15 @@
 
                     <div class="form-group">
                         <label for="valorDeducaoReais" class="control-label">Vai ter deduções em reais?</label>
-                        <input type="number" class="form-control bg-yellow-300" name="valorDeducaoReais" oninput="calcular()"
-                            id="valorDeducaoReais" placeholder="Valor da dedução em reais">
+                        <input type="text" class="form-control bg-yellow-300" name="valorDeducaoReais"
+                            id="valorDeducaoReais" placeholder="Valor da dedução em reais" value="{{$av->valorDeducaoReais}}">
                     </div>
 
                     @if($isInternacional == true)
                     <hr>
                         <div class="form-group">
                             <label for="valorExtraDolar" class="control-label">Você vai precisar de valor extra em dólar?</label>
-                            <input type="number" class="form-control" name="valorExtraDolar" oninput="calcular()"
+                            <input type="number" class="form-control" name="valorExtraDolar"
                                 id="valorExtraDolar" placeholder="Valor Extra em dólar" value="{{$av->valorExtraDolar}}">
                         </div>
                     @endif
@@ -604,14 +604,25 @@
         window.scrollTo(0,document.body.scrollHeight);
 
         var valor1 = parseFloat(document.getElementById("valorReais").getAttribute('data-value'));
-        var valor3 = parseFloat(document.getElementById('valorExtraReais').value);
-        var valor5 = parseFloat(document.getElementById('valorDeducaoReais').value);
+        var valor3 = document.getElementById('valorExtraReais').value;
+        var valor5 = document.getElementById('valorDeducaoReais').value;
         if(document.getElementById('valorExtraReais').value == ""){
             valor3 = 0;
         }
         if(document.getElementById('valorDeducaoReais').value == ""){
             valor5 = 0;
         }
+
+        valor3 = valor3.toString().replace(",", ".");
+        valor3 = valor3.replace("R$ ", "");
+        valor3 = valor3.replace(/\s/g, '');
+        valor3 = parseFloat(valor3);
+
+        valor5 = valor5.toString().replace(",", ".");
+        valor5 = valor5.replace("R$ ", "");
+        valor5 = valor5.replace(/\s/g, '');
+        valor5 = parseFloat(valor5);
+
         var somaReais = valor1 + valor3 - valor5;
         document.getElementById('result1').innerHTML = "R$ " + somaReais;
 
@@ -638,14 +649,25 @@
 
     function calcularInicial(){
         var valor1 = parseFloat(document.getElementById("valorReais").getAttribute('data-value'));
-        var valor3 = parseFloat(document.getElementById('valorExtraReais').value);
-        var valor5 = parseFloat(document.getElementById('valorDeducaoReais').value);
+        var valor3 = document.getElementById('valorExtraReais').value;
+        var valor5 = document.getElementById('valorDeducaoReais').value;
         if(document.getElementById('valorExtraReais').value == ""){
             valor3 = 0;
         }
         if(document.getElementById('valorDeducaoReais').value == ""){
             valor5 = 0;
         }
+
+        valor3 = valor3.toString().replace(",", ".");
+        valor3 = valor3.replace("R$ ", "");
+        valor3 = valor3.replace(/\s/g, '');
+        valor3 = parseFloat(valor3);
+
+        valor5 = valor5.toString().replace(",", ".");
+        valor5 = valor5.replace("R$ ", "");
+        valor5 = valor5.replace(/\s/g, '');
+        valor5 = parseFloat(valor5);
+
         var somaReais = valor1 + valor3 - valor5;
         document.getElementById('result1').innerHTML = "R$ " + somaReais;
 
@@ -677,7 +699,35 @@
     $(function(){
     //Se o campo de outro objetivo for vazio, ativa o campo de seleção de objetivo e desabilita o de outro objetivo
         //espera meio segundo
+        
         calcularInicial();
+
+        $('#valorExtraReais').maskMoney({
+            prefix: 'R$ ', // Adiciona o prefixo 'R$'
+            thousands: '.', // Usa ponto como separador de milhares
+            decimal: ',', // Usa vírgula como separador decimal
+            allowZero: true, // Permite que o valor comece com zero
+            precision: 2, // Define 2 casas decimais
+            allowNegative: false // Não permite valores negativos
+        });
+        $('#valorDeducaoReais').maskMoney({
+            prefix: 'R$ ', // Adiciona o prefixo 'R$'
+            thousands: '.', // Usa ponto como separador de milhares
+            decimal: ',', // Usa vírgula como separador decimal
+            allowZero: true, // Permite que o valor comece com zero
+            precision: 2, // Define 2 casas decimais
+            allowNegative: false // Não permite valores negativos
+        });
+
+        // Monitora o evento keyup no campo valorExtraReais
+        $('#valorExtraReais').on('keyup', function() {
+            calcular(); // Chama a função calcular() sempre que uma tecla for liberada no campo
+        });
+
+        // Monitora o evento keyup no campo valorDeducaoReais
+        $('#valorDeducaoReais').on('keyup', function() {
+            calcular(); // Chama a função calcular() sempre que uma tecla for liberada no campo
+        });
 
         // @if(count($reservas2) > 0)
         //     //esconda o elemento de id botaoAdicionarReserva
@@ -954,16 +1004,5 @@
         // Altera o estilo da <div> para "block"
         $('#custom-tabs-five-overlay').css('display', 'block');
     }
-
-    $(document).ready(function() {
-        // $('#valorExtraReais').maskMoney({
-        //     prefix: 'R$ ', // Adiciona o prefixo 'R$'
-        //     thousands: '.', // Usa ponto como separador de milhares
-        //     decimal: ',', // Usa vírgula como separador decimal
-        //     allowZero: true, // Permite que o valor comece com zero
-        //     precision: 2, // Define 2 casas decimais
-        //     allowNegative: false // Não permite valores negativos
-        // });
-    });
 </script>
 @stop

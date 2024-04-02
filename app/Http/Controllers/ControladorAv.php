@@ -4587,6 +4587,12 @@ class ControladorAv extends Controller
             return redirect('/rotaspc/rotas/' . $avId )->with('msg', 'Cálculo salvo!');
         }
         else{
+            $av->valorExtraReais = number_format($av->valorExtraReais, 2, ',', '.');
+            $av->valorExtraReais = 'R$ ' . $av->valorExtraReais;
+
+            $av->valorDeducaoReais = number_format($av->valorDeducaoReais, 2, ',', '.');
+            $av->valorDeducaoReais = 'R$ ' . $av->valorDeducaoReais;
+
             return view('avs.concluir', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas,
             'diariaTotal' => $diariaTotal, 'meiaDiaria' => $meiaDiaria, 'mostrarValor' => $mostrarValor, 'diaChegadaFinal' => $diaChegadaFinal,
             'arrayDiasValores' => $arrayDiasValores, 'isInternacional' => $isInternacional, 'reservas2' => $reservas2, 'eventos' => $eventos, 
@@ -4799,12 +4805,20 @@ class ControladorAv extends Controller
     {
         $av = Av::findOrFail($request->id);
 
+        $valorExtraReaisFormatado = str_replace(',', '.', $request->valorExtraReais);
+        $valorExtraReaisFormatado = str_replace('R$', '', $valorExtraReaisFormatado);
+        $valorExtraReaisFormatado = str_replace(' ', '', $valorExtraReaisFormatado);
+
+        $valorDeducaoReaisFormatado = str_replace(',', '.', $request->valorDeducaoReais);
+        $valorDeducaoReaisFormatado = str_replace('R$', '', $valorDeducaoReaisFormatado);
+        $valorDeducaoReaisFormatado = str_replace(' ', '', $valorDeducaoReaisFormatado);
+
         $dados = array(
             "valorReais" => $av->valorReais,
             "valorDolar" => $av->valorDolar,
-            "valorDeducaoReais" => $request->valorDeducaoReais,
+            "valorDeducaoReais" => $valorDeducaoReaisFormatado,
             "valorDeducaoDolar" => $request->valorDeducaoDolar,
-            "valorExtraReais" => $request->valorExtraReais,
+            "valorExtraReais" => $valorExtraReaisFormatado,
             "valorExtraDolar" => $request->valorExtraDolar,
             "justificativaValorExtra"=>$request->justificativaValorExtra,
             "status"=>"AV aguardando aprovação do Gestor",
