@@ -115,6 +115,9 @@ class ControladorRota extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $eventos = json_decode(curl_exec($ch));
 
+        //espera 1 segundo
+        sleep(1);
+        
         $url = 'http://10.51.10.43/reservas/public/api/getReservasUsuarioAPI/' . $user->username;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -122,12 +125,14 @@ class ControladorRota extends Controller
         //crie uma coleção de $reservas2
         $reservas2 = collect($reservas2);
 
-        //procura a reserva em que observacao == "[Reserva realizada pelo Sistema de Viagens, referente a AV: " . $request->nrAv . "]" e pega o id
+        //procura a reserva e pega o id
         $idReserva = null;
         if(count($reservas2) > 0){
             foreach($reservas2 as $reserva){
-                if($reserva->observacoes == "[Reserva realizada pelo Sistema de Viagens, referente a AV: " . $request->nrAv . "]"){
+                //verifique se na string $reserva->observacoes contém o $request->nrAv
+                if(strpos($reserva->observacoes, $request->nrAv ) !== false){
                     $idReserva = $reserva->id;
+                    break;
                 }
             }
         }

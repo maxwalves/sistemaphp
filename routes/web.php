@@ -281,6 +281,6 @@ Route::middleware(['assinatura.termo'])->group(function () {
 
         //faça uma rota post reservasVeiculo.store
         Route::post('/reservasVeiculo', [ControladorRota::class, 'registrarReservaVeiculo'])->middleware('auth')->name('reservasVeiculo.store');
-        Route::delete('/reservasVeiculo/{id}/{av}', [ControladorRota::class, 'removerReservaVeiculo'])->middleware('auth')->name('reservasVeiculo.destroy');
+        Route::get('/reservasVeiculo/{id}/{av}', [ControladorRota::class, 'removerReservaVeiculo'])->middleware('auth')->name('reservasVeiculo.destroy');
 
 });
