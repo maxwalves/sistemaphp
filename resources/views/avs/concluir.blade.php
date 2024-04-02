@@ -464,7 +464,8 @@
 
                 <div class="col-12 col-md-4" >
                     <div class="form-group">
-                        <label for="valorExtraReais" class="control-label">Você vai precisar de valor extra em reais?</label>
+                        <label for="valorExtraReais" class="control-label">Você vai precisar de valor extra em reais?</label><br>
+                        <strong style="color: red">Adicione somentes valores neste formato: 10 ou 10.00, não é aceito com vírgula. (será corrigido em breve)</strong>
                         <input type="text" class="form-control" name="valorExtraReais" oninput="calcular()"
                             id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}">
                     </div>
@@ -866,9 +867,7 @@
                             if(av == {{$av->id}}){
                                 linha += `
                                 <div class="d-flex">
-                                    <form action="{{ url('reservasVeiculo/') }}/${reserva.id}/${av}" method="POST" style="display: inline-block;">
-                                        @csrf
-                                        @method('DELETE')
+                                    <form action="{{ url('reservasVeiculo/') }}/${reserva.id}/${av}" method="GET" style="display: inline-block;">
                                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta reserva?')"><i class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </div>
