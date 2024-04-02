@@ -465,7 +465,6 @@
                 <div class="col-12 col-md-4" >
                     <div class="form-group">
                         <label for="valorExtraReais" class="control-label">Você vai precisar de valor extra em reais?</label><br>
-                        <strong style="color: red">Adicione somentes valores neste formato: 10 ou 10.00, não é aceito com vírgula. (será corrigido em breve)</strong>
                         <input type="text" class="form-control" name="valorExtraReais" oninput="calcular()"
                             id="valorExtraReais" placeholder="Valor Extra em reais" value="{{$av->valorExtraReais}}">
                     </div>
