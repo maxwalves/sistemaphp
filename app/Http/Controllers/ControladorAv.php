@@ -4555,8 +4555,19 @@ class ControladorAv extends Controller
             return $dataInicio >= $dataAtual;
         });
 
+        $departmentUser = auth()->user()->department;
+        $isCuritiba = false;
+        if($departmentUser != "ERCSC"
+        && $departmentUser != "ERMGA"
+        && $departmentUser != "ERFCB"
+        && $departmentUser != "ERGUA"
+        && $departmentUser != "ERLDA"
+        && $departmentUser != "ERPTG"){
+            $isCuritiba = true;
+        }
+
         $reservas3 = $reservas3->filter(function ($reserva) use ($departmentUser, $isCuritiba) {
-            if($isCuritiba && $reserva->usuario->department == "CWB"){
+            if($isCuritiba && $reserva->veiculo->codigoRegional == "CWB"){
                 return true;
             }
             else if($reserva->usuario->department == $departmentUser){
@@ -4822,8 +4833,15 @@ class ControladorAv extends Controller
             "valorExtraDolar" => $request->valorExtraDolar,
             "justificativaValorExtra"=>$request->justificativaValorExtra,
             "status"=>"AV aguardando aprovação do Gestor",
-            "idReservaVeiculo" => $request->reservaVeiculo_id,
         );
+
+        //se alguma rota for do tipo Carona, então adicione a priopriedade idReservaVeiculo em $dados
+        $rotasEncontradas = $av->rotas;
+        foreach ($rotasEncontradas as $r) {
+            if($r->isOutroMeioTransporte == 2){
+                $dados["idReservaVeiculo"] = $request->reservaVeiculo_id;
+            }
+        }
 
         $cidadeOrigem = null;
         $cidadeOrigemInternacional = null;
