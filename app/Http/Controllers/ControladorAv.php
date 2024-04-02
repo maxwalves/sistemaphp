@@ -1503,6 +1503,13 @@ class ControladorAv extends Controller
         $user = auth()->user();
         $users = User::all();
         $comprovante = new ComprovanteDespesa();
+
+        $valorReaisFiltrado = 0;
+        if($request->valorReais != null){
+            $valorReaisFiltrado = str_replace(',', '.', $request->valorReais);
+            $valorReaisFiltrado = str_replace('R$', '', $valorReaisFiltrado);
+            $valorReaisFiltrado = str_replace(' ', '', $valorReaisFiltrado);
+        }
         
         if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
         {
@@ -1529,14 +1536,13 @@ class ControladorAv extends Controller
             }
 
             if($request->valorReais != null){
-                $valorReaisFiltrado = str_replace(',', '.', $request->valorReais);
                 $comprovante->valorReais = $valorReaisFiltrado;
             }
             
-            if($request->valorDolar != null){
-                $valorDolarFiltrado = str_replace(',', '.', $request->valorDolar);
-            $comprovante->valorDolar = $valorDolarFiltrado;
-            }
+            // if($request->valorDolar != null){
+            //     $valorDolarFiltrado = str_replace(',', '.', $request->valorDolar);
+            //     $comprovante->valorDolar = $valorDolarFiltrado;
+            // }
             
             $timezone = new DateTimeZone('America/Sao_Paulo');
             $comprovante->dataOcorrencia = new DateTime('now', $timezone);

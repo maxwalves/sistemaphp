@@ -1235,7 +1235,7 @@
             <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
             <input type="text" hidden="true" id="avId" name="avId" value="{{ $av->id }}">
             <br><br>
-            <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar arquivo</button>
+            <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" onclick="mostrarOverlay()" disabled>Gravar arquivo</button>
     </form>
 
     <x-slot name="footerSlot">
@@ -1271,6 +1271,10 @@
         });
 
     });
+
+    function mostrarOverlay(){
+        $('#custom-tabs-five-overlay').css('display', 'block');
+    }
 
 </script>
 

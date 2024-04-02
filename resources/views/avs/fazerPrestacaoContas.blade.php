@@ -1196,7 +1196,7 @@
             <br>
         @endif
         <br><br>
-        <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" disabled>Gravar
+        <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success" onclick="acionarOverlay()" disabled>Gravar
             arquivo</button>
     </form>
 
@@ -1212,7 +1212,7 @@
 @stop
 
 @section('js')
-
+<script src="{{ asset('js/jquery.maskMoney.min.js') }}"></script>
 <script type="text/javascript">
 
     function exibirLoader() {
@@ -1241,6 +1241,15 @@
 
     $(function() {
 
+        $('#valorReais').maskMoney({
+            prefix: 'R$ ', // Adiciona o prefixo 'R$'
+            thousands: '.', // Usa ponto como separador de milhares
+            decimal: ',', // Usa vírgula como separador decimal
+            allowZero: true, // Permite que o valor comece com zero
+            precision: 2, // Define 2 casas decimais
+            allowNegative: false // Não permite valores negativos
+        });
+
 
         const input = document.getElementById('arquivo1');
         const botaoEnviar = document.getElementById('botaoEnviarArquivo1');
@@ -1262,6 +1271,9 @@
         } else {
             divJustificativa.style.display = "none";
         }
+    }
+    function acionarOverlay() {
+        $('#custom-tabs-five-overlay').css('display', 'block');
     }
 </script>
 
