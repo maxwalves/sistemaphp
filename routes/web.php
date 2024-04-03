@@ -99,6 +99,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::get('/avs/prestacaoContasUsuario', [ControladorAv::class, 'prestacaoContasUsuario'])->middleware('auth');
     Route::get('/avs/fazerPrestacaoContas/{id}', [ControladorAv::class, 'fazerPrestacaoContas'])->middleware('auth');
     Route::get('/avs/gerenciarAvs', [ControladorAv::class, 'gerenciarAvs'])->middleware('auth');
+    Route::get('/avs/gerenciarAvsRh', [ControladorAv::class, 'gerenciarAvsRh'])->middleware('auth');
 
     //Prestação de contas
     Route::get('/avspc/edit/{id}', [ControladorAv::class, 'editAvPc'])->middleware('auth');

@@ -111,6 +111,26 @@ class ControladorAv extends Controller
         return view('avs.avsAdm', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos, 'users' => $users]);
     }
 
+    public function gerenciarAvsRh()
+    {
+        $user = auth()->user();
+        $usersAll = User::all();
+        $users = [];
+        foreach ($usersAll as $u) {
+            if ($u->employeeNumber != null) {
+                array_push($users, $u);
+            }
+        }
+        $names = array_column($users, 'name');
+
+        // Ordena os arrays $users e $names em ordem ascendente
+        array_multisort($names, SORT_ASC, $users);
+        
+        $avs = Av::all();
+        $objetivos = Objetivo::all();
+        return view('avs.avsAdmRh', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos, 'users' => $users]);
+    }
+
     public function create()
     {
         $user = auth()->user();
