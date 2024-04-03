@@ -169,7 +169,7 @@
                             <td scropt="row">{{ $av->id }}</td>
                             <td>
                                 <div class="opcoesGerenciarAv">
-                                    <a href="/avs/verDetalhesAvGerenciar/{{ $av->id }}"
+                                    <a href="/avs/verDetalhesAvGerenciarRh/{{ $av->id }}"
                                         class="btn btn-primary btn-sm"> Ver</a>
                                 </div>
                             </td>

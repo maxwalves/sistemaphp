@@ -2197,6 +2197,134 @@ class ControladorAv extends Controller
         'arrayDiasValores' => $arrayDiasValores, 'reservas2' => $reservas2]);
     }
 
+    public function verDetalhesAvGerenciarRh($id){
+
+        $objetivos = Objetivo::all();
+        $historicosTodos = Historico::all();
+        $veiculosParanacidade = VeiculoParanacidade::all();
+        $users = User::all();
+        $historicos = [];
+        $anexos = [];
+        $user = auth()->user();
+        $usersFiltrados = [];
+        $possoEditar = false;
+        $veiculosProprios = $user->veiculosProprios;
+        $anexosFinanceiro = [];
+        $anexosRotas = [];
+        $comprovantesAll = ComprovanteDespesa::all();
+        $comprovantes = [];
+        $valorAcertoContasReal = 0;
+        $valorAcertoContasDolar = 0;
+
+        $av = Av::findOrFail($id);
+        $userAv = User::findOrFail($av->user_id);
+        $historicoPcAll = HistoricoPc::all();
+        $historicoPc = [];
+        $valorRecebido = null;
+
+        $medicoes = Medicao::all();
+        $medicoesFiltradas = [];
+
+        foreach($medicoes as $medicao){
+            if($medicao->av_id == $av->id){
+                array_push($medicoesFiltradas, $medicao); 
+            }
+        }
+
+        foreach($comprovantesAll as $comp){
+            if($comp->av_id == $av->id){
+                array_push($comprovantes, $comp);
+            }
+        }
+
+        foreach($comprovantes as $compFiltrado){
+            $valorAcertoContasReal += $compFiltrado->valorReais;
+            $valorAcertoContasDolar += $compFiltrado->valorDolar;
+        }
+        
+        foreach($historicoPcAll as $hisPc){
+            if($hisPc->av_id == $av->id){
+                array_push($historicoPc, $hisPc);
+            }
+            if($hisPc->av_id == $av->id && $hisPc->comentario == "Documento AV"){
+                $valorRecebido = $hisPc;
+            }
+        }
+        if($valorRecebido == null){
+            $valorRecebido = new HistoricoPc();
+            $valorRecebido->valorReais = 0;
+            $valorRecebido->valorExtraReais = 0;
+            $valorRecebido->valorDolar = 0;
+            $valorRecebido->valorExtraDolar = 0;
+        }
+
+        foreach($av->rotas as $r){//Verifica todas as rotas da AV
+            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+            }
+        }
+        
+        foreach($historicosTodos as $historico){
+            if($historico->av_id == $av->id){
+                array_push($historicos, $historico);
+            }
+        }
+
+        foreach($av->anexosFinanceiro as $anexF){
+                array_push($anexosFinanceiro, $anexF);
+        }
+
+        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+
+        //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
+        $eventos = [];
+        $reservas2 = [];
+        $veiculos = [];
+
+        $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $veiculos = json_decode(curl_exec($ch));
+        //crie uma coleção de $veiculos
+        $veiculos = collect($veiculos);
+
+        $url = 'http://10.51.10.43/reservas/public/api/getTodasReservasAPI';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $reservas2 = json_decode(curl_exec($ch));
+        //crie uma coleção de $reservas2
+        $reservas2 = collect($reservas2);
+
+        if(count($reservas2) > 0){
+            //filtre as reservas de acordo com o $av->idReservaVeiculo e a coluna a ser filtrada é id de reserva
+            $reservas2 = $reservas2->filter(function ($reserva) use ($av) {
+                if($reserva->id == $av->idReservaVeiculo){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+
+        if(count($veiculos) > 0){
+            //verifique qual é o veículo da reserva pela coluna idVeiculo de $reservas2 e adicione uma nova coluna chamada veiculo
+            $reservas2 = $reservas2->map(function ($reserva) use ($veiculos) {
+                $veiculo = $veiculos->where('id', $reserva->idVeiculo)->first();
+                $reserva->veiculo = $veiculo;
+                return $reserva;
+            });
+        }
+        //------------------------------------------------------------------------------------------------------------------------
+
+        return view('avs.verDetalhesAvGerenciarRh', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
+        'user'=> $user, 'historicos'=> $historicos, 'anexosRotas' => $anexosRotas, 'anexosFinanceiro' => $anexosFinanceiro, 
+        'users'=> $users, 'userAv' => $userAv, 'historicoPc' => $historicoPc, 'comprovantes' => $comprovantes, 'valorRecebido' => $valorRecebido,
+        'valorAcertoContasReal'=>$valorAcertoContasReal, 'valorAcertoContasDolar'=>$valorAcertoContasDolar, 
+        'veiculosParanacidade' => $veiculosParanacidade, 'medicoesFiltradas' => $medicoesFiltradas, 
+        'arrayDiasValores' => $arrayDiasValores, 'reservas2' => $reservas2]);
+    }
+
     public function gestorAprovarAv(Request $request){
 
         $user = auth()->user();
