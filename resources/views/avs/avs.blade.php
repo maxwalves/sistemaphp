@@ -24,7 +24,11 @@
         </div>
         <div class="col-3">
             <strong></strong> 
-            <a class="btn btn-success btn-lg" type="button" href="/avs/create" ><i class="fas fa-plus"></i></a>
+            @if($user->employeeNumber != null)
+                <a class="btn btn-success btn-lg" type="button" href="/avs/create" ><i class="fas fa-plus"></i></a>
+            @else
+                <p ><h3><strong style="color: red">Matrícula não cadastrada, entre em contato com o suporte</strong></h3></p>
+            @endif
         </div>
         <br>
     </div> 

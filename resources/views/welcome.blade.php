@@ -35,7 +35,7 @@
                             Não encontrado
                         @endif
                     </h5>                    
-                    <h5><strong>Matrícula: </strong> {{ $user->employeeNumber }}</h5>
+                    <h5><strong>Matrícula: </strong> {{ $user->employeeNumber != null ? $user->employeeNumber : "** NÃO CADASTRADO **. Entre em contato com o suporte!"}}</h5>
                     <h5><strong>Setor: </strong> {{ $user->nomeSetor }}</h5>
                     <h5><strong>Coordenador: </strong> {{ $managerName }}</h5>
                     <h5><strong>Quantidade de AVs cadastradas: </strong> {{ count($avs) }}</h5>
