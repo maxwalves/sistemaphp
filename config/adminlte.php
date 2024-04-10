@@ -400,7 +400,7 @@ return [
             'label'       => '',
             'label_color' => '',
             'id'          => 'gerenciarProgramaLink',
-            'can'         => ['aprov avs financeiro', 'aprov avs gestor'],
+            'can'         => ['aprov avs financeiro', 'aprov avs gestor', 'view users' ],
         ],
         [
             'text'        => 'Dashboard RH',
@@ -409,7 +409,7 @@ return [
             'label'       => '',
             'label_color' => '',
             'id'          => 'gerenciarRhLink',
-            'can'         => ['aprov avs financeiro', 'aprov avs gestor'],
+            'can'         => ['aprov avs financeiro', 'aprov avs gestor', 'view users'],
         ],
         ['header' => 'DAF',
          'can'    => 'aprov avs diretoria',

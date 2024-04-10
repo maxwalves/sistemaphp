@@ -4645,6 +4645,15 @@ class ControladorAv extends Controller
         //crie uma coleção de $veiculos
         $veiculos = collect($veiculos);
 
+        //----------------------------------------------------------PARA O CASO DO USUÁRIO NÃO SER O MARCIO------------------------------
+        if(auth()->user()->name != "Marcio Claudio Wozniack"){
+            //remover o veículo que tem a placa BCX8D43
+            $veiculos = $veiculos->filter(function ($veiculo) {
+                return $veiculo->placa != "BCX8D43";
+            });
+        }
+        //--------------------------------------------------------------------------------------------------------------------------------
+
         //filtre os veículos de acordo com o departamento do usuário, a coluna a ser filtrada é codigoRegional de veículo
         $veiculos = $veiculos->filter(function ($veiculo) use ($departmentUser, $isCuritiba) {
             if($isCuritiba && $veiculo->codigoRegional == "CWB"){

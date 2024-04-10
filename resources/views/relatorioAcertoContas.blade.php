@@ -68,6 +68,16 @@
                         
                     </div>
 
+                    <h3 >Relatório:</h3>
+                    
+                    <div style="border: 1px solid black; padding-left:10px">
+    
+                        <p><strong>Contatos:</strong> {{ $av->contatos }}</p>
+                        <p><strong> Atividades:</strong> {{ $av->atividades }}</p>
+                        <p><strong> Conclusões:</strong> {{ $av->conclusoes }}</p>
+                        
+                    </div>
+
                     <h3 >Pagamento realizado no acerto de contas:</h3>
                     <div style="border: 1px solid black; padding-left:10px">
                         <p><strong>Valor:</strong> R$ {{ number_format($av->valorReais, 2, ',', '.') }}</p>
