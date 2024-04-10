@@ -164,7 +164,7 @@ class ControladorAv extends Controller
             $contas = array_unique($contas);
             $pixs = array_unique($pixs);
         }
-
+        
         foreach ($data as $item) {
             $jaExiste = false;
             foreach ($medicoes as $medicao) {
@@ -174,7 +174,9 @@ class ControladorAv extends Controller
                 }
             }
             if(!$jaExiste){
-                if ($item->nome_supervisor == $user->name) { //  para teste 'Fernanda Espindola de Oliveira'
+                $nomeItemSemAcento = $this->tirarAcentos($item->nome_supervisor);
+                $nomeUserSemAcento = $this->tirarAcentos($user->name);
+                if ($nomeItemSemAcento == $nomeUserSemAcento) { //  para teste 'Fernanda Espindola de Oliveira'
                     array_push($filtro, $item);
                 }
                 else{
@@ -184,6 +186,10 @@ class ControladorAv extends Controller
         }
         return view('avs.create', ['objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'veiculosParanacidade' => $veiculosParanacidade, 
         'user'=> $user, 'filtro' => $filtro, 'filtroTodos' => $filtroTodos, 'bancos' => $bancos, 'agencias' => $agencias, 'contas' => $contas, 'pixs' => $pixs]);
+    }
+
+    public function tirarAcentos($string){
+        return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(Ñ)/"), explode(" ", "a A e E i I o O u U n N"), $string);
     }
 
     public function verFluxo($id){
@@ -2217,6 +2223,11 @@ class ControladorAv extends Controller
         $valorAcertoContasDolar = 0;
 
         $av = Av::findOrFail($id);
+        //se a AV não tiver rotas, redireciona para a página de gerenciar AVs com a mensagem de erro
+        if(count($av->rotas) == 0){
+            return redirect('/avs/gerenciarAvsRh')->with('msg', 'A AV não possui rotas cadastradas!');
+        }
+
         $userAv = User::findOrFail($av->user_id);
         $historicoPcAll = HistoricoPc::all();
         $historicoPc = [];
