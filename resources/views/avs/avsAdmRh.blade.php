@@ -333,6 +333,15 @@
                     $('#totalValueDolarPagina').html(totalFormattedDolar);
                 },
             });
+
+
+            @if(session('msg'))
+
+                Swal.fire({
+                    title: '{{ session('msg') }}',
+                    text: '',
+                })
+            @endif
         });
 
         $(document).ready(function() {
