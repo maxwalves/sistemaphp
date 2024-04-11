@@ -429,7 +429,7 @@
                             <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraSaidaNacional" style="border-width: 1px; border-color: black"
                                 id="dataHoraSaidaNacional" placeholder="Data/Hora de saída" 
                                 class="classeDataHoraSaidaNacional {{ $errors->has('dataHoraSaidaNacional') ? 'is-invalid' :''}}"
-                                min="{{ $minDate }}" value="{{ $minDate }}" >
+                               value="{{ $minDate }}" >
 
                             @if ($errors->has('dataHoraSaidaNacional'))
                             <div class="invalid-feedback">
@@ -488,8 +488,7 @@
                             <label for="dataHoraChegadaNacional" class="control-label"><strong style="color: red">* </strong>Data/Hora de chegada: </label>
                             <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local" name="dataHoraChegadaNacional" style="border-width: 1px; border-color: black"
                                 id="dataHoraChegadaNacional" placeholder="Data/Hora de chegada" 
-                                class="classeDataHoraChegadaNacional {{ $errors->has('dataHoraChegadaNacional') ? 'is-invalid' :''}}"
-                                min="{{ $minDate }}">
+                                class="classeDataHoraChegadaNacional {{ $errors->has('dataHoraChegadaNacional') ? 'is-invalid' :''}}">
 
                             @if ($errors->has('dataHoraChegadaNacional'))
                             <div class="invalid-feedback">
