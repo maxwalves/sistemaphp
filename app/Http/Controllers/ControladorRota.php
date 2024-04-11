@@ -218,7 +218,12 @@ class ControladorRota extends Controller
         $av = Av::findOrFail($id);//Busca a AV com base no ID
         $rotas = $av->rotas;//Busca as rotas da AV
 
-        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        if(count($rotas) > 0){
+            $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        }
+        else{
+            $arrayDiasValores = null;
+        }
 
         return view('rotaspc.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user, 'arrayDiasValores' => $arrayDiasValores]);
     }
@@ -289,7 +294,6 @@ class ControladorRota extends Controller
                 $ultimaRotaSetada = $rotas[$i];
             }
         }
-
         $veiculosProprios = $user->veiculosProprios;
         
         return view('rotaspc.createRota', ['veiculosProprios' => $veiculosProprios, 'av' => $av, 'user'=> $user, 'isOrigemNacional' => $isOrigemNacional, 

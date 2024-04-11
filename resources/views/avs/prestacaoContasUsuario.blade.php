@@ -84,9 +84,6 @@
                         && $av->isPrestacaoContasRealizada == 0 && $av->isCancelado == 0) ||
                         ($av->isCancelado == 1 && $av->isAprovadoFinanceiro == 1 && $av->isPrestacaoContasRealizada == 0))
 
-                        @for($i = 0; $i < count($av->rotas); $i++)
-                            @if($i == (count($av->rotas)-1))
-                                {{-- @if($av->rotas[$i]->dataHoraChegada < date('Y-m-d H:i:s')) --}}
                                 @if(true)
                                     <div class="opcoesGerenciarAv">
                                         <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" class="btn btn-success btn-sm"
@@ -95,8 +92,7 @@
                                 @else
                                     Ainda não finalizou
                                 @endif
-                            @endif
-                        @endfor
+                            
                     @elseif(($av->isEnviadoUsuario==1 && $av->isAprovadoGestor ==1 && $av->isRealizadoReserva ==1 && $av->isAprovadoFinanceiro ==1
                             && $av->isPrestacaoContasRealizada == 1) ||
                             ($av->isCancelado == 1 && $av->isAprovadoFinanceiro == 1 && $av->isPrestacaoContasRealizada == 1))

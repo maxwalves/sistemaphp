@@ -566,7 +566,7 @@
                                 @endif
                         </div>
             
-                        <div class="form-group" id="selecaoVeiculo" {{ $ultimaRotaSetada->isVeiculoProprio == "1" ? "" : 'hidden="true"'}} >
+                        <div class="form-group" id="selecaoVeiculo" {{ (isset($ultimaRotaSetada) && $ultimaRotaSetada->isVeiculoProprio == "1") ? "" : 'hidden="true"'}} >
                             <label for="veiculoProprio_id" class="control-label" required>Selecione o veículo?</label>
                             <br>
                                 <select class="select select-bordered select-sm w-full max-w-xs {{ $errors->has('veiculoProprio_id') ? 'is-invalid' :''}}" 

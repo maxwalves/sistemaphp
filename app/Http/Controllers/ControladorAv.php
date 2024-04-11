@@ -4095,6 +4095,17 @@ class ControladorAv extends Controller
                 $isInternacional = true;
             }
         }
+
+        //se não tiver rotas, retorne para a página de rotas
+        if(sizeof($rotas) == 0){
+            if($isPc=="sim"){
+        
+                return redirect('/rotaspc/rotas/' . $avId );
+            }
+            else{
+                return redirect('/rotas/rotas/' . $avId );
+            }
+        }
         
         $dataInicio = date('Y-m-d', strtotime($rotas[0]->dataHoraSaida));
         $dataFim = date('Y-m-d', strtotime($rotas[sizeof($rotas)-1]->dataHoraChegada));
@@ -4930,12 +4941,22 @@ class ControladorAv extends Controller
             }
         }
 
+        //filtre o $medicoes e veja qual o id da av que está na tabela medicoes é igual a av que está sendo editada
+        $medicoes = Medicao::all();
+        $idAv = $av->id;
+        $medicoesFiltradas = [];
+        foreach ($medicoes as $medicao) {
+            if($medicao->av_id == $idAv){
+                array_push($medicoesFiltradas, $medicao);
+            }
+        }
+
         if($user->id != $av->user->id) {
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
         }
 
         return view('avs.edit', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 
-        'user'=> $user, 'filtro' => $filtro, 'filtroTodos' => $filtroTodos, 'userAv' => $userAv]);
+        'user'=> $user, 'filtro' => $filtro, 'filtroTodos' => $filtroTodos, 'userAv' => $userAv, 'medicoesFiltradas' => $medicoesFiltradas]);
     }
 
     public function editAvPc($id)
