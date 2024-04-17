@@ -450,6 +450,12 @@ class RelatorioController extends Controller
                                 ($proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && $proximaRotaDataSaidaFormatado->format('H:i:s') >= "19:01:00" ||
                                  $proximaRotaDataChegadaFormatado->format('Y-m-d') == $dia && $proximaRotaDataChegadaFormatado->format('H:i:s') >= "19:01:00")){
                         //SE A PRÓXIMA ROTA FOR NO MESMO DIA E A HORA DE SAÍDA OU CHEGADA DELA FOR MAIOR QUE 19:01
+                            try {
+                                $rotaImediatamenteAnterior = $this->buscarRotaPosterior($rota, $rotas);
+                                $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            } catch (\Throwable $th) {
+                                $valor = $this->verificaValorRota($rota);
+                            }
                             $valorTarde = $valor/2;
                             $temDiariaTarde = true;
                         }
@@ -692,6 +698,12 @@ class RelatorioController extends Controller
                                 ($proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia && $proximaRotaDataSaidaFormatado->format('H:i:s') >= "19:01:00" ||
                                  $proximaRotaDataChegadaFormatado->format('Y-m-d') == $dia && $proximaRotaDataChegadaFormatado->format('H:i:s') >= "19:01:00")){
                         //SE A PRÓXIMA ROTA FOR NO MESMO DIA E A HORA DE SAÍDA OU CHEGADA DELA FOR MAIOR QUE 19:01
+                            try {
+                                $rotaImediatamenteAnterior = $this->buscarRotaPosterior($rota, $rotas);
+                                $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            } catch (\Throwable $th) {
+                                $valor = $this->verificaValorRota($rota);
+                            }
                             $valorTarde = $valor/2;
                             $temDiariaTarde = true;
                         }
@@ -815,5 +827,17 @@ class RelatorioController extends Controller
             }
         }
         return $rotaAnterior;
+    }
+
+    //bucar rota posterior
+    public function buscarRotaPosterior($rota, $rotas){
+        $rotaPosterior = null;
+        for ($i=0; $i < sizeof($rotas) ; $i++) {
+            if($rota->id == $rotas[$i]->id){
+                $rotaPosterior = $rotas[$i+1];
+                break;
+            }
+        }
+        return $rotaPosterior;
     }
 }

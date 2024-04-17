@@ -70,7 +70,7 @@
                     @if($av->isCancelado == true)
                     <div class="opcoesGerenciarAv">
                         <a href="/avs/verFluxoSecretaria/{{ $av->id }}" class="btn btn-warning btn-sm"
-                            style="width: 200px" title="Gerenciar cancelamento"><i class="far fa-calendar-times"></i></a> 
+                            title="Gerenciar cancelamento"><i class="far fa-calendar-times"></i></a> 
                     </div>
                     @else
                     <div class="opcoesGerenciarAv">
