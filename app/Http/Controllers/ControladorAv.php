@@ -535,6 +535,8 @@ class ControladorAv extends Controller
         $comprovantesAll = ComprovanteDespesa::all();
         $comprovantes = [];
 
+        $todosAnexosRotas = AnexoRota::all();
+
         $av = Av::findOrFail($id);
         $userAv = User::findOrFail($av->user_id);
         $historicoPcAll = HistoricoPc::all();
@@ -561,9 +563,9 @@ class ControladorAv extends Controller
             }
         }
 
-        foreach($av->rotas as $r){//Verifica todas as rotas da AV
-            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
-                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+        foreach($todosAnexosRotas as $r){//Verifica todas as rotas da AV
+            if($r->av_id == $id){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $r);// Empilha no array cada um dos anexos
             }
         }
         
@@ -659,6 +661,8 @@ class ControladorAv extends Controller
         $historicoPc = [];
         $valorRecebido = null;
 
+        $anexoRotasTodos = AnexoRota::all();
+
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
@@ -698,9 +702,9 @@ class ControladorAv extends Controller
             $valorRecebido->valorExtraDolar = 0;
         }
 
-        foreach($av->rotas as $r){//Verifica todas as rotas da AV
-            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
-                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+        foreach($anexoRotasTodos as $r){//Verifica todas as rotas da AV
+            if($r->av_id == $id){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $r);// Empilha no array cada um dos anexos
             }
         }
         
@@ -798,6 +802,8 @@ class ControladorAv extends Controller
         $valorAcertoContasReal = 0;
         $valorAcertoContasDolar = 0;
 
+        $anexoRotasTodos = AnexoRota::all();
+
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
@@ -826,9 +832,9 @@ class ControladorAv extends Controller
             }
         }
 
-        foreach($av->rotas as $r){//Verifica todas as rotas da AV
-            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
-                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+        foreach($anexoRotasTodos as $r){//Verifica todas as rotas da AV
+            if($r->av_id == $id){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $r);// Empilha no array cada um dos anexos
             }
         }
         
@@ -926,6 +932,8 @@ class ControladorAv extends Controller
         $historicoPc = [];
         $valorRecebido = null;
 
+        $anexosRotasTodos = AnexoRota::all();
+
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
@@ -955,9 +963,9 @@ class ControladorAv extends Controller
             }
         }
 
-        foreach($av->rotas as $r){//Verifica todas as rotas da AV
-            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
-                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+        foreach($anexosRotasTodos as $r){//Verifica todas as rotas da AV
+            if($r->av_id == $id){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $r);// Empilha no array cada um dos anexos
             }
         }
         
@@ -1055,6 +1063,8 @@ class ControladorAv extends Controller
         $historicoPc = [];
         $valorRecebido = null;
 
+        $anexoRotasTodos = AnexoRota::all();
+
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
@@ -1094,9 +1104,9 @@ class ControladorAv extends Controller
             $valorRecebido->valorExtraDolar = 0;
         }
 
-        foreach($av->rotas as $r){//Verifica todas as rotas da AV
-            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
-                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+        foreach($anexoRotasTodos as $r){//Verifica todas as rotas da AV
+            if($r->av_id == $id){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $r);// Empilha no array cada um dos anexos
             }
         }
         
@@ -1330,6 +1340,7 @@ class ControladorAv extends Controller
             $anexoRota->usuario_id = $av->user_id;
             $anexoRota->rota_id = $rota->id;
             $anexoRota->descricao = $request->descricao;
+            $anexoRota->av_id = $av->id;
             $anexoRota->save();
         }
         return redirect('/avs/realizarReservas/' . $rota->id)->with('msg', 'Anexo salvo com sucesso!');
@@ -1357,6 +1368,7 @@ class ControladorAv extends Controller
             $anexoRota->usuario_id = $av->user_id;
             $anexoRota->rota_id = $rota->id;
             $anexoRota->descricao = $request->descricao;
+            $anexoRota->av_id = $av->id;
             $anexoRota->save();
         }
 
@@ -4964,7 +4976,9 @@ class ControladorAv extends Controller
                 }
             }
             if(!$jaExiste){
-                if ($item->nome_supervisor == $user->name) { //  para teste 'Fernanda Espindola de Oliveira'
+                $nomeItemSemAcento = $this->tirarAcentos($item->nome_supervisor);
+                $nomeUserSemAcento = $this->tirarAcentos($user->name);
+                if ($nomeItemSemAcento == $nomeUserSemAcento) { //  para teste 'Fernanda Espindola de Oliveira'
                     array_push($filtro, $item);
                 }
                 else{

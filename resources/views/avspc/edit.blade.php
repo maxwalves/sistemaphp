@@ -309,7 +309,7 @@
         @endif
         
         @for($i = 0; $i < count($objetivos); $i++)
-            @if($objetivos[$i]->id == $av->objetivo_id)
+            @if($objetivos[$i]->id == $av->objetivo_id && $av->objetivo_id == 3)
                 setTimeout(verificarObjetivoViagem, 500);
                 document.getElementById("mensagemUsuario").innerHTML = "Confirme a medição";
                 document.getElementById("mensagemUsuario").style.fontWeight = "bold";

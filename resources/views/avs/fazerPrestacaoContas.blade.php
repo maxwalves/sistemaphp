@@ -179,7 +179,7 @@
                                 <div>
                                     <a href="/avspc/edit/{{ $av->id }}" class="btn btn-success btn-sm"><i class="fas fa-edit"></i> AV</a>
                                     <a href="/rotaspc/rotas/{{ $av->id }}" class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i> ROTAS</a>
-                        
+                                    <a href="/avs/cancelarAv/{{ $av->id }}" class="btn btn-danger btn-error btn-sm" title="Cancelar AV">Cancelar AV</a>
                                 </div>
                             @endif
                         <hr>
@@ -1045,19 +1045,21 @@
                                     <tr>
                                         <td> {{ $anexoTransporte->descricao }} </td>
                                         <td>
-                                            @for ($i = 0; $i < count($av->rotas); $i++)
-                                                @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
-                                                    @if ($av->rotas[$i]->isViagemInternacional == 0)
-                                                        - {{ $av->rotas[$i]->cidadeOrigemNacional }}
-                                                        -> {{ $av->rotas[$i]->cidadeDestinoNacional }}
-                                                    @endif
+                                            @if(count($av->rotas) > 0)
+                                                @for ($i = 0; $i < count($av->rotas); $i++)
+                                                    @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
+                                                        @if ($av->rotas[$i]->isViagemInternacional == 0)
+                                                            - {{ $av->rotas[$i]->cidadeOrigemNacional }}
+                                                            -> {{ $av->rotas[$i]->cidadeDestinoNacional }}
+                                                        @endif
 
-                                                    @if ($av->rotas[$i]->isViagemInternacional == 1)
-                                                        - {{ $av->rotas[$i]->cidadeOrigemInternacional }}
-                                                        -> {{ $av->rotas[$i]->cidadeDestinoInternacional }}
+                                                        @if ($av->rotas[$i]->isViagemInternacional == 1)
+                                                            - {{ $av->rotas[$i]->cidadeOrigemInternacional }}
+                                                            -> {{ $av->rotas[$i]->cidadeDestinoInternacional }}
+                                                        @endif
                                                     @endif
-                                                @endif
-                                            @endfor
+                                                @endfor
+                                            @endif
                                         </td>
                                         <td>
                                             <a href="{{ route('recuperaArquivo', [

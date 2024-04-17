@@ -15,7 +15,8 @@ class AnexoRota extends Model
         'anexoTransporte',
         'usuario_id',
         'rota_id',
-        'descricao'
+        'descricao',
+        'av_id'
     ];
 
     public function rota()

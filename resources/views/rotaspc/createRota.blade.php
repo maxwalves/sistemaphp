@@ -573,9 +573,13 @@
                                     <option value="" name=""> Selecione</option>
                                     @for($i = 0; $i < count($veiculosProprios); $i++)
                                         <div>
-                                            <option value="{{ $veiculosProprios[$i]->id }}" {{$ultimaRotaSetada->veiculoProprio_id == $veiculosProprios[$i]->id ? "selected='selected'" : ""}}
+                                            @if($ultimaRotaSetada != null)
+                                                <option value="{{ $veiculosProprios[$i]->id }}" {{$ultimaRotaSetada->veiculoProprio_id == $veiculosProprios[$i]->id ? "selected='selected'" : ""}}
                                                 name="{{ $veiculosProprios[$i]->id }}"> {{ $veiculosProprios[$i] ->modelo }} - {{ $veiculosProprios[$i] ->placa }} </option>
-                                        </div>
+                                            @else
+                                                <option value="{{ $veiculosProprios[$i]->id }}" name="{{ $veiculosProprios[$i]->id }}"> {{ $veiculosProprios[$i] ->modelo }} - {{ $veiculosProprios[$i] ->placa }} </option>
+                                            @endif
+                                            </div>
                                     @endfor
                                 </select>
             
