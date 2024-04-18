@@ -143,61 +143,63 @@
                 </table>
             
                 <h3>Controle de diárias:</h3>
-                <table class="comBordaSimples" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th style="vertical-align: middle; text-align: center;">Dias</th>
-                            <th style="vertical-align: middle; text-align: center;">Trajeto Dia</th>
-                            <th style="vertical-align: middle; text-align: center;">Diária Almoço</th>
-                            <th style="vertical-align: middle; text-align: center;">Diária Jantar</th>
-                            <th style="vertical-align: middle; text-align: center;">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $j=0;
-                        @endphp
-                        @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
-                                    
-                            <tr style="vertical-align: middle; text-align: center;">
-                                <td style="vertical-align: middle; text-align: center;">
-                                    {{$arrayDiasValores[$j]['dia']}}
-                                </td>
-                                <td style="vertical-align: middle">
-                                    @foreach($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
-                                        {{-- verifique se $r começa com "ida" --}}
-                                        @if(strpos($r, 'Ida:') !== false)
-                                            {{str_replace('Ida:', '', $r)}}
-                                        @else
-                                            {{$r}}<br>
-                                        @endif
-                                    @endforeach
-                                </td>
-                                <td style="vertical-align: middle; text-align: center;"> 
-                                    @if($arrayDiasValores[$j]['valorManha'] != 0)
-                                        R${{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                                <td style="vertical-align: middle; text-align: center;">
-                                    @if($arrayDiasValores[$j]['valorTarde'] != 0)
-                                        R${{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                                <td style="vertical-align: middle; text-align: center;"> 
-                                    R${{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}
-                                </td>                                
+                @if(count($av->rotas) > 0 && count($arrayDiasValores) > 0)
+                    <table class="comBordaSimples" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th style="vertical-align: middle; text-align: center;">Dias</th>
+                                <th style="vertical-align: middle; text-align: center;">Trajeto Dia</th>
+                                <th style="vertical-align: middle; text-align: center;">Diária Almoço</th>
+                                <th style="vertical-align: middle; text-align: center;">Diária Jantar</th>
+                                <th style="vertical-align: middle; text-align: center;">Total</th>
                             </tr>
-
+                        </thead>
+                        <tbody>
                             @php
-                                $j++;
+                                $j=0;
                             @endphp
-                        @endfor
-                    </tbody>
-                </table>
+                            @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
+                                        
+                                <tr style="vertical-align: middle; text-align: center;">
+                                    <td style="vertical-align: middle; text-align: center;">
+                                        {{$arrayDiasValores[$j]['dia']}}
+                                    </td>
+                                    <td style="vertical-align: middle">
+                                        @foreach($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
+                                            {{-- verifique se $r começa com "ida" --}}
+                                            @if(strpos($r, 'Ida:') !== false)
+                                                {{str_replace('Ida:', '', $r)}}
+                                            @else
+                                                {{$r}}<br>
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: center;"> 
+                                        @if($arrayDiasValores[$j]['valorManha'] != 0)
+                                            R${{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: center;">
+                                        @if($arrayDiasValores[$j]['valorTarde'] != 0)
+                                            R${{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: center;"> 
+                                        R${{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}
+                                    </td>                                
+                                </tr>
+
+                                @php
+                                    $j++;
+                                @endphp
+                            @endfor
+                        </tbody>
+                    </table>
+                @endif
 
                 <br><br>
                 @if(count($medicoesFiltradas) > 0)

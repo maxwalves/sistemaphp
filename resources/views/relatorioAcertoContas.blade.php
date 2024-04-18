@@ -184,34 +184,36 @@
             
             <div class="col-md-8 offset-md-0" style="font-size: 12px">
                 <h3><strong>Detalhamento: </strong></h3>
-                <table id="tabelaRota" class="comBordaSimples" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th>Estado de saída</th>
-                            <th>Cidade de saída</th>
-                            <th>Data/Hora de saída</th>
-                            <th>-</th>
-                            <th>Estado de chegada</th>
-                            <th>Cidade de chegada</th>
-                            <th>Data/Hora de chegada</th>
+                @if(count($av->rotas) > 0)
+                    <table id="tabelaRota" class="comBordaSimples" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th>Estado de saída</th>
+                                <th>Cidade de saída</th>
+                                <th>Data/Hora de saída</th>
+                                <th>-</th>
+                                <th>Estado de chegada</th>
+                                <th>Cidade de chegada</th>
+                                <th>Data/Hora de chegada</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($av->rotas as $rota)
-                        <tr>
-                            <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->estadoOrigemNacional : $rota->estadoOrigemInternacional}} </td>
-                            <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} </td>
-                            <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
-                            <td>-</td>
-                            <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->estadoDestinoNacional : $rota->estadoDestinoInternacional}} </td>
-                            <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} </td>
-                            <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
-                            
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($av->rotas as $rota)
+                            <tr>
+                                <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->estadoOrigemNacional : $rota->estadoOrigemInternacional}} </td>
+                                <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} </td>
+                                <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
+                                <td>-</td>
+                                <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->estadoDestinoNacional : $rota->estadoDestinoInternacional}} </td>
+                                <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} </td>
+                                <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>
+                                
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
                 <br><br><br><br>
                 <h3><strong>Histórico: </strong></h3>
                 <table id="minhaTabela" class="comBordaSimples" style="width: 100%">
@@ -246,61 +248,63 @@
                 </table>
 
                 <h3><strong>Detalhamento de valores: </strong></h3>
-                <table class="comBordaSimples" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th style="vertical-align: middle; text-align: center;">Dias</th>
-                            <th style="vertical-align: middle; text-align: center;">Trajeto Dia</th>
-                            <th style="vertical-align: middle; text-align: center;">Diária Almoço</th>
-                            <th style="vertical-align: middle; text-align: center;">Diária Jantar</th>
-                            <th style="vertical-align: middle; text-align: center;">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $j=0;
-                        @endphp
-                        @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
-                                    
-                            <tr style="vertical-align: middle; text-align: center;">
-                                <td style="vertical-align: middle; text-align: center;">
-                                    {{$arrayDiasValores[$j]['dia']}}
-                                </td>
-                                <td style="vertical-align: middle">
-                                    @foreach($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
-                                        {{-- verifique se $r começa com "ida" --}}
-                                        @if(strpos($r, 'Ida:') !== false)
-                                            {{str_replace('Ida:', '', $r)}}
-                                        @else
-                                            {{$r}}<br>
-                                        @endif
-                                    @endforeach
-                                </td>
-                                <td style="vertical-align: middle; text-align: center;"> 
-                                    @if($arrayDiasValores[$j]['valorManha'] != 0)
-                                        R${{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                                <td style="vertical-align: middle; text-align: center;">
-                                    @if($arrayDiasValores[$j]['valorTarde'] != 0)
-                                        R${{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                                <td style="vertical-align: middle; text-align: center;"> 
-                                    R${{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}
-                                </td>                                
+                @if(count($av->rotas) > 0 && count($arrayDiasValores) > 0)
+                    <table class="comBordaSimples" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th style="vertical-align: middle; text-align: center;">Dias</th>
+                                <th style="vertical-align: middle; text-align: center;">Trajeto Dia</th>
+                                <th style="vertical-align: middle; text-align: center;">Diária Almoço</th>
+                                <th style="vertical-align: middle; text-align: center;">Diária Jantar</th>
+                                <th style="vertical-align: middle; text-align: center;">Total</th>
                             </tr>
-
+                        </thead>
+                        <tbody>
                             @php
-                                $j++;
+                                $j=0;
                             @endphp
-                        @endfor
-                    </tbody>
-                </table>
+                            @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
+                                        
+                                <tr style="vertical-align: middle; text-align: center;">
+                                    <td style="vertical-align: middle; text-align: center;">
+                                        {{$arrayDiasValores[$j]['dia']}}
+                                    </td>
+                                    <td style="vertical-align: middle">
+                                        @foreach($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
+                                            {{-- verifique se $r começa com "ida" --}}
+                                            @if(strpos($r, 'Ida:') !== false)
+                                                {{str_replace('Ida:', '', $r)}}
+                                            @else
+                                                {{$r}}<br>
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: center;"> 
+                                        @if($arrayDiasValores[$j]['valorManha'] != 0)
+                                            R${{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: center;">
+                                        @if($arrayDiasValores[$j]['valorTarde'] != 0)
+                                            R${{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: center;"> 
+                                        R${{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}
+                                    </td>                                
+                                </tr>
+
+                                @php
+                                    $j++;
+                                @endphp
+                            @endfor
+                        </tbody>
+                    </table>
+                @endif
                 <br><br>
                 @if(count($medicoesFiltradas) > 0)
                     <h3><strong>Medições: </strong></h3>

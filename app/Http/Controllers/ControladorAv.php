@@ -226,7 +226,12 @@ class ControladorAv extends Controller
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
-        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        if(count($av->rotas) > 0){
+            $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        }
+        else{
+            $arrayDiasValores = [];
+        }
 
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
@@ -387,7 +392,12 @@ class ControladorAv extends Controller
 
         $veiculosProprios = $userAv->veiculosProprios;
 
-        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        if(count($av->rotas) > 0){
+            $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        }
+        else{
+            $arrayDiasValores = [];
+        }
 
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
@@ -1265,7 +1275,12 @@ class ControladorAv extends Controller
             
         }
 
-        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        if(count($av->rotas) > 0){
+            $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        }
+        else{
+            $arrayDiasValores = [];
+        }
 
         //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
         $eventos = [];
@@ -2764,7 +2779,12 @@ class ControladorAv extends Controller
         $historicos = [];
         $users = User::all();
 
-        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        if(count($av->rotas) > 0){
+            $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        }
+        else{
+            $arrayDiasValores = [];
+        }
 
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
@@ -3195,7 +3215,12 @@ class ControladorAv extends Controller
             }
         }
 
-        $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        if(count($av->rotas) > 0){
+            $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+        }
+        else{
+            $arrayDiasValores = [];
+        }
 
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
