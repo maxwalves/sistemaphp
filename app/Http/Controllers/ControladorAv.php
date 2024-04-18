@@ -1775,6 +1775,8 @@ class ControladorAv extends Controller
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
+        $todosAnexosRotas = AnexoRota::all();
+
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
                 array_push($medicoesFiltradas, $medicao); 
@@ -1808,9 +1810,9 @@ class ControladorAv extends Controller
             $valorRecebido->valorExtraDolar = 0;
         }
 
-        foreach($av->rotas as $r){//Verifica todas as rotas da AV
-            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
-                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+        foreach($todosAnexosRotas as $r){//Verifica todas as rotas da AV
+            if($r->av_id == $id){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $r);// Empilha no array cada um dos anexos
             }
         }
         
@@ -1907,6 +1909,8 @@ class ControladorAv extends Controller
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
+        $todosAnexosRotas = AnexoRota::all();
+
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
                 array_push($medicoesFiltradas, $medicao); 
@@ -1940,9 +1944,9 @@ class ControladorAv extends Controller
             $valorRecebido->valorExtraDolar = 0;
         }
 
-        foreach($av->rotas as $r){//Verifica todas as rotas da AV
-            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
-                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+        foreach($todosAnexosRotas as $r){//Verifica todas as rotas da AV
+            if($r->av_id == $id){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $r);// Empilha no array cada um dos anexos
             }
         }
         
@@ -1998,6 +2002,8 @@ class ControladorAv extends Controller
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
+        $todosAnexosRotas = AnexoRota::all();
+
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
                 array_push($medicoesFiltradas, $medicao); 
@@ -2031,9 +2037,9 @@ class ControladorAv extends Controller
             $valorRecebido->valorExtraDolar = 0;
         }
 
-        foreach($av->rotas as $r){//Verifica todas as rotas da AV
-            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
-                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+        foreach($todosAnexosRotas as $r){//Verifica todas as rotas da AV
+            if($r->av_id == $id){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $r);// Empilha no array cada um dos anexos
             }
         }
         
@@ -2128,6 +2134,8 @@ class ControladorAv extends Controller
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
+        $todosAnexosRotas = AnexoRota::all();
+
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
                 array_push($medicoesFiltradas, $medicao); 
@@ -2161,9 +2169,9 @@ class ControladorAv extends Controller
             $valorRecebido->valorExtraDolar = 0;
         }
 
-        foreach($av->rotas as $r){//Verifica todas as rotas da AV
-            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
-                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+        foreach($todosAnexosRotas as $r){//Verifica todas as rotas da AV
+            if($r->av_id == $id){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $r);// Empilha no array cada um dos anexos
             }
         }
         
@@ -2266,6 +2274,8 @@ class ControladorAv extends Controller
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
 
+        $todosAnexosRotas = AnexoRota::all();
+
         foreach($medicoes as $medicao){
             if($medicao->av_id == $av->id){
                 array_push($medicoesFiltradas, $medicao); 
@@ -2299,9 +2309,9 @@ class ControladorAv extends Controller
             $valorRecebido->valorExtraDolar = 0;
         }
 
-        foreach($av->rotas as $r){//Verifica todas as rotas da AV
-            foreach($r->anexos as $a){// Verifica cada um dos anexos da rota
-                array_push($anexosRotas, $a);// Empilha no array cada um dos anexos
+        foreach($todosAnexosRotas as $r){//Verifica todas as rotas da AV
+            if($r->av_id == $id){// Verifica cada um dos anexos da rota
+                array_push($anexosRotas, $r);// Empilha no array cada um dos anexos
             }
         }
         
