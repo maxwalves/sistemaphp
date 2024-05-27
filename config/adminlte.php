@@ -64,7 +64,7 @@ return [
     */
 
     'logo' => '<b>Sistema de Viagens</b>',
-    'logo_img' => '/img/1.png',
+    'logo_img' => '/img/logo.png',
     'logo_img_class' => 'brand-image img elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
