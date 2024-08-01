@@ -2392,6 +2392,8 @@ class ControladorAv extends Controller
 
         $isVeiculoProprio = false;
         $isInternacional = false;
+        $temReservaHotelOuTransporte = false;
+        $temReservaVeiculoEmpresa = false;
         $dados = [];
 
         $historico = new Historico();
@@ -2411,6 +2413,21 @@ class ControladorAv extends Controller
             }
             if($rota["isViagemInternacional"]==1){
                 $isInternacional = true;
+            }
+            if($rota["isReservaHotel"]==1){
+                $temReservaHotelOuTransporte = true;
+            }
+            if($rota["isOnibusLeito"]==1){
+                $temReservaHotelOuTransporte = true;
+            }
+            if($rota["isOnibusConvencional"]==1){
+                $temReservaHotelOuTransporte = true;
+            }
+            if($rota["isAereo"]==1){
+                $temReservaHotelOuTransporte = true;
+            }
+            if($rota["isVeiculoEmpresa"]==1){
+                $temReservaVeiculoEmpresa = true;
             }
         }
 
@@ -2514,8 +2531,48 @@ class ControladorAv extends Controller
             foreach($users as $u){
                 try {
                     if($u->hasPermissionTo($permission2)){
-                        Mail::to($u->username)
-                        ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
+
+                        if($temReservaVeiculoEmpresa && !$temReservaHotelOuTransporte){
+                            if
+                            (
+                            ($u->department == "ERCSC" && $userAv->department == "ERCSC")
+                            ||
+                            ($u->department == "ERMGA" && $userAv->department == "ERMGA")
+                            ||
+                            ($u->department == "ERFCB" && $userAv->department == "ERFCB")
+                            ||
+                            ($u->department == "ERGUA" && $userAv->department == "ERGUA")
+                            ||
+                            ($u->department == "ERLDA" && $userAv->department == "ERLDA")
+                            ||
+                            ($u->department == "ERPTG" && $userAv->department == "ERPTG")
+                            ){
+                                Mail::to($u->username)
+                                ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
+                            }
+                            else if(
+                            ($u->department != "ERCSC" 
+                            && $u->department != "ERMGA" 
+                            && $u->department != "ERFCB" 
+                            && $u->department != "ERGUA" 
+                            && $u->department != "ERLDA" 
+                            && $u->department != "ERPTG")
+                            &&
+                            ($userAv->department != "ERCSC"
+                            && $userAv->department != "ERMGA"
+                            && $userAv->department != "ERFCB"
+                            && $userAv->department != "ERGUA"
+                            && $userAv->department != "ERLDA"
+                            && $userAv->department != "ERPTG")
+                            ){
+                                Mail::to($u->username)
+                                ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
+                            }
+                        }
+                        else if($temReservaHotelOuTransporte){
+                            Mail::to($u->username)
+                            ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
+                        }
                     }
                 } catch (\Throwable $th) {
                 }
