@@ -496,21 +496,22 @@
                             </thead>
                             <tbody>
                                 <!-- row 1 -->
+                                @if(count($historicos) > 0)
+                                    @foreach ($historicos as $historico)
+                                        <tr>
+                                            <td>{{ date('d/m/Y', strtotime($historico->dataOcorrencia)) }}</td>
+                                            <td>{{ $historico->tipoOcorrencia }}</td>
+                                            <td>{{ $historico->comentario }}</td>
+                                            <td>{{ $historico->perfilDonoComentario }}</td>
 
-                                @foreach ($historicos as $historico)
-                                    <tr>
-                                        <td>{{ date('d/m/Y', strtotime($historico->dataOcorrencia)) }}</td>
-                                        <td>{{ $historico->tipoOcorrencia }}</td>
-                                        <td>{{ $historico->comentario }}</td>
-                                        <td>{{ $historico->perfilDonoComentario }}</td>
-
-                                        @foreach ($users as $u)
-                                            @if ($u->id == $historico->usuario_comentario_id)
-                                                <td>{{ $u->name }}</td>
-                                            @endif
-                                        @endforeach
-                                    </tr>
-                                @endforeach
+                                            @foreach ($users as $u)
+                                                @if ($u->id == $historico->usuario_comentario_id)
+                                                    <td>{{ $u->name }}</td>
+                                                @endif
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                @endif
 
                             </tbody>
                         </table>
@@ -945,15 +946,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($reservas2 as $r)
-                                        <tr>
-                                            <td>{{$r->id}}</td>
-                                            <td>{{date('d/m/Y H:i', strtotime($r->dataInicio))}}</td>
-                                            <td>{{date('d/m/Y H:i', strtotime($r->dataFim))}}</td>
-                                            <td>{{$r->observacoes}}</td>
-                                            <td>{{$r->veiculo->marca}} - {{$r->veiculo->modelo}} - {{$r->veiculo->placa}}</td>
-                                        </tr>
-                                    @endforeach
+                                    @if(count($reservas2) > 0)
+                                        @foreach($reservas2 as $r)
+                                            <tr>
+                                                <td>{{$r->id}}</td>
+                                                <td>{{date('d/m/Y H:i', strtotime($r->dataInicio))}}</td>
+                                                <td>{{date('d/m/Y H:i', strtotime($r->dataFim))}}</td>
+                                                <td>{{$r->observacoes}}</td>
+                                                <td>{{$r->veiculo->marca}} - {{$r->veiculo->modelo}} - {{$r->veiculo->placa}}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         @else
@@ -1056,7 +1059,7 @@
                                 @if ($anexoTransporte->anexoTransporte != null)
                                     <tr>
                                         <td> {{ $anexoTransporte->descricao }} </td>
-
+    
                                         {{-- <td>
                                             @for ($i = 0; $i < count($av->rotas); $i++)
                                                 @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
@@ -1071,7 +1074,7 @@
                                                         - {{ $av->rotas[$i]->cidadeOrigemNacional }}
                                                         -> {{ $av->rotas[$i]->cidadeDestinoNacional }}
                                                     @endif
-
+    
                                                     @if ($av->rotas[$i]->isViagemInternacional == 1)
                                                         - {{ $av->rotas[$i]->cidadeOrigemInternacional }}
                                                         -> {{ $av->rotas[$i]->cidadeDestinoInternacional }}
@@ -1079,11 +1082,12 @@
                                                 @endif
                                             @endfor
                                         </td>
-                                        <td><a href="{{ route('recuperaArquivo', [
+                                        <td> 
+                                            <a href="{{ route('recuperaArquivo', [
                                                 'name' => $userAv->name,
                                                 'id' => $av->id,
                                                 'pasta' => 'null',
-                                                'anexoRelatorio' => $anexoHotel->anexoTransporte,
+                                                'anexoRelatorio' => $anexoTransporte->anexoTransporte,
                                                 ]) }}"
                                                 target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
                                         </td>
@@ -1107,21 +1111,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($anexosFinanceiro as $anexoFinanceiro)
-                                <tr>
-                                    <td> {{ $anexoFinanceiro->descricao }} </td>
+                            @if(count($anexosFinanceiro) > 0)
+                                @foreach ($anexosFinanceiro as $anexoFinanceiro)
+                                    <tr>
+                                        <td> {{ $anexoFinanceiro->descricao }} </td>
 
-                                    <td><a href="{{ route('recuperaArquivo', [
-                                            'name' => $userAv->name,
-                                            'id' => $av->id,
-                                            'pasta' => 'adiantamentos',
-                                            'anexoRelatorio' => $anexoFinanceiro->anexoFinanceiro,
-                                            ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
-                                    </td>
+                                        <td><a href="{{ route('recuperaArquivo', [
+                                                'name' => $userAv->name,
+                                                'id' => $av->id,
+                                                'pasta' => 'adiantamentos',
+                                                'anexoRelatorio' => $anexoFinanceiro->anexoFinanceiro,
+                                                ]) }}"
+                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                        </td>
 
-                                </tr>
-                            @endforeach
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -1138,21 +1144,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($comprovantes as $comp)
-                                <tr>
-                                    <td> {{ $comp->descricao }} </td>
-                                    <td> {{ $comp->valorReais }} </td>
-                                    {{-- <td> {{ $comp->valorDolar }} </td> --}}
-                                    <td><a href="{{ route('recuperaArquivo', [
-                                            'name' => $userAv->name,
-                                            'id' => $av->id,
-                                            'pasta' => 'comprovantesDespesa',
-                                            'anexoRelatorio' => $comp->anexoDespesa,
-                                            ]) }}"
-                                            target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
-                                    </td>
-                                </tr>
-                            @endforeach
+                            @if(count($comprovantes) > 0)
+                                @foreach ($comprovantes as $comp)
+                                    <tr>
+                                        <td> {{ $comp->descricao }} </td>
+                                        <td> {{ $comp->valorReais }} </td>
+                                        {{-- <td> {{ $comp->valorDolar }} </td> --}}
+                                        <td><a href="{{ route('recuperaArquivo', [
+                                                'name' => $userAv->name,
+                                                'id' => $av->id,
+                                                'pasta' => 'comprovantesDespesa',
+                                                'anexoRelatorio' => $comp->anexoDespesa,
+                                                ]) }}"
+                                                target="_blank" class="btn btn-active btn-success btn-sm">Abrir documento</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <p>Nenhum comprovante encontrado</p>
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -1170,14 +1180,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($medicoesFiltradas as $med)
-                                    <tr>
-                                        <td> {{ $med->nome_municipio }} </td>
-                                        <td> {{ $med->numero_projeto }} </td>
-                                        <td> {{ $med->numero_lote }} </td>
-                                        <td> {{ $med->numero_medicao }} </td>
-                                    </tr>
-                                @endforeach
+                                @if(count($medicoesFiltradas) > 0)
+                                    @foreach ($medicoesFiltradas as $med)
+                                        <tr>
+                                            <td> {{ $med->nome_municipio }} </td>
+                                            <td> {{ $med->numero_projeto }} </td>
+                                            <td> {{ $med->numero_lote }} </td>
+                                            <td> {{ $med->numero_medicao }} </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <p>Nenhuma medição vinculada</p>
+                                @endif
                             </tbody>
                         </table>
                     </div>

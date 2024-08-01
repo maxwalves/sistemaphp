@@ -1126,8 +1126,18 @@ class ControladorRota extends Controller
                             $valorTarde = $valor/2;
                             $temDiariaTarde = true;
                         }
-                        else if($proximaRota == false && $dia != $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') < "24:00:00"){
-                        //NÃO TEM MAIS ROTAS NO DIA, SIGNFICA QUE JÁ CHEGOU E VAI FICAR NA CIDADE
+                        else if($proximaRota == false && $dia != $dataUltimaRota && $dia == $dataChegadaFormatado->format('Y-m-d') && $dataChegadaFormatado->format('H:i:s') < "24:00:00"){
+                        //NÃO TEM MAIS ROTAS NO DIA, SIGNFICA QUE JÁ CHEGOU E VAI FICAR NA CIDADE, A HORA DE CHEGADA É MENOR QUE 24:00, NÃO É A ÚLTIMA ROTA E CHEGOU NA CIDADE NO MESMO DIA
+                            $valorTarde = $valor/2;
+                            $temDiariaTarde = true;
+                        }
+                        else if($proximaRota == false && $dia != $dataUltimaRota && $dia != $dataChegadaFormatado->format('Y-m-d') && $dataSaidaFormatado->format('H:i:s') < "19:00:00"){
+                        //NÃO TEM MAIS ROTAS NO DIA, SIGNFICA QUE JÁ CHEGOU E VAI FICAR NA CIDADE, A HORA DE SAÍDA É MENOR QUE 19:00, NÃO É A ÚLTIMA ROTA E A CHEGADA NO DESTINO VAI SER NO DIA SEGUINTE
+                            $valorTarde = $valor/2;
+                            $temDiariaTarde = true;
+                        }
+                        else if($proximaRota == false && $dia != $dataUltimaRota && $dia != $dataChegadaFormatado->format('Y-m-d') && $dia != $dataPrimeiraRota){
+                        //NÃO TEM MAIS ROTAS NO DIA, SIGNFICA QUE JÁ CHEGOU E VAI FICAR NA CIDADE, NÃO É A ÚLTIMA ROTA E A CHEGADA NO DESTINO VAI SER NO DIA SEGUINTE E NÃO É A PRIMEIRA ROTA
                             $valorTarde = $valor/2;
                             $temDiariaTarde = true;
                         }
@@ -1160,6 +1170,7 @@ class ControladorRota extends Controller
                     else if($dataChegadaFormatado->format('H:i:s') >= "19:01:00"){
                         $valorTarde = $valor/2;
                     }
+                    $valor = $valorManha + $valorTarde;
                 }
 
             }
@@ -1281,6 +1292,9 @@ class ControladorRota extends Controller
                 if($rotaAnterior != false){
                     $rotaAnteriorDataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotaAnterior->dataHoraChegada)->format('Y-m-d H:i:s');
                     $rotaAnteriorDataChegadaFormatado = new DateTime($rotaAnteriorDataChegada);
+
+                    $rotaAnteriorDataSaida = DateTime::createFromFormat('Y-m-d H:i:s', $rotaAnterior->dataHoraSaida)->format('Y-m-d H:i:s');
+                    $rotaAnteriorDataSaidaFormatado = new DateTime($rotaAnteriorDataSaida);
                 }
 
                 //Captura a data de saída e chegada da próxima rota e formata para DateTime
@@ -1351,6 +1365,20 @@ class ControladorRota extends Controller
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
+                        else if ($dia == $dataUltimaRota && $proximaRota == false && 
+                        $rotaAnteriorDataChegadaFormatado->format('H:i:s') <= "13:01:00" &&
+                        $rotaAnteriorDataSaidaFormatado->format('H:i:s') <= "13:01:00" &&
+                        $dataChegadaFormatado->format('H:i:s') >= "13:01:00" ){
+                            //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A ROTA ANTERIOR TIVER HORÁRIO DE SAÍDA OU CHEGADA ANTES DE 13:01 E A DATA DE CHEGADA DA ÚLTIMA ROTA FOR DEPOIS DE 13:01
+                            try {
+                                $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
+                                $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
+                            } catch (\Throwable $th) {
+                                $valor = $this->verificaValorRota($rota);
+                            }
+                            $valorManha = $valor / 2;
+                            $temDiariaManha = true;
+                        }
                     }
 
                     if($temDiariaTarde == false){
@@ -1408,6 +1436,7 @@ class ControladorRota extends Controller
                     else if($dataChegadaFormatado->format('H:i:s') >= "19:01:00"){
                         $valorTarde = $valor/2;
                     }
+                    $valor = $valorManha + $valorTarde;
                 }
 
             }
