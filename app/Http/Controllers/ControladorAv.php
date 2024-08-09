@@ -2543,6 +2543,7 @@ class ControladorAv extends Controller
         $existeResponsavelFinanceiroLondrina = false;
         $existeResponsavelFinanceiroPontaGrossa = false;
         
+        $users = User::all();
         foreach($users as $uf){
             if($uf->department == "ERCSC"){
                 try {
