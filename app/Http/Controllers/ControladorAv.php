@@ -48,6 +48,7 @@ use App\Mail\EnvioUsuarioToFinanceiroDevolucao;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Permission;
 use App\Models\Country;
+use Illuminate\Support\Facades\Log;
 
 class ControladorAv extends Controller
 {
@@ -245,6 +246,18 @@ class ControladorAv extends Controller
             }
         }
 
+        $managerDN = $userAv->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+        // Dividir a string em partes usando o caractere de vírgula como delimitador
+        $parts = explode(',', $managerDN);
+
+        // Extrair o nome do gerente da primeira parte
+        $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+
+        if($managerName == $userAv->name){
+            $possoEditar = true;
+        }
+
         foreach ($users as $u){//Percorre todos os usuários do sistema
             $managerDN = $u->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
 
@@ -272,6 +285,7 @@ class ControladorAv extends Controller
                 if($managerName == $uF->name && $u2->employeeNumber != null && $uF->id != $u2->id && $uF->id != 92){//Verifica se cada um pertence ao seu time, exceto vc mesmo
                     array_push($usersFiltradosSubordinados, $u2);//Adiciona ao array filtrado o usuário encontrado
                 }
+                
             }
         }
 
@@ -289,6 +303,7 @@ class ControladorAv extends Controller
                 }
             }
         }
+        
 
         foreach($historicosTodos as $historico){
             if($historico->av_id == $av->id){
@@ -1181,6 +1196,18 @@ class ControladorAv extends Controller
                 && $av["isFinanceiroAprovouPC"] == true && $av["isGestorAprovouPC"] == false)){ //Se a av dele já foi enviada e autorizada pelo Gestor
                 $possoEditar = true;
             }
+        }
+        
+        $managerDN = $userAv->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+
+        // Dividir a string em partes usando o caractere de vírgula como delimitador
+        $parts = explode(',', $managerDN);
+
+        // Extrair o nome do gerente da primeira parte
+        $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+
+        if($managerName == $userAv->name){
+            $possoEditar = true;
         }
 
         if($possoEditar == true){
@@ -2509,6 +2536,58 @@ class ControladorAv extends Controller
         $permission2 = Permission::where('name', 'aprov avs secretaria')->first();
         $permission3 = Permission::where('name', 'aprov avs financeiro')->first();
 
+        $existeResponsavelFinanceiroCascavel = false;
+        $existeResponsavelFinanceiroMaringa = false;
+        $existeResponsavelFinanceiroFrancisco = false;
+        $existeResponsavelFinanceiroGuarapuava = false;
+        $existeResponsavelFinanceiroLondrina = false;
+        $existeResponsavelFinanceiroPontaGrossa = false;
+        
+        foreach($users as $uf){
+            if($uf->department == "ERCSC"){
+                try {
+                    if($uf->hasPermissionTo($permission3)){
+                        $existeResponsavelFinanceiroCascavel = true;
+                        $existeResponsavelFinanceiroFrancisco = true;
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
+            else if($uf->department == "ERMGA"){
+                try {
+                    if($uf->hasPermissionTo($permission3)){
+                        $existeResponsavelFinanceiroMaringa = true;
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
+            else if($uf->department == "ERGUA"){
+                try {
+                    if($uf->hasPermissionTo($permission3)){
+                        $existeResponsavelFinanceiroGuarapuava = true;
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
+            else if($uf->department == "ERLDA"){
+                try {
+                    if($uf->hasPermissionTo($permission3)){
+                        $existeResponsavelFinanceiroLondrina = true;
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
+            else if($uf->department == "ERPTG"){
+                try {
+                    if($uf->hasPermissionTo($permission3)){
+                        $existeResponsavelFinanceiroPontaGrossa = true;
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
+        }
+        
+
         if($isInternacional==true){
             
             Mail::to($userAv->username)
@@ -2621,6 +2700,91 @@ class ControladorAv extends Controller
                         {
                             Mail::to($u2->username)
                             ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                        }
+                        else if(
+                        (
+                        $u2->department != "ERCSC" 
+                        && $u2->department != "ERMGA" 
+                        && $u2->department != "ERFCB" 
+                        && $u2->department != "ERGUA" 
+                        && $u2->department != "ERLDA" 
+                        && $u2->department != "ERPTG")
+                        &&
+                        ($userAv->department == "ERCSC")
+                        )
+                        {
+                            if(!$existeResponsavelFinanceiroCascavel){
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                            }
+                        }
+                        else if(
+                        (
+                        $u2->department != "ERCSC"
+                        && $u2->department != "ERMGA"
+                        && $u2->department != "ERFCB"
+                        && $u2->department != "ERGUA"
+                        && $u2->department != "ERLDA"
+                        && $u2->department != "ERPTG")
+                        &&
+                        ($userAv->department == "ERMGA")
+                        )
+                        {
+                            if(!$existeResponsavelFinanceiroMaringa){
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                            }
+                        }
+                        else if(
+                        (
+                        $u2->department != "ERCSC"
+                        && $u2->department != "ERMGA"
+                        && $u2->department != "ERFCB"
+                        && $u2->department != "ERGUA"
+                        && $u2->department != "ERLDA"
+                        && $u2->department != "ERPTG")
+                        &&
+                        ($userAv->department == "ERGUA")
+                        )
+                        {
+                            if(!$existeResponsavelFinanceiroGuarapuava){
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                            }
+                        }
+                        else if(
+                        (
+                        $u2->department != "ERCSC"
+                        && $u2->department != "ERMGA"
+                        && $u2->department != "ERFCB"
+                        && $u2->department != "ERGUA"
+                        && $u2->department != "ERLDA"
+                        && $u2->department != "ERPTG")
+                        &&
+                        ($userAv->department == "ERLDA")
+                        )
+                        {
+                            if(!$existeResponsavelFinanceiroLondrina){
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                            }
+                        }
+                        else if(
+                        (
+                        $u2->department != "ERCSC"
+                        && $u2->department != "ERMGA"
+                        && $u2->department != "ERFCB"
+                        && $u2->department != "ERGUA"
+                        && $u2->department != "ERLDA"
+                        && $u2->department != "ERPTG")
+                        &&
+                        ($userAv->department == "ERPTG")
+                        )
+                        {
+                            if(!$existeResponsavelFinanceiroPontaGrossa){
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                            }
                         }
                     }
                 } catch (\Throwable $th) {
@@ -5284,6 +5448,14 @@ class ControladorAv extends Controller
         Mail::to($email)
             ->send(new EnvioEmailGestor($user->id, $usermanager->id, $av->id));
 
+        Log::channel('email')->info("E-mail enviado para {$email}", [
+            'user_id' => $user->id,
+            'user_name' => $user->name,
+            'usermanager_id' => $usermanager->id,
+            'usermanager_name' => $usermanager->name,
+            'av_id' => $av->id,
+        ]);
+
         Av::findOrFail($request->id)->update($dados);
         $historico->save();
 
@@ -5347,6 +5519,9 @@ class ControladorAv extends Controller
             if($managerName == $user->name && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo 
                 array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
             }
+            if($u->name == $managerName && $u->id == $user->id){
+                array_push($usersFiltrados, $u);
+            }
         }
         
         $avsFiltradas = [];
@@ -5399,6 +5574,9 @@ class ControladorAv extends Controller
             
             if($managerName == $user->name && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo 
                 array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
+            }
+            if($u->name == $managerName && $u->id == $user->id){
+                array_push($usersFiltrados, $u);
             }
         }
         $avsFiltradas = [];
@@ -5617,6 +5795,7 @@ class ControladorAv extends Controller
                 $isFinanceiroCuritiba = true;
             }
         }
+
         $existeResponsavelFinanceiroCascavel = false;
         $existeResponsavelFinanceiroMaringa = false;
         $existeResponsavelFinanceiroFrancisco = false;
@@ -5677,7 +5856,9 @@ class ControladorAv extends Controller
                 }
             }
             
+            $tempUsers = [];
             foreach($users as $uf){
+                
                 if($existeResponsavelFinanceiroCascavel == false){
                     if($uf->department == "ERCSC"){
                         array_push($usersFiltrados, $uf);
@@ -5715,6 +5896,25 @@ class ControladorAv extends Controller
             }
         }
 
+        if(!$existeResponsavelFinanceiroCascavel){
+            $temFinanceiroCascavel = true;
+        }
+        if(!$existeResponsavelFinanceiroMaringa){
+            $temFinanceiroMaringa = true;
+        }
+        if(!$existeResponsavelFinanceiroFrancisco){
+            $temFinanceiroFrancisco = true;
+        }
+        if(!$existeResponsavelFinanceiroGuarapuava){
+            $temFinanceiroGuarapuava = true;
+        }
+        if(!$existeResponsavelFinanceiroLondrina){
+            $temFinanceiroLondrina = true;
+        }
+        if(!$existeResponsavelFinanceiroPontaGrossa){
+            $temFinanceiroPontaGrossa = true;
+        }
+
         $avsFiltradas = [];
         foreach($usersFiltrados as $uf){//Verifica todos os usuários
             
@@ -5747,7 +5947,9 @@ class ControladorAv extends Controller
         return view('avs.autFinanceiro', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos, 'users' => $users,
         'temFinanceiroCascavel' => $temFinanceiroCascavel, 'temFinanceiroMaringa' => $temFinanceiroMaringa, 'temFinanceiroFrancisco' => $temFinanceiroFrancisco,
         'temFinanceiroGuarapuava' => $temFinanceiroGuarapuava, 'temFinanceiroLondrina' => $temFinanceiroLondrina, 'temFinanceiroPontaGrossa' => $temFinanceiroPontaGrossa,
-        'isFinanceiroCuritiba' => $isFinanceiroCuritiba]);
+        'isFinanceiroCuritiba' => $isFinanceiroCuritiba, 'existeResponsavelFinanceiroCascavel' => $existeResponsavelFinanceiroCascavel, 'existeResponsavelFinanceiroMaringa' => $existeResponsavelFinanceiroMaringa,
+        'existeResponsavelFinanceiroFrancisco' => $existeResponsavelFinanceiroFrancisco, 'existeResponsavelFinanceiroGuarapuava' => $existeResponsavelFinanceiroGuarapuava,
+        'existeResponsavelFinanceiroLondrina' => $existeResponsavelFinanceiroLondrina, 'existeResponsavelFinanceiroPontaGrossa' => $existeResponsavelFinanceiroPontaGrossa]);
     }
 
     public function autPcFinanceiro(){
@@ -6155,6 +6357,9 @@ class ControladorAv extends Controller
             
             if($managerName == $user->name && $u->id != $user->id){//Verifica se cada um pertence ao seu time, exceto vc mesmo  
                 array_push($usersFiltrados, $u);//Adiciona ao array filtrado o usuário encontrado
+            }
+            if($managerName == $user->name && $u->id == $user->id){//Se o usuário for você mesmo
+                array_push($usersFiltrados, $u);
             }
         }
 

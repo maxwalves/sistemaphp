@@ -122,9 +122,12 @@
                 const selectedUserId = $('#usuarioSelecionado').val();
                 console.log(selectedUserId);
                 // Perform the async requests
-                const getUsersPromise = $.getJSON('/api/getAllUsers/');
-                const getObjetivosPromise = $.getJSON('/api/getAllObjetivos/');
-                const getRotasPromise = $.getJSON('/api/getAllRotas/');
+                const getUsersPromise = $.getJSON('https://viagem.paranacidade.org.br/api/getAllUsers');
+                const getObjetivosPromise = $.getJSON('https://viagem.paranacidade.org.br/api/getAllObjetivos');
+                const getRotasPromise = $.getJSON('https://viagem.paranacidade.org.br/api/getAllRotas');
+
+                //mostre um loading
+                $('#minhaTabela tbody').append('<tr><td colspan="7">Carregando...</td></tr>');
                 
                 // Wait for all promises to resolve
                 $.when(getUsersPromise, getObjetivosPromise, getRotasPromise)
@@ -214,9 +217,11 @@
                 const selectedUserId = '{{$user->id}}';
                 console.log(selectedUserId);
                 // Perform the async requests
-                const getUsersPromise = $.getJSON('/api/getAllUsers/');
-                const getObjetivosPromise = $.getJSON('/api/getAllObjetivos/');
-                const getRotasPromise = $.getJSON('/api/getAllRotas/');
+                const getUsersPromise = $.getJSON('https://viagem.paranacidade.org.br/api/getAllUsers');
+                const getObjetivosPromise = $.getJSON('https://viagem.paranacidade.org.br/api/getAllObjetivos');
+                const getRotasPromise = $.getJSON('https://viagem.paranacidade.org.br/api/getAllRotas');
+
+                $('#minhaTabela tbody').append('<tr><td colspan="7">Carregando...</td></tr>');
                 
                 // Wait for all promises to resolve
                 $.when(getUsersPromise, getObjetivosPromise, getRotasPromise)
