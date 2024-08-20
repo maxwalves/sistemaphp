@@ -167,10 +167,8 @@ class ControladorAv extends Controller
         }
         
         foreach ($data as $item) {
-            
-            $nomeItemSemAcento = $this->tirarAcentos($item->nome_supervisor);
-            $nomeUserSemAcento = $this->tirarAcentos($user->name);
-            if ($nomeItemSemAcento == $nomeUserSemAcento) {
+
+            if($item->email_supervisor == $user->username){
                 array_push($filtro, $item);
             }
             else{
@@ -5286,9 +5284,7 @@ class ControladorAv extends Controller
                 }
             }
             if(!$jaExiste){
-                $nomeItemSemAcento = $this->tirarAcentos($item->nome_supervisor);
-                $nomeUserSemAcento = $this->tirarAcentos($user->name);
-                if ($nomeItemSemAcento == $nomeUserSemAcento) { //  para teste 'Fernanda Espindola de Oliveira'
+                if($item->email_supervisor == $user->username){
                     array_push($filtro, $item);
                 }
                 else{
@@ -5336,7 +5332,7 @@ class ControladorAv extends Controller
 
         foreach ($data as $item) {
 
-            if ($item->nome_supervisor == $user->name) { //  para teste 'Fernanda Espindola de Oliveira'
+            if($item->email_supervisor == $user->username){
                 array_push($filtro, $item);
             }
             else{
@@ -5897,23 +5893,31 @@ class ControladorAv extends Controller
             }
         }
 
-        if(!$existeResponsavelFinanceiroCascavel){
-            $temFinanceiroCascavel = true;
-        }
-        if(!$existeResponsavelFinanceiroMaringa){
-            $temFinanceiroMaringa = true;
-        }
-        if(!$existeResponsavelFinanceiroFrancisco){
-            $temFinanceiroFrancisco = true;
-        }
-        if(!$existeResponsavelFinanceiroGuarapuava){
-            $temFinanceiroGuarapuava = true;
-        }
-        if(!$existeResponsavelFinanceiroLondrina){
-            $temFinanceiroLondrina = true;
-        }
-        if(!$existeResponsavelFinanceiroPontaGrossa){
-            $temFinanceiroPontaGrossa = true;
+        if($user->department != "ERCSC" &&
+            $user->department != "ERMGA" &&
+            $user->department != "ERFCB" &&
+            $user->department != "ERGUA" &&
+            $user->department != "ERLDA" &&
+            $user->department != "ERPTG")
+        {
+            if(!$existeResponsavelFinanceiroCascavel){
+                $temFinanceiroCascavel = true;
+            }
+            if(!$existeResponsavelFinanceiroMaringa){
+                $temFinanceiroMaringa = true;
+            }
+            if(!$existeResponsavelFinanceiroFrancisco){
+                $temFinanceiroFrancisco = true;
+            }
+            if(!$existeResponsavelFinanceiroGuarapuava){
+                $temFinanceiroGuarapuava = true;
+            }
+            if(!$existeResponsavelFinanceiroLondrina){
+                $temFinanceiroLondrina = true;
+            }
+            if(!$existeResponsavelFinanceiroPontaGrossa){
+                $temFinanceiroPontaGrossa = true;
+            }
         }
 
         $avsFiltradas = [];
