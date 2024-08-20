@@ -28,6 +28,12 @@
     <form action="/avs/gravarAv" method="POST" enctype="multipart/form-data">
         @csrf
         
+        @if(session('errors'))
+            <div class="alert alert-danger alert-dismissible">
+                <h5><i class="icon fas fa-ban"></i> Atenção, revise o objetivo da viagem!</h5>
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="form-group col-md-6" id="nomeObjetivo">
             <label for="objetivo_id" class="control-label" required>Qual é o Objetivo da viagem? (selecione)</label>
             <br>
@@ -37,7 +43,7 @@
                     @for($i = 0; $i < count($objetivos); $i++)
                         <div>
                             <option value="{{ $objetivos[$i]->id }}" 
-                                name="{{ $objetivos[$i]->id }}"> {{ $objetivos[$i] ->nomeObjetivo }} </option>
+                                name="{{ $objetivos[$i]->id }}" {{ old('objetivo_id') == $objetivos[$i]->id ? 'selected' : '' }}> {{ $objetivos[$i] ->nomeObjetivo }} </option>
                         </div>
                     @endfor
                 </select>
@@ -136,7 +142,7 @@
             <label for="outro" class="control-label">Digite outro objetivo: </label>
             <div class="input-group">
                 <input type="text" class="form-control {{ $errors->has('outroObjetivo') ? 'is-invalid' :''}}" 
-                name="outroObjetivo"
+                name="outroObjetivo" value="{{ old('outroObjetivo') }}"
                 id="outroObjetivo" placeholder="Digite outro objetivo">
             </div>
 
@@ -166,7 +172,7 @@
                     <option value="">Selecione</option>
                     @for($i = 0; $i < count($bancos); $i++)
                             <option value="{{ $bancos[$i] }}" 
-                                name="{{ $bancos[$i] }}"> {{ $bancos[$i] }} </option>
+                                name="{{ $bancos[$i] }}" {{ old('banco') == $bancos[$i] ? 'selected' : '' }}> {{ $bancos[$i] }} </option>
                     @endfor
                     
                     <option value="outro">Outro</option>
@@ -192,7 +198,7 @@
                     <option value="">Selecione</option>
                     @for($i = 0; $i < count($agencias); $i++)
                             <option value="{{ $agencias[$i] }}" 
-                                name="{{ $agencias[$i] }}"> {{ $agencias[$i] }} </option>
+                                name="{{ $agencias[$i] }}" {{ old('agencia') == $agencias[$i] ? 'selected' : '' }}> {{ $agencias[$i] }} </option>
                     @endfor
                     
                     <option value="outro">Outro</option>
@@ -218,7 +224,7 @@
                     <option value="">Selecione</option>
                     @for($i = 0; $i < count($contas); $i++)
                             <option value="{{ $contas[$i] }}" 
-                                name="{{ $contas[$i] }}"> {{ $contas[$i] }} </option>
+                                name="{{ $contas[$i] }}" {{ old('conta') == $contas[$i] ? 'selected' : '' }}> {{ $contas[$i] }} </option>
                     @endfor
                     
                     <option value="outro">Outro</option>
@@ -244,7 +250,7 @@
                     <option value="">Selecione</option>
                     @for($i = 0; $i < count($pixs); $i++)
                             <option value="{{ $pixs[$i] }}" 
-                                name="{{ $pixs[$i] }}"> {{ $pixs[$i] }} </option>
+                                name="{{ $pixs[$i] }}" {{ old('pix') == $pixs[$i] ? 'selected' : '' }}> {{ $pixs[$i] }} </option>
                     @endfor
                     
                     <option value="outro">Outro</option>
@@ -260,11 +266,11 @@
             <label for="comentario" class="form-label">Comentários</label><br>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="comentario"
-                    id="comentario" placeholder="Comentário">
+                    id="comentario" placeholder="Comentário" value="{{ old('comentario') }}">
                 <span class="input-group-text" id="basic-addon2">Opcional</span>
             </div>
         </div>
-        <input type="file" id="arquivo1" style="height: 150px" name="arquivo1" class="form-control form-control-lg col-md-6">
+        <input type="file" id="arquivo1" style="height: 150px" name="arquivo1" value="{{ old('arquivo1') }}" class="form-control form-control-lg col-md-6">
 
         <br>
 
@@ -307,6 +313,20 @@
                         "search": "Pesquisar"
                     }
                 });
+
+                setTimeout(verificarObjetivoViagem, 500);
+                setTimeout(() => {
+                    if(
+                        document.getElementById("outroObjetivo").value != ""){
+                        document.getElementById("outroObjetivoCampo").hidden = false;
+                        document.getElementById("nomeObjetivo").hidden = true;
+                        document.getElementById("nomeObjetivo").value = null;
+                        document.getElementById("isSelecionado").value = "1";
+
+                        var seletor = document.getElementById("flexSwitchCheckDefault");
+                        seletor.checked = true;
+                    }
+                }, 500);
         });
 
         function desativarCampoObjetivo(){
@@ -315,7 +335,6 @@
             if(seletor.checked == true) {
                 document.getElementById("outroObjetivoCampo").hidden = false;
                 document.getElementById("nomeObjetivo").hidden = true;
-                document.getElementById("outroObjetivo").value = "";
                 document.getElementById("nomeObjetivo").value = null;
                 document.getElementById("isSelecionado").value = "1";
             } else if(seletor.checked == false){
@@ -327,7 +346,7 @@
         
         function verificarObjetivoViagem(){
             var objetivo = document.getElementById("objetivo_id");
-            
+
             if(objetivo.value == 3){
                 document.getElementById("autorizacaoComissao").hidden = false;
                 document.getElementById("selecOutroObj").hidden = true;

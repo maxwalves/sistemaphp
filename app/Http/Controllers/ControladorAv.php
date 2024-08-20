@@ -49,6 +49,7 @@ use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Permission;
 use App\Models\Country;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class ControladorAv extends Controller
 {
@@ -4265,8 +4266,13 @@ class ControladorAv extends Controller
         else{
             $av->objetivo_id = $request->objetivo_id;
         }
-
-        $request->validate($regras, $mensagens);
+        
+        $validator = Validator::make($request->all(), $regras, $mensagens);
+        if ($validator->fails()) {
+            return redirect('/avs/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
         
         $av->isDiaria = true;
         
