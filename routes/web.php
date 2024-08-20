@@ -188,6 +188,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::get('/rotas/rotas/{id}', [ControladorRota::class, 'rotas'])->middleware('auth');
     Route::get('/rotas/rotasEditData/{id}', [ControladorRota::class, 'rotasEditData'])->middleware('auth');
     Route::get('/rotas/create/{id}', [ControladorRota::class, 'create'])->middleware('auth');
+    Route::get('/rotas/createInternacional/{id}', [ControladorRota::class, 'createInternacional'])->middleware('auth')->name('rotas.createInternacional');
     Route::get('/rotas/{id}', [ControladorRota::class, 'show'])->middleware('auth');
     Route::delete('/rotas/{id}', [ControladorRota::class, 'destroy'])->middleware('auth');
     Route::get('/rotas/edit/{id}', [ControladorRota::class, 'edit'])->middleware('auth');

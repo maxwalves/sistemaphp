@@ -265,6 +265,43 @@ class ControladorRota extends Controller
         'rotaOriginal' => $rotaOriginal, 'ultimaRotaSetada' => $ultimaRotaSetada, 'rotas' => $rotas]);
     }
 
+    public function createInternacional($id)//Id da AV
+    {
+        $user = auth()->user();
+        $avs = $user->avs;
+        $av = null;
+        foreach ($avs as $a){
+            if ($a->id == $id){
+                $av = $a;
+            }
+        }
+        if($av == null){
+            return redirect('/avs/avs')->with('msg', 'Você não tem autorização para criar uma rota de AV de outro usuário!');
+        }
+        $rotas = $av->rotas;
+
+        $isOrigemNacional = null;
+        $rotaOriginal = null;
+        $ultimaRotaSetada = null;
+        for($i = 0; $i < count($rotas); $i++){
+            if($i == 0){
+                $rotaOriginal = $rotas[$i];
+                if($rotas[$i]->isViagemInternacional == false){
+                    $isOrigemNacional = true;
+                }
+            }
+            if($i == count($rotas)-1){
+                $ultimaRotaSetada = $rotas[$i];
+            }
+        }
+        $veiculosProprios = $user->veiculosProprios;
+
+        $rotas = $av->rotas;
+        
+        return view('rotas.createRotaInternacional', ['veiculosProprios' => $veiculosProprios, 'av' => $av, 'user'=> $user, 'isOrigemNacional' => $isOrigemNacional, 
+        'rotaOriginal' => $rotaOriginal, 'ultimaRotaSetada' => $ultimaRotaSetada, 'rotas' => $rotas]);
+    }
+
     public function createpc($id)//Id da AV
     {
         $user = auth()->user();
