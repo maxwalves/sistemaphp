@@ -606,6 +606,30 @@ class ControladorRota extends Controller
         return view('rotas.editRota', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
     }
 
+    public function editInternacional($id)
+    {
+        $rota = Rota::findOrFail($id);
+        $idAv = $rota->av_id;
+
+        $user = auth()->user();
+        $avs = $user->avs;
+        $av = null;
+        foreach ($avs as $a){
+            if ($a->id == $idAv){
+                $av = $a;
+            }
+        }
+        if($av->isEnviadoUsuario == 1){
+            return redirect('/avs/avs/')->with('msg', 'Você não tem autorização para editar uma rota de AV de outro usuário!');
+        }
+
+        $rotas = $av->rotas;
+
+        $veiculosProprios = $user->veiculosProprios;
+
+        return view('rotas.editRotaInternacional', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
+    }
+
     public function editNovaData($id)
     {
         $rota = Rota::findOrFail($id);

@@ -1,21 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Criar Rota')
+@section('title', 'Editar rota')
 
 @section('content_header')
+    <h1>Editar rota</h1>
 @stop
 
 @section('content')
-
-    <div class="tab-pane fade show active" id="custom-tabs-five-overlay" role="tabpanel"
-        aria-labelledby="custom-tabs-five-overlay-tab"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: none">
-        <div class="overlay-wrapper"
-            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #ffffff;">
-            <i class="fas fa-3x fa-sync-alt fa-spin" style="margin-bottom: 10px;"></i>
-            <div class="text-bold pt-2">Carregando...</div>
-        </div>
-    </div>
 
     <div id="container">
         <div class="container">
@@ -26,31 +17,29 @@
                             <h3 class="card-title">Editar Nova Rota</h3>
                         </div>
                         <div class="card-body">
-
-                            <form action="/rotas" method="POST" enctype="multipart/form-data">
+                            <form action="/rotas/update/{{ $rota->id }}" method="POST" enctype="multipart/form-data">
                                 @csrf
+                                @method('PUT')
 
-                                <input type="text" id="isViagemInternacional" name="isViagemInternacional" value="1"
-                                    hidden>
-
-                                <div class="row justify-content-start">
-                                    <div class="col-8">
-                                        <label for="idav"> <strong>NOVA ROTA - Autorização de Viagem nº </strong>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <a href="/rotas/rotas/{{ $av->id }}" type="submit"
+                                                class="btn btn-warning"><i class="fas fa-arrow-left"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label for="idav"> <strong>Edição de rota da Autorização de Viagem nº </strong>
                                         </label>
                                         <input type="text" style="width: 50px" value="{{ $av->id }}" id="idav"
                                             name="idav" readonly>
-                                        <br>
-                                        <span><strong>Data da Autorização de Viagem:
-                                                {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong></span>
-                                    </div>
-                                    <div class="col-3">
-                                        <br>
-                                        <a href="/rotas/rotas/{{ $av->id }}" type="submit" class="btn btn-warning"><i
-                                                class="fas fa-arrow-left"></i></a>
+
+                                        <h4> <strong>Data da Autorização de Viagem:
+                                                {{ date('d/m/Y', strtotime($av->dataCriacao)) }}</strong> </h4>
                                     </div>
                                 </div>
-                                <hr>
-                                <div style="padding-left: 50px" class="form-group">
+
+                                <div style="padding-left: 100px" class="form-group">
 
                                     @if (
                                         $errors->has('isViagemInternacional') ||
@@ -67,18 +56,14 @@
                                             $errors->has('selecaoEstadoDestinoNacional') ||
                                             $errors->has('selecaoCidadeDestinoNacional') ||
                                             $errors->has('tipoTransporte') ||
-                                            $errors->has('dataHoraSaidaInternacional') ||
-                                            $errors->has('dataHoraChegadaInternacional') ||
-                                            $errors->has('dataHoraSaidaNacional') ||
-                                            $errors->has('dataHoraChegadaNacional') ||
                                             $errors->has('veiculoProprio_id'))
                                         <div>
-                                            <p style="color: red"> <strong>Alguns campos não foram preenchidos!</strong></p>
-                                            <p style="color: red"> <strong>Selecione o tipo de viagem e verifique os
-                                                    campos!</strong></p>
+                                            <p style="color: red"> <strong>Existem campos pendentes de preenchimento!
+                                                    Selecione o tipo de viagem e verifique os campos!</strong></p>
                                         </div>
                                     @endif
                                 </div>
+
                                 @if (count($rotas) > 0)
                                     <p>
                                     <h4>Rotas já cadastradas</h4>
@@ -179,28 +164,41 @@
                                     <hr>
                                 @endif
 
+                                <input type="text" id="isViagemInternacional" name="isViagemInternacional" value="1"
+                                    hidden>
+
                                 <div id="isInternacional">
                                     <br>
                                     <h3 style="color: brown"> <ion-icon name="airplane-outline"></ion-icon> VIAGEM
                                         INTERNACIONAL</h3>
                                     <div class="row">
                                         <div class="col-12 col-xl-6 mb-4">
+                                            {{-- CAMPOS DE ORIGEM INTERNACIONAL ------------------------------- --}}
+                                            
                                             <h4 style="color: crimson"> Origem: </h4>
                                             <div class="form-group">
                                                 <label for="selecaoContinenteOrigem" class="control-label"><strong
-                                                        style="color: red">*
-                                                    </strong>Selecione o continente origem</label>
+                                                        style="color: red">* </strong>Selecione o continente origem</label>
                                                 <br>
                                                 <select
                                                     class="custom-select custom-select-lg {{ $errors->has('selecaoContinenteOrigem') ? 'is-invalid' : '' }}"
                                                     id="selecaoContinenteOrigem" name="selecaoContinenteOrigem">
                                                     <option value="0" name="0"> Selecione</option>
-                                                    <option value="1" name="1"> América Latina ou América Central
-                                                    </option>
-                                                    <option value="2" name="2"> América do Norte</option>
-                                                    <option value="3" name="3"> Europa</option>
-                                                    <option value="4" name="4"> África</option>
-                                                    <option value="5" name="5"> Ásia</option>
+                                                    <option value="1" name="1"
+                                                        {{ $rota->continenteOrigemInternacional == '1' ? "selected='selected'" : '' }}>
+                                                        América Latina ou América Central</option>
+                                                    <option value="2" name="2"
+                                                        {{ $rota->continenteOrigemInternacional == '2' ? "selected='selected'" : '' }}>
+                                                        América do Norte</option>
+                                                    <option value="3" name="3"
+                                                        {{ $rota->continenteOrigemInternacional == '3' ? "selected='selected'" : '' }}>
+                                                        Europa</option>
+                                                    <option value="4" name="4"
+                                                        {{ $rota->continenteOrigemInternacional == '4' ? "selected='selected'" : '' }}>
+                                                        África</option>
+                                                    <option value="5" name="5"
+                                                        {{ $rota->continenteOrigemInternacional == '5' ? "selected='selected'" : '' }}>
+                                                        Ásia</option>
                                                 </select>
 
                                                 @if ($errors->has('selecaoContinenteOrigem'))
@@ -212,14 +210,13 @@
 
                                             <div class="form-group">
                                                 <label for="selecaoPaisOrigem" class="control-label"><strong
-                                                        style="color: red">*
-                                                    </strong>Selecione o país origem:</label>
+                                                        style="color: red">* </strong>Selecione o país origem:</label>
                                                 <br>
 
                                                 <select
                                                     class="custom-select custom-select-lg {{ $errors->has('selecaoPaisOrigem') ? 'is-invalid' : '' }}"
                                                     id="selecaoPaisOrigem" name="selecaoPaisOrigem">
-
+                                                    <option value="{{ $rota->paisOrigemInternacional }}" selected></option>
 
                                                 </select>
 
@@ -231,17 +228,14 @@
                                             </div>
 
                                             <div class="form-group">
-
                                                 <label for="selecaoEstadoOrigem" class="control-label"><strong
-                                                        style="color: red">*
-                                                    </strong>Digite o nome do estado/província origem:</label>
+                                                        style="color: red">* </strong>Digite o nome do estado/província
+                                                    origem:</label>
                                                 <br>
                                                 <input
                                                     class="form-control form-control-lg {{ $errors->has('selecaoEstadoOrigem') ? 'is-invalid' : '' }}"
-                                                    type="text" id="selecaoEstadoOrigem" name="selecaoEstadoOrigem">
-                                                <h5 style="color: brown"> Obs: Caso não possua Estado/Província, preencha
-                                                    com o nome da cidade.
-                                                </h5>
+                                                    type="text" id="selecaoEstadoOrigem" name="selecaoEstadoOrigem"
+                                                    value="{{ $rota->estadoOrigemInternacional }}">
 
                                                 @if ($errors->has('selecaoEstadoOrigem'))
                                                     <div class="invalid-feedback">
@@ -252,13 +246,14 @@
 
                                             <div class="form-group">
                                                 <label for="selecaoCidadeOrigem" class="control-label"><strong
-                                                        style="color: red">*
-                                                    </strong>Digite o nome da cidade de origem:</label>
+                                                        style="color: red">* </strong>Digite o nome da cidade de
+                                                    origem:</label>
                                                 <br>
 
                                                 <input
                                                     class="form-control form-control-lg {{ $errors->has('selecaoCidadeOrigem') ? 'is-invalid' : '' }}"
-                                                    type="text" id="selecaoCidadeOrigem" name="selecaoCidadeOrigem">
+                                                    type="text" id="selecaoCidadeOrigem" name="selecaoCidadeOrigem"
+                                                    value="{{ $rota->cidadeOrigemInternacional }}">
 
                                                 @if ($errors->has('selecaoCidadeOrigem'))
                                                     <div class="invalid-feedback">
@@ -267,34 +262,15 @@
                                                 @endif
                                             </div>
 
-                                            <br>
-                                            @php
-                                                if (count($av->rotas) > 0) {
-                                                    $minDate = date(
-                                                        'Y-m-d\TH:i',
-                                                        strtotime($rotas[count($rotas) - 1]->dataHoraChegada),
-                                                    );
-                                                } else {
-                                                    $minDate = date('Y-m-d\TH:i');
-                                                }
-                                            @endphp
-
                                             <div class="form-group">
                                                 <div id="dataHoraSaidaInternacional" class="input-append date">
                                                     <label for="dataHoraSaidaInternacional" class="control-label"><strong
                                                             style="color: red">* </strong>Data/Hora de saída: </label>
                                                     <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local"
-                                                        name="dataHoraSaidaInternacional"
-                                                        style="border-width: 1px; border-color: black"
-                                                        id="dataHoraSaidaInternacional" placeholder="Data/Hora de saída"
-                                                        class="form-control form-control-lg {{ $errors->has('dataHoraSaidaInternacional') ? 'is-invalid' : '' }}"
-                                                        min="{{ $minDate }}">
-
-                                                    @if ($errors->has('dataHoraSaidaInternacional'))
-                                                        <div class="invalid-feedback">
-                                                            {{ $errors->first('dataHoraSaidaInternacional') }}
-                                                        </div>
-                                                    @endif
+                                                        name="dataHoraSaidaInternacional" id="dataHoraSaidaInternacional"
+                                                        class="form-control form-control-lg"
+                                                        placeholder="Data/Hora de saída"
+                                                        value="{{ $rota->isViagemInternacional == '1' ? $rota->dataHoraSaida : '' }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -311,12 +287,21 @@
                                                     id="selecaoContinenteDestinoInternacional"
                                                     name="selecaoContinenteDestinoInternacional">
                                                     <option value="0" name="0"> Selecione</option>
-                                                    <option value="1" name="1"> América Latina ou América
-                                                        Central</option>
-                                                    <option value="2" name="2"> América do Norte</option>
-                                                    <option value="3" name="3"> Europa</option>
-                                                    <option value="4" name="4"> África</option>
-                                                    <option value="5" name="5"> Ásia</option>
+                                                    <option value="1" name="1"
+                                                        {{ $rota->continenteDestinoInternacional == '1' ? "selected='selected'" : '' }}>
+                                                        América Latina ou América Central</option>
+                                                    <option value="2" name="2"
+                                                        {{ $rota->continenteDestinoInternacional == '2' ? "selected='selected'" : '' }}>
+                                                        América do Norte</option>
+                                                    <option value="3" name="3"
+                                                        {{ $rota->continenteDestinoInternacional == '3' ? "selected='selected'" : '' }}>
+                                                        Europa</option>
+                                                    <option value="4" name="4"
+                                                        {{ $rota->continenteDestinoInternacional == '4' ? "selected='selected'" : '' }}>
+                                                        África</option>
+                                                    <option value="5" name="5"
+                                                        {{ $rota->continenteDestinoInternacional == '5' ? "selected='selected'" : '' }}>
+                                                        Ásia</option>
                                                 </select>
 
                                                 @if ($errors->has('selecaoContinenteDestinoInternacional'))
@@ -335,7 +320,8 @@
                                                     class="custom-select custom-select-lg {{ $errors->has('selecaoPaisDestinoInternacional') ? 'is-invalid' : '' }}"
                                                     id="selecaoPaisDestinoInternacional"
                                                     name="selecaoPaisDestinoInternacional">
-
+                                                    <option value="{{ $rota->paisDestinoInternacional }}" selected>
+                                                    </option>
 
                                                 </select>
 
@@ -347,7 +333,6 @@
                                             </div>
 
                                             <div class="form-group">
-
                                                 <label for="selecaoEstadoDestinoInternacional"
                                                     class="control-label"><strong style="color: red">* </strong>Digite o
                                                     nome do estado/província destino:</label>
@@ -356,10 +341,9 @@
                                                 <input
                                                     class="form-control form-control-lg {{ $errors->has('selecaoEstadoDestinoInternacional') ? 'is-invalid' : '' }}"
                                                     type="text" id="selecaoEstadoDestinoInternacional"
-                                                    name="selecaoEstadoDestinoInternacional">
-                                                <h5 style="color: brown"> Obs: Caso não possua Estado/Província, preencha
-                                                    com o nome da cidade.
-                                                </h5>
+                                                    name="selecaoEstadoDestinoInternacional"
+                                                    value="{{ $rota->estadoDestinoInternacional }}">
+
                                                 @if ($errors->has('selecaoEstadoDestinoInternacional'))
                                                     <div class="invalid-feedback">
                                                         {{ $errors->first('selecaoEstadoDestinoInternacional') }}
@@ -376,7 +360,8 @@
                                                 <input
                                                     class="form-control form-control-lg {{ $errors->has('selecaoCidadeDestinoInternacional') ? 'is-invalid' : '' }}"
                                                     type="text" id="selecaoCidadeDestinoInternacional"
-                                                    name="selecaoCidadeDestinoInternacional">
+                                                    name="selecaoCidadeDestinoInternacional"
+                                                    value="{{ $rota->cidadeDestinoInternacional }}">
 
                                                 @if ($errors->has('selecaoCidadeDestinoInternacional'))
                                                     <div class="invalid-feedback">
@@ -385,11 +370,6 @@
                                                 @endif
                                             </div>
 
-                                            <br>
-                                            <?php
-                                            $minDate = date('Y-m-d\TH:i');
-                                            ?>
-
                                             <div class="form-group">
                                                 <div id="dataHoraChegadaInternacional" class="input-append date">
                                                     <label for="dataHoraChegadaInternacional"
@@ -397,40 +377,39 @@
                                                         </strong>Data/Hora de chegada: </label>
                                                     <input data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local"
                                                         name="dataHoraChegadaInternacional"
-                                                        style="border-width: 1px; border-color: black"
                                                         id="dataHoraChegadaInternacional"
+                                                        class="form-control form-control-lg"
                                                         placeholder="Data/Hora de chegada"
-                                                        class="form-control form-control-lg {{ $errors->has('dataHoraChegadaInternacional') ? 'is-invalid' : '' }}"
-                                                        min="{{ $minDate }}">
-
-                                                    @if ($errors->has('dataHoraChegadaInternacional'))
-                                                        <div class="invalid-feedback">
-                                                            {{ $errors->first('dataHoraChegadaInternacional') }}
-                                                        </div>
-                                                    @endif
+                                                        value="{{ $rota->isViagemInternacional == '1' ? $rota->dataHoraChegada : '' }}">
                                                 </div>
                                             </div>
+
 
                                         </div>
                                     </div>
                                 </div>
+
                                 <br>
                                 <div class="row" style="background-color: lightgrey">
 
                                     <div class="col-md-6">
 
                                         <div>
-                                            <div id="camposFinais" hidden="true">
-                                                <div class="form-group" id="campoHotel">
+                                            <div id="camposFinais">
+                                                <div class="form-group">
                                                     <label for="isReservaHotel" class="control-label"><strong
-                                                            style="color: red">*
-                                                        </strong>Você vai precisar de reserva de hotel no destino?</label>
+                                                            style="color: red">* </strong>Você vai precisar de reserva de
+                                                        hotel?</label>
                                                     <br>
                                                     <select
                                                         class="custom-select custom-select-lg {{ $errors->has('isReservaHotel') ? 'is-invalid' : '' }}"
                                                         id="isReservaHotel" name="isReservaHotel">
-                                                        <option value="0" name="0"> Não</option>
-                                                        <option value="1" name="1"> Sim</option>
+                                                        <option value="0" name="0"
+                                                            {{ $rota->isReservaHotel == '0' ? "selected='selected'" : '' }}>
+                                                            Não</option>
+                                                        <option value="1" name="1"
+                                                            {{ $rota->isReservaHotel == '1' ? "selected='selected'" : '' }}>
+                                                            Sim</option>
                                                     </select>
 
                                                     @if ($errors->has('isReservaHotel'))
@@ -443,49 +422,35 @@
 
                                                 <div class="form-group">
                                                     <label for="tipoTransporte" class="control-label"><strong
-                                                            style="color: red">*
-                                                        </strong>Qual o tipo de transporte?</label>
+                                                            style="color: red">* </strong>Qual o tipo de
+                                                        transporte?</label>
                                                     <br>
                                                     <select
                                                         class="custom-select custom-select-lg {{ $errors->has('tipoTransporte') ? 'is-invalid' : '' }}"
                                                         id="tipoTransporte" name="tipoTransporte"
                                                         onChange="ativarCampo()">
+                                                        <option value="0" name="0"
+                                                            {{ $rota->isOnibusLeito == '1' ? "selected='selected'" : '' }}>
+                                                            Onibus Leito</option>
+                                                        <option value="1" name="1"
+                                                            {{ $rota->isOnibusConvencional == '1' ? "selected='selected'" : '' }}>
+                                                            Onibus convencional</option>
+                                                        <option value="2" name="2"
+                                                            {{ $rota->isVeiculoProprio == '1' ? "selected='selected'" : '' }}>
+                                                            Veículo próprio</option>
+                                                        <option value="3" name="3"
+                                                            {{ $rota->isVeiculoEmpresa == '1' ? "selected='selected'" : '' }}>
+                                                            Veículo do Paranacidade</option>
+                                                        <option value="4" name="4"
+                                                            {{ $rota->isAereo == '1' ? "selected='selected'" : '' }}> Avião
+                                                        </option>
+                                                        <option value="5" name="5"
+                                                            {{ $rota->isOutroMeioTransporte == '1' ? "selected='selected'" : '' }}>
+                                                            Outros</option>
+                                                        <option value="6" name="6"
+                                                            {{ $rota->isOutroMeioTransporte == '2' ? "selected='selected'" : '' }}>
+                                                            Carona</option>
 
-                                                        @if ($ultimaRotaSetada != null)
-                                                            <option value="0" name="0"
-                                                                {{ $ultimaRotaSetada->isOnibusLeito == '1' ? "selected='selected'" : '' }}>
-                                                                Onibus Leito</option>
-                                                            <option value="1" name="1"
-                                                                {{ $ultimaRotaSetada->isOnibusConvencional == '1' ? "selected='selected'" : '' }}>
-                                                                Onibus convencional</option>
-                                                            <option value="2" name="2"
-                                                                {{ $ultimaRotaSetada->isVeiculoProprio == '1' ? "selected='selected'" : '' }}>
-                                                                Veículo próprio</option>
-                                                            <option value="3" name="3"
-                                                                {{ $ultimaRotaSetada->isVeiculoEmpresa == '1' ? "selected='selected'" : '' }}>
-                                                                Veículo do Paranacidade</option>
-                                                            <option value="4" name="4"
-                                                                {{ $ultimaRotaSetada->isAereo == '1' ? "selected='selected'" : '' }}>
-                                                                Avião
-                                                            </option>
-                                                            <option value="5" name="5"
-                                                                {{ $ultimaRotaSetada->isOutroMeioTransporte == '1' ? "selected='selected'" : '' }}>
-                                                                Outros</option>
-                                                            <option value="6" name="6"
-                                                                {{ $ultimaRotaSetada->isOutroMeioTransporte == '2' ? "selected='selected'" : '' }}>
-                                                                Carona</option>
-                                                        @else
-                                                            <option value="0" name="0"> Onibus Leito</option>
-                                                            <option value="1" name="1"> Onibus convencional
-                                                            </option>
-                                                            <option value="2" name="2"> Veículo próprio
-                                                            </option>
-                                                            <option value="3" name="3"> Veículo do Paranacidade
-                                                            </option>
-                                                            <option value="4" name="4"> Avião</option>
-                                                            <option value="5" name="5">Outros</option>
-                                                            <option value="6" name="6">Carona</option>
-                                                        @endif
                                                     </select>
 
                                                     @if ($errors->has('tipoTransporte'))
@@ -495,7 +460,8 @@
                                                     @endif
                                                 </div>
 
-                                                <div class="form-group" id="selecaoVeiculo" hidden="true">
+                                                <div class="form-group" id="selecaoVeiculo"
+                                                    {{ $rota->isVeiculoProprio == '1' ? '' : 'hidden="true"' }}>
                                                     <label for="veiculoProprio_id" class="control-label"
                                                         required>Selecione o veículo?</label>
                                                     <br>
@@ -506,10 +472,10 @@
                                                         @for ($i = 0; $i < count($veiculosProprios); $i++)
                                                             <div>
                                                                 <option value="{{ $veiculosProprios[$i]->id }}"
+                                                                    {{ $rota->veiculoProprio_id == $veiculosProprios[$i]->id ? "selected='selected'" : '' }}
                                                                     name="{{ $veiculosProprios[$i]->id }}">
                                                                     {{ $veiculosProprios[$i]->modelo }} -
-                                                                    {{ $veiculosProprios[$i]->placa }}
-                                                                </option>
+                                                                    {{ $veiculosProprios[$i]->placa }} </option>
                                                             </div>
                                                         @endfor
                                                     </select>
@@ -522,145 +488,166 @@
                                                 </div>
 
                                                 <div id="btSalvarRota">
-                                                    <input style="font-size: 16px" type="submit" id="salvarBt"
-                                                        class="btn btn-active btn-primary" value="Cadastrar Rota!">
+                                                    <input style="font-size: 16px" type="submit"
+                                                        class="btn btn-active btn-primary" value="Salvar Rota!">
                                                 </div>
-                                                <br><br>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-    @stop
+    </div>
 
-    @section('css')
 
-        <link href="{{ asset('/chosen/chosen.min.css') }}" rel="stylesheet">
+@stop
 
-    @stop
+@section('css')
 
-    @section('js')
-        <script src="{{ asset('/chosen/chosen.proto.min.js') }}"></script>
-        <script src="{{ asset('/chosen/chosen.jquery.min.js') }}"></script>
+@stop
 
-        <script type="text/javascript">
-            $('#custom-tabs-five-overlay').css('display', 'block');
+@section('js')
 
-            var data1 = null;
-            var data2 = null;
+    <script type="text/javascript">
+        function ativarCampo() {
+            var tipoTransporte = document.getElementById("tipoTransporte")
+            var veiculoProprio_id = document.getElementById("veiculoProprio_id")
 
-            function ativarCampo() {
-                var tipoTransporte = document.getElementById("tipoTransporte")
-                var veiculoProprio_id = document.getElementById("veiculoProprio_id")
-
-                if (tipoTransporte.value == "2") { //Se for veículo próprio
-                    document.getElementById("selecaoVeiculo").hidden = false;
-                } else {
-                    document.getElementById("selecaoVeiculo").hidden = true;
-                    document.getElementById("veiculoProprio_id").value = "";
-                }
+            if (tipoTransporte.value == "2") { //Se for veículo próprio
+                document.getElementById("selecaoVeiculo").hidden = false;
+            } else {
+                document.getElementById("selecaoVeiculo").hidden = true;
+                document.getElementById("veiculoProprio_id").value = "";
             }
+        }
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            }
+        });
+
+        function carregarPaises() {
+
+            $.getJSON('/countries', function(data) {
+
+                opcaoSelecione = '<option value=" "> Selecione </option>';
+                $('#selecaoPaisOrigem').append(opcaoSelecione);
+                $('#selecaoPaisDestinoInternacional').append(opcaoSelecione);
+
+                for (i = 0; i < data.length; i++) {
+                    opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+
+                    $('#selecaoPaisOrigem').append(opcao);
+                    $('#selecaoPaisDestinoInternacional').append(opcao);
+                }
+            });
+        }
+
+        function carregarPaisOrigem() {
+
+            var id = document.getElementById("selecaoPaisOrigem").value;
+            $("#selecaoPaisOrigem").html('');
+
+            $.getJSON('/country/' + id, function(data) {
+
+                for (i = 0; i < data.length; i++) {
+                    opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+
+                    $('#selecaoPaisOrigem').append(opcao);
                 }
             });
 
-            function gerenciaNacionalInternacional() {
-                $('#custom-tabs-five-overlay').css('display', 'block');
+            $.getJSON('/countries', function(data) {
 
-                document.getElementById("camposFinais").hidden = false;
-                document.getElementById("btSalvarRota").hidden = false;
-                document.getElementById("isInternacional").hidden = false;
 
-                setTimeout(function() {
-                    $('#custom-tabs-five-overlay').css('display', 'none');
-                }, 500);
-            }
+                for (i = 0; i < data.length; i++) {
+                    opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
 
-            function carregarPaises() {
-
-                $.getJSON('/countries', function(data) {
-
-                    opcaoSelecione = '<option value=" "> Selecione </option>';
-                    $('#selecaoPaisOrigem').append(opcaoSelecione);
-                    $('#selecaoPaisDestinoInternacional').append(opcaoSelecione);
-
-                    for (i = 0; i < data.length; i++) {
-                        opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
-
-                        $('#selecaoPaisOrigem').append(opcao);
-                        $('#selecaoPaisDestinoInternacional').append(opcao);
-                    }
-                });
-            }
-
-            function carregarCidadesOrigemInternacional() {
-
-                var idEstado = null;
-                idEstado = document.getElementById("selecaoEstadoOrigem");
-
-                $.getJSON('/cities', function(data) {
-
-                    for (i = 0; i < data.length; i++) {
-
-                        if (data[i].state_id == idEstado.value) {
-                            opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
-                            $('#selecaoCidadeOrigem').append(opcao);
-                        }
-                    }
-                });
-            }
-
-            function resetarCampoOrigemInternacional() {
-                document.getElementById("selecaoPaisOrigem").value = "";
-                document.getElementById("selecaoEstadoOrigem").value = "";
-                document.getElementById("selecaoContinenteOrigem").selectedIndex = 0;
-                $("#selecaoEstadoOrigem").html('');
-                $("#selecaoEstadoOrigem").html('<option value="">Selecione</option>');
-                document.getElementById("selecaoCidadeOrigem").value = "";
-                carregarPaises();
-                document.getElementById("selecaoPaisOrigem").disabled = false;
-            }
-
-            function resetarCampoDestinoInternacional() {
-                document.getElementById("selecaoPaisDestinoInternacional").value = "";
-                document.getElementById("selecaoEstadoDestinoInternacional").value = "";
-                document.getElementById("selecaoContinenteDestinoInternacional").selectedIndex = 0;
-                $("#selecaoEstadoDestinoInternacional").html('');
-                $("#selecaoEstadoDestinoInternacional").html('<option value="">Selecione</option>');
-                document.getElementById("selecaoCidadeDestinoInternacional").value = "";
-                carregarPaises();
-                document.getElementById("selecaoPaisDestinoInternacional").disabled = false;
-            }
-
-            function exibeCamposVolta() {
-                if (document.getElementById("isViagemVoltaIgualIda").hidden == false) {
-                    document.getElementById("isViagemVoltaIgualIda").hidden = true;
-                } else {
-                    document.getElementById("isViagemVoltaIgualIda").hidden = false;
+                    $('#selecaoPaisOrigem').append(opcao);
                 }
-            }
+            });
+        }
 
-            $(function() {
+        function carregarPaisDestino() {
 
-                carregarPaises();
-                document.getElementById("isInternacional").hidden = true;
-                document.getElementById("btSalvarRota").hidden = true;
+            var id = document.getElementById("selecaoPaisDestinoInternacional").value;
+            $("#selecaoPaisDestinoInternacional").html('');
+
+            $.getJSON('/country/' + id, function(data) {
+
+                for (i = 0; i < data.length; i++) {
+                    opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+
+                    $('#selecaoPaisDestinoInternacional').append(opcao);
+                }
+            });
+
+            $.getJSON('/countries', function(data) {
 
 
-                document.getElementById("isInternacional").hidden = false;
-                gerenciaNacionalInternacional();
+                for (i = 0; i < data.length; i++) {
+                    opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
 
-                ativarCampo();
+                    $('#selecaoPaisDestinoInternacional').append(opcao);
+                }
+            });
+        }
 
-            })
-        </script>
-    @stop
+        function carregarCidadesOrigemInternacional() {
+
+            var idEstado = null;
+            idEstado = document.getElementById("selecaoEstadoOrigem");
+
+            $.getJSON('/cities', function(data) {
+
+                for (i = 0; i < data.length; i++) {
+
+                    if (data[i].state_id == idEstado.value) {
+                        opcao = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+                        $('#selecaoCidadeOrigem').append(opcao);
+                    }
+                }
+            });
+        }
+
+        function resetarCampoOrigemInternacional() {
+            document.getElementById("selecaoPaisOrigem").value = "";
+            document.getElementById("selecaoEstadoOrigem").value = "";
+            document.getElementById("selecaoContinenteOrigem").selectedIndex = 0;
+            $("#selecaoEstadoOrigem").html('');
+            $("#selecaoEstadoOrigem").html('<option value="">Selecione</option>');
+            document.getElementById("selecaoCidadeOrigem").value = "";
+            carregarPaises();
+            document.getElementById("selecaoPaisOrigem").disabled = false;
+        }
+
+        function resetarCampoDestinoInternacional() {
+            document.getElementById("selecaoPaisDestinoInternacional").value = "";
+            document.getElementById("selecaoEstadoDestinoInternacional").value = "";
+            document.getElementById("selecaoContinenteDestinoInternacional").selectedIndex = 0;
+            $("#selecaoEstadoDestinoInternacional").html('');
+            $("#selecaoEstadoDestinoInternacional").html('<option value="">Selecione</option>');
+            document.getElementById("selecaoCidadeDestinoInternacional").value = "";
+            carregarPaises();
+            document.getElementById("selecaoPaisDestinoInternacional").disabled = false;
+        }
+
+        //Assim que a tela carrega, aciona automaticamente essas duas funções ------------------------
+        $(function() {
+
+            //carregarPaises();
+            @if ($rota->isViagemInternacional == true)
+                carregarPaisOrigem();
+                carregarPaisDestino();
+            @endif
+        })
+    </script>
+
+@stop
