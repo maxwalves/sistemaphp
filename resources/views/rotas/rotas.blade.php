@@ -141,12 +141,17 @@
                     </td>
                     <td> 
                         <div class="d-flex align-items-center">
-                            <a href="/rotas/edit/{{ $rota->id }}" class="btn btn-warning btn-sm" title="Editar"><i class="far fa-edit"></i></a> 
-                            <form action="/rotas/{{ $rota->id }}" method="POST">
+                            @if($rota->isViagemInternacional == 1)
+                                <a href="/rotas/editInternacional/{{ $rota->id }}" class="btn btn-warning btn-sm" title="Editar"><i class="far fa-edit"></i></a>
+                            @else
+                                <a href="/rotas/edit/{{ $rota->id }}" class="btn btn-warning btn-sm" title="Editar"><i class="far fa-edit"></i></a>
+                            @endif
+                            <form action="/rotas/{{ $rota->id }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover essa rota?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" title="Remover"><i class="fas fa-trash-alt"></i></button>
                             </form>
+                        </div>
                         </div>
                     </td>
                 </tr>
