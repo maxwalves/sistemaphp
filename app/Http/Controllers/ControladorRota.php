@@ -80,7 +80,7 @@ class ControladorRota extends Controller
         $curl = curl_init();
     
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://sistemas.paranacidade.org.br/reservas/public/api/inserirReservaVeiculo",
+            CURLOPT_URL => "http://10.51.10.43/reservas/public/api/inserirReservaVeiculo",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -106,14 +106,14 @@ class ControladorRota extends Controller
         $veiculosProprios = VeiculoProprio::all();
 
         //obter dados da API
-        $eventos = [];
+        //$eventos = [];
         $reservas2 = [];
-        $veiculos = [];
+        //$veiculos = [];
 
-        $url = 'https://sistemas.paranacidade.org.br/reservas/public/api/getReservasAPI';
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $eventos = json_decode(curl_exec($ch));
+        // $url = 'http://10.51.10.43/reservas/public/api/getReservasAPI';
+        // $ch = curl_init($url);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $eventos = json_decode(curl_exec($ch));
 
         //espera 1 segundo
         sleep(1);
@@ -141,10 +141,10 @@ class ControladorRota extends Controller
         $av->idReservaVeiculo = $idReserva;
         $av->save();
 
-        $url = 'https://sistemas.paranacidade.org.br/reservas/public/api/getVeiculosAPI';
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $veiculos = json_decode(curl_exec($ch));
+        // $url = 'http://10.51.10.43/reservas/public/api/getVeiculosAPI';
+        // $ch = curl_init($url);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $veiculos = json_decode(curl_exec($ch));
 
         if($av->isEnviadoUsuario == 1){
             return redirect('/avs/avs/')->with('msg', 'Você não tem autorização para editar uma rota de AV que já foi enviada!');
@@ -169,7 +169,7 @@ class ControladorRota extends Controller
         $curl = curl_init();
     
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://sistemas.paranacidade.org.br/reservas/public/api/removerReservaVeiculo",
+            CURLOPT_URL => "http://10.51.10.43/reservas/public/api/removerReservaVeiculo",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
