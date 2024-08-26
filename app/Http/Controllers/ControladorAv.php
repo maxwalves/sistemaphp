@@ -2220,7 +2220,6 @@ class ControladorAv extends Controller
         else{
             $arrayDiasValores = [];
         }
-        
 
         //código para obter as reservas do usuário da AV -------------------------------------------------------------------------
         $eventos = [];
@@ -3164,21 +3163,8 @@ class ControladorAv extends Controller
         $somaDespesasReal = 0;
         $somaDespesasDolar = 0;
 
-        if($av->isCancelado != true){
-            $regras = [
-                'contatos' => 'required',
-                'atividades' => 'required',
-                'conclusoes' => 'required',
-            ];
-
-            $mensagens = [
-                'required' => 'Este campo não pode estar em branco',
-            ];
-        }
-        else{
-            $regras = [];
-            $mensagens = [];
-        }
+        $regras = [];
+        $mensagens = [];
 
         foreach($comprovantes as $c){
             if($c->av_id == $av->id){
@@ -3230,8 +3216,7 @@ class ControladorAv extends Controller
             $dados += ['justificativaHorasExtras' => $request->get('justificativa')];
         }
         
-
-        $request->validate($regras, $mensagens);
+        //$request->validate($regras, $mensagens);
         
         Av::findOrFail($av->id)->update($dados);
         $historico->save();

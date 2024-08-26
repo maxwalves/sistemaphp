@@ -86,7 +86,7 @@
 
                                 @if(true)
                                     <div class="opcoesGerenciarAv">
-                                        <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" class="btn btn-success btn-sm"
+                                        <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" class="btn btn-warning btn-sm"
                                             title="Prestar contas"><i class="fas fa-file-invoice-dollar"></i></a> 
                                     </div>
                                 @else
@@ -101,8 +101,8 @@
                             title="Ver"><i class="fas fa-eye"></i></a>
 
                         @if($av->isAcertoContasRealizado == 1 && $av->isUsuarioAprovaAcertoContas != 1)
-                            <a href="/avs/validarAcertoContasUsuario/{{ $av->id }}" class="btn btn-success btn-sm"
-                            title="Validar PC"><i class="fas fa-thumbs-up"></i></a>
+                            <a href="/avs/validarAcertoContasUsuario/{{ $av->id }}" class="btn btn-warning btn-sm"
+                            title="Validar PC"><i class="fas fa-exclamation-triangle"></i></a>
                         @endif
                     @endif
                     @if(($av->isEnviadoUsuario==1 

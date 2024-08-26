@@ -11,6 +11,7 @@
 <div>
     <a href="/avs/gerenciarAvs" class="btn btn-warning">Voltar</a>
     <x-adminlte-button label="Detalhar dias" data-toggle="modal" class="bg-blue" data-target="#my-modal-5"/>
+    <x-adminlte-button label="Como é calculada a diária de alimentação?" data-toggle="modal" data-target="#my-modal-3"/>
 </div>
 
 <br>
@@ -1197,10 +1198,12 @@
                                 <td style="vertical-align: middle; text-align: center;"> 
                                     @if($arrayDiasValores[$j]['valorManha'] != 0)
                                         <span><strong>{{($arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
+                                            $arrayDiasValores[$j]['valor'] == 190 ||
                                             $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
                                             $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
                                             $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
-                                            (($arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 50) && !in_array('Brasília', $arrayDiasValores[$j]['valor']))
+                                            (($arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 50) && 
+                                            !in_array('Brasília', $arrayDiasValores[$j]['valor']))
                                             ? "$" : "R$")}}{{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}</strong></span>
                                     @else
                                         -
@@ -1209,6 +1212,7 @@
                                 <td style="vertical-align: middle; text-align: center;">
                                     @if($arrayDiasValores[$j]['valorTarde'] != 0)
                                         <span><strong>{{($arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
+                                            $arrayDiasValores[$j]['valor'] == 190 ||
                                             $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
                                             $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
                                             $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
@@ -1219,7 +1223,9 @@
                                     @endif
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;"> 
-                                    <span><strong>{{($arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
+                                    <span><strong>{{(
+                                                     $arrayDiasValores[$j]['valor'] == 190 ||
+                                                     $arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
                                                      $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
                                                      $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
                                                      $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
@@ -1238,6 +1244,21 @@
             </div>
             <br><br>
         </div>
+    <x-slot name="footerSlot">
+        <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal"/>
+    </x-slot>
+
+</x-adminlte-modal>
+
+<x-adminlte-modal id="my-modal-3" title="Cálculos" size="xl" theme="teal"
+        icon="fas fa-bell" v-centered static-backdrop scrollable>
+
+    <div>
+        <br>
+        <h3 class="text-lg font-bold" style="padding-left: 10%">A diária de alimentação é calculada da seguinte forma:</h3>
+        <img src="/img/horarios.png" style="width: 100%;">
+        
+    </div>
     <x-slot name="footerSlot">
         <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal"/>
     </x-slot>

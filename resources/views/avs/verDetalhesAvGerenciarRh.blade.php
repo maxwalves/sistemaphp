@@ -1196,7 +1196,9 @@
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;"> 
                                     @if($arrayDiasValores[$j]['valorManha'] != 0)
-                                        <span><strong>{{($arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
+                                        <span><strong>{{(
+                                            $arrayDiasValores[$j]['valor'] == 190 ||
+                                            $arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
                                             $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
                                             $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
                                             $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
@@ -1208,7 +1210,9 @@
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
                                     @if($arrayDiasValores[$j]['valorTarde'] != 0)
-                                        <span><strong>{{($arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
+                                        <span><strong>{{(
+                                            $arrayDiasValores[$j]['valor'] == 190 ||
+                                            $arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
                                             $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
                                             $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
                                             $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
@@ -1219,7 +1223,9 @@
                                     @endif
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;"> 
-                                    <span><strong>{{($arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
+                                    <span><strong>{{(
+                                        $arrayDiasValores[$j]['valor'] == 190 ||
+                                        $arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
                                         $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
                                         $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
                                         $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
