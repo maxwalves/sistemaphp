@@ -10,13 +10,12 @@
 
 <br>
 <div class="row">
-    <div class="col-8">
-        <h3>Editar AV</h3>
+    <div class="col-3">
+        <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i>VOLTAR PARA PRESTAÇÃO DE CONTAS SEM SALVAR</a>
     </div>
     <div class="col-4">
-        <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit" class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i></a>
+        <h3>Editar AV</h3>
     </div>
-    
 </div>
 
 <div id="av-create-container" >
@@ -258,7 +257,7 @@
 
         <div class="col-md-6 offset-md-3">
             <div id="btSalvarAv">
-                <input type="submit" class="btn btn-primary" value="Salvar">
+                <input type="submit" class="btn btn-success" value="SALVAR E VOLTAR PARA PRESTAÇÃO DE CONTAS">
             </div>
         </div>
     </form>

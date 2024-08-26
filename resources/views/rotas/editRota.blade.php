@@ -8,7 +8,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Criar Nova Rota</h3>
+                        <h3 class="card-title">Editar Rota</h3>
                     </div>
                     <div class="card-body">
                         <form action="/rotas/update/{{ $rota->id }}" method="POST" enctype="multipart/form-data" id="formPrincipal">

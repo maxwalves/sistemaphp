@@ -111,6 +111,9 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::get('/rotaspc/edit/{id}', [ControladorRota::class, 'editRotaPc'])->middleware('auth');
     Route::put('/rotaspc/update/{id}', [ControladorRota::class, 'update'])->middleware('auth');
     Route::get('/avspc/concluir/{id}/{isPc}', [ControladorAv::class, 'concluir'])->middleware('auth');
+    Route::post('/avspc/salvarContatos/{id}', [ControladorAv::class, 'salvarContatos'])->middleware('auth');
+    Route::post('/avspc/salvarAtividades/{id}', [ControladorAv::class, 'salvarAtividades'])->middleware('auth');
+    Route::post('/avspc/salvarConclusoes/{id}', [ControladorAv::class, 'salvarConclusoes'])->middleware('auth');
 
     Route::get('/avs/relatorio-pdf/{id}', [RelatorioController::class, 'gerarRelatorioPDF']);
     Route::get('/avs/relatorioPdfAv/{id}', [RelatorioController::class, 'gerarRelatorioPDFAv']);

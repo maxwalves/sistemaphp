@@ -4353,6 +4353,33 @@ class ControladorAv extends Controller
         return redirect('/rotas/rotas/' . $av->id)->with('msg', 'AV criada com sucesso!');
         //return view('rotas.createRota', ['av' => $av]);
     }
+
+    public function salvarContatos(Request $request, $id)
+    {
+        $av = Av::findOrFail($id);
+        $av->contatos = $request->contatos;
+        $av->save();
+        
+        return response()->json([$av->contatos]);
+    }
+
+    public function salvarAtividades(Request $request, $id)
+    {
+        $av = Av::findOrFail($id);
+        $av->atividades = $request->atividades;
+        $av->save();
+        
+        return response()->json([$av->atividades]);
+    }
+
+    public function salvarConclusoes(Request $request, $id)
+    {
+        $av = Av::findOrFail($id);
+        $av->conclusoes = $request->conclusoes;
+        $av->save();
+        
+        return response()->json([$av->conclusoes]);
+    }
     
     public function concluir($avId, $isPc){
         
