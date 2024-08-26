@@ -712,10 +712,12 @@
                 '#tipoTransporte, #isReservaHotel, #selecaoEstadoOrigemNacional, #selecaoCidadeOrigemNacional, #dataHoraSaidaNacional, #selecaoEstadoDestinoNacional, #selecaoCidadeDestinoNacional, #dataHoraChegadaNacional'
             );
             //se flexSwitchCheckDefault está marcardo como true, então adicione os campos #dataHoraSaidaVoltaNacional, #dataHoraChegadaVoltaNacional
-            if(document.getElementById("flexSwitchCheckDefault").checked){
-                campos = document.querySelectorAll(
-                    '#tipoTransporte, #isReservaHotel, #selecaoEstadoOrigemNacional, #selecaoCidadeOrigemNacional, #dataHoraSaidaNacional, #selecaoEstadoDestinoNacional, #selecaoCidadeDestinoNacional, #dataHoraChegadaNacional, #dataHoraSaidaVoltaNacional, #dataHoraChegadaVoltaNacional'
-                );
+            if(document.getElementById("flexSwitchCheckDefault")){
+                if(document.getElementById("flexSwitchCheckDefault").checked){
+                    campos = document.querySelectorAll(
+                        '#tipoTransporte, #isReservaHotel, #selecaoEstadoOrigemNacional, #selecaoCidadeOrigemNacional, #dataHoraSaidaNacional, #selecaoEstadoDestinoNacional, #selecaoCidadeDestinoNacional, #dataHoraChegadaNacional, #dataHoraSaidaVoltaNacional, #dataHoraChegadaVoltaNacional'
+                    );
+                }
             }
             
             var existemPendencias = [];
