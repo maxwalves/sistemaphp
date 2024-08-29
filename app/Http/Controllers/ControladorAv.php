@@ -3178,9 +3178,6 @@ class ControladorAv extends Controller
             $dados = array(
                 "isPrestacaoContasRealizada" => 1,
                 "status" => "AV Cancelada - Aguardando aprovação da Prestação de Contas pelo Financeiro",
-                "contatos" => $request->get('contatos'),
-                "atividades" => $request->get('atividades'),
-                "conclusoes" => $request->get('conclusoes'),
                 "valorExtraReais" => $somaDespesasReal,
                 "valorExtraDolar" => $somaDespesasDolar
             );
@@ -3189,9 +3186,6 @@ class ControladorAv extends Controller
             $dados = array(
                 "isPrestacaoContasRealizada" => 1,
                 "status" => "Aguardando aprovação da Prestação de Contas pelo Financeiro",
-                "contatos" => $request->get('contatos'),
-                "atividades" => $request->get('atividades'),
-                "conclusoes" => $request->get('conclusoes'),
                 "valorExtraReais" => $somaDespesasReal,
                 "valorExtraDolar" => $somaDespesasDolar
             );

@@ -47,11 +47,11 @@
                             href="#custom-tabs-three-trajeto" role="tab" aria-controls="custom-tabs-three-trajeto"
                             aria-selected="false">Trajeto</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" id="custom-tabs-three-relatorio-tab" data-toggle="pill"
                             href="#custom-tabs-three-relatorio" role="tab" aria-controls="custom-tabs-three-relatorio"
                             aria-selected="false">Relatório</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link" id="custom-tabs-three-hotel-tab" data-toggle="pill"
                             href="#custom-tabs-three-hotel" role="tab" aria-controls="custom-tabs-three-hotel"
@@ -936,7 +936,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane fade" id="custom-tabs-three-relatorio" role="tabpanel"
+                {{-- <div class="tab-pane fade" id="custom-tabs-three-relatorio" role="tabpanel"
                     aria-labelledby="custom-tabs-three-relatorio-tab">
                     <h1 style="font-size: 24px"><strong>Relatório:</strong></h1>
 
@@ -955,7 +955,7 @@
                         <textarea type="text" class="textarea textarea-secondary textarea-lg" name="conclusoes" id="conclusoes"
                             placeholder="Conclusões" style="width: 100%; height: 100px" disabled>{{ $av->conclusoes }}</textarea>
                     </div>
-                </div>
+                </div> --}}
                 <div class="tab-pane fade" id="custom-tabs-three-hotel" role="tabpanel"
                     aria-labelledby="custom-tabs-three-hotel-tab">
                     <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Reserva de hotel
