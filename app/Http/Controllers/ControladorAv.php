@@ -45,6 +45,10 @@ use App\Mail\EnvioSecretariaToUsuario;
 use App\Mail\EnvioGestorToUsuarioViagemInternacional;
 use App\Mail\EnvioGestorToUsuarioDevolverDespesas;
 use App\Mail\EnvioUsuarioToFinanceiroDevolucao;
+use App\Mail\EnvioUsuarioToAdministrativoAvInternacionalAviso;
+use App\Mail\EnvioUsuarioToAdministrativoAvInternacionalNotificacao;
+use App\Mail\EnvioUsuarioToFinanceiroAvInternacionalAviso;
+use App\Mail\EnvioUsuarioToFinanceiroAvInternacionalNotificacao;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Permission;
 use App\Models\Country;
@@ -2586,11 +2590,43 @@ class ControladorAv extends Controller
             }
         }
         
-
         if($isInternacional==true){
             
             Mail::to($userAv->username)
                         ->send(new EnvioGestorToUsuarioViagemInternacional($userAv->id, $av->id));
+
+            $users = User::all();
+            foreach($users as $u){
+                try {
+                    if($u->hasPermissionTo($permission2)){
+                        if(
+                        ($u->department != "ERCSC" 
+                        && $u->department != "ERMGA" 
+                        && $u->department != "ERFCB" 
+                        && $u->department != "ERGUA" 
+                        && $u->department != "ERLDA" 
+                        && $u->department != "ERPTG")
+                        ){
+                            Mail::to($u->username)
+                            ->send(new EnvioUsuarioToAdministrativoAvInternacionalNotificacao($userAv->id, $u->id, $av->id));
+                        }
+                    }
+                    if($u->hasPermissionTo($permission3)){
+                        if(
+                        ($u->department != "ERCSC" 
+                        && $u->department != "ERMGA" 
+                        && $u->department != "ERFCB" 
+                        && $u->department != "ERGUA" 
+                        && $u->department != "ERLDA" 
+                        && $u->department != "ERPTG")
+                        ){
+                            Mail::to($u->username)
+                            ->send(new EnvioUsuarioToFinanceiroAvInternacionalNotificacao($userAv->id, $u->id, $av->id));
+                        }
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
         }
         else if($isVeiculoProprio == true){
             $users = User::all();
@@ -5456,6 +5492,52 @@ class ControladorAv extends Controller
 
         Mail::to($email)
             ->send(new EnvioEmailGestor($user->id, $usermanager->id, $av->id));
+
+
+        $isInternacional = false;
+        foreach($rotasEncontradas as $r){
+            if($r->isViagemInternacional == true){
+                $isInternacional = true;
+            }
+        }
+
+        if($isInternacional){
+            $permission2 = Permission::where('name', 'aprov avs secretaria')->first();
+            $permission3 = Permission::where('name', 'aprov avs financeiro')->first();
+
+            $users = User::all();
+            foreach($users as $u){
+                try {
+                    if($u->hasPermissionTo($permission2)){
+                        if(
+                        ($u->department != "ERCSC" 
+                        && $u->department != "ERMGA" 
+                        && $u->department != "ERFCB" 
+                        && $u->department != "ERGUA" 
+                        && $u->department != "ERLDA" 
+                        && $u->department != "ERPTG")
+                        ){
+                            Mail::to($u->username)
+                            ->send(new EnvioUsuarioToAdministrativoAvInternacionalAviso($user->id, $u->id, $av->id));
+                        }
+                    }
+                    if($u->hasPermissionTo($permission3)){
+                        if(
+                        ($u->department != "ERCSC" 
+                        && $u->department != "ERMGA" 
+                        && $u->department != "ERFCB" 
+                        && $u->department != "ERGUA" 
+                        && $u->department != "ERLDA" 
+                        && $u->department != "ERPTG")
+                        ){
+                            Mail::to($u->username)
+                            ->send(new EnvioUsuarioToFinanceiroAvInternacionalAviso($user->id, $u->id, $av->id));
+                        }
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
+        }
 
         Log::channel('email')->info("E-mail enviado para {$email}", [
             'user_id' => $user->id,
