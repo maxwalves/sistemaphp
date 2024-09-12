@@ -451,63 +451,61 @@
                                                 @if ($av['isCancelado'] == false)
                                                     @foreach ($av->rotas as $r)
                                                         @if ($r->isVeiculoProprio == true)
-                                                            <p style="color: red">DIGITAR APENAS NÚMEROS, SEM
-                                                                PONTOS.</p>
-                                                            <div class="form-group">
-                                                                <label for="odometroIda"
-                                                                    class="control-label {{ $errors->has('odometroIda') ? 'is-invalid' : '' }}">Odômetro
-                                                                    ida:</label><br>
-                                                                <input type="number" class="form-control"
-                                                                    name="odometroIda" id="odometroIda"
-                                                                    placeholder="Odômetro ida" style="width: 100%">
-                                                                @if ($errors->has('odometroIda'))
-                                                                    <div class="invalid-feedback">
-                                                                        {{ $errors->first('odometroIda') }}
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="odometroVolta"
-                                                                    class="control-label {{ $errors->has('odometroVolta') ? 'is-invalid' : '' }}">Odômetro
-                                                                    volta:</label><br>
-                                                                <input type="number" class="form-control"
-                                                                    name="odometroVolta" id="odometroVolta"
-                                                                    placeholder="Odômetro volta" style="width: 100%">
-                                                                @if ($errors->has('odometroVolta'))
-                                                                    <div class="invalid-feedback">
-                                                                        {{ $errors->first('odometroVolta') }}
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                        @break
-                                                    @endif
-                                                @endforeach
-                                            @endif
+                                                                <p style="color: red">DIGITAR APENAS NÚMEROS, SEM
+                                                                    PONTOS.</p>
+                                                                <div class="form-group">
+                                                                    <label for="odometroIda"
+                                                                        class="control-label {{ $errors->has('odometroIda') ? 'is-invalid' : '' }}">Odômetro
+                                                                        ida:</label><br>
+                                                                    <input type="number" class="form-control"
+                                                                        name="odometroIda" id="odometroIda"
+                                                                        placeholder="Odômetro ida" style="width: 100%">
+                                                                    @if ($errors->has('odometroIda'))
+                                                                        <div class="invalid-feedback">
+                                                                            {{ $errors->first('odometroIda') }}
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="odometroVolta"
+                                                                        class="control-label {{ $errors->has('odometroVolta') ? 'is-invalid' : '' }}">Odômetro
+                                                                        volta:</label><br>
+                                                                    <input type="number" class="form-control"
+                                                                        name="odometroVolta" id="odometroVolta"
+                                                                        placeholder="Odômetro volta" style="width: 100%">
+                                                                    @if ($errors->has('odometroVolta'))
+                                                                        <div class="invalid-feedback">
+                                                                            {{ $errors->first('odometroVolta') }}
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            @break
+                                                        @endif
+                                                    @endforeach
+                                                @endif
 
-                                            <input type="text" hidden="true" id="id" name="id"
-                                                value="{{ $av->id }}">
-                                            <label for="comentario">Enviar PC para aprovação do Financeiro:
-                                            </label>
-                                            <br>
+                                                <input type="text" hidden="true" id="id" name="id"
+                                                    value="{{ $av->id }}">
+                                                <label for="comentario">Enviar PC para aprovação do Financeiro:
+                                                </label>
+                                                <br>
 
-                                            <div class="input-group mb-3">
-                                                <textarea type="text" class="textarea textarea-bordered h-24" name="comentario" style="width: 200px"
-                                                    id="comentario" placeholder="Comentário"></textarea>
+                                                <div class="input-group mb-3">
+                                                    <textarea type="text" class="textarea textarea-bordered h-24" name="comentario" style="width: 200px"
+                                                        id="comentario" placeholder="Comentário"></textarea>
 
-                                                <span class="input-group-append">
-                                                    <button type="submit" class="btn btn-active btn-success"
-                                                        onclick="exibirLoader()">Enviar PC</button>
-                                                </span>
-                                            </div>
-                                        </form>
-
+                                                    <span class="input-group-append">
+                                                        <button type="submit" class="btn btn-active btn-success"
+                                                            onclick="exibirLoader()">Enviar PC</button>
+                                                    </span>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                </div>
                 <div class="tab-pane fade" id="custom-tabs-three-historico" role="tabpanel"
                     aria-labelledby="custom-tabs-three-historico-tab" style="overflow-x: auto;">
                     <h3 class="text-lg font-bold" style="padding-left: 10%; padding-bottom: 20px">Histórico</h3>
@@ -1150,7 +1148,6 @@
                 @endif
             </div>
         </div>
-
     </div>
 </div>
 

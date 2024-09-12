@@ -2821,6 +2821,23 @@ class ControladorAv extends Controller
                                 ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
                             }
                         }
+                        else if(
+                        (
+                        $u2->department != "ERCSC"
+                        && $u2->department != "ERMGA"
+                        && $u2->department != "ERFCB"
+                        && $u2->department != "ERGUA"
+                        && $u2->department != "ERLDA"
+                        && $u2->department != "ERPTG")
+                        &&
+                        ($userAv->department == "ERFCB")
+                        )
+                        {
+                            if(!$existeResponsavelFinanceiroCascavel){
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                            }
+                        }
                     }
                 } catch (\Throwable $th) {
                 }
@@ -3254,53 +3271,55 @@ class ControladorAv extends Controller
         $permission = Permission::where('name', 'aprov avs financeiro')->first();
         
         $users = User::all();
-        foreach($users as $u2){
-            try {
-                if($u2->hasPermissionTo($permission)){
-                    //verifique se u2 é da mesma regional que $userAv
-                    if(
-                    ($u2->department != "ERCSC" 
-                    && $u2->department != "ERMGA" 
-                    && $u2->department != "ERFCB" 
-                    && $u2->department != "ERGUA" 
-                    && $u2->department != "ERLDA" 
-                    && $u2->department != "ERPTG")
-                    &&
-                    ($userAv->department != "ERCSC"
-                    && $userAv->department != "ERMGA"
-                    && $userAv->department != "ERFCB"
-                    && $userAv->department != "ERGUA"
-                    && $userAv->department != "ERLDA"
-                    && $userAv->department != "ERPTG")
-                    )
-                    {
-                        Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id, $av->id));
+        if($userAv->name != "testeviagem"){
+            foreach($users as $u2){
+                try {
+                    if($u2->hasPermissionTo($permission)){
+                        //verifique se u2 é da mesma regional que $userAv
+                        if(
+                        ($u2->department != "ERCSC" 
+                        && $u2->department != "ERMGA" 
+                        && $u2->department != "ERFCB" 
+                        && $u2->department != "ERGUA" 
+                        && $u2->department != "ERLDA" 
+                        && $u2->department != "ERPTG")
+                        &&
+                        ($userAv->department != "ERCSC"
+                        && $userAv->department != "ERMGA"
+                        && $userAv->department != "ERFCB"
+                        && $userAv->department != "ERGUA"
+                        && $userAv->department != "ERLDA"
+                        && $userAv->department != "ERPTG")
+                        )
+                        {
+                            Mail::to($u2->username)
+                            ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id, $av->id));
+                        }
+                        else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                            Mail::to($u2->username)
+                            ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id, $av->id));
+                        }
+                        else if
+                        (
+                        ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
+                        ||
+                        ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
+                        ||
+                        ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
+                        ||
+                        ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
+                        ||
+                        ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
+                        ||
+                        ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
+                        )
+                        {
+                            Mail::to($u2->username)
+                            ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id, $av->id));
+                        }
                     }
-                    else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
-                        Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id, $av->id));
-                    }
-                    else if
-                    (
-                    ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
-                    ||
-                    ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
-                    ||
-                    ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
-                    ||
-                    ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
-                    ||
-                    ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
-                    ||
-                    ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
-                    )
-                    {
-                        Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroPc($av->user_id, $u2->id, $av->id));
-                    }
+                } catch (\Throwable $th) {
                 }
-            } catch (\Throwable $th) {
             }
         }
 
