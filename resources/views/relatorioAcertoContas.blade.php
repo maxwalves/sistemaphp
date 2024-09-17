@@ -190,12 +190,16 @@
                     <table id="tabelaRota" class="comBordaSimples" style="width: 100%">
                         <thead>
                             <tr>
-                                <th>País de saída</th>
+                                @if($av->isAprovadoViagemInternacional)
+                                    <th>País de saída</th>
+                                @endif
                                 <th>Estado de saída</th>
                                 <th>Cidade de saída</th>
                                 <th>Data/Hora de saída</th>
                                 <th>-</th>
-                                <th>País de chegada</th>
+                                @if($av->isAprovadoViagemInternacional)
+                                    <th>País de chegada</th>
+                                @endif
                                 <th>Estado de chegada</th>
                                 <th>Cidade de chegada</th>
                                 <th>Data/Hora de chegada</th>
@@ -205,20 +209,24 @@
                         <tbody>
                             @foreach($av->rotas as $rota)
                             <tr>
-                                @foreach($paises as $p)
-                                    @if ($p->id == $rota->paisOrigemInternacional)
-                                        <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? "Brasil" : $p->name}} </td>
-                                    @endif
-                                @endforeach
+                                @if($av->isAprovadoViagemInternacional)
+                                    @foreach($paises as $p)
+                                        @if ($p->id == $rota->paisOrigemInternacional)
+                                            <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? "Brasil" : $p->name}} </td>
+                                        @endif
+                                    @endforeach
+                                @endif
                                 <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->estadoOrigemNacional : $rota->estadoOrigemInternacional}} </td>
                                 <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} </td>
                                 <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
                                 <td>-</td>
-                                @foreach($paises as $p)
-                                    @if ($p->id == $rota->paisDestinoInternacional)
-                                        <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? "Brasil" : $p->name}} </td>
-                                    @endif
-                                @endforeach
+                                @if($av->isAprovadoViagemInternacional)
+                                    @foreach($paises as $p)
+                                        @if ($p->id == $rota->paisDestinoInternacional)
+                                            <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? "Brasil" : $p->name}} </td>
+                                        @endif
+                                    @endforeach
+                                @endif
                                 <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->estadoDestinoNacional : $rota->estadoDestinoInternacional}} </td>
                                 <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} </td>
                                 <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>

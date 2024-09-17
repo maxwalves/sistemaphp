@@ -2639,49 +2639,81 @@ class ControladorAv extends Controller
         //     }
         // }
 
-        if($isVeiculoProprio == true || $isInternacional==true){
-            $users = User::all();
-            foreach($users as $uDir){
-                try {
-                    if($uDir->hasPermissionTo($permissionDir)){
-                        Mail::to($uDir->username)
-                        ->send(new EnvioGestorToDiretoria($av->user_id, $uDir->id));
+        if($userAv->name != "testeviagem"){
+            if($isVeiculoProprio == true || $isInternacional==true){
+                $users = User::all();
+                foreach($users as $uDir){
+                    try {
+                        if($uDir->hasPermissionTo($permissionDir)){
+                            Mail::to($uDir->username)
+                            ->send(new EnvioGestorToDiretoria($av->user_id, $uDir->id));
+                        }
+                    } catch (\Throwable $th) {
                     }
-                } catch (\Throwable $th) {
                 }
             }
-        }
-        else{
-            $users = User::all();
-            foreach($users as $u){
-                try {
-                    if($u->hasPermissionTo($permission2)){
+            else{
+                $users = User::all();
+                foreach($users as $u){
+                    try {
+                        if($u->hasPermissionTo($permission2)){
 
-                        if($temReservaVeiculoEmpresa && !$temReservaHotelOuTransporte){
-                            if
-                            (
-                            ($u->department == "ERCSC" && $userAv->department == "ERCSC")
-                            ||
-                            ($u->department == "ERMGA" && $userAv->department == "ERMGA")
-                            ||
-                            ($u->department == "ERFCB" && $userAv->department == "ERFCB")
-                            ||
-                            ($u->department == "ERGUA" && $userAv->department == "ERGUA")
-                            ||
-                            ($u->department == "ERLDA" && $userAv->department == "ERLDA")
-                            ||
-                            ($u->department == "ERPTG" && $userAv->department == "ERPTG")
-                            ){
+                            if($temReservaVeiculoEmpresa && !$temReservaHotelOuTransporte){
+                                if
+                                (
+                                ($u->department == "ERCSC" && $userAv->department == "ERCSC")
+                                ||
+                                ($u->department == "ERMGA" && $userAv->department == "ERMGA")
+                                ||
+                                ($u->department == "ERFCB" && $userAv->department == "ERFCB")
+                                ||
+                                ($u->department == "ERGUA" && $userAv->department == "ERGUA")
+                                ||
+                                ($u->department == "ERLDA" && $userAv->department == "ERLDA")
+                                ||
+                                ($u->department == "ERPTG" && $userAv->department == "ERPTG")
+                                ){
+                                    Mail::to($u->username)
+                                    ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
+                                }
+                                else if(
+                                ($u->department != "ERCSC" 
+                                && $u->department != "ERMGA" 
+                                && $u->department != "ERFCB" 
+                                && $u->department != "ERGUA" 
+                                && $u->department != "ERLDA" 
+                                && $u->department != "ERPTG")
+                                &&
+                                ($userAv->department != "ERCSC"
+                                && $userAv->department != "ERMGA"
+                                && $userAv->department != "ERFCB"
+                                && $userAv->department != "ERGUA"
+                                && $userAv->department != "ERLDA"
+                                && $userAv->department != "ERPTG")
+                                ){
+                                    Mail::to($u->username)
+                                    ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
+                                }
+                            }
+                            else if($temReservaHotelOuTransporte){
                                 Mail::to($u->username)
                                 ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
                             }
-                            else if(
-                            ($u->department != "ERCSC" 
-                            && $u->department != "ERMGA" 
-                            && $u->department != "ERFCB" 
-                            && $u->department != "ERGUA" 
-                            && $u->department != "ERLDA" 
-                            && $u->department != "ERPTG")
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                foreach($users as $u2){
+                    try {
+                        if($u2->hasPermissionTo($permission3)){
+                            //verifique se u2 é da mesma regional que $userAv
+                            if(
+                            ($u2->department != "ERCSC" 
+                            && $u2->department != "ERMGA" 
+                            && $u2->department != "ERFCB" 
+                            && $u2->department != "ERGUA" 
+                            && $u2->department != "ERLDA" 
+                            && $u2->department != "ERPTG")
                             &&
                             ($userAv->department != "ERCSC"
                             && $userAv->department != "ERMGA"
@@ -2689,168 +2721,138 @@ class ControladorAv extends Controller
                             && $userAv->department != "ERGUA"
                             && $userAv->department != "ERLDA"
                             && $userAv->department != "ERPTG")
-                            ){
-                                Mail::to($u->username)
-                                ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
+                            )
+                            {
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                            }
+                            else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                            }
+                            else if
+                            (
+                            ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
+                            ||
+                            ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
+                            ||
+                            ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
+                            ||
+                            ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
+                            ||
+                            ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
+                            ||
+                            ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
+                            )
+                            {
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                            }
+                            else if(
+                            (
+                            $u2->department != "ERCSC" 
+                            && $u2->department != "ERMGA" 
+                            && $u2->department != "ERFCB" 
+                            && $u2->department != "ERGUA" 
+                            && $u2->department != "ERLDA" 
+                            && $u2->department != "ERPTG")
+                            &&
+                            ($userAv->department == "ERCSC")
+                            )
+                            {
+                                if(!$existeResponsavelFinanceiroCascavel){
+                                    Mail::to($u2->username)
+                                    ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                                }
+                            }
+                            else if(
+                            (
+                            $u2->department != "ERCSC"
+                            && $u2->department != "ERMGA"
+                            && $u2->department != "ERFCB"
+                            && $u2->department != "ERGUA"
+                            && $u2->department != "ERLDA"
+                            && $u2->department != "ERPTG")
+                            &&
+                            ($userAv->department == "ERMGA")
+                            )
+                            {
+                                if(!$existeResponsavelFinanceiroMaringa){
+                                    Mail::to($u2->username)
+                                    ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                                }
+                            }
+                            else if(
+                            (
+                            $u2->department != "ERCSC"
+                            && $u2->department != "ERMGA"
+                            && $u2->department != "ERFCB"
+                            && $u2->department != "ERGUA"
+                            && $u2->department != "ERLDA"
+                            && $u2->department != "ERPTG")
+                            &&
+                            ($userAv->department == "ERGUA")
+                            )
+                            {
+                                if(!$existeResponsavelFinanceiroGuarapuava){
+                                    Mail::to($u2->username)
+                                    ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                                }
+                            }
+                            else if(
+                            (
+                            $u2->department != "ERCSC"
+                            && $u2->department != "ERMGA"
+                            && $u2->department != "ERFCB"
+                            && $u2->department != "ERGUA"
+                            && $u2->department != "ERLDA"
+                            && $u2->department != "ERPTG")
+                            &&
+                            ($userAv->department == "ERLDA")
+                            )
+                            {
+                                if(!$existeResponsavelFinanceiroLondrina){
+                                    Mail::to($u2->username)
+                                    ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                                }
+                            }
+                            else if(
+                            (
+                            $u2->department != "ERCSC"
+                            && $u2->department != "ERMGA"
+                            && $u2->department != "ERFCB"
+                            && $u2->department != "ERGUA"
+                            && $u2->department != "ERLDA"
+                            && $u2->department != "ERPTG")
+                            &&
+                            ($userAv->department == "ERPTG")
+                            )
+                            {
+                                if(!$existeResponsavelFinanceiroPontaGrossa){
+                                    Mail::to($u2->username)
+                                    ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                                }
+                            }
+                            else if(
+                            (
+                            $u2->department != "ERCSC"
+                            && $u2->department != "ERMGA"
+                            && $u2->department != "ERFCB"
+                            && $u2->department != "ERGUA"
+                            && $u2->department != "ERLDA"
+                            && $u2->department != "ERPTG")
+                            &&
+                            ($userAv->department == "ERFCB")
+                            )
+                            {
+                                if(!$existeResponsavelFinanceiroCascavel){
+                                    Mail::to($u2->username)
+                                    ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                                }
                             }
                         }
-                        else if($temReservaHotelOuTransporte){
-                            Mail::to($u->username)
-                            ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
-                        }
+                    } catch (\Throwable $th) {
                     }
-                } catch (\Throwable $th) {
-                }
-            }
-            foreach($users as $u2){
-                try {
-                    if($u2->hasPermissionTo($permission3)){
-                        //verifique se u2 é da mesma regional que $userAv
-                        if(
-                        ($u2->department != "ERCSC" 
-                        && $u2->department != "ERMGA" 
-                        && $u2->department != "ERFCB" 
-                        && $u2->department != "ERGUA" 
-                        && $u2->department != "ERLDA" 
-                        && $u2->department != "ERPTG")
-                        &&
-                        ($userAv->department != "ERCSC"
-                        && $userAv->department != "ERMGA"
-                        && $userAv->department != "ERFCB"
-                        && $userAv->department != "ERGUA"
-                        && $userAv->department != "ERLDA"
-                        && $userAv->department != "ERPTG")
-                        )
-                        {
-                            Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                        }
-                        else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
-                            Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                        }
-                        else if
-                        (
-                        ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
-                        ||
-                        ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
-                        ||
-                        ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
-                        ||
-                        ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
-                        ||
-                        ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
-                        ||
-                        ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
-                        )
-                        {
-                            Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                        }
-                        else if(
-                        (
-                        $u2->department != "ERCSC" 
-                        && $u2->department != "ERMGA" 
-                        && $u2->department != "ERFCB" 
-                        && $u2->department != "ERGUA" 
-                        && $u2->department != "ERLDA" 
-                        && $u2->department != "ERPTG")
-                        &&
-                        ($userAv->department == "ERCSC")
-                        )
-                        {
-                            if(!$existeResponsavelFinanceiroCascavel){
-                                Mail::to($u2->username)
-                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                            }
-                        }
-                        else if(
-                        (
-                        $u2->department != "ERCSC"
-                        && $u2->department != "ERMGA"
-                        && $u2->department != "ERFCB"
-                        && $u2->department != "ERGUA"
-                        && $u2->department != "ERLDA"
-                        && $u2->department != "ERPTG")
-                        &&
-                        ($userAv->department == "ERMGA")
-                        )
-                        {
-                            if(!$existeResponsavelFinanceiroMaringa){
-                                Mail::to($u2->username)
-                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                            }
-                        }
-                        else if(
-                        (
-                        $u2->department != "ERCSC"
-                        && $u2->department != "ERMGA"
-                        && $u2->department != "ERFCB"
-                        && $u2->department != "ERGUA"
-                        && $u2->department != "ERLDA"
-                        && $u2->department != "ERPTG")
-                        &&
-                        ($userAv->department == "ERGUA")
-                        )
-                        {
-                            if(!$existeResponsavelFinanceiroGuarapuava){
-                                Mail::to($u2->username)
-                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                            }
-                        }
-                        else if(
-                        (
-                        $u2->department != "ERCSC"
-                        && $u2->department != "ERMGA"
-                        && $u2->department != "ERFCB"
-                        && $u2->department != "ERGUA"
-                        && $u2->department != "ERLDA"
-                        && $u2->department != "ERPTG")
-                        &&
-                        ($userAv->department == "ERLDA")
-                        )
-                        {
-                            if(!$existeResponsavelFinanceiroLondrina){
-                                Mail::to($u2->username)
-                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                            }
-                        }
-                        else if(
-                        (
-                        $u2->department != "ERCSC"
-                        && $u2->department != "ERMGA"
-                        && $u2->department != "ERFCB"
-                        && $u2->department != "ERGUA"
-                        && $u2->department != "ERLDA"
-                        && $u2->department != "ERPTG")
-                        &&
-                        ($userAv->department == "ERPTG")
-                        )
-                        {
-                            if(!$existeResponsavelFinanceiroPontaGrossa){
-                                Mail::to($u2->username)
-                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                            }
-                        }
-                        else if(
-                        (
-                        $u2->department != "ERCSC"
-                        && $u2->department != "ERMGA"
-                        && $u2->department != "ERFCB"
-                        && $u2->department != "ERGUA"
-                        && $u2->department != "ERLDA"
-                        && $u2->department != "ERPTG")
-                        &&
-                        ($userAv->department == "ERFCB")
-                        )
-                        {
-                            if(!$existeResponsavelFinanceiroCascavel){
-                                Mail::to($u2->username)
-                                ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                            }
-                        }
-                    }
-                } catch (\Throwable $th) {
                 }
             }
         }
@@ -3450,6 +3452,7 @@ class ControladorAv extends Controller
         $historicosTodos = Historico::all();
         $users = User::all();
         $historicos = [];
+        $paises = Country::all();
 
         $historicoPcAll = HistoricoPc::all();
         $valorRecebido = null;
@@ -3560,7 +3563,7 @@ class ControladorAv extends Controller
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 
-        'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores', 'medicoesFiltradas', 'dataFormatadaAtual', 'reservas2')));
+        'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores', 'medicoesFiltradas', 'dataFormatadaAtual', 'reservas2', 'paises')));
         $dompdf->render();
 
         $nomeArquivo = md5("relatorioAcertoContas" . strtotime("now")) . ".pdf";
@@ -3675,54 +3678,55 @@ class ControladorAv extends Controller
         $permission = Permission::where('name', 'aprov avs financeiro')->first();
 
         $users = User::all();
-        
-        foreach($users as $u2){
-            try {
-                if($u2->hasPermissionTo($permission)){
-                    //verifique se u2 é da mesma regional que $userAv
-                    if(
-                    ($u2->department != "ERCSC" 
-                    && $u2->department != "ERMGA" 
-                    && $u2->department != "ERFCB" 
-                    && $u2->department != "ERGUA" 
-                    && $u2->department != "ERLDA" 
-                    && $u2->department != "ERPTG")
-                    &&
-                    ($userAv->department != "ERCSC"
-                    && $userAv->department != "ERMGA"
-                    && $userAv->department != "ERFCB"
-                    && $userAv->department != "ERGUA"
-                    && $userAv->department != "ERLDA"
-                    && $userAv->department != "ERPTG")
-                    )
-                    {
-                        Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id, $av->id));
+        if($userAv->name != "testeviagem"){
+            foreach($users as $u2){
+                try {
+                    if($u2->hasPermissionTo($permission)){
+                        //verifique se u2 é da mesma regional que $userAv
+                        if(
+                        ($u2->department != "ERCSC" 
+                        && $u2->department != "ERMGA" 
+                        && $u2->department != "ERFCB" 
+                        && $u2->department != "ERGUA" 
+                        && $u2->department != "ERLDA" 
+                        && $u2->department != "ERPTG")
+                        &&
+                        ($userAv->department != "ERCSC"
+                        && $userAv->department != "ERMGA"
+                        && $userAv->department != "ERFCB"
+                        && $userAv->department != "ERGUA"
+                        && $userAv->department != "ERLDA"
+                        && $userAv->department != "ERPTG")
+                        )
+                        {
+                            Mail::to($u2->username)
+                            ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id, $av->id));
+                        }
+                        else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                            Mail::to($u2->username)
+                            ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id, $av->id));
+                        }
+                        else if
+                        (
+                        ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
+                        ||
+                        ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
+                        ||
+                        ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
+                        ||
+                        ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
+                        ||
+                        ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
+                        ||
+                        ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
+                        )
+                        {
+                            Mail::to($u2->username)
+                            ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id, $av->id));
+                        }
                     }
-                    else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
-                        Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id, $av->id));
-                    }
-                    else if
-                    (
-                    ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
-                    ||
-                    ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
-                    ||
-                    ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
-                    ||
-                    ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
-                    ||
-                    ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
-                    ||
-                    ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
-                    )
-                    {
-                        Mail::to($u2->username)
-                        ->send(new EnvioUsuarioToFinanceiroDevolucao($av->user_id, $u2->id, $av->id));
-                    }
+                } catch (\Throwable $th) {
                 }
-            } catch (\Throwable $th) {
             }
         }
 
@@ -3944,60 +3948,62 @@ class ControladorAv extends Controller
 
         $permission = Permission::where('name', 'aprov avs financeiro')->first();
 
-        if($resultadoUsuarioPagar > 0){
+        if($userAv->name != "testeviagem"){
+            if($resultadoUsuarioPagar > 0){
 
-            Mail::to($userAv->username)
-            ->send(new EnvioGestorToUsuarioDevolverDespesas($userAv->id, $av->id));
-        }
-        else{
-            $users = User::all();
-            foreach($users as $u2){
-                try {
-                    if($u2->hasPermissionTo($permission)){
-                        //verifique se u2 é da mesma regional que $userAv
-                        if(
-                        ($u2->department != "ERCSC" 
-                        && $u2->department != "ERMGA" 
-                        && $u2->department != "ERFCB" 
-                        && $u2->department != "ERGUA" 
-                        && $u2->department != "ERLDA" 
-                        && $u2->department != "ERPTG")
-                        &&
-                        ($userAv->department != "ERCSC"
-                        && $userAv->department != "ERMGA"
-                        && $userAv->department != "ERFCB"
-                        && $userAv->department != "ERGUA"
-                        && $userAv->department != "ERLDA"
-                        && $userAv->department != "ERPTG")
-                        )
-                        {
-                            Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
+                Mail::to($userAv->username)
+                ->send(new EnvioGestorToUsuarioDevolverDespesas($userAv->id, $av->id));
+            }
+            else{
+                $users = User::all();
+                foreach($users as $u2){
+                    try {
+                        if($u2->hasPermissionTo($permission)){
+                            //verifique se u2 é da mesma regional que $userAv
+                            if(
+                            ($u2->department != "ERCSC" 
+                            && $u2->department != "ERMGA" 
+                            && $u2->department != "ERFCB" 
+                            && $u2->department != "ERGUA" 
+                            && $u2->department != "ERLDA" 
+                            && $u2->department != "ERPTG")
+                            &&
+                            ($userAv->department != "ERCSC"
+                            && $userAv->department != "ERMGA"
+                            && $userAv->department != "ERFCB"
+                            && $userAv->department != "ERGUA"
+                            && $userAv->department != "ERLDA"
+                            && $userAv->department != "ERPTG")
+                            )
+                            {
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
+                            }
+                            else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
+                            }
+                            else if
+                            (
+                            ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
+                            ||
+                            ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
+                            ||
+                            ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
+                            ||
+                            ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
+                            ||
+                            ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
+                            ||
+                            ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
+                            )
+                            {
+                                Mail::to($u2->username)
+                                ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
+                            }
                         }
-                        else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
-                            Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
-                        }
-                        else if
-                        (
-                        ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
-                        ||
-                        ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
-                        ||
-                        ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
-                        ||
-                        ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
-                        ||
-                        ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
-                        ||
-                        ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
-                        )
-                        {
-                            Mail::to($u2->username)
-                            ->send(new EnvioGestorToFinanceiroAcertoContas($av->user_id, $u2->id, $av->id));
-                        }
+                    } catch (\Throwable $th) {
                     }
-                } catch (\Throwable $th) {
                 }
             }
         }
@@ -4113,62 +4119,64 @@ class ControladorAv extends Controller
         $permission2 = Permission::where('name', 'aprov avs financeiro')->first();
 
         $users = User::all();
-        foreach($users as $u){
-            try {
-                if($u->hasPermissionTo($permission)){
-                    Mail::to($u->username)
-                    ->send(new EnvioDiretoriaToSecretaria($av->user_id, $u->id, $av->id));
+        if($userAv->name != "testeviagem"){
+            foreach($users as $u){
+                try {
+                    if($u->hasPermissionTo($permission)){
+                        Mail::to($u->username)
+                        ->send(new EnvioDiretoriaToSecretaria($av->user_id, $u->id, $av->id));
+                    }
+                } catch (\Throwable $th) {
                 }
-            } catch (\Throwable $th) {
             }
-        }
-        foreach($users as $u2){
-            try {
-                if($u2->hasPermissionTo($permission2)){
-                    //verifique se u2 é da mesma regional que $userAv
-                    if(
-                    ($u2->department != "ERCSC" 
-                    && $u2->department != "ERMGA" 
-                    && $u2->department != "ERFCB" 
-                    && $u2->department != "ERGUA" 
-                    && $u2->department != "ERLDA" 
-                    && $u2->department != "ERPTG")
-                    &&
-                    ($userAv->department != "ERCSC"
-                    && $userAv->department != "ERMGA"
-                    && $userAv->department != "ERFCB"
-                    && $userAv->department != "ERGUA"
-                    && $userAv->department != "ERLDA"
-                    && $userAv->department != "ERPTG")
-                    )
-                    {
-                        Mail::to($u2->username)
-                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+            foreach($users as $u2){
+                try {
+                    if($u2->hasPermissionTo($permission2)){
+                        //verifique se u2 é da mesma regional que $userAv
+                        if(
+                        ($u2->department != "ERCSC" 
+                        && $u2->department != "ERMGA" 
+                        && $u2->department != "ERFCB" 
+                        && $u2->department != "ERGUA" 
+                        && $u2->department != "ERLDA" 
+                        && $u2->department != "ERPTG")
+                        &&
+                        ($userAv->department != "ERCSC"
+                        && $userAv->department != "ERMGA"
+                        && $userAv->department != "ERFCB"
+                        && $userAv->department != "ERGUA"
+                        && $userAv->department != "ERLDA"
+                        && $userAv->department != "ERPTG")
+                        )
+                        {
+                            Mail::to($u2->username)
+                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                        }
+                        else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
+                            Mail::to($u2->username)
+                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                        }
+                        else if
+                        (
+                        ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
+                        ||
+                        ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
+                        ||
+                        ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
+                        ||
+                        ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
+                        ||
+                        ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
+                        ||
+                        ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
+                        )
+                        {
+                            Mail::to($u2->username)
+                            ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
+                        }
                     }
-                    else if($u2->department != $userAv->department && $userAv->department == "ERFCB" && $u2->department == "ERCSC"){
-                        Mail::to($u2->username)
-                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                    }
-                    else if
-                    (
-                    ($u2->department == "ERCSC" && $userAv->department == "ERCSC")
-                    ||
-                    ($u2->department == "ERMGA" && $userAv->department == "ERMGA")
-                    ||
-                    ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
-                    ||
-                    ($u2->department == "ERGUA" && $userAv->department == "ERGUA")
-                    ||
-                    ($u2->department == "ERLDA" && $userAv->department == "ERLDA")
-                    ||
-                    ($u2->department == "ERPTG" && $userAv->department == "ERPTG")
-                    )
-                    {
-                        Mail::to($u2->username)
-                        ->send(new EnvioGestorToFinanceiro($av->user_id, $u2->id, $av->id));
-                    }
+                } catch (\Throwable $th) {
                 }
-            } catch (\Throwable $th) {
             }
         }
 
