@@ -1098,6 +1098,9 @@
                         <tr>
                             <th>Descrição</th>
                             <th>Valor reais</th>
+                            @if($av->isAprovadoViagemInternacional)
+                                <th>Valor dólar</th>
+                            @endif
                             <th>Anexo</th>
                         </tr>
                     </thead>
@@ -1106,6 +1109,9 @@
                             <tr>
                                 <td> {{ $comp->descricao }} </td>
                                 <td> {{ $comp->valorReais }} </td>
+                                @if($av->isAprovadoViagemInternacional)
+                                    <td> {{ $comp->valorDolar }} </td>
+                                @endif
                                 <td> 
                                     
                                     <a href="{{ route('recuperaArquivo', [

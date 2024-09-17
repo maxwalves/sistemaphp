@@ -497,10 +497,10 @@
                     </div>
 
                     @if($isInternacional == true)
-                    <hr>
+                        <hr>
                         <div class="form-group">
                             <label for="valorExtraDolar" class="control-label">Você vai precisar de valor extra em dólar?</label>
-                            <input type="number" class="form-control" name="valorExtraDolar"
+                            <input type="text" class="form-control" name="valorExtraDolar" oninput="calcular()"
                                 id="valorExtraDolar" placeholder="Valor Extra em dólar" value="{{$av->valorExtraDolar}}">
                         </div>
                     @endif
@@ -508,7 +508,7 @@
                     @if($isInternacional == true)
                         <div class="form-group">
                             <label for="valorDeducaoDolar" class="control-label">Vai ter deduções em dólar?</label>
-                            <input type="number" class="form-control bg-yellow-300" name="valorDeducaoDolar" oninput="calcular()"
+                            <input type="text" class="form-control bg-yellow-300" name="valorDeducaoDolar" oninput="calcular()"
                                 id="valorDeducaoDolar" placeholder="Valor da dedução em dólar">
                         </div>
                     @endif
@@ -619,94 +619,107 @@
         document.getElementById("outroObjetivo").hidden = true;
     }
 
-    function calcular(){
+    function calcular() {
+        // Deixar o foco da página sempre no final
+        window.scrollTo(0, document.body.scrollHeight);
 
-        //deixar o foco da página sempre no final
-        window.scrollTo(0,document.body.scrollHeight);
-
+        // Cálculo para Reais
         var valor1 = parseFloat(document.getElementById("valorReais").getAttribute('data-value'));
         var valor3 = document.getElementById('valorExtraReais').value;
         var valor5 = document.getElementById('valorDeducaoReais').value;
-        if(document.getElementById('valorExtraReais').value == ""){
+
+        if (valor3 == "") {
             valor3 = 0;
         }
-        if(document.getElementById('valorDeducaoReais').value == ""){
+        if (valor5 == "") {
             valor5 = 0;
         }
 
-        valor3 = valor3.toString().replace(",", ".");
-        valor3 = valor3.replace("R$ ", "");
-        valor3 = valor3.replace(/\s/g, '');
-        valor3 = parseFloat(valor3);
+        valor3 = valor3.toString().replace(",", ".").replace("R$ ", "").replace(/\s/g, '');
+        valor5 = valor5.toString().replace(",", ".").replace("R$ ", "").replace(/\s/g, '');
 
-        valor5 = valor5.toString().replace(",", ".");
-        valor5 = valor5.replace("R$ ", "");
-        valor5 = valor5.replace(/\s/g, '');
+        valor3 = parseFloat(valor3);
         valor5 = parseFloat(valor5);
 
         var somaReais = valor1 + valor3 - valor5;
         document.getElementById('result1').innerHTML = "R$ " + somaReais;
 
+        // Cálculo para Dólares
         try {
             var valor2 = parseFloat(document.getElementById("valorDolar").getAttribute('data-value'));
-            var valor4 = parseFloat(document.getElementById('valorExtraDolar').value);
-            var valor6 = parseFloat(document.getElementById('valorDeducaoDolar').value);
+            var valor4 = document.getElementById('valorExtraDolar').value;
+            var valor6 = document.getElementById('valorDeducaoDolar').value;
 
-            if(document.getElementById('valorExtraDolar').value == ""){
+            if (valor4 == "") {
                 valor4 = 0;
             }
-            if(document.getElementById('valorDeducaoDolar').value == ""){
+            if (valor6 == "") {
                 valor6 = 0;
             }
+
+            // Tratamento para valores em dólar, incluindo a remoção da vírgula de separação de milhares
+            valor4 = valor4.toString().replace(",", "").replace("$", "").replace(/\s/g, '');
+            valor6 = valor6.toString().replace(",", "").replace("$", "").replace(/\s/g, '');
+
+            valor4 = parseFloat(valor4);
+            valor6 = parseFloat(valor6);
+
             var somaDolar = valor2 + valor4 - valor6;
-            
+
             document.getElementById('result2').innerHTML = "$ " + somaDolar;
         } catch (error) {
+            console.error("Erro ao calcular valores em dólar: ", error);
         }
 
-        
-        
     }
 
-    function calcularInicial(){
+    function calcularInicial() {
+        // Cálculo para Reais
         var valor1 = parseFloat(document.getElementById("valorReais").getAttribute('data-value'));
         var valor3 = document.getElementById('valorExtraReais').value;
         var valor5 = document.getElementById('valorDeducaoReais').value;
-        if(document.getElementById('valorExtraReais').value == ""){
+
+        if (valor3 == "") {
             valor3 = 0;
         }
-        if(document.getElementById('valorDeducaoReais').value == ""){
+        if (valor5 == "") {
             valor5 = 0;
         }
 
-        valor3 = valor3.toString().replace(",", ".");
-        valor3 = valor3.replace("R$ ", "");
-        valor3 = valor3.replace(/\s/g, '');
-        valor3 = parseFloat(valor3);
+        valor3 = valor3.toString().replace(",", ".").replace("R$ ", "").replace(/\s/g, '');
+        valor5 = valor5.toString().replace(",", ".").replace("R$ ", "").replace(/\s/g, '');
 
-        valor5 = valor5.toString().replace(",", ".");
-        valor5 = valor5.replace("R$ ", "");
-        valor5 = valor5.replace(/\s/g, '');
+        valor3 = parseFloat(valor3);
         valor5 = parseFloat(valor5);
 
         var somaReais = valor1 + valor3 - valor5;
         document.getElementById('result1').innerHTML = "R$ " + somaReais;
 
+        // Cálculo para Dólares
         try {
             var valor2 = parseFloat(document.getElementById("valorDolar").getAttribute('data-value'));
-            var valor4 = parseFloat(document.getElementById('valorExtraDolar').value);
-            var valor6 = parseFloat(document.getElementById('valorDeducaoDolar').value);
+            var valor4 = document.getElementById('valorExtraDolar').value;
+            var valor6 = document.getElementById('valorDeducaoDolar').value;
 
-            if(document.getElementById('valorExtraDolar').value == ""){
+            if (valor4 == "") {
                 valor4 = 0;
             }
-            if(document.getElementById('valorDeducaoDolar').value == ""){
+            if (valor6 == "") {
                 valor6 = 0;
             }
+
+            // Tratamento para valores em dólar, removendo símbolos e formatando
+            valor4 = valor4.toString().replace(",", "").replace("$", "").replace(/\s/g, '');
+            valor6 = valor6.toString().replace(",", "").replace("$", "").replace(/\s/g, '');
+
+            valor4 = parseFloat(valor4);
+            valor6 = parseFloat(valor6);
+
             var somaDolar = valor2 + valor4 - valor6;
             
             document.getElementById('result2').innerHTML = "$ " + somaDolar;
         } catch (error) {
+            console.error("Erro ao calcular valores em dólar: ", error);
         }
     }
 
@@ -740,13 +753,36 @@
             allowNegative: false // Não permite valores negativos
         });
 
-        // Monitora o evento keyup no campo valorExtraReais
         $('#valorExtraReais').on('keyup', function() {
             calcular(); // Chama a função calcular() sempre que uma tecla for liberada no campo
         });
 
-        // Monitora o evento keyup no campo valorDeducaoReais
         $('#valorDeducaoReais').on('keyup', function() {
+            calcular(); // Chama a função calcular() sempre que uma tecla for liberada no campo
+        });
+
+        $('#valorExtraDolar').maskMoney({
+            prefix: '$ ', // Add the prefix '$'
+            thousands: ',', // Use comma as thousands separator
+            decimal: '.', // Use dot as decimal separator
+            allowZero: true, // Allow the value to start with zero
+            precision: 2, // Define 2 decimal places
+            allowNegative: false // Do not allow negative values
+        });
+        $('#valorDeducaoDolar').maskMoney({
+            prefix: '$ ', // Add the prefix '$'
+            thousands: ',', // Use comma as thousands separator
+            decimal: '.', // Use dot as decimal separator
+            allowZero: true, // Allow the value to start with zero
+            precision: 2, // Define 2 decimal places
+            allowNegative: false // Do not allow negative values
+        });
+
+        $('#valorExtraDolar').on('keyup', function() {
+            calcular(); // Chama a função calcular() sempre que uma tecla for liberada no campo
+        });
+
+        $('#valorDeducaoDolar').on('keyup', function() {
             calcular(); // Chama a função calcular() sempre que uma tecla for liberada no campo
         });
 

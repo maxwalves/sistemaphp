@@ -109,6 +109,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::post('/rotaspc', [ControladorRota::class,'store'])->middleware('auth');
     Route::delete('/rotaspc/{id}', [ControladorRota::class, 'destroyRotaPc'])->middleware('auth');
     Route::get('/rotaspc/edit/{id}', [ControladorRota::class, 'editRotaPc'])->middleware('auth');
+    Route::get('/rotaspc/editInternacional/{id}', [ControladorRota::class, 'editRotaPCInternacional'])->middleware('auth');
     Route::put('/rotaspc/update/{id}', [ControladorRota::class, 'update'])->middleware('auth');
     Route::get('/avspc/concluir/{id}/{isPc}', [ControladorAv::class, 'concluir'])->middleware('auth');
     Route::post('/avspc/salvarContatos/{id}', [ControladorAv::class, 'salvarContatos'])->middleware('auth');

@@ -146,6 +146,7 @@ class RelatorioController extends Controller
         $objetivos = Objetivo::all();
         $historicosTodos = Historico::all();
         $users = User::all();
+        $paises = Country::all();
         $historicos = [];
 
         $historicoPcAll = HistoricoPc::all();
@@ -242,7 +243,7 @@ class RelatorioController extends Controller
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('relatorioAcertoContas', compact('av', 'objetivos', 'historicos', 'users', 'userAv', 'valorRecebido', 
-        'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores', 'medicoesFiltradas', 'dataFormatadaAtual', 'reservas2')));
+        'valorAcertoContasReal', 'valorAcertoContasDolar', 'arrayDiasValores', 'medicoesFiltradas', 'dataFormatadaAtual', 'reservas2', 'paises')));
         $dompdf->render();
 
         return $dompdf->stream('relatorio.pdf');

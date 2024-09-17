@@ -729,6 +729,7 @@ class ControladorAv extends Controller
             $valorRecebido->valorDolar = 0;
             $valorRecebido->valorExtraDolar = 0;
         }
+        //dd($valorRecebido);
 
         foreach($anexoRotasTodos as $r){//Verifica todas as rotas da AV
             if($r->av_id == $id){// Verifica cada um dos anexos da rota
@@ -1280,6 +1281,7 @@ class ControladorAv extends Controller
         $av = Av::findOrFail($id);
         $userAv = User::findOrFail($av->user_id);
         $veiculosProprios = $userAv->veiculosProprios;
+        $isViagemInternacional = $av->isAprovadoViagemInternacional;
 
         $medicoes = Medicao::all();
         $medicoesFiltradas = [];
@@ -1359,7 +1361,7 @@ class ControladorAv extends Controller
         if($possoEditar == true){
             return view('avs.verFluxoFinanceiro', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 
             'historicos'=> $historicos, 'anexos' => $anexos, 'users'=> $users, 'userAv' => $userAv, 'veiculosParanacidade' => $veiculosParanacidade,
-            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores, 'reservas2' => $reservas2]);
+            'medicoesFiltradas' => $medicoesFiltradas, 'arrayDiasValores' => $arrayDiasValores, 'reservas2' => $reservas2, 'isViagemInternacional' => $isViagemInternacional]);
         }
         else{
             return redirect('avs/autFinanceiro')->with('msg', 'Você não tem permissão para avaliar esta av!');
@@ -1594,6 +1596,13 @@ class ControladorAv extends Controller
             $valorReaisFiltrado = str_replace('R$', '', $valorReaisFiltrado);
             $valorReaisFiltrado = str_replace(' ', '', $valorReaisFiltrado);
         }
+
+        $valorDolarFiltrado = 0;
+        if($request->valorDolar != null){
+            $valorDolarFiltrado = str_replace(',', '.', $request->valorDolar);
+            $valorDolarFiltrado = str_replace('US$', '', $valorDolarFiltrado);
+            $valorDolarFiltrado = str_replace(' ', '', $valorDolarFiltrado);
+        }
         
         if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
         {
@@ -1622,11 +1631,10 @@ class ControladorAv extends Controller
             if($request->valorReais != null){
                 $comprovante->valorReais = $valorReaisFiltrado;
             }
-            
-            // if($request->valorDolar != null){
-            //     $valorDolarFiltrado = str_replace(',', '.', $request->valorDolar);
-            //     $comprovante->valorDolar = $valorDolarFiltrado;
-            // }
+
+            if($request->valorDolar != null){
+                $comprovante->valorDolar = $valorDolarFiltrado;
+            }
             
             $timezone = new DateTimeZone('America/Sao_Paulo');
             $comprovante->dataOcorrencia = new DateTime('now', $timezone);
@@ -2463,7 +2471,7 @@ class ControladorAv extends Controller
         if($isInternacional==true){
             $dados = array(
                 "isAprovadoGestor" => 1,
-                "status" => "AV Internacional cadastrada no sistema"
+                "status" => "Aguardando aprovação da DAF"
             );
         }
         else if($isVeiculoProprio == true){
@@ -2479,58 +2487,59 @@ class ControladorAv extends Controller
             );
         }
 
-        if($isInternacional == true){
-            //Gera o PDF
-            $avs = Av::all();
-            $av = Av::findOrFail($request->get('id'));
-            $userAv = User::findOrFail($av->user_id);
-            $objetivos = Objetivo::all();
-            $historicosTodos = Historico::all();
-            $historicos = [];
-            $users = User::all();
-            $valorRecebido = $av;
-            $valorReais = 0;
-            $valorAcertoContasReal = 0;
-            $valorAcertoContasDolar = 0;
+        //QUANDO O FLUXO DA AV INTERNACIONAL IA SOMENTE ATÉ A SUA GERAÇÃO
+        // if($isInternacional == true){
+        //     //Gera o PDF
+        //     $avs = Av::all();
+        //     $av = Av::findOrFail($request->get('id'));
+        //     $userAv = User::findOrFail($av->user_id);
+        //     $objetivos = Objetivo::all();
+        //     $historicosTodos = Historico::all();
+        //     $historicos = [];
+        //     $users = User::all();
+        //     $valorRecebido = $av;
+        //     $valorReais = 0;
+        //     $valorAcertoContasReal = 0;
+        //     $valorAcertoContasDolar = 0;
 
-            foreach($historicosTodos as $historico){
-                if($historico->av_id == $av->id){
-                    array_push($historicos, $historico);
-                }
-            }
+        //     foreach($historicosTodos as $historico){
+        //         if($historico->av_id == $av->id){
+        //             array_push($historicos, $historico);
+        //         }
+        //     }
 
-            $paises = Country::all();
+        //     $paises = Country::all();
 
-            $options = new Options();
-            $options->set('defaultFont', 'sans-serif');
-            $dompdf = new Dompdf($options);
+        //     $options = new Options();
+        //     $options->set('defaultFont', 'sans-serif');
+        //     $dompdf = new Dompdf($options);
 
-            $dompdf->loadHtml(view('relatorioViagemInternacional', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 
-            'valorRecebido', 'valorReais', 'valorAcertoContasReal', 'valorAcertoContasDolar', 'paises')));
-            $dompdf->render();
+        //     $dompdf->loadHtml(view('relatorioViagemInternacional', compact('avs', 'av', 'objetivos', 'historicos', 'users', 'userAv', 
+        //     'valorRecebido', 'valorReais', 'valorAcertoContasReal', 'valorAcertoContasDolar', 'paises')));
+        //     $dompdf->render();
 
-            $nomeArquivo = md5("relatorio" . strtotime("now")) . ".pdf";
-            $caminhoDiretorio = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/internacional' . '/';
-            $caminhoArquivo = $caminhoDiretorio . $nomeArquivo;
-            if (!file_exists($caminhoDiretorio)) {
-                mkdir($caminhoDiretorio, 0777, true);
-            }
-            file_put_contents($caminhoArquivo, $dompdf->output());
+        //     $nomeArquivo = md5("relatorio" . strtotime("now")) . ".pdf";
+        //     $caminhoDiretorio = '/mnt/arquivos_viagem/AVs/' . $userAv->name . '/' . $av->id . '/internacional' . '/';
+        //     $caminhoArquivo = $caminhoDiretorio . $nomeArquivo;
+        //     if (!file_exists($caminhoDiretorio)) {
+        //         mkdir($caminhoDiretorio, 0777, true);
+        //     }
+        //     file_put_contents($caminhoArquivo, $dompdf->output());
 
-            //Salva no HistoricoPC
-            $historicoPc = new HistoricoPc();
-            $historicoPc->valorReais = $av->valorReais;
-            $historicoPc->valorDolar = $av->valorDolar;
-            $historicoPc->valorExtraReais = $av->valorExtraReais;
-            $historicoPc->valorExtraDolar = $av->valorExtraDolar;
-            $historicoPc->ocorrencia ="Gestor aprovou AV internacional";
-            $historicoPc->comentario ="AV Internacional gerada";
-            $historicoPc->av_id = $av->id;
+        //     //Salva no HistoricoPC
+        //     $historicoPc = new HistoricoPc();
+        //     $historicoPc->valorReais = $av->valorReais;
+        //     $historicoPc->valorDolar = $av->valorDolar;
+        //     $historicoPc->valorExtraReais = $av->valorExtraReais;
+        //     $historicoPc->valorExtraDolar = $av->valorExtraDolar;
+        //     $historicoPc->ocorrencia ="Gestor aprovou AV internacional";
+        //     $historicoPc->comentario ="AV Internacional gerada";
+        //     $historicoPc->av_id = $av->id;
 
-            $historicoPc->dataOcorrencia = new DateTime('now', $timezone);
-            $historicoPc->anexoRelatorio = $nomeArquivo;
-            $historicoPc->save();
-        }
+        //     $historicoPc->dataOcorrencia = new DateTime('now', $timezone);
+        //     $historicoPc->anexoRelatorio = $nomeArquivo;
+        //     $historicoPc->save();
+        // }
 
         Av::findOrFail($av->id)->update($dados);
         
@@ -2590,45 +2599,47 @@ class ControladorAv extends Controller
             }
         }
         
-        if($isInternacional==true){
+        //QUANDO O FLUXO DA AV INTERNACIONAL IA SOMENTE ATÉ A SUA GERAÇÃO
+        // if($isInternacional==true){
             
-            Mail::to($userAv->username)
-                        ->send(new EnvioGestorToUsuarioViagemInternacional($userAv->id, $av->id));
+        //     Mail::to($userAv->username)
+        //                 ->send(new EnvioGestorToUsuarioViagemInternacional($userAv->id, $av->id));
 
-            $users = User::all();
-            foreach($users as $u){
-                try {
-                    if($u->hasPermissionTo($permission2)){
-                        if(
-                        ($u->department != "ERCSC" 
-                        && $u->department != "ERMGA" 
-                        && $u->department != "ERFCB" 
-                        && $u->department != "ERGUA" 
-                        && $u->department != "ERLDA" 
-                        && $u->department != "ERPTG")
-                        ){
-                            Mail::to($u->username)
-                            ->send(new EnvioUsuarioToAdministrativoAvInternacionalNotificacao($userAv->id, $u->id, $av->id));
-                        }
-                    }
-                    if($u->hasPermissionTo($permission3)){
-                        if(
-                        ($u->department != "ERCSC" 
-                        && $u->department != "ERMGA" 
-                        && $u->department != "ERFCB" 
-                        && $u->department != "ERGUA" 
-                        && $u->department != "ERLDA" 
-                        && $u->department != "ERPTG")
-                        ){
-                            Mail::to($u->username)
-                            ->send(new EnvioUsuarioToFinanceiroAvInternacionalNotificacao($userAv->id, $u->id, $av->id));
-                        }
-                    }
-                } catch (\Throwable $th) {
-                }
-            }
-        }
-        else if($isVeiculoProprio == true){
+        //     $users = User::all();
+        //     foreach($users as $u){
+        //         try {
+        //             if($u->hasPermissionTo($permission2)){
+        //                 if(
+        //                 ($u->department != "ERCSC" 
+        //                 && $u->department != "ERMGA" 
+        //                 && $u->department != "ERFCB" 
+        //                 && $u->department != "ERGUA" 
+        //                 && $u->department != "ERLDA" 
+        //                 && $u->department != "ERPTG")
+        //                 ){
+        //                     Mail::to($u->username)
+        //                     ->send(new EnvioUsuarioToAdministrativoAvInternacionalNotificacao($userAv->id, $u->id, $av->id));
+        //                 }
+        //             }
+        //             if($u->hasPermissionTo($permission3)){
+        //                 if(
+        //                 ($u->department != "ERCSC" 
+        //                 && $u->department != "ERMGA" 
+        //                 && $u->department != "ERFCB" 
+        //                 && $u->department != "ERGUA" 
+        //                 && $u->department != "ERLDA" 
+        //                 && $u->department != "ERPTG")
+        //                 ){
+        //                     Mail::to($u->username)
+        //                     ->send(new EnvioUsuarioToFinanceiroAvInternacionalNotificacao($userAv->id, $u->id, $av->id));
+        //                 }
+        //             }
+        //         } catch (\Throwable $th) {
+        //         }
+        //     }
+        // }
+
+        if($isVeiculoProprio == true || $isInternacional==true){
             $users = User::all();
             foreach($users as $uDir){
                 try {
@@ -5173,7 +5184,7 @@ class ControladorAv extends Controller
         //---------------------------------------------------------------------------------------------------------------------
 
         if($isPc=="sim"){
-
+            
             $historico = new Historico();
             $timezone = new DateTimeZone('America/Sao_Paulo');
             $historico->dataOcorrencia = new DateTime('now', $timezone);
@@ -5438,13 +5449,33 @@ class ControladorAv extends Controller
         $valorDeducaoReaisFormatado = str_replace('R$', '', $valorDeducaoReaisFormatado);
         $valorDeducaoReaisFormatado = str_replace(' ', '', $valorDeducaoReaisFormatado);
 
+        if($request->valorExtraDolar != null && $request->valorExtraDolar != ""){
+            // Formatação para o valor extra em dólares
+            $valorExtraDolarFormatado = str_replace(',', '', $request->valorExtraDolar);   // Remove a vírgula de separação de milhares
+            $valorExtraDolarFormatado = str_replace('$', '', $valorExtraDolarFormatado);    // Remove o símbolo de dólar
+            $valorExtraDolarFormatado = str_replace(' ', '', $valorExtraDolarFormatado);    // Remove espaços
+        }
+        else{
+            $valorExtraDolarFormatado = 0;
+        }
+
+        if($request->valorDeducaoDolar != null && $request->valorDeducaoDolar != ""){
+            // Formatação para o valor de dedução em dólares
+            $valorDeducaoDolarFormatado = str_replace(',', '', $request->valorDeducaoDolar); // Remove a vírgula de separação de milhares
+            $valorDeducaoDolarFormatado = str_replace('$', '', $valorDeducaoDolarFormatado); // Remove o símbolo de dólar
+            $valorDeducaoDolarFormatado = str_replace(' ', '', $valorDeducaoDolarFormatado); // Remove espaços
+        }
+        else{
+            $valorDeducaoDolarFormatado = 0;
+        }
+
         $dados = array(
             "valorReais" => $av->valorReais,
             "valorDolar" => $av->valorDolar,
             "valorDeducaoReais" => $valorDeducaoReaisFormatado,
-            "valorDeducaoDolar" => $request->valorDeducaoDolar,
+            "valorDeducaoDolar" => $valorDeducaoDolarFormatado,
             "valorExtraReais" => $valorExtraReaisFormatado,
-            "valorExtraDolar" => $request->valorExtraDolar,
+            "valorExtraDolar" => $valorExtraDolarFormatado,
             "justificativaValorExtra"=>$request->justificativaValorExtra,
             "status"=>"AV aguardando aprovação do Gestor",
         );
@@ -5758,6 +5789,7 @@ class ControladorAv extends Controller
             }
         }
         $avs = $avsFiltradas;
+
         $objetivos = Objetivo::all();
         return view('avs.autSecretaria', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos, 'users' => $users]);
     }

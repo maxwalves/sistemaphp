@@ -217,6 +217,12 @@ class ControladorRota extends Controller
         $user = auth()->user();
         $av = Av::findOrFail($id);//Busca a AV com base no ID
         $rotas = $av->rotas;//Busca as rotas da AV
+        $isViagemInternacional = null;
+        foreach($rotas as $r){
+            if($r->isViagemInternacional == true){
+                $isViagemInternacional = true;
+            }
+        }
 
         if(count($rotas) > 0){
             $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
@@ -225,7 +231,7 @@ class ControladorRota extends Controller
             $arrayDiasValores = null;
         }
 
-        return view('rotaspc.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user, 'arrayDiasValores' => $arrayDiasValores]);
+        return view('rotaspc.rotas', ['rotas' => $rotas, 'av' => $av, 'user'=> $user, 'arrayDiasValores' => $arrayDiasValores, 'isViagemInternacional' => $isViagemInternacional]);
     }
 
     public function create($id)//Id da AV
@@ -628,6 +634,30 @@ class ControladorRota extends Controller
         $veiculosProprios = $user->veiculosProprios;
 
         return view('rotas.editRotaInternacional', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
+    }
+
+    public function editRotaPCInternacional($id){
+        $rota = Rota::findOrFail($id);
+        $idAv = $rota->av_id;
+
+        $user = auth()->user();
+        $avs = $user->avs;
+        $av = null;
+        foreach ($avs as $a){
+            if ($a->id == $idAv){
+                $av = $a;
+            }
+        }
+
+        if($av->user_id != $user->id){
+            return redirect('/avs/avs/')->with('msg', 'Você não tem autorização para editar uma rota de AV de outro usuário!');
+        }
+
+        $rotas = $av->rotas;
+
+        $veiculosProprios = $user->veiculosProprios;
+
+        return view('rotaspc.editRotaInternacional', ['rota' => $rota, 'av' => $av, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas]);
     }
 
     public function editNovaData($id)

@@ -89,7 +89,7 @@
                                                                                     <td align="left" class="esd-block-text es-p10t">
                                                                                         <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">O usuário {{ $user->name }} cadastrou a AV Internacional Nr: {{ $idAv }}, em breve será enviado para o seu setor.</p>
 
-                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o Sistema de viagens para verificar a pendência: <a href="https://viagem.paranacidade.org.br/">Sistema de Viagens</a>  </p>
+                                                                                        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Acesse o Sistema de viagens para verificar: <a href="https://viagem.paranacidade.org.br/">Sistema de Viagens</a>  </p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>

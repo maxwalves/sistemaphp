@@ -50,16 +50,18 @@
 
                     <h3 >Adiantamentos:</h3>
                     <div style="border: 1px solid black; padding-left:10px">
-                        <p> <strong>Valor:</strong> R$ {{ number_format($av->valorReais, 2, ',', '.') }} 
-                            <strong> Valor extra:</strong> R$ {{ number_format($av->valorExtraReais, 2, ',', '.') }}
-                            <strong> Dedução:</strong> R$ {{ number_format($av->valorDeducaoReais, 2, ',', '.') }}
-                            <strong> Valor TOTAL:</strong> R$ {{ number_format($av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais, 2, ',', '.') }}</p>
-{{-- 
-                        <p><strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
-                        <p><strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
-                        <p><strong>Dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
-                        <p><strong>Valor TOTAL dólar:</strong> $ {{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</p>
-                        <p><strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p> --}}
+                        <p> <strong>Valor (reais):</strong> R$ {{ number_format($av->valorReais, 2, ',', '.') }} 
+                            <strong> Valor extra (reais):</strong> R$ {{ number_format($av->valorExtraReais, 2, ',', '.') }}
+                            <strong> Dedução (reais):</strong> R$ {{ number_format($av->valorDeducaoReais, 2, ',', '.') }}
+                            <strong> Valor TOTAL (reais):</strong> R$ {{ number_format($av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais, 2, ',', '.') }}</p>
+
+                        @if($av->isAprovadoViagemInternacional == true)
+                            <p><strong>Valor em dólar:</strong> $ {{ $av->valorDolar }}</p>
+                            <p><strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
+                            <p><strong>Dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
+                            <p><strong>Valor TOTAL dólar:</strong> $ {{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar}}</p>
+                            <p><strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
+                        @endif
                         
                     </div>
                 </div>

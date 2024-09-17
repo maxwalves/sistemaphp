@@ -243,6 +243,9 @@
                                                             @if ($av['isCancelado'] == false)
                                                                 <th>Valor em reais</th>
                                                             @endif
+                                                            @if ($av->isAprovadoViagemInternacional)
+                                                                <th>Valor em dólar</th>
+                                                            @endif
                                                             <th>Ações</th>
                                                         </tr>
                                                     </thead>
@@ -252,6 +255,9 @@
                                                                 <td> {{ $comp->descricao }} </td>
                                                                 @if ($av['isCancelado'] == false)
                                                                     <td> R${{ number_format($comp->valorReais, 2, ',', '.') }}</td>
+                                                                @endif
+                                                                @if ($av->isAprovadoViagemInternacional)
+                                                                    <td> U${{ number_format($comp->valorDolar, 2, ',', '.') }}</td>
                                                                 @endif
                                                                 <td>
                                                                     <div class="d-flex">
@@ -614,16 +620,40 @@
 
                     <h1 class="text-lg font-bold">Adiantamentos:</h1>
                     <div class="stats stats-vertical shadow">
-                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
-                            {{ $av->valorReais }}</p>
-                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
-                                name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
-                            {{ $av->valorExtraReais }}</p>
-                        <p class="av-owner" style="font-size: 20px; color: black;">
-                            <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
-                            {{ $av->valorDeducaoReais }}
-                        </p>
+                        <div class="av-owner" style="border: 1px solid red; padding: 10px;">
+                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                    name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
+                                    {{ number_format($av->valorReais, 2, ',', '.') }}</p>
+                            <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                                    name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
+                                    {{ number_format($av->valorExtraReais, 2, ',', '.') }}</p>
+                            <p class="av-owner" style="font-size: 20px; color: black;">
+                                <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
+                                {{ number_format($av->valorDeducaoReais, 2, ',', '.') }}
+                            </p>
+                        </div>
+
+                        <br>
+
+                        @if($av->isAprovadoViagemInternacional)
+                            <div class="av-owner" style="border: 1px solid blue; padding: 10px;">
+                                <p class="av-owner" style="font-size: 20px; color: black;">
+                                    <ion-icon name="cash-outline"></ion-icon> <strong>Valor em dólares:</strong> U$
+                                    {{ number_format($av->valorDolar, 2, ',', '.') }}
+                                </p>
+
+                                <p class="av-owner" style="font-size: 20px; color: black;">
+                                    <ion-icon name="cash-outline"></ion-icon> <strong>Valor extra em dólares:</strong> U$
+                                    {{ number_format($av->valorExtraDolar, 2, ',', '.') }}
+                                </p>
+
+                                <p class="av-owner" style="font-size: 20px; color: black;">
+                                    <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólares:</strong> U$
+                                    {{ number_format($av->valorDeducaoDolar, 2, ',', '.') }}
+                                </p>
+                            </div>
+                        @endif
+
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                 extra:</strong>
@@ -1097,6 +1127,9 @@
                             <tr>
                                 <th>Descrição</th>
                                 <th>Valor reais</th>
+                                @if($av->isAprovadoViagemInternacional)
+                                    <th>Valor dólar</th>
+                                @endif
                                 <th>Anexo</th>
                             </tr>
                         </thead>
@@ -1104,7 +1137,10 @@
                             @foreach ($comprovantes as $comp)
                                 <tr>
                                     <td> {{ $comp->descricao }} </td>
-                                    <td> {{ $comp->valorReais }} </td>
+                                    <td>R$ {{ number_format($comp->valorReais, 2, ',', '.') }}</td>
+                                    @if($av->isAprovadoViagemInternacional)
+                                        <td>$ {{ number_format($comp->valorDolar, 2, ',', '.') }}</td>
+                                    @endif
                                     <td>
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,
@@ -1156,35 +1192,57 @@
 </div>
 
 
-<x-adminlte-modal id="modalAdd" title="Adicionar comprovante de despesa" size="lg" theme="teal"
-    icon="fas fa-bell" v-centered static-backdrop scrollable>
+<x-adminlte-modal id="modalAdd" title="Adicionar Comprovante de Despesa" size="lg" theme="teal"
+    icon="fas fa-receipt" v-centered static-backdrop scrollable>
 
     <form action="/avs/gravarComprovante" method="POST" enctype="multipart/form-data">
         @csrf
-        <input type="file" id="arquivo1" name="arquivo1" class="form-control-file">
-        <input type="text" hidden="true" id="avId" name="avId" value="{{ $av->id }}">
-        <br><br>
-        <label for="descricao">Descrição</label><br>
+
+        <!-- Seção de Upload -->
+        <div class="form-group">
+            <label for="arquivo1" class="form-label">Comprovante de Despesa (arquivo)</label>
+            <input type="file" id="arquivo1" name="arquivo1" class="form-control-file" required>
+        </div>
+
+        <!-- ID oculto -->
+        <input type="hidden" id="avId" name="avId" value="{{ $av->id }}">
 
         @if ($av['isCancelado'] == false)
-            <input type="text" id="descricao" name="descricao"
-                class="input input-bordered input-secondary w-full max-w-xs">
-            <br>
-            <label for="valorReais">Valor em reais utilizado: </label>
-            <br>
-            <input type="text" id="valorReais" name="valorReais"
-                class="input input-bordered input-secondary w-full max-w-xs">
-            <br>
+            <!-- Descrição -->
+            <div class="form-group">
+                <label for="descricao" class="form-label">Descrição da Despesa</label>
+                <input type="text" id="descricao" name="descricao" class="form-control" placeholder="Descreva a despesa" required>
+            </div>
+
+            <!-- Valor em reais -->
+            <div class="form-group">
+                <label for="valorReais" class="form-label">Valor em Reais Utilizado</label>
+                <input type="text" id="valorReais" name="valorReais" class="form-control" placeholder="Ex: 100,00">
+            </div>
+
+            <!-- Valor em dólar -->
+            @if ($av->isAprovadoViagemInternacional)
+                <div class="form-group">
+                    <label for="valorDolar" class="form-label">Valor em Dólar Utilizado</label>
+                    <input type="text" id="valorDolar" name="valorDolar" class="form-control" placeholder="Ex: $ 100,00">
+                </div>
+            @endif
+
         @endif
-        <br><br>
-        <button type="submit" id="botaoEnviarArquivo1" class="btn btn-active btn-success"
-            onclick="acionarOverlay()" disabled>Gravar
-            arquivo</button>
+
+        <!-- Botão de Enviar -->
+        <div class="text-center mt-4">
+            <button type="submit" id="botaoEnviarArquivo1" class="btn btn-success btn-lg" 
+                onclick="acionarOverlay()" disabled>
+                <i class="fas fa-upload"></i> Enviar Comprovante
+            </button>
+        </div>
     </form>
 
     <x-slot name="footerSlot">
-        <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal" />
+        <x-adminlte-button theme="danger" label="Fechar" icon="fas fa-times" data-dismiss="modal" />
     </x-slot>
+
 </x-adminlte-modal>
 
 <!-- Modal Contatos -->
@@ -1290,6 +1348,16 @@
 
         $('#valorReais').maskMoney({
             prefix: 'R$ ', // Adiciona o prefixo 'R$'
+            thousands: '.', // Usa ponto como separador de milhares
+            decimal: ',', // Usa vírgula como separador decimal
+            allowZero: true, // Permite que o valor comece com zero
+            precision: 2, // Define 2 casas decimais
+            allowNegative: false // Não permite valores negativos
+        });
+
+        //faça o mesmo para valorDolar
+        $('#valorDolar').maskMoney({
+            prefix: 'US$ ', // Adiciona o prefixo 'US$'
             thousands: '.', // Usa ponto como separador de milhares
             decimal: ',', // Usa vírgula como separador decimal
             allowZero: true, // Permite que o valor comece com zero

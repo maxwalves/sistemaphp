@@ -1171,7 +1171,9 @@
                             <tr>
                                 <th>Descrição</th>
                                 <th>Valor reais</th>
-                                <th>Valor dólar</th>
+                                @if($av->isAprovadoViagemInternacional)
+                                    <td> Valor dólar </td>
+                                @endif
                                 <th>Anexo</th>
                             </tr>
                         </thead>
@@ -1179,8 +1181,10 @@
                             @foreach ($comprovantes as $comp)
                                 <tr>
                                     <td> {{ $comp->descricao }} </td>
-                                    <td> {{ $comp->valorReais }} </td>
-                                    <td> {{ $comp->valorDolar }} </td>
+                                    <td>R$ {{ number_format($comp->valorReais, 2, ',', '.') }}</td>
+                                    @if($av->isAprovadoViagemInternacional)
+                                        <td>$ {{ number_format($comp->valorDolar, 2, ',', '.') }}</td>
+                                    @endif
                                     <td> 
                                         <a href="{{ route('recuperaArquivo', [
                                             'name' => $userAv->name,

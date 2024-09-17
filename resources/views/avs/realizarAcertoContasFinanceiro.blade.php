@@ -257,14 +257,12 @@
                                                     {{ $valorRecebido->valorExtraReais - $valorAcertoContasReal }}</div>
                                             </div>
                     
-                                            @if ($valorRecebido->valorDolar - $av->valorDolar > 0)
+                                            @if($av->isAprovadoViagemInternacional)
                                                 <div class="stat">
                                                     <div class="stat-title" style="color: black">Valor em dólar</div>
                                                     <div class="stat-value text-gray-950">$
                                                         {{ $valorRecebido->valorDolar - $av->valorDolar }}</div>
                                                 </div>
-                                            @endif
-                                            @if ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar > 0)
                                                 <div class="stat">
                                                     <div class="stat-title" style="color: black">Valor extra em dólar</div>
                                                     <div class="stat-value text-gray-950">$
@@ -437,7 +435,7 @@
                                                         'pasta' => 'resumo',
                                                         'anexoRelatorio' => $hist->anexoRelatorio,
                                                         ]) }}"
-                                                        target="_blank" class="btn btn-active btn-success btn-sm d-inline"><i class="fas fa-paperclip"></i></a>
+                                                        target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
 
                                                     @if($hist->comentario != "Documento AV" && $hist->comentario != "Acerto de contas" && $hist->comentario != "Comprovante Devolução Usuário")
                                                         
@@ -650,28 +648,28 @@
                     <div class="stats stats-vertical shadow">
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
-                            {{ $av->valorReais }}</p>
+                            {{ number_format($av->valorReais, 2, ',', '.') }}</p>
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor em dolar:</strong> $
-                            {{ $av->valorDolar }}</p>
+                            {{ number_format($av->valorDolar, 2, ',', '.') }}</p>
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
-                            {{ $av->valorExtraReais }}</p>
+                            {{ number_format($av->valorExtraReais, 2, ',', '.') }}</p>
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
-                            {{ $av->valorExtraDolar }}</p>
+                            {{ number_format($av->valorExtraDolar, 2, ',', '.') }}</p>
                         <p class="av-owner" style="font-size: 20px; color: black;">
                             <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
-                            {{ $av->valorDeducaoReais }}
+                            {{ number_format($av->valorDeducaoReais, 2, ',', '.') }}
                         </p>
                         <p class="av-owner" style="font-size: 20px; color: black;">
                             <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
-                            {{ $av->valorDeducaoDolar }}
+                            {{ number_format($av->valorDeducaoDolar, 2, ',', '.') }}
                         </p>
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                 extra:</strong>
-                            {{ $av->justificativaValorExtra }}</p>
+                                {{$av->justificativaValorExtra}}</p>
                         @if ($av->autorizacao != null)
                             <a href="{{ route('recuperaArquivo', [
                                 'name' => $userAv->name,
@@ -1046,7 +1044,7 @@
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>IdRota</th>
+                            {{-- <th>IdRota</th> --}}
                             <th>Rota</th>
                             <th>Anexo</th>
                         </tr>
@@ -1057,13 +1055,13 @@
                                 <tr>
                                     <td> {{ $anexoHotel->descricao }} </td>
 
-                                    <td>
+                                    {{-- <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
                                                 {{ $av->rotas[$i]->id }}
                                             @endif
                                         @endfor
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoHotel->rota_id == $av->rotas[$i]->id)
@@ -1104,7 +1102,7 @@
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>IdRota</th>
+                            {{-- <th>IdRota</th> --}}
                             <th>Rota</th>
                             <th>Anexo</th>
                         </tr>
@@ -1115,13 +1113,13 @@
                                 <tr>
                                     <td> {{ $anexoTransporte->descricao }} </td>
 
-                                    <td>
+                                    {{-- <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
                                                 {{ $av->rotas[$i]->id }}
                                             @endif
                                         @endfor
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         @for ($i = 0; $i < count($av->rotas); $i++)
                                             @if ($anexoTransporte->rota_id == $av->rotas[$i]->id)
@@ -1193,7 +1191,9 @@
                         <tr>
                             <th>Descrição</th>
                             <th>Valor reais</th>
-                            <th>Valor dólar</th>
+                            @if($av->isAprovadoViagemInternacional)
+                                <th>Valor dólar</th>
+                            @endif
                             <th>Anexo</th>
                         </tr>
                     </thead>
@@ -1201,8 +1201,10 @@
                         @foreach ($comprovantes as $comp)
                             <tr>
                                 <td> {{ $comp->descricao }} </td>
-                                <td> {{ $comp->valorReais }} </td>
-                                <td> {{ $comp->valorDolar }} </td>
+                                <td>R$ {{ number_format($comp->valorReais, 2, ',', '.') }}</td>
+                                @if($av->isAprovadoViagemInternacional)
+                                    <td>$ {{ number_format($comp->valorDolar, 2, ',', '.') }}</td>
+                                @endif
                                 <td>
                                     <a href="{{ route('recuperaArquivo', [
                                         'name' => $userAv->name,

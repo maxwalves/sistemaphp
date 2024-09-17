@@ -22,8 +22,7 @@
 
                 <div class="col-3">
                     <a href="/avs/fazerPrestacaoContas/{{ $av->id }}" type="submit"
-                        class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i>VOLTAR PARA PRESTAÇÃO DE CONTAS
-                        SEM SALVAR</a>
+                        class="btn btn-active btn-warning"><i class="fas fa-arrow-left"></i>VOLTAR PARA PRESTAÇÃO DE CONTAS</a>
                 </div>
                 <div class="col-8">
 
@@ -52,14 +51,16 @@
                                                 </span></strong> </h2>
                                     </td>
                                 </tr>
-                                {{-- <tr>
-                                    <td>
-                                        <strong style="font-size: 18px">Valor adiantamento em dólar:  </strong>
-                                    </td>
-                                    <td>
-                                        <h2 style="font-size: 18px"> <strong><span style="color: green"> ${{ $av->valorDolar}} + Extra: {{$av->valorExtraDolar  != null ? $av->valorExtraDolar : 0}} </span></strong> </h2>
-                                    </td>
-                                </tr> --}}
+                                @if($isViagemInternacional)
+                                    <tr>
+                                        <td>
+                                            <strong style="font-size: 18px">Valor adiantamento em dólar:  </strong>
+                                        </td>
+                                        <td>
+                                            <h2 style="font-size: 18px"> <strong><span style="color: green"> ${{ $av->valorDolar}} + Extra: {{$av->valorExtraDolar  != null ? $av->valorExtraDolar : 0}} </span></strong> </h2>
+                                        </td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <td>
                                         <strong style="font-size: 18px">Valor dedução em reais: </strong>
@@ -70,14 +71,16 @@
                                                 </span></strong> </h2>
                                     </td>
                                 </tr>
-                                {{-- <tr>
-                                    <td>
-                                        <strong style="font-size: 18px">Valor dedução em dólar:  </strong>
-                                    </td>
-                                    <td>
-                                        <h2 style="font-size: 18px"> <strong> <span style="color: green"> ${{ $av->valorDeducaoDolar != null ? $av->valorDeducaoDolar : 0 }} </span></strong> </h2>
-                                    </td>
-                                </tr> --}}
+                                @if($isViagemInternacional)
+                                    <tr>
+                                        <td>
+                                            <strong style="font-size: 18px">Valor dedução em dólar:  </strong>
+                                        </td>
+                                        <td>
+                                            <h2 style="font-size: 18px"> <strong> <span style="color: green"> ${{ $av->valorDeducaoDolar != null ? $av->valorDeducaoDolar : 0 }} </span></strong> </h2>
+                                        </td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <td>
                                         <strong style="font-size: 18px">Saldo em reais: </strong>
@@ -88,14 +91,16 @@
                                                 </span></strong> </h2>
                                     </td>
                                 </tr>
-                                {{-- <tr>
-                                    <td>
-                                        <strong style="font-size: 18px">Saldo em dólar: </strong>
-                                    </td>
-                                    <td>
-                                        <h2 style="font-size: 18px"> <strong> <span style="color: green"> ${{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar }} </span></strong> </h2>
-                                    </td>
-                                </tr> --}}
+                                @if($isViagemInternacional)
+                                    <tr>
+                                        <td>
+                                            <strong style="font-size: 18px">Saldo em dólar: </strong>
+                                        </td>
+                                        <td>
+                                            <h2 style="font-size: 18px"> <strong> <span style="color: green"> ${{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar }} </span></strong> </h2>
+                                        </td>
+                                    </tr>
+                                @endif
                             </table>
                         </div>
                     </div>
@@ -116,46 +121,73 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $j = 0;
+                                            $j=0;
+                                            $cores = ['bg-blue', 'bg-success']; // Adicione mais cores conforme necessário
+                                            $corIndex = 0; // Índice inicial
                                         @endphp
-                                        @for ($i = 0; $i <= sizeof($arrayDiasValores) - 1; $i++)
+                                        
+                                        @for($i = 0; $i <= sizeof($arrayDiasValores)-1; $i++)
                                             <tr style="vertical-align: middle; text-align: center;">
                                                 <td style="vertical-align: middle; text-align: center;">
-                                                    {{ $arrayDiasValores[$j]['dia'] }}
+                                                    {{$arrayDiasValores[$j]['dia']}}
                                                 </td>
                                                 <td style="vertical-align: middle">
-                                                    @foreach ($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
-                                                        {{-- verifique se $r começa com "ida" --}}
-                                                        @if (strpos($r, 'Ida:') !== false)
-                                                            <span>{{ str_replace('Ida:', '', $r) }}</span>
+                                                    @foreach($arrayDiasValores[$j]['arrayRotasDoDia'] as $r)
+                                                        {{-- Verifique se $r começa com "ida" --}}
+                                                        @if(strpos($r, 'Ida:') !== false)
+                                                            <span class="badge {{$cores[$corIndex]}}">{{str_replace('Ida:', '', $r)}}</span>
                                                         @else
-                                                            <span>{{ $r }}</span><br>
+                                                            <span class="badge {{$cores[$corIndex]}}">{{$r}}</span><br>
+                                                            @php
+                                                                $corIndex = ($corIndex + 1) % count($cores); // Avança para a próxima cor, voltando ao início se necessário
+                                                            @endphp
                                                         @endif
                                                     @endforeach
                                                 </td>
-                                                <td style="vertical-align: middle; text-align: center;">
-                                                    @if ($arrayDiasValores[$j]['valorManha'] != 0)
-                                                        <span><strong>R${{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}</strong></span>
+                                                <td style="vertical-align: middle; text-align: center;"> 
+                                                    @if($arrayDiasValores[$j]['valorManha'] != 0)
+                                                        <span><strong>{{($arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
+                                                            $arrayDiasValores[$j]['valor'] == 190 ||
+                                                            $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
+                                                            $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
+                                                            $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
+                                                            (($arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 50) && 
+                                                            !in_array('Brasília', $arrayDiasValores[$j]['valor']))
+                                                            ? "$" : "R$")}}{{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}</strong></span>
                                                     @else
                                                         -
                                                     @endif
                                                 </td>
                                                 <td style="vertical-align: middle; text-align: center;">
-                                                    @if ($arrayDiasValores[$j]['valorTarde'] != 0)
-                                                        <span><strong>R${{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}</strong></span>
+                                                    @if($arrayDiasValores[$j]['valorTarde'] != 0)
+                                                        <span><strong>{{($arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
+                                                            $arrayDiasValores[$j]['valor'] == 190 ||
+                                                            $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
+                                                            $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
+                                                            $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
+                                                            (($arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 50) && !in_array('Brasília', $arrayDiasValores[$j]['valor']))
+                                                            ? "$" : "R$")}}{{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}</strong></span>
                                                     @else
                                                         -
                                                     @endif
                                                 </td>
-                                                <td style="vertical-align: middle; text-align: center;">
-                                                    <span><strong>R${{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}</strong></span>
+                                                <td style="vertical-align: middle; text-align: center;"> 
+                                                    <span><strong>{{(
+                                                                    $arrayDiasValores[$j]['valor'] == 190 ||
+                                                                    $arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
+                                                                    $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
+                                                                    $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
+                                                                    $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
+                                                                    (($arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 50) && !in_array('Brasília', $arrayDiasValores[$j]['valor']))
+                                                                    ? "$" : "R$")}}{{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}</strong></span>
                                                 </td>
                                             </tr>
-
+                                        
                                             @php
                                                 $j++;
                                             @endphp
                                         @endfor
+                                    
                                     </tbody>
                                 </table>
                             @endif
@@ -258,8 +290,13 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="/rotaspc/edit/{{ $rota->id }}"
-                                                    class="btn btn-success btn-sm"><i class="far fa-edit"></i></a>
+                                                
+                                                @if($rota->isViagemInternacional == 1)
+                                                    <a href="/rotaspc/editInternacional/{{ $rota->id }}" class="btn btn-warning btn-sm" title="Editar"><i class="far fa-edit"></i></a>
+                                                @else
+                                                    <a href="/rotaspc/edit/{{ $rota->id }}"
+                                                        class="btn btn-success btn-sm"><i class="far fa-edit"></i></a>
+                                                @endif
                                                 <form action="/rotaspc/{{ $rota->id }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta rota?')">
                                                     @csrf
                                                     @method('DELETE')

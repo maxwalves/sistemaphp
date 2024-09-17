@@ -91,11 +91,13 @@
                             <p><strong>Valor TOTAL reais:</strong> R$ {{ number_format($av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais, 2, ',', '.') }}</p>
                         @endif
 
-                        {{-- <p><strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
-                        <p><strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
-                        <p><strong>Dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
-                        <p><strong>Valor TOTAL dólar:</strong> $ {{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar }}</p>
-                        <p><strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p> --}}
+                        @if($av->isAprovadoViagemInternacional == true)
+                            <p><strong>Valor em dolar:</strong> $ {{ $av->valorDolar }}</p>
+                            <p><strong>Valor extra em dólar:</strong> $ {{ $av->valorExtraDolar }}</p>
+                            <p><strong>Dedução em dólar:</strong> $ {{ $av->valorDeducaoDolar }}</p>
+                            <p><strong>Valor TOTAL dólar:</strong> $ {{ $av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar }}</p>
+                            <p><strong>Justificativa valor extra:</strong> {{ $av->justificativaValorExtra }}</p>
+                        @endif
                         
                     </div>
                 </div>
@@ -188,10 +190,12 @@
                     <table id="tabelaRota" class="comBordaSimples" style="width: 100%">
                         <thead>
                             <tr>
+                                <th>País de saída</th>
                                 <th>Estado de saída</th>
                                 <th>Cidade de saída</th>
                                 <th>Data/Hora de saída</th>
                                 <th>-</th>
+                                <th>País de chegada</th>
                                 <th>Estado de chegada</th>
                                 <th>Cidade de chegada</th>
                                 <th>Data/Hora de chegada</th>
@@ -201,10 +205,20 @@
                         <tbody>
                             @foreach($av->rotas as $rota)
                             <tr>
+                                @foreach($paises as $p)
+                                    @if ($p->id == $rota->paisOrigemInternacional)
+                                        <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? "Brasil" : $p->name}} </td>
+                                    @endif
+                                @endforeach
                                 <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->estadoOrigemNacional : $rota->estadoOrigemInternacional}} </td>
                                 <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? $rota->cidadeOrigemNacional : $rota->cidadeOrigemInternacional}} </td>
                                 <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraSaida)) }} </td>
                                 <td>-</td>
+                                @foreach($paises as $p)
+                                    @if ($p->id == $rota->paisDestinoInternacional)
+                                        <td style="text-align: center"> {{$rota->isViagemInternacional == 0 ? "Brasil" : $p->name}} </td>
+                                    @endif
+                                @endforeach
                                 <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->estadoDestinoNacional : $rota->estadoDestinoInternacional}} </td>
                                 <td style="text-align: center">{{$rota->isViagemInternacional == 0 ? $rota->cidadeDestinoNacional : $rota->cidadeDestinoInternacional}} </td>
                                 <td style="text-align: center"> {{ date('d/m/Y H:i', strtotime($rota->dataHoraChegada)) }} </td>

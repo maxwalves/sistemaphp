@@ -144,24 +144,24 @@
                                                     <div class="stat-value text-primary">- R$ {{ $av->valorDeducaoReais }}</div>
                                                 </div>
                                             @endif
-                                            {{-- @if ($av->valorDeducaoDolar > 0)
+                                            @if ($av->valorDeducaoDolar > 0)
                                                 <div class="stat">
                                                     <div class="stat-title">Dedução em dólar</div>
                                                     <div class="stat-value text-primary">$ {{ $av->valorDeducaoDolar }}</div>
                                                 </div>
-                                            @endif --}}
-                                            {{-- @if ($valorRecebido->valorDolar > 0)
+                                            @endif
+                                            @if ($valorRecebido->valorDolar > 0)
                                                 <div class="stat">
                                                     <div class="stat-title">Valor em dólar</div>
                                                     <div class="stat-value text-primary">$ {{ $valorRecebido->valorDolar }}</div>
                                                 </div>
-                                            @endif --}}
-                                            {{-- @if ($valorRecebido->valorExtraDolar > 0)
+                                            @endif
+                                            @if ($valorRecebido->valorExtraDolar > 0)
                                                 <div class="stat">
                                                     <div class="stat-title">Valor extra em dólar</div>
                                                     <div class="stat-value text-primary">$ {{ $valorRecebido->valorExtraDolar }}</div>
                                                 </div>
-                                            @endif --}}
+                                            @endif
                                         </div>
                                         <div class="callout callout-success">
                                             <div class="stat">
@@ -257,14 +257,12 @@
                                                     {{ $valorRecebido->valorExtraReais - $valorAcertoContasReal }}</div>
                                             </div>
                     
-                                            @if ($valorRecebido->valorDolar - $av->valorDolar > 0)
+                                            @if($av->isAprovadoViagemInternacional)
                                                 <div class="stat">
                                                     <div class="stat-title" style="color: black">Valor em dólar</div>
                                                     <div class="stat-value text-gray-950">$
                                                         {{ $valorRecebido->valorDolar - $av->valorDolar }}</div>
                                                 </div>
-                                            @endif
-                                            @if ($valorRecebido->valorExtraDolar - $valorAcertoContasDolar > 0)
                                                 <div class="stat">
                                                     <div class="stat-title" style="color: black">Valor extra em dólar</div>
                                                     <div class="stat-value text-gray-950">$
@@ -303,7 +301,7 @@
                                                                     'pasta' => 'resumo',
                                                                     'anexoRelatorio' => $hist->anexoRelatorio,
                                                                     ]) }}"
-                                                                    target="_blank" class="btn btn-active btn-success btn-sm d-inline"><i class="fas fa-paperclip"></i></a>
+                                                                    target="_blank" class="btn btn-active btn-success btn-sm"><i class="fas fa-paperclip"></i></a>
 
                                                                 @if($hist->comentario != "Documento AV" && $hist->comentario != "Acerto de contas"
                                                                 && $hist->comentario != "Comprovante Acerto de Contas Financeiro" && $hist->comentario != "Comprovante Devolução Usuário")
@@ -326,6 +324,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Descrição</th>
+                                                        <th>Valor reais</th>
+                                                        @if($av->isAprovadoViagemInternacional)
+                                                            <th>Valor dólar</th>
+                                                        @endif
                                                         <th>Anexo</th>
                                                     </tr>
                                                 </thead>
@@ -333,6 +335,10 @@
                                                     @foreach ($comprovantes as $comp)
                                                         <tr>
                                                             <td> {{ $comp->descricao }} </td>
+                                                            <td> R$ {{ number_format($comp->valorReais, 2, ',', '.') }}</td>
+                                                            @if($av->isAprovadoViagemInternacional)
+                                                                <td> $ {{ number_format($comp->valorDolar, 2, ',', '.') }}</td>
+                                                            @endif
                                                             <td>
                                                                 <a href="{{ route('recuperaArquivo', [
                                                                     'name' => $userAv->name,
@@ -633,23 +639,23 @@
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor em reais:</strong> R$
                             {{ $av->valorReais }}</p>
-                        {{-- <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor em dólar:</strong> $
-                            {{ $av->valorDolar }}</p> --}}
+                            {{ $av->valorDolar }}</p>
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor extra em reais:</strong> R$
                             {{ $av->valorExtraReais }}</p>
-                        {{-- <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
+                        <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="cash-outline"></ion-icon> <strong>Valor extra em dólar:</strong> $
-                            {{ $av->valorExtraDolar }}</p> --}}
+                            {{ $av->valorExtraDolar }}</p>
                         <p class="av-owner" style="font-size: 20px; color: black;">
                             <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em reais:</strong> R$
                             {{ $av->valorDeducaoReais }}
                         </p>
-                        {{-- <p class="av-owner" style="font-size: 20px; color: black;">
+                        <p class="av-owner" style="font-size: 20px; color: black;">
                             <ion-icon name="cash-outline"></ion-icon> <strong>Valor dedução em dólar:</strong> $
                             {{ $av->valorDeducaoDolar }}
-                        </p> --}}
+                        </p>
                         <p class="av-owner" style="font-size: 20px; color: black;"><ion-icon
                                 name="chevron-forward-circle-outline"></ion-icon> <strong>Justificativa valor
                                 extra:</strong>
@@ -1177,6 +1183,9 @@
                         <tr>
                             <th>Descrição</th>
                             <th>Valor reais</th>
+                            @if($av->isAprovadoViagemInternacional)
+                                <th>Valor dólar</th>
+                            @endif
                             <th>Anexo</th>
                         </tr>
                     </thead>
@@ -1184,7 +1193,10 @@
                         @foreach ($comprovantes as $comp)
                             <tr>
                                 <td> {{ $comp->descricao }} </td>
-                                <td> {{ $comp->valorReais }} </td>
+                                <td>R$ {{ number_format($comp->valorReais, 2, ',', '.') }}</td>
+                                @if($av->isAprovadoViagemInternacional)
+                                    <td>$ {{ number_format($comp->valorDolar, 2, ',', '.') }}</td>
+                                @endif
                                 <td> 
                                     <a href="{{ route('recuperaArquivo', [
                                         'name' => $userAv->name,
