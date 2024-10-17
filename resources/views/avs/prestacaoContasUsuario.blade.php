@@ -24,58 +24,18 @@
     <table id="minhaTabela" class="display nowrap">
         <thead>
             <tr>
+                <th>Ações</th>
                 <th style="width: 50px">Número</th>
                 <th>Objetivo</th>
                 <th>Rota</th>
                 <th>Data criação</th>
                 <th>Data retorno</th>
                 <th>Status</th>
-                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
             @foreach($avs as $av)
             <tr>
-                <td scropt="row">{{ $av->id }}</td>
-                
-                <td>
-                    @for($i = 0; $i < count($objetivos); $i++)
-
-                        @if ($av->objetivo_id == $objetivos[$i]->id )
-                                {{$objetivos[$i]->nomeObjetivo}}     
-                        @endif
-
-                    @endfor
-
-                    @if (isset($av->outroObjetivo))
-                            {{$av->outroObjetivo }} 
-                    @endif
-                </td>
-
-                <td>
-                    @for($i = 0; $i < count($av->rotas); $i++)
-
-                        @if($av->rotas[$i]->isViagemInternacional == 0)
-                           - {{$av->rotas[$i]->cidadeOrigemNacional}}
-                        @endif
-                        
-                        @if($av->rotas[$i]->isViagemInternacional == 1)
-                           - {{$av->rotas[$i]->cidadeOrigemInternacional}} 
-                        @endif
-
-                    @endfor
-
-                </td>
-
-                <td> <a> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </a></td>
-                <td>
-                    @for($i = 0; $i < count($av->rotas); $i++)
-                        @if($i == (count($av->rotas)-1))
-                            {{date('d/m/Y H:i', strtotime($av->rotas[$i]->dataHoraChegada))}}
-                        @endif
-                    @endfor
-                </td>
-                <td> {{$av->status}} </td>
                 <td> 
                     @php
                         date_default_timezone_set('America/Sao_Paulo');
@@ -119,6 +79,47 @@
 
                     @endif
                 </td>
+                <td scropt="row">{{ $av->id }}</td>
+                
+                <td>
+                    @for($i = 0; $i < count($objetivos); $i++)
+
+                        @if ($av->objetivo_id == $objetivos[$i]->id )
+                                {{$objetivos[$i]->nomeObjetivo}}     
+                        @endif
+
+                    @endfor
+
+                    @if (isset($av->outroObjetivo))
+                            {{$av->outroObjetivo }} 
+                    @endif
+                </td>
+
+                <td>
+                    @for($i = 0; $i < count($av->rotas); $i++)
+
+                        @if($av->rotas[$i]->isViagemInternacional == 0)
+                           - {{$av->rotas[$i]->cidadeOrigemNacional}}
+                        @endif
+                        
+                        @if($av->rotas[$i]->isViagemInternacional == 1)
+                           - {{$av->rotas[$i]->cidadeOrigemInternacional}} 
+                        @endif
+
+                    @endfor
+
+                </td>
+
+                <td> <a> {{ date('d/m/Y', strtotime($av->dataCriacao)) }} </a></td>
+                <td>
+                    @for($i = 0; $i < count($av->rotas); $i++)
+                        @if($i == (count($av->rotas)-1))
+                            {{date('d/m/Y H:i', strtotime($av->rotas[$i]->dataHoraChegada))}}
+                        @endif
+                    @endfor
+                </td>
+                <td> {{$av->status}} </td>
+                
             </tr>
             @endforeach
         </tbody>
