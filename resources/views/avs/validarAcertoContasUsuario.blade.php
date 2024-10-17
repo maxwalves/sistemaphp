@@ -488,7 +488,7 @@
                                                         id="comentario" placeholder="Comentário"></textarea>
             
                                                         <span class="input-group-append">
-                                                            <button type="submit" class="btn btn-active btn-success" onclick="exibirLoader()">Finalizar</button>
+                                                            <button type="submit" class="btn btn-active btn-success" onclick="exibirLoader()">Validar</button>
                                                         </span>
                                                     </div>
                                             </form>
