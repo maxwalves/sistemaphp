@@ -457,7 +457,7 @@ return [
         [
             'text'       => 'Reservas de Veículos',
             'icon_color' => 'purple',
-            'url'        => 'https://sistemas.paranacidade.org.br/reservas/public/',
+            'url'        => 'https://reservas.paranacidade.org.br',
             'id'          => '',
             'can'         => '',
             'target'     => '_blank',
