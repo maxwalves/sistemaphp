@@ -46,8 +46,8 @@
                     <h5>Tutoriais: </h5>
                 </div>
                 <div class="card-body">
-                    <h5><strong>1. Como cadastrar uma nova AV: </strong> <a href="https://paranacidade-my.sharepoint.com/:v:/g/personal/maximiliano_alves_paranacidade_org_br/EZEG2wIEthdBmE-ML6XFdRUBIQLXm9byI6YE695DPpNJKA" target="_blank">Clique aqui</a></h5>
-                    <h5><strong>2. Como fazer a Prestação de Contas: </strong> <a href="https://paranacidade-my.sharepoint.com/:v:/g/personal/maximiliano_alves_paranacidade_org_br/Eb9S9jOoly5Lgo9QWVIVk8sBlD3fl_PAB_Du4KpUtWUZiA" target="_blank">Clique aqui</a></h5>
+                    <h5><strong>1. Como cadastrar uma nova AV: </strong> <a href="https://paranacidade-my.sharepoint.com/:v:/g/personal/maximiliano_alves_paranacidade_org_br/EZEG2wIEthdBmE-ML6XFdRUBIQLXm9byI6YE695DPpNJKA?e=d7LR6F&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D" target="_blank">Clique aqui</a></h5>
+                    <h5><strong>2. Como fazer a Prestação de Contas: </strong> <a href="https://paranacidade-my.sharepoint.com/:v:/g/personal/maximiliano_alves_paranacidade_org_br/Eb9S9jOoly5Lgo9QWVIVk8sBlD3fl_PAB_Du4KpUtWUZiA?e=gdDcEg&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D" target="_blank">Clique aqui</a></h5>
                 </div>
             </div>
         </div>
