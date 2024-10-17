@@ -1592,18 +1592,20 @@ class ControladorAv extends Controller
 
         $valorReaisFiltrado = 0;
         if($request->valorReais != null){
-            $valorReaisFiltrado = str_replace(',', '.', $request->valorReais);
-            $valorReaisFiltrado = str_replace('R$', '', $valorReaisFiltrado);
-            $valorReaisFiltrado = str_replace(' ', '', $valorReaisFiltrado);
+            $valorReaisFiltrado = str_replace('R$', '', $request->valorReais);
+            $valorReaisFiltrado = str_replace('.', '', $valorReaisFiltrado);
+            $valorReaisFiltrado = str_replace('.', '', $valorReaisFiltrado);
+            $valorReaisFiltrado = str_replace(',', '.', $valorReaisFiltrado);
         }
 
         $valorDolarFiltrado = 0;
-        if($request->valorDolar != null){
-            $valorDolarFiltrado = str_replace(',', '.', $request->valorDolar);
-            $valorDolarFiltrado = str_replace('US$', '', $valorDolarFiltrado);
-            $valorDolarFiltrado = str_replace(' ', '', $valorDolarFiltrado);
+        if ($request->valorDolar != null) {
+            $valorDolarFiltrado = str_replace('US$', '', $request->valorDolar); // Remove símbolo "US$"
+            $valorDolarFiltrado = str_replace(' ', '', $valorDolarFiltrado);    // Remove espaços em branco
+            $valorDolarFiltrado = str_replace('.', '', $valorDolarFiltrado);    // Remove separadores de milhar
+            $valorDolarFiltrado = str_replace(',', '.', $valorDolarFiltrado);   // Troca vírgula por ponto
         }
-        
+                
         if($request->hasFile('arquivo1') && $request->file('arquivo1')->isValid())
         {
             $requestFile = $request->arquivo1;
