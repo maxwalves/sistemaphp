@@ -90,6 +90,9 @@
                                 <h1 style="font-size: 24px"><strong>Autorização de viagem nº:</strong>
                                     {{ $av->id }}</h1>
                                 <h1 style="font-size: 24px"><strong>Status atual:</strong> {{ $av->status }}</h1>
+                                @if($av->isCancelado)
+                                    <h1 style="font-size: 24px"><strong>Motivo do cancelamento:</strong> {{ $av->justificativaCancelamento }}</h1>
+                                @endif
                                 <p class="av-owner" style="font-size: 20px"><ion-icon
                                         name="chevron-forward-circle-outline">
                                     </ion-icon> <strong>Nome do usuário: </strong>
