@@ -234,6 +234,7 @@ Route::middleware(['assinatura.termo'])->group(function () {
     Route::get('/users/users', [UsersController::class, 'users'])->middleware('auth');
     Route::get('/users/sincronizarGerentes', [UsersController::class, 'sincronizarGerentes'])->middleware('auth');
     Route::get('/users/sincronizarSetores', [UsersController::class, 'sincronizarSetores'])->middleware('auth');
+    Route::get('/users/sincronizarAD', [UsersController::class, 'sincronizarAD'])->middleware('auth');
     Route::get('/users/create', [UsersController::class, 'create'])->middleware('auth');
     Route::get('/users/{id}', [UsersController::class, 'show'])->middleware('auth');
     Route::delete('/users/{id}', [UsersController::class, 'destroy'])->middleware('auth');

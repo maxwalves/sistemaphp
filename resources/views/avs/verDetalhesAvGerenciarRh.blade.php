@@ -1203,13 +1203,11 @@
                                 <td style="vertical-align: middle; text-align: center;"> 
                                     @if($arrayDiasValores[$j]['valorManha'] != 0)
                                         <span><strong>{{(
-                                            $arrayDiasValores[$j]['valor'] == 190 ||
-                                            $arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
-                                            $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
-                                            $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
-                                            $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
-                                            (($arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 50) && !in_array('Brasília', $arrayDiasValores[$j]['valor']))
-                                            ? "$" : "R$")}}{{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}</strong></span>
+                                            in_array($arrayDiasValores[$j]['valor'], [190, 95, 180, 90, 140, 70, 150, 75, 100, 50]) &&
+                                            !collect($arrayDiasValores[$j]['arrayRotasDoDia'])->contains(fn($rota) => strpos($rota, 'Brasília') !== false)
+                                            ? "$"
+                                            : "R$")
+                                        }}{{ number_format($arrayDiasValores[$j]['valorManha'], 2, ',', '.') }}</strong></span>
                                     @else
                                         -
                                     @endif
@@ -1217,26 +1215,22 @@
                                 <td style="vertical-align: middle; text-align: center;">
                                     @if($arrayDiasValores[$j]['valorTarde'] != 0)
                                         <span><strong>{{(
-                                            $arrayDiasValores[$j]['valor'] == 190 ||
-                                            $arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
-                                            $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
-                                            $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
-                                            $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
-                                            (($arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 50) && !in_array('Brasília', $arrayDiasValores[$j]['valor']))
-                                            ? "$" : "R$")}}{{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}</strong></span>
+                                            in_array($arrayDiasValores[$j]['valor'], [190, 95, 180, 90, 140, 70, 150, 75, 100, 50]) &&
+                                            !collect($arrayDiasValores[$j]['arrayRotasDoDia'])->contains(fn($rota) => strpos($rota, 'Brasília') !== false)
+                                            ? "$"
+                                            : "R$")
+                                        }}{{ number_format($arrayDiasValores[$j]['valorTarde'], 2, ',', '.') }}</strong></span>
                                     @else
                                         -
                                     @endif
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;"> 
                                     <span><strong>{{(
-                                        $arrayDiasValores[$j]['valor'] == 190 ||
-                                        $arrayDiasValores[$j]['valor'] == 150 || $arrayDiasValores[$j]['valor'] == 75 ||
-                                        $arrayDiasValores[$j]['valor'] == 180 || $arrayDiasValores[$j]['valor'] == 90 ||
-                                        $arrayDiasValores[$j]['valor'] == 140 || $arrayDiasValores[$j]['valor'] == 70 ||
-                                        $arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 95 ||
-                                        (($arrayDiasValores[$j]['valor'] == 100 || $arrayDiasValores[$j]['valor'] == 50) && !in_array('Brasília', $arrayDiasValores[$j]['valor']))
-                                        ? "$" : "R$")}}{{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}</strong></span>
+                                        in_array($arrayDiasValores[$j]['valor'], [190, 95, 180, 90, 140, 70, 150, 75, 100, 50]) &&
+                                        !collect($arrayDiasValores[$j]['arrayRotasDoDia'])->contains(fn($rota) => strpos($rota, 'Brasília') !== false)
+                                        ? "$"
+                                        : "R$")
+                                    }}{{ number_format($arrayDiasValores[$j]['valor'], 2, ',', '.') }}</strong></span>
                                 </td>
                             </tr>
                         

@@ -4472,6 +4472,11 @@ class ControladorAv extends Controller
                 return redirect('/rotas/rotas/' . $avId );
             }
         }
+
+        if(sizeof($rotas) == 1){
+            //retorne uma mensagem de que deve ter pelo menos uma viagem de ida e uma de volta
+            return redirect('/rotas/rotas/' . $avId )->with('msg', 'Deve ter pelo menos uma viagem de ida e uma de volta!');
+        }
         
         $dataInicio = date('Y-m-d', strtotime($rotas[0]->dataHoraSaida));
         $dataFim = date('Y-m-d', strtotime($rotas[sizeof($rotas)-1]->dataHoraChegada));
@@ -4815,6 +4820,7 @@ class ControladorAv extends Controller
                     $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "";
                 }
 
+                $rotaAnteriorDataChegadaFormatado = null;
                 //Captura a data de chegada da rota anterior e formata para DateTime
                 if($rotaAnterior != false){
                     $rotaAnteriorDataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotaAnterior->dataHoraChegada)->format('Y-m-d H:i:s');
@@ -4891,7 +4897,7 @@ class ControladorAv extends Controller
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if ($dia == $dataUltimaRota && $proximaRota == false && 
+                        else if ($dia == $dataUltimaRota && $proximaRota == false && $rotaAnteriorDataChegadaFormatado != null &&
                         $rotaAnteriorDataChegadaFormatado->format('H:i:s') <= "13:01:00" &&
                         $rotaAnteriorDataSaidaFormatado->format('H:i:s') <= "13:01:00" &&
                         $dataChegadaFormatado->format('H:i:s') >= "13:01:00" ){
@@ -5216,6 +5222,8 @@ class ControladorAv extends Controller
 
             $av->valorDeducaoReais = number_format($av->valorDeducaoReais, 2, ',', '.');
             $av->valorDeducaoReais = 'R$ ' . $av->valorDeducaoReais;
+
+            //dd($reservas2, $eventos, $reservas3);
 
             return view('avs.concluir', ['av' => $av, 'objetivos' => $objetivos, 'veiculosProprios' => $veiculosProprios, 'user'=> $user, 'rotas' => $rotas,
             'diariaTotal' => $diariaTotal, 'meiaDiaria' => $meiaDiaria, 'mostrarValor' => $mostrarValor, 'diaChegadaFinal' => $diaChegadaFinal,
@@ -5834,6 +5842,11 @@ class ControladorAv extends Controller
             }
         }
         $avs = $avsFiltradas;
+        //ordene avs pelo id para que os mais recentes fiquem no topo
+        usort($avs, function($a, $b) {
+            return $b->id <=> $a->id;
+        });
+
         $objetivos = Objetivo::all();
         return view('avs.prestacaoContasUsuario', ['avs' => $avs, 'user'=> $user, 'objetivos' => $objetivos]);
     }
@@ -6836,6 +6849,7 @@ class ControladorAv extends Controller
                     $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "";
                 }
 
+                $rotaAnteriorDataChegadaFormatado = null;
                 //Captura a data de chegada da rota anterior e formata para DateTime
                 if($rotaAnterior != false){
                     $rotaAnteriorDataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotaAnterior->dataHoraChegada)->format('Y-m-d H:i:s');
@@ -7155,7 +7169,7 @@ class ControladorAv extends Controller
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if ($dia == $dataUltimaRota && $proximaRota == false && 
+                        else if ($dia == $dataUltimaRota && $proximaRota == false && $rotaAnteriorDataChegadaFormatado != null &&
                         $rotaAnteriorDataChegadaFormatado->format('H:i:s') <= "13:01:00" &&
                         $rotaAnteriorDataSaidaFormatado->format('H:i:s') <= "13:01:00" &&
                         $dataChegadaFormatado->format('H:i:s') >= "13:01:00" ){

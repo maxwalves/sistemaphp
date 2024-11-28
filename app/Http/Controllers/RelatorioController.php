@@ -379,6 +379,7 @@ class RelatorioController extends Controller
                     $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "";
                 }
 
+                $rotaAnteriorDataChegadaFormatado = null;
                 //Captura a data de chegada da rota anterior e formata para DateTime
                 if($rotaAnterior != false){
                     $rotaAnteriorDataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotaAnterior->dataHoraChegada)->format('Y-m-d H:i:s');
@@ -622,6 +623,7 @@ class RelatorioController extends Controller
                     $arrayRotasDoDia[] = $rota->cidadeDestinoNacional . " (" . $dataChegadaFormatado->format('H:i') . ")" . "";
                 }
 
+                $rotaAnteriorDataChegadaFormatado = null;
                 //Captura a data de chegada da rota anterior e formata para DateTime
                 if($rotaAnterior != false){
                     $rotaAnteriorDataChegada = DateTime::createFromFormat('Y-m-d H:i:s', $rotaAnterior->dataHoraChegada)->format('Y-m-d H:i:s');
@@ -699,7 +701,7 @@ class RelatorioController extends Controller
                             $valorManha = $valor/2;
                             $temDiariaManha = true;
                         }
-                        else if ($dia == $dataUltimaRota && $proximaRota == false && 
+                        else if ($dia == $dataUltimaRota && $proximaRota == false && $rotaAnteriorDataChegadaFormatado != null &&
                         $rotaAnteriorDataChegadaFormatado->format('H:i:s') <= "13:01:00" &&
                         $rotaAnteriorDataSaidaFormatado->format('H:i:s') <= "13:01:00" &&
                         $dataChegadaFormatado->format('H:i:s') >= "13:01:00" ){

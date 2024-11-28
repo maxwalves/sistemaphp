@@ -429,6 +429,15 @@
                             </div>
 
                             <div class="box box-40">
+                                <div class="callout callout-info">
+                                    <h1 style="font-size: 24px"><strong>Dados da conta para devolução:</strong></h1>
+                                    <p><strong>Banco:</strong> Banco do Brasil</p>
+                                    <p><strong>Agência:</strong> 3793-1</p>
+                                    <p><strong>Conta Corrente:</strong> 1738-8</p>
+                                </div>
+                            </div>
+
+                            <div class="box box-40">
                                 <div style="overflow-x: auto;">
                                     <h5 style="color: red">Insira o comprovante de DEVOLUÇÃO:</h5><br>
                                     <div class="col-3">

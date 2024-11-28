@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Gate;
 use PHPUnit\TextUI\Configuration\Php;
 use DateTimeZone;
 use DateTime;
+use Illuminate\Support\Facades\Artisan;
 
 class UsersController extends Controller
 {
@@ -172,6 +173,18 @@ class UsersController extends Controller
         }
 
         return view('users.users', ['users' => $users, 'user'=> $user]);
+    }
+
+    public function sincronizarAD()
+    {
+        // Executar o comando Artisan sem interação
+        Artisan::call('ldap:import', [
+            'provider' => 'ldap', // ou outro provedor se necessário
+            '--no-interaction' => true,
+        ]);
+
+        // Retornar mensagem de sucesso
+        return redirect()->back()->with('success', 'Sincronização com o AD realizada com sucesso!');
     }
 
     public function create()

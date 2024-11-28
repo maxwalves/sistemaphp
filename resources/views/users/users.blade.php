@@ -11,6 +11,11 @@
 <div class="col-md-10 offset-md-1 dashboard-avs-container">
     @if(count($users) > 0 )
     <h3> <strong> Usuários do sistema </strong></h3>
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <table id="tabelaRota" class="display nowrap" style="width:100%">
         <thead>
             <tr>
@@ -51,6 +56,10 @@
         </div>
         <div class="col-12 col-xl-4">
             <a class="btn btn-success btn-lg" href="/users/sincronizarSetores">Sincronizar setores</a>
+        </div>
+
+        <div class="col-12 col-xl-4">
+            <a class="btn btn-success btn-lg" href="/users/sincronizarAD">Sincronizar com AD</a>
         </div>
     </div>
     

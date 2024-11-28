@@ -1197,29 +1197,30 @@
 
     <form action="/avs/gravarComprovante" method="POST" enctype="multipart/form-data">
         @csrf
-
+    
         <!-- Seção de Upload -->
         <div class="form-group">
             <label for="arquivo1" class="form-label">Comprovante de Despesa (arquivo)</label>
             <input type="file" id="arquivo1" name="arquivo1" class="form-control-file" required>
+            <small id="fileHelp" class="form-text text-muted">O arquivo deve ter no máximo 25MB.</small>
         </div>
-
+    
         <!-- ID oculto -->
         <input type="hidden" id="avId" name="avId" value="{{ $av->id }}">
-
+    
         @if ($av['isCancelado'] == false)
             <!-- Descrição -->
             <div class="form-group">
                 <label for="descricao" class="form-label">Descrição da Despesa</label>
                 <input type="text" id="descricao" name="descricao" class="form-control" placeholder="Descreva a despesa" required>
             </div>
-
+    
             <!-- Valor em reais -->
             <div class="form-group">
                 <label for="valorReais" class="form-label">Valor em Reais Utilizado</label>
                 <input type="text" id="valorReais" name="valorReais" class="form-control" placeholder="Ex: 100,00">
             </div>
-
+    
             <!-- Valor em dólar -->
             @if ($av->isAprovadoViagemInternacional)
                 <div class="form-group">
@@ -1227,17 +1228,48 @@
                     <input type="text" id="valorDolar" name="valorDolar" class="form-control" placeholder="Ex: $ 100,00">
                 </div>
             @endif
-
+    
         @endif
-
+    
         <!-- Botão de Enviar -->
-        <div class="text-center mt-4">
-            <button type="submit" id="botaoEnviarArquivo1" class="btn btn-success btn-lg" 
-                onclick="acionarOverlay()" disabled>
+        <div class="text-center mt-4" id="divEnviarArquivoDespesa">
+            <button type="submit" id="botaoEnviarArquivo1" class="btn btn-success btn-lg" disabled>
                 <i class="fas fa-upload"></i> Enviar Comprovante
             </button>
         </div>
     </form>
+
+    <script>
+        const arquivoInput = document.getElementById('arquivo1');
+        const botaoEnviar = document.getElementById('botaoEnviarArquivo1');
+        const fileHelp = document.getElementById('fileHelp');
+        
+        arquivoInput.addEventListener('change', function() {
+            const maxFileSize = 25 * 1024 * 1024; // 25MB em bytes
+            const arquivo = arquivoInput.files[0];
+
+            const divEnviarArquivoDespesa = document.getElementById('divEnviarArquivoDespesa');
+    
+            if (arquivo && arquivo.size > maxFileSize) {
+                fileHelp.textContent = 'O arquivo excede o tamanho máximo permitido de 25MB.';
+                fileHelp.style.color = 'red';
+                divEnviarArquivoDespesa.style.display = 'none';
+                //dispare um alert
+                alert('O arquivo excede o tamanho máximo permitido de 25MB. ADICIONE UM ARQUIVO MENOR.');
+                console.log('O arquivo excede o tamanho máximo permitido de 25MB.');
+            } else if (arquivo) {
+                fileHelp.textContent = 'O arquivo é válido. Você pode enviar.';
+                fileHelp.style.color = 'green';
+                divEnviarArquivoDespesa.style.display = 'block';
+                console.log('O arquivo é válido. Você pode enviar.');
+            } else {
+                fileHelp.textContent = 'Por favor, selecione um arquivo.';
+                fileHelp.style.color = 'black';
+                divEnviarArquivoDespesa.style.display = 'none';
+                console.log('Por favor, selecione um arquivo.');
+            }
+        });
+    </script>
 
     <x-slot name="footerSlot">
         <x-adminlte-button theme="danger" label="Fechar" icon="fas fa-times" data-dismiss="modal" />

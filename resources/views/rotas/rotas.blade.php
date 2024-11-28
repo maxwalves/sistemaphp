@@ -18,6 +18,11 @@
     @if (session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
+    {{-- adicione uma exibição de alerta para msg se houver --}}
+    @if (session('msg'))
+        <div class="alert alert-warning">{{ session('msg') }}</div>
+    @endif
+
 @stop
 
 @section('content')
