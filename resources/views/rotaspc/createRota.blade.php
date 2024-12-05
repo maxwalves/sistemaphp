@@ -16,7 +16,7 @@
                         <h3 class="card-title">Criar Nova Rota</h3>
                     </div>
                     <div class="card-body">
-                        <form action="/rotas" method="POST" enctype="multipart/form-data" id="formPrincipal">
+                        <form action="/rotaspc" method="POST" enctype="multipart/form-data" id="formPrincipal">
                             @csrf
                             <div class="row">
                                 <div class="col-5">
