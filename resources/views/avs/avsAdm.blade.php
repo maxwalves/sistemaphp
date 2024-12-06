@@ -167,7 +167,7 @@
                 </td>
                 <td>  
                     @if(isset($av->rotas[count($av->rotas)-1]))
-                        {{ date('d/m/Y h:m', strtotime($av->rotas[count($av->rotas)-1]->dataHoraSaida)) }}
+                        {{ date('d/m/Y H:i', strtotime($av->rotas[count($av->rotas)-1]->dataHoraSaida)) }}
                     @endif
                 </td>
                 <td>

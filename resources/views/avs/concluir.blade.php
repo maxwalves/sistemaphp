@@ -27,7 +27,7 @@
 
         <div class="col-6">
             <x-adminlte-button label="Dados Básicos da AV" data-toggle="modal" class="bg-purple" data-target="#my-modal-4"/>
-            <x-adminlte-button label="Detalhar dias" data-toggle="modal" class="bg-blue" data-target="#my-modal-5"/>
+            <x-adminlte-button label="Diárias a receber" data-toggle="modal" class="bg-yellow" data-target="#my-modal-5" icon="fas fa-money-bill"/>
             <x-adminlte-button label="Como é calculada a diária de alimentação?" data-toggle="modal" data-target="#my-modal-3"/>
         </div>
     </div>

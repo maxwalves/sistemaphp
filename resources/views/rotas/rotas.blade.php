@@ -49,7 +49,7 @@
                 <form action="/avs/concluir/{{ $av->id }}/nao" enctype="multipart/form-data">
                     @if(count($rotas) > 0 )
                         <div id="btSalvarRota">
-                            <button type="submit" class="btn btn-primary" id="salvarBt">Finalizar <i class="fas fa-thumbs-up"></i></button>
+                            <button type="submit" class="btn btn-primary" id="salvarBt">Continuar <i class="fas fa-thumbs-up"></i></button>
                         </div>
                     @endif
                 </form>
