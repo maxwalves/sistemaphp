@@ -538,7 +538,7 @@ class ControladorRota extends Controller
             return $formHtml . $scriptHtml;
         }
         else{
-            return redirect('/rotas/rotas/' . $request->idav )->with('msg', 'Rota criada com sucesso!');
+            return redirect('/rotas/rotas/' . $request->idav )->with('success', 'Rota criada com sucesso!');
         }
     }
 

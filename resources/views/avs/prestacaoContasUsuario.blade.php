@@ -72,7 +72,7 @@
                             && $av->isPrestacaoContasRealizada == 1
                             && $av->isFinanceiroAprovouPC == 1
                             && $av->isGestorAprovouPC == 1
-                            && $av->status == "Aguardando envio de comprovante de devolução pelo usuário")
+                            && ($av->status == "Aguardando envio de comprovante de devolução pelo usuário" || $av->status == "AV Cancelada - Aguardando envio de comprovante de devolução pelo usuário"))
                             )
                         <a href="/avs/verPaginaDevolucaoPc/{{ $av->id }}" class="btn btn-danger btn-sm"
                             title="Devolver valor não utilizado"><i class="fas fa-dollar-sign"></i></i></a>

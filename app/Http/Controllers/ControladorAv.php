@@ -2978,7 +2978,7 @@ class ControladorAv extends Controller
                 "status" => "Aguardando prestação de contas do usuário"
             );
         }
-        else if($av["isCancelado"]== true && $av["isRealizadoReserva"]== true && $av["isAprovadoFinanceiro"]== true){
+        else if($av["isCancelado"]== true && $av["isRealizadoReserva"]== true && $av["isAprovadoFinanceiro"]== true && $av["isPrestacaoContasRealizada"]== false){
             $dados = array(
                 "status" => "AV Cancelada - Aguardando prestação de contas do usuário",
                 "isRealizadoCancelamentoReserva" => 1
@@ -2987,6 +2987,18 @@ class ControladorAv extends Controller
         else if($av["isCancelado"]== true && $av["isRealizadoReserva"]== true && $av["isAprovadoFinanceiro"]== false){
             $dados = array(
                 "status" => "AV Cancelada (Reservas canceladas pela CAD)",
+                "isRealizadoCancelamentoReserva" => 1
+            );
+        }
+        else if($av["isCancelado"]== true && $av["isRealizadoReserva"]== true && $av["isAprovadoFinanceiro"]== true && $av["isPrestacaoContasRealizada"]== true && $av["isFinanceiroAprovouPC"]== true){
+            $dados = array(
+                "status" => "AV Cancelada - Pendente Gestor",
+                "isRealizadoCancelamentoReserva" => 1
+            );
+        }
+        else if($av["isCancelado"]== true && $av["isRealizadoReserva"]== true && $av["isAprovadoFinanceiro"]== true && $av["isPrestacaoContasRealizada"]== true && $av["isFinanceiroAprovouPC"]== false){
+            $dados = array(
+                "status" => "AV Cancelada - Pendente CFI",
                 "isRealizadoCancelamentoReserva" => 1
             );
         }
@@ -3408,7 +3420,7 @@ class ControladorAv extends Controller
         if($av->isCancelado == true){
             $dados = array(
                 "isFinanceiroAprovouPC" => 1,
-                "status" => "AV Cancelada - Aguardando aprovação da prestação de contas pelo Gestor"
+                "status" => "AV Cancelada - Pendências: CAD e Gestor"
             );
         }
         else{
@@ -3668,10 +3680,16 @@ class ControladorAv extends Controller
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
         
-
-        $dados = array(
-            "status" => "Devolução enviada pelo usuário - Aguardando Acerto de Contas do Financeiro"
-        );
+        if($av->isCancelado == true){
+            $dados = array(
+                "status" => "AV Cancelada - Devolução enviada pelo usuário - Aguardando Acerto de Contas do Financeiro"
+            );
+        }
+        else{
+            $dados = array(
+                "status" => "Devolução enviada pelo usuário - Aguardando Acerto de Contas do Financeiro"
+            );
+        }
 
         Av::findOrFail($av->id)->update($dados);
         $historico->save();
@@ -3926,10 +3944,16 @@ class ControladorAv extends Controller
         $historico->usuario_comentario_id = $user->id;
         $historico->av_id = $av->id;
         
-        if($av->isCancelado == true){
+        if($av->isCancelado == true && $resultadoUsuarioPagar == 0){
             $dados = array(
                 "isGestorAprovouPC" => 1,
                 "status" => "AV Cancelada - Aguardando acerto de contas pelo financeiro"
+            );
+        }
+        else if($av->isCancelado == true && $resultadoUsuarioPagar > 0){
+            $dados = array(
+                "isGestorAprovouPC" => 1,
+                "status" => "AV Cancelada - Aguardando envio de comprovante de devolução pelo usuário"
             );
         }
         else if($resultadoUsuarioPagar > 0){
@@ -4405,7 +4429,7 @@ class ControladorAv extends Controller
             }
         }
 
-        return redirect('/rotas/rotas/' . $av->id)->with('msg', 'AV criada com sucesso!');
+        return redirect('/rotas/rotas/' . $av->id)->with('success', 'AV criada com sucesso!');
         //return view('rotas.createRota', ['av' => $av]);
     }
 
@@ -6167,7 +6191,7 @@ class ControladorAv extends Controller
         else if($av->isAprovadoFinanceiro == true && $av->isRealizadoReserva == true){
             $dados = array(
                 "isCancelado" => 1,
-                "status" => "AV Cancelada - Pendente de prestação de contas pelo usuário e de cancelamento de reservas pelo CAD",
+                "status" => "AV Cancelada - Pendente de prestação de contas pelo usuário",
                 "valorExtraReais" => 0,
                 "valorExtraDolar" => 0,
                 "valorReais" => 0,

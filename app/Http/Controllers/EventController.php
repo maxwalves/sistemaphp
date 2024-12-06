@@ -69,7 +69,7 @@ class EventController extends Controller
 
         $event->save();
 
-        return redirect('/')->with('msg', 'AV criada com sucesso!');
+        return redirect('/')->with('success', 'AV criada com sucesso!');
     }
 
     public function show($id)
