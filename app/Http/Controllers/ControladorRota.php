@@ -1210,7 +1210,7 @@ class ControladorRota extends Controller
                                  $proximaRotaDataChegadaFormatado->format('Y-m-d') == $dia && $proximaRotaDataChegadaFormatado->format('H:i:s') >= "19:01:00")){
                         //SE A PRÓXIMA ROTA FOR NO MESMO DIA E A HORA DE SAÍDA OU CHEGADA DELA FOR MAIOR QUE 19:01
                             try {
-                                $rotaImediatamenteAnterior = $this->buscarRotaPosterior($rota, $rotas);
+                                $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
                                 $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
                             } catch (\Throwable $th) {
                                 $valor = $this->verificaValorRota($rota);
@@ -1487,7 +1487,7 @@ class ControladorRota extends Controller
                                  $proximaRotaDataChegadaFormatado->format('Y-m-d') == $dia && $proximaRotaDataChegadaFormatado->format('H:i:s') >= "19:01:00")){
                         //SE A PRÓXIMA ROTA FOR NO MESMO DIA E A HORA DE SAÍDA OU CHEGADA DELA FOR MAIOR QUE 19:01
                             try {
-                                $rotaImediatamenteAnterior = $this->buscarRotaPosterior($rota, $rotas);
+                                $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
                                 $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
                             } catch (\Throwable $th) {
                                 $valor = $this->verificaValorRota($rota);

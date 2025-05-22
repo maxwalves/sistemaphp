@@ -111,10 +111,12 @@
                         <div class="stat-title">
                             <p>
                                 @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                    <p>Cálculo do valor do veículo: ({{$av->qtdKmVeiculoProprio}}km x R$0,49 = R$ {{number_format($av->qtdKmVeiculoProprio * 0.49, 2, ',', '.')}})</p>
                                     @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )<0)
                                         Valor que o usuário deve receber em reais
                                     @endif
                                     @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )>0)
+                                        <p>Cálculo do valor do veículo: ({{$av->qtdKmVeiculoProprio}}km x R$0,49 = R$ {{number_format($av->qtdKmVeiculoProprio * 0.49, 2, ',', '.')}})</p>
                                         Valor que o usuário deve pagar em reais
                                     @endif
                                 @else
