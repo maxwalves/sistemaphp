@@ -11,10 +11,11 @@
                         <h3 class="card-title">Editar Rota</h3>
                     </div>
                     <div class="card-body">
-                        <form action="/rotas/update/{{ $rota->id }}" method="POST" enctype="multipart/form-data" id="formPrincipal">
+                        <form action="/rotas/update/{{ $rota->id }}" method="POST" enctype="multipart/form-data"
+                            id="formPrincipal">
                             @csrf
                             @method('PUT')
-                            
+
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -527,6 +528,19 @@
 
             $.getJSON('/cities', function(data) {
 
+                data.sort(function(a, b) {
+                    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    // names must be equal
+                    return 0;
+                });
+
                 for (i = 0; i < data.length; i++) {
 
                     if (data[i].state_id == objeto.id) {
@@ -548,7 +562,7 @@
             document.getElementById("selecaoCidadeDestinoNacional").disabled = false;
 
             var nomeCidade = document.getElementById("selecaoCidadeDestinoNacional")
-            .value; //Recupera o valor que ta salvo no banco
+                .value; //Recupera o valor que ta salvo no banco
 
             var idEstado = document.getElementById("selecaoEstadoDestinoNacional").value; //Recebe o valur como String
             var resultado = idEstado.replace(/'/g, "\""); //Adiciona as aspas para deixar no formato JSON
@@ -559,6 +573,19 @@
             document.getElementById("selecaoCidadeDestinoNacional").value = "";
 
             $.getJSON('/cities', function(data) {
+
+                data.sort(function(a, b) {
+                    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    // names must be equal
+                    return 0;
+                });
 
                 for (i = 0; i < data.length; i++) {
 

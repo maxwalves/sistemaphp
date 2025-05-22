@@ -179,23 +179,24 @@
                                             <br>
                                             <select
                                                 class="custom-select custom-select-lg {{ $errors->has('selecaoCidadeOrigemNacional') ? 'is-invalid' : '' }}"
-                                                id="selecaoCidadeOrigemNacional" name="selecaoCidadeOrigemNacional" onChange="verificarCampo(this)">
+                                                id="selecaoCidadeOrigemNacional" name="selecaoCidadeOrigemNacional"
+                                                onChange="verificarCampo(this)">
                                                 @if ($ultimaRotaSetada != null)
                                                     <option value="{{ $ultimaRotaSetada->cidadeDestinoNacional }}"
                                                         selected>
                                                     </option>
                                                 @else
-                                                    @if ($user->department == 'ERCSC')
+                                                    @if ($user->department == 'CMCAS')
                                                         <option value="Cascavel" selected></option>
-                                                    @elseif($user->department == 'ERMGA')
+                                                    @elseif($user->department == 'CMMGA')
                                                         <option value="Maringá" selected></option>
                                                     @elseif($user->department == 'ERFCB')
                                                         <option value="Francisco Beltrão" selected></option>
-                                                    @elseif($user->department == 'ERGUA')
+                                                    @elseif($user->department == 'CMGP')
                                                         <option value="Guarapuava" selected></option>
-                                                    @elseif($user->department == 'ERLDA')
+                                                    @elseif($user->department == 'CMLDR' || $user->department == 'CELDR')
                                                         <option value="Londrina" selected></option>
-                                                    @elseif($user->department == 'ERPTG')
+                                                    @elseif($user->department == 'CMPG')
                                                         <option value="Ponta Grossa" selected></option>
                                                     @else
                                                         <option value="Curitiba" selected></option>
@@ -554,6 +555,19 @@
 
             $.getJSON('/cities', function(data) {
 
+                data.sort(function(a, b) {
+                    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    // names must be equal
+                    return 0;
+                });
+
                 for (i = 0; i < data.length; i++) {
 
                     if (data[i].state_id == objeto.id) {
@@ -583,6 +597,19 @@
             document.getElementById("selecaoCidadeDestinoNacional").value = "";
 
             $.getJSON('/cities', function(data) {
+
+                data.sort(function(a, b) {
+                    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    // names must be equal
+                    return 0;
+                });
 
                 for (i = 0; i < data.length; i++) {
 

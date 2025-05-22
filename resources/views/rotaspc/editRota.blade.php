@@ -370,7 +370,8 @@
                                 </div>
                             </div>
                             <div class="card-footer text-right">
-                                <button type="submit" id="salvarBt" class="btn btn-success">SALVAR ROTA E VOLTAR PARA PC</button>
+                                <button type="submit" id="salvarBt" class="btn btn-success">SALVAR ROTA E VOLTAR PARA
+                                    PC</button>
                                 <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancelar</a>
                             </div>
                         </form>
@@ -491,6 +492,19 @@
 
             $.getJSON('/cities', function(data) {
 
+                data.sort(function(a, b) {
+                    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    // names must be equal
+                    return 0;
+                });
+
                 for (i = 0; i < data.length; i++) {
 
                     if (data[i].state_id == objeto.id) {
@@ -523,6 +537,19 @@
             document.getElementById("selecaoCidadeDestinoNacional").value = "";
 
             $.getJSON('/cities', function(data) {
+
+                data.sort(function(a, b) {
+                    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    // names must be equal
+                    return 0;
+                });
 
                 for (i = 0; i < data.length; i++) {
 

@@ -183,9 +183,9 @@
                                                         selected>{{ $ultimaRotaSetada->cidadeDestinoNacional }}</option>
                                                 @else
                                                     <option
-                                                        value="{{ $user->department == 'ERCSC' ? 'Cascavel' : ($user->department == 'ERMGA' ? 'Maringá' : ($user->department == 'ERFCB' ? 'Francisco Beltrão' : ($user->department == 'ERGUA' ? 'Guarapuava' : ($user->department == 'ERLDA' ? 'Londrina' : ($user->department == 'ERPTG' ? 'Ponta Grossa' : 'Curitiba'))))) }}"
+                                                        value="{{ $user->department == 'CMCAS' ? 'Cascavel' : ($user->department == 'CMMGA' ? 'Maringá' : ($user->department == 'ERFCB' ? 'Francisco Beltrão' : ($user->department == 'CMGP' ? 'Guarapuava' : ($user->department == 'CMLDR' || $user->department == 'CELDR' ? 'Londrina' : ($user->department == 'CMPG' ? 'Ponta Grossa' : 'Curitiba'))))) }}"
                                                         selected>
-                                                        {{ $user->department == 'ERCSC' ? 'Cascavel' : ($user->department == 'ERMGA' ? 'Maringá' : ($user->department == 'ERFCB' ? 'Francisco Beltrão' : ($user->department == 'ERGUA' ? 'Guarapuava' : ($user->department == 'ERLDA' ? 'Londrina' : ($user->department == 'ERPTG' ? 'Ponta Grossa' : 'Curitiba'))))) }}
+                                                        {{ $user->department == 'CMCAS' ? 'Cascavel' : ($user->department == 'CMMGA' ? 'Maringá' : ($user->department == 'ERFCB' ? 'Francisco Beltrão' : ($user->department == 'CMGP' ? 'Guarapuava' : ($user->department == 'CMLDR' || $user->department == 'CELDR' ? 'Londrina' : ($user->department == 'CMPG' ? 'Ponta Grossa' : 'Curitiba'))))) }}
                                                     </option>
                                                 @endif
                                             </select>
@@ -299,8 +299,7 @@
                                             <input type="datetime-local" id="dataHoraSaidaVoltaNacional"
                                                 name="dataHoraSaidaVoltaNacional"
                                                 class="form-control form-control-lg {{ $errors->has('dataHoraSaidaVoltaNacional') ? 'is-invalid' : '' }}"
-                                                placeholder="Data/Hora de saída na volta"
-                                                onChange="verificarCampo(this)">
+                                                placeholder="Data/Hora de saída na volta" onChange="verificarCampo(this)">
                                             @if ($errors->has('dataHoraSaidaVoltaNacional'))
                                                 <div class="invalid-feedback">
                                                     {{ $errors->first('dataHoraSaidaVoltaNacional') }}
@@ -374,7 +373,8 @@
                                                 </label>
                                                 <select
                                                     class="custom-select custom-select-lg {{ $errors->has('tipoTransporte') ? 'is-invalid' : '' }}"
-                                                    id="tipoTransporte" name="tipoTransporte" onChange="ativarCampo(); verificarCampo(this)">
+                                                    id="tipoTransporte" name="tipoTransporte"
+                                                    onChange="ativarCampo(); verificarCampo(this)">
 
                                                     <option value="">Selecione</option>
 
@@ -461,7 +461,8 @@
                             </div>
                         </form>
                         <div class="card-footer text-right">
-                            <button onclick="verificaConsistencia()" id="salvarBt" class="btn btn-success">Salvar Rota</button>
+                            <button onclick="verificaConsistencia()" id="salvarBt" class="btn btn-success">Salvar
+                                Rota</button>
                             <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancelar</a>
                         </div>
                     </div>
@@ -612,6 +613,19 @@
 
             $.getJSON('/cities', function(data) {
 
+                data.sort(function(a, b) {
+                    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    // names must be equal
+                    return 0;
+                });
+
                 for (i = 0; i < data.length; i++) {
 
                     if (data[i].state_id == objeto.id) {
@@ -641,6 +655,19 @@
             document.getElementById("selecaoCidadeDestinoNacional").value = "";
 
             $.getJSON('/cities', function(data) {
+
+                data.sort(function(a, b) {
+                    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    // names must be equal
+                    return 0;
+                });
 
                 for (i = 0; i < data.length; i++) {
 
@@ -707,19 +734,19 @@
             }
         }
 
-        function verificaConsistencia(){
+        function verificaConsistencia() {
             var campos = document.querySelectorAll(
                 '#tipoTransporte, #isReservaHotel, #selecaoEstadoOrigemNacional, #selecaoCidadeOrigemNacional, #dataHoraSaidaNacional, #selecaoEstadoDestinoNacional, #selecaoCidadeDestinoNacional, #dataHoraChegadaNacional'
             );
             //se flexSwitchCheckDefault está marcardo como true, então adicione os campos #dataHoraSaidaVoltaNacional, #dataHoraChegadaVoltaNacional
-            if(document.getElementById("flexSwitchCheckDefault")){
-                if(document.getElementById("flexSwitchCheckDefault").checked){
+            if (document.getElementById("flexSwitchCheckDefault")) {
+                if (document.getElementById("flexSwitchCheckDefault").checked) {
                     campos = document.querySelectorAll(
                         '#tipoTransporte, #isReservaHotel, #selecaoEstadoOrigemNacional, #selecaoCidadeOrigemNacional, #dataHoraSaidaNacional, #selecaoEstadoDestinoNacional, #selecaoCidadeDestinoNacional, #dataHoraChegadaNacional, #dataHoraSaidaVoltaNacional, #dataHoraChegadaVoltaNacional'
                     );
                 }
             }
-            
+
             var existemPendencias = [];
             campos.forEach(function(campo) {
                 if (!campo.value) {
@@ -728,34 +755,34 @@
             });
             var nomeDosCampos = [];
             existemPendencias.forEach(element => {
-                if(element == "tipoTransporte"){
+                if (element == "tipoTransporte") {
                     nomeDosCampos.push("Tipo de transporte");
                 }
-                if(element == "isReservaHotel"){
+                if (element == "isReservaHotel") {
                     nomeDosCampos.push("Reserva de hotel");
                 }
-                if(element == "selecaoEstadoOrigemNacional"){
+                if (element == "selecaoEstadoOrigemNacional") {
                     nomeDosCampos.push("Estado de origem");
                 }
-                if(element == "selecaoCidadeOrigemNacional"){
+                if (element == "selecaoCidadeOrigemNacional") {
                     nomeDosCampos.push("Cidade de origem");
                 }
-                if(element == "dataHoraSaidaNacional"){
+                if (element == "dataHoraSaidaNacional") {
                     nomeDosCampos.push("Data/Hora de saída");
                 }
-                if(element == "selecaoEstadoDestinoNacional"){
+                if (element == "selecaoEstadoDestinoNacional") {
                     nomeDosCampos.push("Estado de destino");
                 }
-                if(element == "selecaoCidadeDestinoNacional"){
+                if (element == "selecaoCidadeDestinoNacional") {
                     nomeDosCampos.push("Cidade de destino");
                 }
-                if(element == "dataHoraChegadaNacional"){
+                if (element == "dataHoraChegadaNacional") {
                     nomeDosCampos.push("Data/Hora de chegada");
                 }
-                if(element == "dataHoraSaidaVoltaNacional"){
+                if (element == "dataHoraSaidaVoltaNacional") {
                     nomeDosCampos.push("Data/Hora de saída na volta");
                 }
-                if(element == "dataHoraChegadaVoltaNacional"){
+                if (element == "dataHoraChegadaVoltaNacional") {
                     nomeDosCampos.push("Data/Hora de chegada na volta");
                 }
             });
