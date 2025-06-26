@@ -2910,7 +2910,7 @@ class ControladorAv extends Controller
                     }
                 } catch (\Throwable $th) {
                 }
-            } else if ($uf->department == "CMMGA") {
+            } else if ($uf->department == "CMMGA" || $uf->department == "CEMGA") {
                 try {
                     if ($uf->hasPermissionTo($permission3)) {
                         $existeResponsavelFinanceiroMaringa = true;
@@ -3003,7 +3003,7 @@ class ControladorAv extends Controller
                                 if (
                                     ($u->department == "CMCAS" && $userAv->department == "CMCAS")
                                     ||
-                                    ($u->department == "CMMGA" && $userAv->department == "CMMGA")
+                                    ($u->department == "CMMGA" && ($userAv->department == "CMMGA" || $userAv->department == "CEMGA"))
                                     ||
                                     ($u->department == "ERFCB" && $userAv->department == "ERFCB")
                                     ||
@@ -3017,14 +3017,14 @@ class ControladorAv extends Controller
                                         ->send(new EnvioGestorToSecretaria($av->user_id, $u->id, $av->id));
                                 } else if (
                                     ($u->department != "CMCAS"
-                                        && $u->department != "CMMGA"
+                                        && $u->department != "CMMGA" && $u->department != "CEMGA"
                                         && $u->department != "ERFCB"
                                         && $u->department != "CMGP"
                                         && $u->department != "CMLDR" && $u->department != "CELDR"
                                         && $u->department != "CMPG")
                                     &&
                                     ($userAv->department != "CMCAS"
-                                        && $userAv->department != "CMMGA"
+                                        && $userAv->department != "CMMGA" && $userAv->department != "CEMGA"
                                         && $userAv->department != "ERFCB"
                                         && $userAv->department != "CMGP"
                                         && $userAv->department != "CMLDR" && $userAv->department != "CELDR"
@@ -3047,14 +3047,14 @@ class ControladorAv extends Controller
                             //verifique se u2 é da mesma regional que $userAv
                             if (
                                 ($u2->department != "CMCAS"
-                                    && $u2->department != "CMMGA"
+                                    && $u2->department != "CMMGA" && $u2->department != "CEMGA"
                                     && $u2->department != "ERFCB"
                                     && $u2->department != "CMGP"
                                     && $u2->department != "CMLDR" && $u2->department != "CELDR"
                                     && $u2->department != "CMPG")
                                 &&
                                 ($userAv->department != "CMCAS"
-                                    && $userAv->department != "CMMGA"
+                                    && $userAv->department != "CMMGA" && $userAv->department != "CEMGA"
                                     && $userAv->department != "ERFCB"
                                     && $userAv->department != "CMGP"
                                     && $userAv->department != "CMLDR" && $userAv->department != "CELDR"
@@ -3068,7 +3068,7 @@ class ControladorAv extends Controller
                             } else if (
                                 ($u2->department == "CMCAS" && $userAv->department == "CMCAS")
                                 ||
-                                ($u2->department == "CMMGA" && $userAv->department == "CMMGA")
+                                ($u2->department == "CMMGA" && ($userAv->department == "CMMGA" || $userAv->department == "CEMGA"))
                                 ||
                                 ($u2->department == "ERFCB" && $userAv->department == "ERFCB")
                                 ||
@@ -3083,7 +3083,7 @@ class ControladorAv extends Controller
                             } else if (
                                 (
                                     $u2->department != "CMCAS"
-                                    && $u2->department != "CMMGA"
+                                    && $u2->department != "CMMGA" && $u2->department != "CEMGA"
                                     && $u2->department != "ERFCB"
                                     && $u2->department != "CMGP"
                                     && $u2->department != "CMLDR" && $u2->department != "CELDR"
@@ -3098,13 +3098,13 @@ class ControladorAv extends Controller
                             } else if (
                                 (
                                     $u2->department != "CMCAS"
-                                    && $u2->department != "CMMGA"
+                                    && $u2->department != "CMMGA" && $u2->department != "CEMGA"
                                     && $u2->department != "ERFCB"
                                     && $u2->department != "CMGP"
                                     && $u2->department != "CMLDR" && $u2->department != "CELDR"
                                     && $u2->department != "CMPG")
                                 &&
-                                ($userAv->department == "CMMGA")
+                                ($userAv->department == "CMMGA" || $userAv->department == "CEMGA")
                             ) {
                                 if (!$existeResponsavelFinanceiroMaringa) {
                                     Mail::to($u2->username)
@@ -3113,7 +3113,7 @@ class ControladorAv extends Controller
                             } else if (
                                 (
                                     $u2->department != "CMCAS"
-                                    && $u2->department != "CMMGA"
+                                    && $u2->department != "CMMGA" && $u2->department != "CEMGA"
                                     && $u2->department != "ERFCB"
                                     && $u2->department != "CMGP"
                                     && $u2->department != "CMLDR" && $u2->department != "CELDR"
@@ -3128,7 +3128,7 @@ class ControladorAv extends Controller
                             } else if (
                                 (
                                     $u2->department != "CMCAS"
-                                    && $u2->department != "CMMGA"
+                                    && $u2->department != "CMMGA" && $u2->department != "CEMGA"
                                     && $u2->department != "ERFCB"
                                     && $u2->department != "CMGP"
                                     && $u2->department != "CMLDR" && $u2->department != "CELDR"
@@ -3143,7 +3143,7 @@ class ControladorAv extends Controller
                             } else if (
                                 (
                                     $u2->department != "CMCAS"
-                                    && $u2->department != "CMMGA"
+                                    && $u2->department != "CMMGA" && $u2->department != "CEMGA"
                                     && $u2->department != "ERFCB"
                                     && $u2->department != "CMGP"
                                     && $u2->department != "CMLDR" && $u2->department != "CELDR"
@@ -3158,7 +3158,7 @@ class ControladorAv extends Controller
                             } else if (
                                 (
                                     $u2->department != "CMCAS"
-                                    && $u2->department != "CMMGA"
+                                    && $u2->department != "CMMGA" && $u2->department != "CEMGA"
                                     && $u2->department != "ERFCB"
                                     && $u2->department != "CMGP"
                                     && $u2->department != "CMLDR" && $u2->department != "CELDR"
@@ -4969,7 +4969,7 @@ class ControladorAv extends Controller
         $isCuritiba = false;
         if (
             $departmentUser != "CMCAS"
-            && $departmentUser != "CMMGA"
+            && $departmentUser != "CMMGA" && $departmentUser != "CEMGA"
             && $departmentUser != "ERFCB"
             && $departmentUser != "CMGP"
             && $departmentUser != "CMLDR" && $departmentUser != "CELDR"
@@ -5829,9 +5829,9 @@ class ControladorAv extends Controller
                         $temFinanceiroFrancisco = true;
                     }
                 }
-            } else if ($user->department == "CMMGA") {
+            } else if ($user->department == "CMMGA" || $user->department == "CEMGA") {
                 foreach ($users as $uf) {
-                    if ($uf->department == "CMMGA") {
+                    if ($uf->department == "CMMGA" || $uf->department == "CEMGA") {
                         array_push($usersFiltrados, $uf);
                         $temFinanceiroMaringa = true;
                     }
@@ -5887,7 +5887,7 @@ class ControladorAv extends Controller
                         }
                     } catch (\Throwable $th) {
                     }
-                } else if ($uf->department == "CMMGA") {
+                } else if ($uf->department == "CMMGA" || $uf->department == "CEMGA") {
                     try {
                         if ($uf->hasPermissionTo($permission)) {
                             $existeResponsavelFinanceiroMaringa = true;
@@ -5936,7 +5936,7 @@ class ControladorAv extends Controller
                     }
                 }
                 if ($existeResponsavelFinanceiroMaringa == false) {
-                    if ($uf->department == "CMMGA") {
+                    if ($uf->department == "CMMGA" || $uf->department == "CEMGA") {
                         array_push($usersFiltrados, $uf);
                     }
                 }
@@ -5962,7 +5962,7 @@ class ControladorAv extends Controller
                 }
                 if (
                     $uf->department != "CMCAS" && $uf->department != "CMMGA" && $uf->department != "ERFCB" && $uf->department != "CMGP"
-                    && $uf->department != "CMLDR" && $uf->department != "CMPG" && $uf->department != "CELDR"
+                    && $uf->department != "CMLDR" && $uf->department != "CMPG" && $uf->department != "CELDR" && $uf->department != "CEMGA"
                 ) {
                     array_push($usersFiltrados, $uf);
                 }
@@ -5972,6 +5972,7 @@ class ControladorAv extends Controller
         if (
             $user->department != "CMCAS" &&
             $user->department != "CMMGA" &&
+            $user->department != "CEMGA" &&
             $user->department != "ERFCB" &&
             $user->department != "CMGP" &&
             $user->department != "CMLDR" &&
@@ -6076,9 +6077,9 @@ class ControladorAv extends Controller
                         $temFinanceiroFrancisco = true;
                     }
                 }
-            } else if ($user->department == "CMMGA") {
+            } else if ($user->department == "CMMGA" || $user->department == "CEMGA") {
                 foreach ($users as $uf) {
-                    if ($uf->department == "CMMGA") {
+                    if ($uf->department == "CMMGA" || $uf->department == "CEMGA") {
                         array_push($usersFiltrados, $uf);
                         $temFinanceiroMaringa = true;
                     }
@@ -6133,7 +6134,7 @@ class ControladorAv extends Controller
                         }
                     } catch (\Throwable $th) {
                     }
-                } else if ($uf->department == "CMMGA") {
+                } else if ($uf->department == "CMMGA" || $uf->department == "CEMGA") {
                     try {
                         if ($uf->hasPermissionTo($permission)) {
                             $existeResponsavelFinanceiroMaringa = true;
@@ -6180,7 +6181,7 @@ class ControladorAv extends Controller
                     }
                 }
                 if ($existeResponsavelFinanceiroMaringa == false) {
-                    if ($uf->department == "CMMGA") {
+                    if ($uf->department == "CMMGA" || $uf->department == "CEMGA") {
                         array_push($usersFiltrados, $uf);
                     }
                 }
@@ -6206,7 +6207,7 @@ class ControladorAv extends Controller
                 }
                 if (
                     $uf->department != "CMCAS" && $uf->department != "CMMGA" && $uf->department != "ERFCB" && $uf->department != "CMGP"
-                    && $uf->department != "CMLDR" && $uf->department != "CMPG" && $uf->department != "CELDR"
+                    && $uf->department != "CMLDR" && $uf->department != "CMPG" && $uf->department != "CELDR" && $uf->department != "CEMGA"
                 ) {
                     array_push($usersFiltrados, $uf);
                 }
@@ -6260,9 +6261,9 @@ class ControladorAv extends Controller
                         $temFinanceiroFrancisco = true;
                     }
                 }
-            } else if ($user->department == "CMMGA") {
+            } else if ($user->department == "CMMGA" || $user->department == "CEMGA") {
                 foreach ($users as $uf) {
-                    if ($uf->department == "CMMGA") {
+                    if ($uf->department == "CMMGA" || $uf->department == "CEMGA") {
                         array_push($usersFiltrados, $uf);
                         $temFinanceiroMaringa = true;
                     }
@@ -6317,7 +6318,7 @@ class ControladorAv extends Controller
                         }
                     } catch (\Throwable $th) {
                     }
-                } else if ($uf->department == "CMMGA") {
+                } else if ($uf->department == "CMMGA" || $uf->department == "CEMGA") {
                     try {
                         if ($uf->hasPermissionTo($permission)) {
                             $existeResponsavelFinanceiroMaringa = true;
@@ -6364,7 +6365,7 @@ class ControladorAv extends Controller
                     }
                 }
                 if ($existeResponsavelFinanceiroMaringa == false) {
-                    if ($uf->department == "CMMGA") {
+                    if ($uf->department == "CMMGA" || $uf->department == "CEMGA") {
                         array_push($usersFiltrados, $uf);
                     }
                 }
@@ -6390,7 +6391,7 @@ class ControladorAv extends Controller
                 }
                 if (
                     $uf->department != "CMCAS" && $uf->department != "CMMGA" && $uf->department != "ERFCB" && $uf->department != "CMGP"
-                    && $uf->department != "CMLDR" && $uf->department != "CMPG" && $uf->department != "CELDR"
+                    && $uf->department != "CMLDR" && $uf->department != "CMPG" && $uf->department != "CELDR" && $uf->department != "CEMGA"
                 ) {
                     array_push($usersFiltrados, $uf);
                 }
