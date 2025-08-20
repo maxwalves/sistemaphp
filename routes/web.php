@@ -14,6 +14,7 @@ use App\Http\Controllers\SetorController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\ArquivosController;
 use App\Http\Controllers\DssController;
+use App\Http\Controllers\EmailTestController; // Adicionei esta linha
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,10 @@ use App\Http\Controllers\EventController;
 
 
 //EMAIL
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/email/test', [EmailTestController::class, 'showEmailTestForm'])->name('email.test');
+    Route::post('/email/send-test', [EmailTestController::class, 'sendTestEmail'])->name('email.sendTest');
+});
 
 
 Route::get('/termoResponsabilidade', [UsersController::class, 'termoResponsabilidade'])->name('termoResponsabilidade');
