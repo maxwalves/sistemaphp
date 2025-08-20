@@ -301,21 +301,27 @@ class ControladorAv extends Controller
             }
         }
 
-        foreach ($usersFiltrados as $u) { //Percorre todos os usuários
-            if ($av->user_id == $u->id) { //Verifica se o usuário do da AV atual pertence ao meu time
-                if ($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0) {
-                    $possoEditar = true;
+        // Se o usuário for camila.mileke, ela tem acesso a todas as AVs
+        if ($user->username == "camila.ms@paranacidade.org.br") {
+            if ($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0) {
+                $possoEditar = true;
+            }
+        } else {
+            foreach ($usersFiltrados as $u) { //Percorre todos os usuários
+                if ($av->user_id == $u->id) { //Verifica se o usuário do da AV atual pertence ao meu time
+                    if ($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0) {
+                        $possoEditar = true;
+                    }
+                }
+            }
+            foreach ($usersFiltradosSubordinados as $u) { //Percorre todos os usuários
+                if ($av->user_id == $u->id) { //Verifica se o usuário do da AV atual pertence ao meu time
+                    if ($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0) {
+                        $possoEditar = true;
+                    }
                 }
             }
         }
-        foreach ($usersFiltradosSubordinados as $u) { //Percorre todos os usuários
-            if ($av->user_id == $u->id) { //Verifica se o usuário do da AV atual pertence ao meu time
-                if ($av->isEnviadoUsuario == 1 && $av->isAprovadoGestor == 0) {
-                    $possoEditar = true;
-                }
-            }
-        }
-
 
         foreach ($historicosTodos as $historico) {
             if ($historico->av_id == $av->id) {
@@ -2774,6 +2780,27 @@ class ControladorAv extends Controller
         $user = auth()->user();
         $av = Av::findOrFail($request->get('id'));
         $userAv = User::findOrFail($av->user_id);
+        
+        // Validação de autorização para aprovar a AV
+        $temPermissao = false;
+        
+        if ($user->username == "camila.ms@paranacidade.org.br") {
+            // Camila pode aprovar qualquer AV pendente
+            $temPermissao = true;
+        } else {
+            // Outros gestores: verificar se é manager do usuário da AV baseado no DN do AD
+            $managerDN = $userAv->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+            $parts = explode(',', $managerDN);
+            $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+            
+            if ($managerName == $user->name) {
+                $temPermissao = true;
+            }
+        }
+        
+        if (!$temPermissao) {
+            return redirect('/dashboard')->with('msg', 'Você não tem permissão para aprovar esta AV!');
+        }
 
         $isVeiculoProprio = false;
         $isInternacional = false;
@@ -3187,6 +3214,27 @@ class ControladorAv extends Controller
         $avs = Av::all();
         $user = auth()->user();
         $userAv = User::findOrFail($av->user_id);
+        
+        // Validação de autorização para reprovar a AV
+        $temPermissao = false;
+        
+        if ($user->username == "camila.ms@paranacidade.org.br") {
+            // Camila pode reprovar qualquer AV pendente
+            $temPermissao = true;
+        } else {
+            // Outros gestores: verificar se é manager do usuário da AV baseado no DN do AD
+            $managerDN = $userAv->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+            $parts = explode(',', $managerDN);
+            $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+            
+            if ($managerName == $user->name) {
+                $temPermissao = true;
+            }
+        }
+        
+        if (!$temPermissao) {
+            return redirect('/dashboard')->with('msg', 'Você não tem permissão para reprovar esta AV!');
+        }
 
         $historico = new Historico();
         $timezone = new DateTimeZone('America/Sao_Paulo');
@@ -5561,39 +5609,65 @@ class ControladorAv extends Controller
         $avsTodas = Av::all();
         $users = User::all();
 
-        $usersFiltrados = [];
-        foreach ($users as $u) { //Percorre todos os usuários do sistema
-            $managerDN = $u->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+        //se o usuário for camila.mileke, deixe todos os usuários do paranacidade no usersFiltrados e deixe em ordem alfabetica
+        if ($user->username == "camila.ms@paranacidade.org.br") {
+            $usersFiltrados = $users->sortBy('name')->values()->all();
+        } else {
+            $usersFiltrados = [];
+            foreach ($users as $u) { //Percorre todos os usuários do sistema
+                $managerDN = $u->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
 
-            // Dividir a string em partes usando o caractere de vírgula como delimitador
-            $parts = explode(',', $managerDN);
+                // Dividir a string em partes usando o caractere de vírgula como delimitador
+                $parts = explode(',', $managerDN);
 
-            // Extrair o nome do gerente da primeira parte
-            $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+                // Extrair o nome do gerente da primeira parte
+                $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
 
-            if ($managerName == $user->name && $u->id != $user->id) { //Verifica se cada um pertence ao seu time, exceto vc mesmo 
-                array_push($usersFiltrados, $u); //Adiciona ao array filtrado o usuário encontrado
-            }
-            if ($u->name == $managerName && $u->id == $user->id) {
-                array_push($usersFiltrados, $u);
-            }
-        }
-
-        $avsFiltradas = [];
-        foreach ($usersFiltrados as $uf) { //Verifica todos os usuários encontrados
-            foreach ($uf->avs as $av) { //Percorre todas as Avs do usuário encontrado
-                if ($av["isEnviadoUsuario"] == 1 && $av["isAprovadoGestor"] == false && $av["isCancelado"] == false) { //Se a av dele já foi enviada, mas ainda não autorizada, adiciona ao array de avs filtradas
-
-                    array_push($avsFiltradas, $av);
+                if ($managerName == $user->name && $u->id != $user->id) { //Verifica se cada um pertence ao seu time, exceto vc mesmo 
+                    array_push($usersFiltrados, $u); //Adiciona ao array filtrado o usuário encontrado
+                }
+                if ($u->name == $managerName && $u->id == $user->id) {
+                    array_push($usersFiltrados, $u);
                 }
             }
         }
-        $avs = $avsFiltradas;
 
-        //$avs é um array, ordene pelo id em ordem decrescente
-        usort($avs, function ($a, $b) {
-            return $b->id <=> $a->id;
-        });
+        if ($user->username == "camila.ms@paranacidade.org.br") {
+            // Para Camila, mostrar todas as AVs pendentes de aprovação de gestor
+            $avs = Av::where('isEnviadoUsuario', 1)
+                     ->where('isAprovadoGestor', false)
+                     ->where('isCancelado', false)
+                     ->orderBy('id', 'desc')
+                     ->get();
+        } else {
+            // Para outros gestores, usar a lógica original baseada na hierarquia do AD
+            $avsFiltradas = [];
+            foreach ($usersFiltrados as $uf) { //Verifica todos os usuários encontrados
+                foreach ($uf->avs as $av) { //Percorre todas as Avs do usuário encontrado
+                    if ($av["isEnviadoUsuario"] == 1 && $av["isAprovadoGestor"] == false && $av["isCancelado"] == false) { //Se a av dele já foi enviada, mas ainda não autorizada, adiciona ao array de avs filtradas
+                        array_push($avsFiltradas, $av);
+                    }
+                }
+            }
+            // Ordenar por ID decrescente
+            usort($avsFiltradas, function ($a, $b) {
+                return $b->id <=> $a->id;
+            });
+            $avs = $avsFiltradas;
+        }
+
+        // Adicionar managerName para cada AV
+        foreach ($avs as $av) {
+            $avUser = User::find($av->user_id);
+            if ($avUser && $avUser->manager) {
+                $managerDN = $avUser->manager; // CN=Leandro Victorino Moura,OU=CTI,OU=Empregados,DC=prcidade,DC=br
+                $parts = explode(',', $managerDN);
+                $managerName = substr($parts[0], 3); // Remover os primeiros 3 caracteres "CN="
+                $av->managerName = $managerName;
+            } else {
+                $av->managerName = 'N/A';
+            }
+        }
 
         $objetivos = Objetivo::all();
         return view('avs.autGestor', [

@@ -15,7 +15,19 @@
         <div class="col-12 col-md-7">
             <h4>AVs pendentes de autorização:</h4>
         </div>
-        @if($usersFiltrados != null)
+        
+        @if($user->username == "camila.ms@paranacidade.org.br")
+            <div class="col-12 col-md-5">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="filtrarMinhasAvs">
+                    <label class="form-check-label" for="filtrarMinhasAvs">
+                        Mostrar apenas AVs onde sou gestora
+                    </label>
+                </div>
+            </div>
+        @endif
+        
+        @if($usersFiltrados != null && $user->username != "camila.ms@paranacidade.org.br")
             <div class="col-12 col-md-5">
                 <p>Ver pendências de AVs dos gestores subordinados: </p>
                 <select name="users" id="usuarioSelecionado" class="select select-bordered w-full max-w-xs" >
@@ -38,6 +50,9 @@
             <tr>
                 <th style="width: 50px">Número</th>
                 <th>Nome funcionário</th>
+                @if($user->username == "camila.ms@paranacidade.org.br")
+                    <th>Gestor</th>
+                @endif
                 <th>Objetivo</th>
                 <th>Rota</th>
                 <th>Data criação</th>
@@ -57,6 +72,12 @@
                         @endif
                     @endforeach
                 </td>
+
+                @if($user->username == "camila.ms@paranacidade.org.br")
+                    <td>
+                        {{$av->managerName}}
+                    </td>
+                @endif
 
                 <td>
                     @for($i = 0; $i < count($objetivos); $i++)
@@ -113,9 +134,43 @@
     <script src="{{asset('/js/moment.js')}}"></script>
     <script src="{{asset('DataTables/datatables.min.js')}}"></script>
     <script type="text/javascript">
-
+        // Variáveis para armazenar os dados originais da tabela
+        let originalTableData = [];
+        let currentUserName = @json($user->name);
 
         $(function(){
+            
+            // Armazenar dados originais da tabela quando a página carrega
+            $('#minhaTabela tbody tr').each(function() {
+                originalTableData.push($(this)[0].outerHTML);
+            });
+
+            // Event listener para o filtro da Camila
+            $('#filtrarMinhasAvs').change(function() {
+                if ($(this).is(':checked')) {
+                    // Filtrar apenas AVs onde Camila é gestora
+                    $('#minhaTabela tbody tr').each(function() {
+                        let gestorColumn = $(this).find('td:nth-child(3)').text().trim(); // Coluna do gestor
+                        if (gestorColumn !== currentUserName) {
+                            $(this).hide();
+                        } else {
+                            $(this).show(); // Garantir que as AVs da Camila estão visíveis
+                        }
+                    });
+                } else {
+                    // Mostrar todas as AVs novamente
+                    $('#minhaTabela tbody tr').show();
+                }
+            });
+
+            // Função para restaurar estado original da tabela (útil para a Camila)
+            function restoreOriginalTable() {
+                $('#minhaTabela tbody').html(originalTableData.join(''));
+                $('#filtrarMinhasAvs').prop('checked', false);
+            }
+
+            // Disponibilizar função globalmente se necessário
+            window.restoreOriginalTable = restoreOriginalTable;
 
             $('#filter-button').click(function() {
                 // Get selected user ID from dropdown
