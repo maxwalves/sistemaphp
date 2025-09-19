@@ -6878,9 +6878,6 @@ class ControladorAv extends Controller
                             //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MAIOR QUE 13:01
                             $valorManha = $valor / 2;
                             $temDiariaManha = true;
-                            if($dia == '2025-07-19'){
-                               // dd($valorManha, "1");
-                            }
                         } else if (
                             $dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "19:00:00"
                             && $proximaRota == false && $dia != $dataUltimaRota
@@ -6888,28 +6885,30 @@ class ControladorAv extends Controller
                             //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MENOR QUE 13:00 E NÃO TIVER PRÓXIMA ROTA NO DIA, MAS NÃO ACABOU A VIAGEM
                             $valorManha = $valor / 2;
                             $temDiariaManha = true;
-                            if($dia == '2025-07-19'){
-                               // dd($valorManha, "2");
-                            }
-                        } else if (
+                        } 
+                        else if($proximaRota != false 
+                        && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia 
+                        && $proximaRotaDataSaidaFormatado->format('H:i:s') > "13:01:00"
+                        && (($rotaAnteriorDataSaidaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataSaidaFormatado->format('H:i:s') <= "12:00:00") || ($rotaAnteriorDataChegadaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataChegadaFormatado->format('H:i:s') <= "12:00:00"))
+                        ){
+                            // SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E NÃO FOR A ÚLTIMA ROTA
+                            //E A ROTA ANTERIOR TIVER HORÁRIO DE SAÍDA OU CHEGADA ANTES DE 12:00
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
+                        }
+                        else if (
                             $proximaRota != false && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia &&
                             $dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dia != $dataUltimaRota
                         ) {
                             //SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E NÃO FOR A ÚLTIMA ROTA
                             $valorManha = $valor / 2;
                             $temDiariaManha = true;
-                            if($dia == '2025-07-19'){
-                               // dd($valorManha, "3");
-                            }
                         } else if ($dia != $dataPrimeiraRota && $dia != $dataUltimaRota) {
                             //SE O DIA ATUAL NÃO FOR O DIA DA PRIMEIRA ROTA E A HORA DE SAÍDA FOR MAIOR QUE 12:01
                             $rotaImediatamenteAnterior = $this->buscarRotaAnterior($rota, $rotas);
                             $valor = $this->verificaValorRota($rotaImediatamenteAnterior);
                             $valorManha = $valor / 2;
                             $temDiariaManha = true;
-                            if($dia == '2025-07-19'){
-                                //dd($valorManha, "4");
-                            }
                         } else if ($dia == $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') >= "13:01:00") {
                             //SE O DIA ATUAL FOR O DIA DA ÚLTIMA ROTA E A HORA DE SAÍDA FOR MENOR QUE 12:00
                             try {
@@ -6920,9 +6919,6 @@ class ControladorAv extends Controller
                             }
                             $valorManha = $valor / 2;
                             $temDiariaManha = true;
-                            if($dia == '2025-07-19'){
-                                //dd($valorManha, "5");
-                            }
                         }
                     }
 
@@ -7136,14 +7132,26 @@ class ControladorAv extends Controller
                             //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MAIOR QUE 13:01
                             $valorManha = $valor / 2;
                             $temDiariaManha = true;
-                        } else if (
+                        } 
+                        else if (
                             $dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dataChegadaFormatado->format('H:i:s') < "19:00:00"
                             && $proximaRota == false && $dia != $dataUltimaRota
                         ) {
                             //SE A HORA DE SAÍDA FOR MENOR QUE 12:00 E A HORA DE CHEGADA FOR MENOR QUE 13:00 E NÃO TIVER PRÓXIMA ROTA NO DIA, MAS NÃO ACABOU A VIAGEM
                             $valorManha = $valor / 2;
                             $temDiariaManha = true;
-                        } else if (
+                        } 
+                        else if($proximaRota != false 
+                        && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia 
+                        && $proximaRotaDataSaidaFormatado->format('H:i:s') > "13:01:00"
+                        && (($rotaAnteriorDataSaidaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataSaidaFormatado->format('H:i:s') <= "12:00:00") || ($rotaAnteriorDataChegadaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataChegadaFormatado->format('H:i:s') <= "12:00:00"))
+                        ){
+                            // SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E NÃO FOR A ÚLTIMA ROTA
+                            //E A ROTA ANTERIOR TIVER HORÁRIO DE SAÍDA OU CHEGADA ANTES DE 12:00
+                            $valorManha = $valor/2;
+                            $temDiariaManha = true;
+                        }
+                        else if (
                             $proximaRota != false && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia &&
                             $dataSaidaFormatado->format('H:i:s') <= "12:00:00" && $dia != $dataUltimaRota
                         ) {
