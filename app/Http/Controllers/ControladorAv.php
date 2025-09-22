@@ -6889,7 +6889,7 @@ class ControladorAv extends Controller
                         else if($proximaRota != false 
                         && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia 
                         && $proximaRotaDataSaidaFormatado->format('H:i:s') > "13:01:00"
-                        && (($rotaAnteriorDataSaidaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataSaidaFormatado->format('H:i:s') <= "12:00:00") || ($rotaAnteriorDataChegadaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataChegadaFormatado->format('H:i:s') <= "12:00:00"))
+                        && ((isset($rotaAnteriorDataSaidaFormatado) && $rotaAnteriorDataSaidaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataSaidaFormatado->format('H:i:s') <= "12:00:00") || (isset($rotaAnteriorDataChegadaFormatado) && $rotaAnteriorDataChegadaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataChegadaFormatado->format('H:i:s') <= "12:00:00"))
                         ){
                             // SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E NÃO FOR A ÚLTIMA ROTA
                             //E A ROTA ANTERIOR TIVER HORÁRIO DE SAÍDA OU CHEGADA ANTES DE 12:00
@@ -7144,7 +7144,7 @@ class ControladorAv extends Controller
                         else if($proximaRota != false 
                         && $proximaRotaDataSaidaFormatado->format('Y-m-d') == $dia 
                         && $proximaRotaDataSaidaFormatado->format('H:i:s') > "13:01:00"
-                        && (($rotaAnteriorDataSaidaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataSaidaFormatado->format('H:i:s') <= "12:00:00") || ($rotaAnteriorDataChegadaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataChegadaFormatado->format('H:i:s') <= "12:00:00"))
+                        && ((isset($rotaAnteriorDataSaidaFormatado) && $rotaAnteriorDataSaidaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataSaidaFormatado->format('H:i:s') <= "12:00:00") || (isset($rotaAnteriorDataChegadaFormatado) && $rotaAnteriorDataChegadaFormatado->format('Y-m-d') == $dia && $rotaAnteriorDataChegadaFormatado->format('H:i:s') <= "12:00:00"))
                         ){
                             // SE A PRÓXIMA ROTA FOR NO MESMO DIA, A HORA DE SAÍDA DELA FOR MAIOR QUE 13:01 E NÃO FOR A ÚLTIMA ROTA
                             //E A ROTA ANTERIOR TIVER HORÁRIO DE SAÍDA OU CHEGADA ANTES DE 12:00
