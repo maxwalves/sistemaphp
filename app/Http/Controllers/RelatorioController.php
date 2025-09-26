@@ -832,19 +832,30 @@ class RelatorioController extends Controller
         }
         else if($rota->continenteDestinoInternacional == 5){//Ásia
             $valor = 190;
-        }else if(($rota->cidadeDestinoNacional == "Curitiba" || $rota->cidadeDestinoNacional == "Foz do Iguaçu") ||
-        ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná" && 
-        ($rota->cidadeDestinoInternacional == "Curitiba" || $rota->cidadeDestinoInternacional == "Foz do Iguaçu"))){//Se for Curitiba ou Foz do Iguaçu
-            $valor = 65;
-        }
-        else if($rota->estadoDestinoNacional == "Paraná" || ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná")){//Se for outra cidade do Paraná
-            $valor = 55;
         }
         else if($rota->cidadeDestinoNacional == "Brasília" || ($rota->paisDestinoInternacional == 30 && $rota->cidadeDestinoInternacional == "Brasília")){//Se for Brasília
-            $valor = 100;
+            $valor = 140.43;
         }
-        else{//Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
-            $valor = 80;
+        else if(($rota->cidadeDestinoNacional == "Curitiba") ||
+        ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná" && 
+        ($rota->cidadeDestinoInternacional == "Curitiba")) ||
+        $rota->cidadeDestinoNacional == "Rio de Janeiro" || $rota->cidadeDestinoNacional == "São Paulo" ||
+        $rota->cidadeDestinoNacional == "Belo Horizonte" || $rota->cidadeDestinoNacional == "Salvador" ||
+        $rota->cidadeDestinoNacional == "Fortaleza" || $rota->cidadeDestinoNacional == "Recife" ||
+        $rota->cidadeDestinoNacional == "Porto Alegre" || $rota->cidadeDestinoNacional == "Manaus" ||
+        $rota->cidadeDestinoNacional == "Belém" || $rota->cidadeDestinoNacional == "Goiânia" ||
+        $rota->cidadeDestinoNacional == "São Luís" || $rota->cidadeDestinoNacional == "Maceió" ||
+        $rota->cidadeDestinoNacional == "Teresina" || $rota->cidadeDestinoNacional == "João Pessoa" ||
+        $rota->cidadeDestinoNacional == "Aracaju" || $rota->cidadeDestinoNacional == "Natal" ||
+        $rota->cidadeDestinoNacional == "Campo Grande" || $rota->cidadeDestinoNacional == "Cuiabá" ||
+        $rota->cidadeDestinoNacional == "Florianópolis" || $rota->cidadeDestinoNacional == "Vitória" ||
+        $rota->cidadeDestinoNacional == "Rio Branco" || $rota->cidadeDestinoNacional == "Porto Velho" ||
+        $rota->cidadeDestinoNacional == "Boa Vista" || $rota->cidadeDestinoNacional == "Macapá" ||
+        $rota->cidadeDestinoNacional == "Palmas"){//Se for capital de estado (incluindo Curitiba)
+            $valor = 111.38;
+        }
+        else{//Demais cidades (incluindo Foz do Iguaçu e outras cidades do Paraná)
+            $valor = 87.17;
         }
 
         return $valor;

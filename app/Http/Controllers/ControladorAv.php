@@ -5119,17 +5119,28 @@ class ControladorAv extends Controller
             $valor = 140;
         } else if ($rota->continenteDestinoInternacional == 5) { //Ásia
             $valor = 190;
-        } else if (($rota->cidadeDestinoNacional == "Curitiba" || $rota->cidadeDestinoNacional == "Foz do Iguaçu") ||
-            ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná" &&
-                ($rota->cidadeDestinoInternacional == "Curitiba" || $rota->cidadeDestinoInternacional == "Foz do Iguaçu"))
-        ) { //Se for Curitiba ou Foz do Iguaçu
-            $valor = 65;
-        } else if ($rota->estadoDestinoNacional == "Paraná" || ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná")) { //Se for outra cidade do Paraná
-            $valor = 55;
         } else if ($rota->cidadeDestinoNacional == "Brasília" || ($rota->paisDestinoInternacional == 30 && $rota->cidadeDestinoInternacional == "Brasília")) { //Se for Brasília
-            $valor = 100;
-        } else { //Se não entrou em nenhum if, então é uma capital ou cidade de outros estados
-            $valor = 80;
+            $valor = 140.43;
+        } else if (($rota->cidadeDestinoNacional == "Curitiba") ||
+            ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná" &&
+                ($rota->cidadeDestinoInternacional == "Curitiba")) ||
+            $rota->cidadeDestinoNacional == "Rio de Janeiro" || $rota->cidadeDestinoNacional == "São Paulo" ||
+            $rota->cidadeDestinoNacional == "Belo Horizonte" || $rota->cidadeDestinoNacional == "Salvador" ||
+            $rota->cidadeDestinoNacional == "Fortaleza" || $rota->cidadeDestinoNacional == "Recife" ||
+            $rota->cidadeDestinoNacional == "Porto Alegre" || $rota->cidadeDestinoNacional == "Manaus" ||
+            $rota->cidadeDestinoNacional == "Belém" || $rota->cidadeDestinoNacional == "Goiânia" ||
+            $rota->cidadeDestinoNacional == "São Luís" || $rota->cidadeDestinoNacional == "Maceió" ||
+            $rota->cidadeDestinoNacional == "Teresina" || $rota->cidadeDestinoNacional == "João Pessoa" ||
+            $rota->cidadeDestinoNacional == "Aracaju" || $rota->cidadeDestinoNacional == "Natal" ||
+            $rota->cidadeDestinoNacional == "Campo Grande" || $rota->cidadeDestinoNacional == "Cuiabá" ||
+            $rota->cidadeDestinoNacional == "Florianópolis" || $rota->cidadeDestinoNacional == "Vitória" ||
+            $rota->cidadeDestinoNacional == "Rio Branco" || $rota->cidadeDestinoNacional == "Porto Velho" ||
+            $rota->cidadeDestinoNacional == "Boa Vista" || $rota->cidadeDestinoNacional == "Macapá" ||
+            $rota->cidadeDestinoNacional == "Palmas"
+        ) { //Se for capital de estado (incluindo Curitiba)
+            $valor = 111.38;
+        } else { //Demais cidades (incluindo Foz do Iguaçu e outras cidades do Paraná)
+            $valor = 87.17;
         }
 
         return $valor;
@@ -5147,14 +5158,26 @@ class ControladorAv extends Controller
 
         // Calcula valor da origem
         if($rota->isViagemInternacional == 0) {
-            if (($rota->cidadeOrigemNacional == "Curitiba" || $rota->cidadeOrigemNacional == "Foz do Iguaçu")) {
-                $valorOrigem = 65;
-            } else if ($rota->estadoOrigemNacional == "Paraná") {
-                $valorOrigem = 55;
-            } else if ($rota->cidadeOrigemNacional == "Brasília") {
-                $valorOrigem = 100;
+            if ($rota->cidadeOrigemNacional == "Brasília") {
+                $valorOrigem = 140.43;
+            } else if ($rota->cidadeOrigemNacional == "Curitiba" ||
+                $rota->cidadeOrigemNacional == "Rio de Janeiro" || $rota->cidadeOrigemNacional == "São Paulo" ||
+                $rota->cidadeOrigemNacional == "Belo Horizonte" || $rota->cidadeOrigemNacional == "Salvador" ||
+                $rota->cidadeOrigemNacional == "Fortaleza" || $rota->cidadeOrigemNacional == "Recife" ||
+                $rota->cidadeOrigemNacional == "Porto Alegre" || $rota->cidadeOrigemNacional == "Manaus" ||
+                $rota->cidadeOrigemNacional == "Belém" || $rota->cidadeOrigemNacional == "Goiânia" ||
+                $rota->cidadeOrigemNacional == "São Luís" || $rota->cidadeOrigemNacional == "Maceió" ||
+                $rota->cidadeOrigemNacional == "Teresina" || $rota->cidadeOrigemNacional == "João Pessoa" ||
+                $rota->cidadeOrigemNacional == "Aracaju" || $rota->cidadeOrigemNacional == "Natal" ||
+                $rota->cidadeOrigemNacional == "Campo Grande" || $rota->cidadeOrigemNacional == "Cuiabá" ||
+                $rota->cidadeOrigemNacional == "Florianópolis" || $rota->cidadeOrigemNacional == "Vitória" ||
+                $rota->cidadeOrigemNacional == "Rio Branco" || $rota->cidadeOrigemNacional == "Porto Velho" ||
+                $rota->cidadeOrigemNacional == "Boa Vista" || $rota->cidadeOrigemNacional == "Macapá" ||
+                $rota->cidadeOrigemNacional == "Palmas"
+            ) {
+                $valorOrigem = 111.38;
             } else {
-                $valorOrigem = 80;
+                $valorOrigem = 87.17;
             }
         } else {
             if ($rota->continenteOrigemInternacional == 1 && $rota->paisOrigemInternacional != 30) {
@@ -5167,28 +5190,54 @@ class ControladorAv extends Controller
                 $valorOrigem = 140;
             } else if ($rota->continenteOrigemInternacional == 5) {
                 $valorOrigem = 190;
-            } else if ($rota->paisOrigemInternacional == 30 && $rota->estadoOrigemInternacional == "Paraná" &&
-                ($rota->cidadeOrigemInternacional == "Curitiba" || $rota->cidadeOrigemInternacional == "Foz do Iguaçu")) {
-                $valorOrigem = 65;
-            } else if ($rota->paisOrigemInternacional == 30 && $rota->estadoOrigemInternacional == "Paraná") {
-                $valorOrigem = 55;
             } else if ($rota->paisOrigemInternacional == 30 && $rota->cidadeOrigemInternacional == "Brasília") {
-                $valorOrigem = 100;
+                $valorOrigem = 140.43;
+            } else if ($rota->paisOrigemInternacional == 30 && $rota->estadoOrigemInternacional == "Paraná" &&
+                ($rota->cidadeOrigemInternacional == "Curitiba")) {
+                $valorOrigem = 111.38;
+            } else if ($rota->paisOrigemInternacional == 30 && 
+                ($rota->cidadeOrigemInternacional == "Rio de Janeiro" || $rota->cidadeOrigemInternacional == "São Paulo" ||
+                $rota->cidadeOrigemInternacional == "Belo Horizonte" || $rota->cidadeOrigemInternacional == "Salvador" ||
+                $rota->cidadeOrigemInternacional == "Fortaleza" || $rota->cidadeOrigemInternacional == "Recife" ||
+                $rota->cidadeOrigemInternacional == "Porto Alegre" || $rota->cidadeOrigemInternacional == "Manaus" ||
+                $rota->cidadeOrigemInternacional == "Belém" || $rota->cidadeOrigemInternacional == "Goiânia" ||
+                $rota->cidadeOrigemInternacional == "São Luís" || $rota->cidadeOrigemInternacional == "Maceió" ||
+                $rota->cidadeOrigemInternacional == "Teresina" || $rota->cidadeOrigemInternacional == "João Pessoa" ||
+                $rota->cidadeOrigemInternacional == "Aracaju" || $rota->cidadeOrigemInternacional == "Natal" ||
+                $rota->cidadeOrigemInternacional == "Campo Grande" || $rota->cidadeOrigemInternacional == "Cuiabá" ||
+                $rota->cidadeOrigemInternacional == "Florianópolis" || $rota->cidadeOrigemInternacional == "Vitória" ||
+                $rota->cidadeOrigemInternacional == "Rio Branco" || $rota->cidadeOrigemInternacional == "Porto Velho" ||
+                $rota->cidadeOrigemInternacional == "Boa Vista" || $rota->cidadeOrigemInternacional == "Macapá" ||
+                $rota->cidadeOrigemInternacional == "Palmas")
+            ) {
+                $valorOrigem = 111.38;
             } else {
-                $valorOrigem = 80;
+                $valorOrigem = 87.17;
             }
         }
 
         // Calcula valor do destino
         if($rota->isViagemInternacional == 0) {
-            if (($rota->cidadeDestinoNacional == "Curitiba" || $rota->cidadeDestinoNacional == "Foz do Iguaçu")) {
-                $valorDestino = 65;
-            } else if ($rota->estadoDestinoNacional == "Paraná") {
-                $valorDestino = 55;
-            } else if ($rota->cidadeDestinoNacional == "Brasília") {
-                $valorDestino = 100;
+            if ($rota->cidadeDestinoNacional == "Brasília") {
+                $valorDestino = 140.43;
+            } else if ($rota->cidadeDestinoNacional == "Curitiba" ||
+                $rota->cidadeDestinoNacional == "Rio de Janeiro" || $rota->cidadeDestinoNacional == "São Paulo" ||
+                $rota->cidadeDestinoNacional == "Belo Horizonte" || $rota->cidadeDestinoNacional == "Salvador" ||
+                $rota->cidadeDestinoNacional == "Fortaleza" || $rota->cidadeDestinoNacional == "Recife" ||
+                $rota->cidadeDestinoNacional == "Porto Alegre" || $rota->cidadeDestinoNacional == "Manaus" ||
+                $rota->cidadeDestinoNacional == "Belém" || $rota->cidadeDestinoNacional == "Goiânia" ||
+                $rota->cidadeDestinoNacional == "São Luís" || $rota->cidadeDestinoNacional == "Maceió" ||
+                $rota->cidadeDestinoNacional == "Teresina" || $rota->cidadeDestinoNacional == "João Pessoa" ||
+                $rota->cidadeDestinoNacional == "Aracaju" || $rota->cidadeDestinoNacional == "Natal" ||
+                $rota->cidadeDestinoNacional == "Campo Grande" || $rota->cidadeDestinoNacional == "Cuiabá" ||
+                $rota->cidadeDestinoNacional == "Florianópolis" || $rota->cidadeDestinoNacional == "Vitória" ||
+                $rota->cidadeDestinoNacional == "Rio Branco" || $rota->cidadeDestinoNacional == "Porto Velho" ||
+                $rota->cidadeDestinoNacional == "Boa Vista" || $rota->cidadeDestinoNacional == "Macapá" ||
+                $rota->cidadeDestinoNacional == "Palmas"
+            ) {
+                $valorDestino = 111.38;
             } else {
-                $valorDestino = 80;
+                $valorDestino = 87.17;
             }
         } else {
             if ($rota->continenteDestinoInternacional == 1 && $rota->paisDestinoInternacional != 30) {
@@ -5201,15 +5250,29 @@ class ControladorAv extends Controller
                 $valorDestino = 140;
             } else if ($rota->continenteDestinoInternacional == 5) {
                 $valorDestino = 190;
-            } else if ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná" &&
-                ($rota->cidadeDestinoInternacional == "Curitiba" || $rota->cidadeDestinoInternacional == "Foz do Iguaçu")) {
-                $valorDestino = 65;
-            } else if ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná") {
-                $valorDestino = 55;
             } else if ($rota->paisDestinoInternacional == 30 && $rota->cidadeDestinoInternacional == "Brasília") {
-                $valorDestino = 100;
+                $valorDestino = 140.43;
+            } else if ($rota->paisDestinoInternacional == 30 && $rota->estadoDestinoInternacional == "Paraná" &&
+                ($rota->cidadeDestinoInternacional == "Curitiba")) {
+                $valorDestino = 111.38;
+            } else if ($rota->paisDestinoInternacional == 30 && 
+                ($rota->cidadeDestinoInternacional == "Rio de Janeiro" || $rota->cidadeDestinoInternacional == "São Paulo" ||
+                $rota->cidadeDestinoInternacional == "Belo Horizonte" || $rota->cidadeDestinoInternacional == "Salvador" ||
+                $rota->cidadeDestinoInternacional == "Fortaleza" || $rota->cidadeDestinoInternacional == "Recife" ||
+                $rota->cidadeDestinoInternacional == "Porto Alegre" || $rota->cidadeDestinoInternacional == "Manaus" ||
+                $rota->cidadeDestinoInternacional == "Belém" || $rota->cidadeDestinoInternacional == "Goiânia" ||
+                $rota->cidadeDestinoInternacional == "São Luís" || $rota->cidadeDestinoInternacional == "Maceió" ||
+                $rota->cidadeDestinoInternacional == "Teresina" || $rota->cidadeDestinoInternacional == "João Pessoa" ||
+                $rota->cidadeDestinoInternacional == "Aracaju" || $rota->cidadeDestinoInternacional == "Natal" ||
+                $rota->cidadeDestinoInternacional == "Campo Grande" || $rota->cidadeDestinoInternacional == "Cuiabá" ||
+                $rota->cidadeDestinoInternacional == "Florianópolis" || $rota->cidadeDestinoInternacional == "Vitória" ||
+                $rota->cidadeDestinoInternacional == "Rio Branco" || $rota->cidadeDestinoInternacional == "Porto Velho" ||
+                $rota->cidadeDestinoInternacional == "Boa Vista" || $rota->cidadeDestinoInternacional == "Macapá" ||
+                $rota->cidadeDestinoInternacional == "Palmas")
+            ) {
+                $valorDestino = 111.38;
             } else {
-                $valorDestino = 80;
+                $valorDestino = 87.17;
             }
         }
 
