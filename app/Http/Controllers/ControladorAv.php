@@ -4861,33 +4861,38 @@ class ControladorAv extends Controller
 
         //SOMA AS DIÁRIAS E RETORNO OS ATRIBUTOS NECESSÁRIOS PARA A TELA ----------------------------------------------------------------------
         foreach ($arrayDiasValores as $diaValor) {
-            if ($diaValor['valor'] == 150.00 || $diaValor['valor'] == 75.00) {
-                $valorDolar += $diaValor['valor'];
-            } else if ($diaValor['valor'] == 180.00 || $diaValor['valor'] == 90.00 || $diaValor['valor'] == 165.00) {
-                $valorDolar += $diaValor['valor'];
-            } else if ($diaValor['valor'] == 140.00 || $diaValor['valor'] == 70.00 || $diaValor['valor'] == 160.00) {
-                $valorDolar += $diaValor['valor'];
-            } else if ($diaValor['valor'] == 190.00 || $diaValor['valor'] == 95.00 || $diaValor['valor'] == 165.00) {
-                $valorDolar += $diaValor['valor'];
-            } else if ($diaValor['valor'] == 65.00 || $diaValor['valor'] == 32.50) {
-                $valorReais += $diaValor['valor'];
-            } else if ($diaValor['valor'] == 55.00 || $diaValor['valor'] == 27.50 || $diaValor['valor'] == 60.00) {
-                $valorReais += $diaValor['valor'];
-            } else if ($diaValor['valor'] == 100.00 || $diaValor['valor'] == 50.00 || $diaValor['valor'] == 87.50) {
 
+            //deixe o $diaValor com apenas duas casas decimais
+            $diaValor['valor'] = number_format((float)$diaValor['valor'], 2, '.', '');
+
+            // Valores internacionais em dólar
+            if ($diaValor['valor'] == 150.00 || $diaValor['valor'] == 75.00) { // América do Norte
+                $valorDolar += $diaValor['valor'];
+            } else if ($diaValor['valor'] == 180.00 || $diaValor['valor'] == 90.00) { // Europa
+                $valorDolar += $diaValor['valor'];
+            } else if ($diaValor['valor'] == 140.00 || $diaValor['valor'] == 70.00) { // África
+                $valorDolar += $diaValor['valor'];
+            } else if ($diaValor['valor'] == 190.00 || $diaValor['valor'] == 95.00) { // Ásia
+                $valorDolar += $diaValor['valor'];
+            } else if ($diaValor['valor'] == 100.00 || $diaValor['valor'] == 50.00) { // América Latina/Central
                 if (array_filter($diaValor['arrayRotasDoDia'], function ($rota) {
                     return stripos($rota, 'Brasília') !== false;
                 })) {
                     $valorReais += $diaValor['valor'];
-                }
-                 else {
+                } else {
                     $valorDolar += $diaValor['valor'];
                 }
-            } else if ($diaValor['valor'] == 80.00 || $diaValor['valor'] == 40.00) {
+            }
+            // Valores nacionais em reais - NOVOS VALORES
+            else if ($diaValor['valor'] == 140.43 || $diaValor['valor'] == 70.22) { // Brasília
+                $valorReais += $diaValor['valor'];
+            } else if ($diaValor['valor'] == 111.38 || $diaValor['valor'] == 55.69) { // Demais capitais dos estados
+                $valorReais += $diaValor['valor'];
+            } else if ($diaValor['valor'] == 87.17 || $diaValor['valor'] == 43.59) { // Demais cidades do Paraná
                 $valorReais += $diaValor['valor'];
             }
         }
-
+        
         if ($isInternacional == true) {
             // $valorDolar = $valorReais;
             $av->valorDolar = $valorDolar;
@@ -4901,11 +4906,13 @@ class ControladorAv extends Controller
             return redirect('/dashboard')->with('msg', 'Você não tem permissão para editar esta av!');
         }
 
+
         //Atualiza no banco de dados o valor calculado para a diária de alimentação
         $dados = array(
             "valorReais" => $av->valorReais,
             "valorDolar" => $av->valorDolar
         );
+        
         Av::findOrFail($av->id)->update($dados);
 
         $veiculosProprios = VeiculoProprio::all();
