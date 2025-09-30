@@ -7303,7 +7303,7 @@ class ControladorAv extends Controller
                             }
                             $valorTarde = $valor / 2;
                             $temDiariaTarde = true;
-                        } else if ($proximaRota == false && $dia != $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') < "24:00:00") {
+                        } else if ($proximaRota == false && $dia != $dataUltimaRota && $dataChegadaFormatado->format('H:i:s') < "24:00:00" && $dataChegadaFormatado->format('H:i:s') >= "19:01:00") {
                             //NÃO TEM MAIS ROTAS NO DIA, SIGNFICA QUE JÁ CHEGOU E VAI FICAR NA CIDADE
                             $valorTarde = $valor / 2;
                             $temDiariaTarde = true;
