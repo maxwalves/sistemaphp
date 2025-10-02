@@ -1882,26 +1882,95 @@ class ControladorRota extends Controller
             abort(403);
         }
 
-        // Buscar AVs com prestação de contas realizada para análise
-        $avs = Av::where('isPrestacaoContasRealizada', true)
+        // Status permitidos para verificação
+        $statusPermitidos = [
+            'Aguardando reserva pela CAD e adiantamento pela CFI',
+            'Aguardando aprovação da prestação de contas pelo Gestor',
+            'Aguardando aprovação da Prestação de Contas pelo Financeiro',
+            'Aguardando acerto de contas pelo financeiro'
+        ];
+
+        // Buscar AVs com rotas cadastradas e status específicos para análise
+        $avs = Av::whereHas('rotas')
                  ->with(['user', 'rotas'])
+                 ->whereIn('status', $statusPermitidos)
+                 ->where(function($query) {
+                     $query->where('valorReais', '>', 0)
+                           ->orWhere('valorDolar', '>', 0);
+                 })
                  ->orderBy('id', 'desc')
-                 ->limit(100)
+                 ->limit(200)
                  ->get();
 
         $irregularidades = [];
+        $estatisticas = [
+            'severidade_alta' => 0,
+            'severidade_media' => 0,
+            'severidade_baixa' => 0,
+            'tipos_irregularidades' => [],
+            'valor_total_divergencia' => 0,
+            'usuarios_com_irregularidades' => [],
+            'avs_por_status' => []
+        ];
+
+        // Contabilizar AVs por status
+        foreach ($avs as $av) {
+            $status = $av->status;
+            if (!isset($estatisticas['avs_por_status'][$status])) {
+                $estatisticas['avs_por_status'][$status] = 0;
+            }
+            $estatisticas['avs_por_status'][$status]++;
+        }
 
         foreach ($avs as $av) {
             $resultado = $this->analisarCoerenciaDiarias($av);
             if ($resultado['temIrregularidade']) {
                 $irregularidades[] = $resultado;
+                
+                // Estatísticas por severidade
+                switch ($resultado['severidade_geral']) {
+                    case 'alta':
+                        $estatisticas['severidade_alta']++;
+                        break;
+                    case 'media':
+                        $estatisticas['severidade_media']++;
+                        break;
+                    case 'baixa':
+                        $estatisticas['severidade_baixa']++;
+                        break;
+                }
+
+                // Tipos de irregularidades
+                foreach ($resultado['irregularidades'] as $irreg) {
+                    $tipo = $irreg['tipo'];
+                    if (!isset($estatisticas['tipos_irregularidades'][$tipo])) {
+                        $estatisticas['tipos_irregularidades'][$tipo] = 0;
+                    }
+                    $estatisticas['tipos_irregularidades'][$tipo]++;
+                    
+                    // Somar diferenças
+                    $estatisticas['valor_total_divergencia'] += $irreg['diferenca'];
+                }
+
+                // Usuários com irregularidades
+                $usuario = $resultado['usuario'];
+                if (!isset($estatisticas['usuarios_com_irregularidades'][$usuario])) {
+                    $estatisticas['usuarios_com_irregularidades'][$usuario] = 0;
+                }
+                $estatisticas['usuarios_com_irregularidades'][$usuario]++;
             }
         }
+
+        // Ordenar usuários por quantidade de irregularidades
+        arsort($estatisticas['usuarios_com_irregularidades']);
+        arsort($estatisticas['tipos_irregularidades']);
 
         return view('admin.monitoramento-diarias', [
             'irregularidades' => $irregularidades,
             'totalAnalisadas' => count($avs),
-            'totalIrregularidades' => count($irregularidades)
+            'totalIrregularidades' => count($irregularidades),
+            'estatisticas' => $estatisticas,
+            'statusPermitidos' => $statusPermitidos
         ]);
     }
 
@@ -1923,108 +1992,227 @@ class ControladorRota extends Controller
     }
 
     /**
-     * Analisa a coerência entre valores calculados e informados
+     * Analisa a coerência entre valores calculados e os valores armazenados na AV
      */
     private function analisarCoerenciaDiarias($av)
     {
-        if (count($av->rotas) == 0) {
+        try {
+            if (count($av->rotas) == 0) {
+                return [
+                    'av_id' => $av->id,
+                    'usuario' => $av->user->name ?? 'Usuário não encontrado',
+                    'temIrregularidade' => false,
+                    'motivo' => 'AV sem rotas cadastradas'
+                ];
+            }
+
+            // Calcular o valor que deveria ser baseado nas rotas atuais
+            $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
+            
+            $valorCalculadoReais = 0;
+            foreach ($arrayDiasValores as $dia) {
+                $valorCalculadoReais += $dia['valor'];
+            }
+
+            // Valores armazenados na AV
+            $valorArmazenadoReais = $av->valorReais ?? 0;
+            $valorArmazenadoDolar = $av->valorDolar ?? 0;
+
+            // Tolerância para diferenças (R$ 5,00)
+            $tolerancia = 5.00;
+
+            $irregularidades = [];
+            $temIrregularidade = false;
+
+            // Verificação principal: Valor calculado vs valor armazenado em Reais
+            $diferencaReais = abs($valorCalculadoReais - $valorArmazenadoReais);
+            
+            if ($diferencaReais > $tolerancia) {
+                $irregularidades[] = [
+                    'tipo' => 'Divergência no valor em Reais',
+                    'descricao' => 'O valor calculado pelas rotas não confere com o valor armazenado na AV',
+                    'valor_esperado' => $valorCalculadoReais,
+                    'valor_encontrado' => $valorArmazenadoReais,
+                    'diferenca' => $diferencaReais,
+                    'severidade' => $this->calcularSeveridade($diferencaReais),
+                    'moeda' => 'BRL'
+                ];
+                $temIrregularidade = true;
+            }
+
+            // Se há valor em dólar mas não há rotas internacionais, isso pode indicar problema
+            if ($valorArmazenadoDolar > 0) {
+                $temRotaInternacional = false;
+                foreach ($av->rotas as $rota) {
+                    if ($rota->isViagemInternacional) {
+                        $temRotaInternacional = true;
+                        break;
+                    }
+                }
+
+                if (!$temRotaInternacional) {
+                    $irregularidades[] = [
+                        'tipo' => 'Valor em dólar sem rota internacional',
+                        'descricao' => 'Há valor em dólar armazenado mas não foram encontradas rotas internacionais',
+                        'valor_esperado' => 0,
+                        'valor_encontrado' => $valorArmazenadoDolar,
+                        'diferenca' => $valorArmazenadoDolar,
+                        'severidade' => 'media',
+                        'moeda' => 'USD'
+                    ];
+                    $temIrregularidade = true;
+                }
+            }
+
+            // Verificação de valores negativos
+            if ($valorArmazenadoReais < 0) {
+                $irregularidades[] = [
+                    'tipo' => 'Valor negativo em Reais',
+                    'descricao' => 'O valor em Reais armazenado na AV é negativo',
+                    'valor_esperado' => max(0, $valorCalculadoReais),
+                    'valor_encontrado' => $valorArmazenadoReais,
+                    'diferenca' => abs($valorArmazenadoReais),
+                    'severidade' => 'alta',
+                    'moeda' => 'BRL'
+                ];
+                $temIrregularidade = true;
+            }
+
+            if ($valorArmazenadoDolar < 0) {
+                $irregularidades[] = [
+                    'tipo' => 'Valor negativo em Dólar',
+                    'descricao' => 'O valor em Dólar armazenado na AV é negativo',
+                    'valor_esperado' => 0,
+                    'valor_encontrado' => $valorArmazenadoDolar,
+                    'diferenca' => abs($valorArmazenadoDolar),
+                    'severidade' => 'alta',
+                    'moeda' => 'USD'
+                ];
+                $temIrregularidade = true;
+            }
+
             return [
                 'av_id' => $av->id,
                 'usuario' => $av->user->name,
-                'temIrregularidade' => false,
-                'motivo' => 'AV sem rotas cadastradas'
+                'data_criacao' => $this->formatarDataSegura($av->dataCriacao),
+                'status' => $av->status,
+                'temIrregularidade' => $temIrregularidade,
+                'irregularidades' => $irregularidades,
+                'valores' => [
+                    'calculado_reais' => $valorCalculadoReais,
+                    'armazenado_reais' => $valorArmazenadoReais,
+                    'armazenado_dolar' => $valorArmazenadoDolar,
+                    'diferenca_reais' => $diferencaReais
+                ],
+                'detalhes_dias' => $arrayDiasValores,
+                'total_dias' => count($arrayDiasValores),
+                'total_rotas' => count($av->rotas),
+                'severidade_geral' => $this->calcularSeveridadeGeral($irregularidades)
             ];
-        }
-
-        // Buscar o valor originalmente calculado e pago (A)
-        $valorOriginalCalculado = \App\Models\HistoricoPc::where('av_id', $av->id)
-                                    ->where('comentario', 'Documento AV')
-                                    ->first();
-
-        if (!$valorOriginalCalculado) {
-            // Se não encontrar no histórico, usar os valores da própria AV como referência
-            $valorOriginalCalculado = (object) [
-                'valorReais' => $av->valorReais,
-                'valorExtraReais' => $av->valorExtraReais ?? 0
-            ];
-        }
-
-        // Calcular o valor que deveria ser baseado nas rotas atuais
-        $controladorAv = new \App\Http\Controllers\ControladorAv();
-        $arrayDiasValores = $controladorAv->geraArrayDiasValoresCerto($av);
         
-        $valorCalculadoAtual = 0;
-        foreach ($arrayDiasValores as $dia) {
-            $valorCalculadoAtual += $dia['valor'];
-        }
-
-        // Valor informado pelo usuário na prestação de contas (B)
-        $valorInformadoPc = $av->valorReais;
-
-        // Cálculos de diferenças
-        $diferencaOriginalVsCalculado = abs($valorOriginalCalculado->valorReais - $valorCalculadoAtual);
-        $diferencaInformadoVsCalculado = abs($valorInformadoPc - $valorCalculadoAtual);
-        $diferencaOriginalVsInformado = abs($valorOriginalCalculado->valorReais - $valorInformadoPc);
-
-        // Tolerância para diferenças (R$ 5,00)
-        $tolerancia = 5.00;
-
-        $irregularidades = [];
-        $temIrregularidade = false;
-
-        // Verificação 1: Valor original vs valor calculado atual
-        if ($diferencaOriginalVsCalculado > $tolerancia) {
-            $irregularidades[] = [
-                'tipo' => 'Divergência no cálculo original',
-                'descricao' => 'O valor originalmente calculado difere significativamente do cálculo atual baseado nas rotas',
-                'valor_esperado' => $valorCalculadoAtual,
-                'valor_encontrado' => $valorOriginalCalculado->valorReais,
-                'diferenca' => $diferencaOriginalVsCalculado
+        } catch (\Exception $e) {
+            // Em caso de erro, retornar informações básicas
+            return [
+                'av_id' => $av->id,
+                'usuario' => $av->user->name ?? 'Usuário não encontrado',
+                'data_criacao' => $this->formatarDataSegura($av->dataCriacao),
+                'status' => $av->status ?? 'Status não definido',
+                'temIrregularidade' => true,
+                'irregularidades' => [[
+                    'tipo' => 'Erro de processamento',
+                    'descricao' => 'Erro ao analisar esta AV: ' . $e->getMessage(),
+                    'valor_esperado' => 0,
+                    'valor_encontrado' => 0,
+                    'diferenca' => 0,
+                    'severidade' => 'alta'
+                ]],
+                'valores' => [
+                    'calculado_reais' => 0,
+                    'armazenado_reais' => 0,
+                    'armazenado_dolar' => 0,
+                    'diferenca_reais' => 0
+                ],
+                'detalhes_dias' => [],
+                'total_dias' => 0,
+                'total_rotas' => 0,
+                'severidade_geral' => 'alta'
             ];
-            $temIrregularidade = true;
+        }
+    }
+
+    /**
+     * Calcula a severidade baseada no valor da diferença
+     */
+    private function calcularSeveridade($diferenca)
+    {
+        if ($diferenca >= 100) {
+            return 'alta';
+        } elseif ($diferenca >= 50) {
+            return 'media';
+        } else {
+            return 'baixa';
+        }
+    }
+
+    /**
+     * Calcula a severidade geral baseada nas irregularidades encontradas
+     */
+    private function calcularSeveridadeGeral($irregularidades)
+    {
+        if (empty($irregularidades)) {
+            return 'nenhuma';
         }
 
-        // Verificação 2: Valor informado na PC vs valor calculado
-        if ($diferencaInformadoVsCalculado > $tolerancia) {
-            $irregularidades[] = [
-                'tipo' => 'Divergência na prestação de contas',
-                'descricao' => 'O valor informado na prestação de contas difere do cálculo baseado nas rotas',
-                'valor_esperado' => $valorCalculadoAtual,
-                'valor_encontrado' => $valorInformadoPc,
-                'diferenca' => $diferencaInformadoVsCalculado
-            ];
-            $temIrregularidade = true;
+        $hasAlta = false;
+        $hasMedia = false;
+
+        foreach ($irregularidades as $irreg) {
+            if (isset($irreg['severidade'])) {
+                if ($irreg['severidade'] === 'alta') {
+                    $hasAlta = true;
+                } elseif ($irreg['severidade'] === 'media') {
+                    $hasMedia = true;
+                }
+            }
         }
 
-        // Verificação 3: Valor original vs valor informado (mudança não justificada)
-        if ($diferencaOriginalVsInformado > $tolerancia) {
-            $irregularidades[] = [
-                'tipo' => 'Alteração de valor não justificada',
-                'descricao' => 'O usuário alterou o valor da diária sem justificativa aparente',
-                'valor_esperado' => $valorOriginalCalculado->valorReais,
-                'valor_encontrado' => $valorInformadoPc,
-                'diferenca' => $diferencaOriginalVsInformado
-            ];
-            $temIrregularidade = true;
+        if ($hasAlta) {
+            return 'alta';
+        } elseif ($hasMedia) {
+            return 'media';
+        } else {
+            return 'baixa';
+        }
+    }
+
+    /**
+     * Formata data de forma segura, tratando diferentes tipos de entrada
+     */
+    private function formatarDataSegura($data)
+    {
+        if (!$data) {
+            return 'N/A';
         }
 
-        return [
-            'av_id' => $av->id,
-            'usuario' => $av->user->name,
-            'data_criacao' => $av->dataCriacao->format('d/m/Y'),
-            'status' => $av->status,
-            'temIrregularidade' => $temIrregularidade,
-            'irregularidades' => $irregularidades,
-            'valores' => [
-                'original_calculado' => $valorOriginalCalculado->valorReais,
-                'atual_calculado' => $valorCalculadoAtual,
-                'informado_pc' => $valorInformadoPc,
-                'extra_original' => $valorOriginalCalculado->valorExtraReais ?? 0,
-                'extra_informado' => $av->valorExtraReais ?? 0
-            ],
-            'detalhes_dias' => $arrayDiasValores,
-            'total_dias' => count($arrayDiasValores),
-            'total_rotas' => count($av->rotas)
-        ];
+        // Se já é um objeto DateTime
+        if (is_object($data) && method_exists($data, 'format')) {
+            return $data->format('d/m/Y');
+        }
+
+        // Se é uma string, tentar converter
+        if (is_string($data)) {
+            try {
+                $dateTime = new \DateTime($data);
+                return $dateTime->format('d/m/Y');
+            } catch (\Exception $e) {
+                // Se falhar, tentar com strtotime
+                $timestamp = strtotime($data);
+                if ($timestamp !== false) {
+                    return date('d/m/Y', $timestamp);
+                }
+            }
+        }
+
+        return 'N/A';
     }
 }
