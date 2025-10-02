@@ -1660,4 +1660,371 @@ class ControladorRota extends Controller
         }
         return $rotaPosterior;
     }
+
+    public function admin()
+    {
+        $user = auth()->user();
+        
+        // Verificar se o usuário tem permissão de administrador
+        $permission = \Spatie\Permission\Models\Permission::where('name', 'view users')->first();
+        if (!$user->hasPermissionTo($permission)) {
+            return redirect()->back()->with('error', 'Acesso negado. Apenas administradores podem acessar esta área.');
+        }
+        
+        return view('admin.index', ['user' => $user]);
+    }
+
+    public function substituirArquivo()
+    {
+        $user = auth()->user();
+        
+        // Verificar se o usuário tem permissão de administrador
+        $permission = \Spatie\Permission\Models\Permission::where('name', 'view users')->first();
+        if (!$user->hasPermissionTo($permission)) {
+            return redirect()->back()->with('error', 'Acesso negado. Apenas administradores podem acessar esta funcionalidade.');
+        }
+        
+        return view('admin.substituir-arquivo', ['user' => $user]);
+    }
+
+    public function processarSubstituicaoArquivo(Request $request)
+    {
+        $user = auth()->user();
+        
+        // Verificar se o usuário tem permissão de administrador
+        $permission = \Spatie\Permission\Models\Permission::where('name', 'view users')->first();
+        if (!$user->hasPermissionTo($permission)) {
+            return redirect()->back()->with('error', 'Acesso negado.');
+        }
+        
+        $request->validate([
+            'diretorio_arquivo' => 'required|string',
+            'novo_arquivo' => 'required|file|max:10240', // Máximo 10MB
+        ], [
+            'diretorio_arquivo.required' => 'O diretório do arquivo é obrigatório.',
+            'novo_arquivo.required' => 'O novo arquivo é obrigatório.',
+            'novo_arquivo.file' => 'Deve ser um arquivo válido.',
+            'novo_arquivo.max' => 'O arquivo deve ter no máximo 10MB.',
+        ]);
+        
+        try {
+            $diretorioCompleto = $request->diretorio_arquivo;
+            
+            // Normalizar separadores de diretório
+            $diretorioCompleto = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $diretorioCompleto);
+            
+            // Se o caminho não for absoluto (não começar com /mnt/arquivos_viagem), 
+            // assumir que é relativo ao diretório base
+            if (!str_starts_with($diretorioCompleto, '/mnt/arquivos_viagem')) {
+                $diretorioCompleto = '/mnt/arquivos_viagem' . DIRECTORY_SEPARATOR . ltrim($diretorioCompleto, DIRECTORY_SEPARATOR);
+            }
+            
+            // Verificar se o arquivo existe
+            if (!file_exists($diretorioCompleto)) {
+                return redirect()->back()->with('error', 'Arquivo não encontrado no diretório especificado: ' . $diretorioCompleto);
+            }
+            
+            // Obter informações do arquivo original
+            $infoArquivo = pathinfo($diretorioCompleto);
+            $diretorioBase = $infoArquivo['dirname'];
+            $nomeArquivoOriginal = $infoArquivo['basename'];
+            
+            // Remover o arquivo original
+            if (!unlink($diretorioCompleto)) {
+                return redirect()->back()->with('error', 'Erro ao remover o arquivo original.');
+            }
+            
+            // Mover o novo arquivo para o local do arquivo original
+            $novoArquivo = $request->file('novo_arquivo');
+            if (!$novoArquivo->move($diretorioBase, $nomeArquivoOriginal)) {
+                return redirect()->back()->with('error', 'Erro ao mover o novo arquivo para o destino.');
+            }
+            
+            // Log da operação
+            \Log::info('Arquivo substituído', [
+                'usuario' => $user->username,
+                'arquivo_substituido' => $diretorioCompleto,
+                'novo_arquivo_nome' => $novoArquivo->getClientOriginalName(),
+                'timestamp' => now()
+            ]);
+            
+            return redirect()->back()->with('success', 'Arquivo substituído com sucesso! O arquivo foi atualizado diretamente.');
+            
+        } catch (\Exception $e) {
+            \Log::error('Erro ao substituir arquivo', [
+                'erro' => $e->getMessage(),
+                'usuario' => $user->username,
+                'diretorio' => $request->diretorio_arquivo
+            ]);
+            
+            return redirect()->back()->with('error', 'Erro interno: ' . $e->getMessage());
+        }
+    }
+
+    public function navegarArquivos(Request $request)
+    {
+        $user = auth()->user();
+        
+        // Verificar se o usuário tem permissão de administrador
+        $permission = \Spatie\Permission\Models\Permission::where('name', 'view users')->first();
+        if (!$user->hasPermissionTo($permission)) {
+            return response()->json(['error' => 'Acesso negado'], 403);
+        }
+
+        $caminho = $request->get('caminho', '');
+        
+        // Definir diretório base para arquivos de viagem
+        $diretorioBase = '/mnt/arquivos_viagem';
+        
+        // Se um caminho foi fornecido, normalizar
+        if ($caminho) {
+            $caminho = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $caminho);
+            $caminhoCompleto = $diretorioBase . DIRECTORY_SEPARATOR . ltrim($caminho, DIRECTORY_SEPARATOR);
+        } else {
+            $caminhoCompleto = $diretorioBase;
+        }
+
+        // Verificar se o diretório existe e é seguro
+        if (!file_exists($caminhoCompleto) || !is_dir($caminhoCompleto)) {
+            return response()->json(['error' => 'Diretório não encontrado'], 404);
+        }
+
+        // Verificar se está dentro do diretório permitido
+        $realPath = realpath($caminhoCompleto);
+        $realBasePath = realpath($diretorioBase);
+        if (strpos($realPath, $realBasePath) !== 0) {
+            return response()->json(['error' => 'Acesso negado a este diretório'], 403);
+        }
+
+        try {
+            $itens = [];
+            $arquivos = scandir($caminhoCompleto);
+            
+            foreach ($arquivos as $arquivo) {
+                if ($arquivo === '.' || $arquivo === '..') {
+                    continue;
+                }
+                
+                $caminhoItem = $caminhoCompleto . DIRECTORY_SEPARATOR . $arquivo;
+                $caminhoRelativo = $caminho ? $caminho . DIRECTORY_SEPARATOR . $arquivo : $arquivo;
+                
+                if (is_dir($caminhoItem)) {
+                    $itens[] = [
+                        'nome' => $arquivo,
+                        'caminho' => $caminhoRelativo,
+                        'tipo' => 'pasta',
+                        'tamanho' => '',
+                        'modificado' => date('d/m/Y H:i', filemtime($caminhoItem))
+                    ];
+                } else {
+                    $tamanho = filesize($caminhoItem);
+                    $tamanhoFormatado = $this->formatarTamanhoArquivo($tamanho);
+                    
+                    $itens[] = [
+                        'nome' => $arquivo,
+                        'caminho' => $caminhoRelativo,
+                        'caminhoCompleto' => $caminhoItem,
+                        'tipo' => 'arquivo',
+                        'extensao' => strtolower(pathinfo($arquivo, PATHINFO_EXTENSION)),
+                        'tamanho' => $tamanhoFormatado,
+                        'modificado' => date('d/m/Y H:i', filemtime($caminhoItem))
+                    ];
+                }
+            }
+            
+            // Ordenar: pastas primeiro, depois arquivos por nome
+            usort($itens, function($a, $b) {
+                if ($a['tipo'] !== $b['tipo']) {
+                    return $a['tipo'] === 'pasta' ? -1 : 1;
+                }
+                return strcasecmp($a['nome'], $b['nome']);
+            });
+            
+            // Caminho pai (para botão voltar)
+            $caminhoParent = '';
+            if ($caminho) {
+                $partes = explode(DIRECTORY_SEPARATOR, $caminho);
+                array_pop($partes);
+                $caminhoParent = implode(DIRECTORY_SEPARATOR, $partes);
+            }
+            
+            return response()->json([
+                'itens' => $itens,
+                'caminhoAtual' => $caminho,
+                'caminhoParent' => $caminhoParent,
+                'podeVoltar' => !empty($caminho)
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao ler diretório: ' . $e->getMessage()], 500);
+        }
+    }
+
+    private function formatarTamanhoArquivo($bytes)
+    {
+        if ($bytes === 0) return '0 B';
+        
+        $unidades = ['B', 'KB', 'MB', 'GB'];
+        $i = floor(log($bytes, 1024));
+        
+        return round($bytes / pow(1024, $i), 2) . ' ' . $unidades[$i];
+    }
+
+    /**
+     * Página de monitoramento de diárias
+     */
+    public function monitoramentoDiarias()
+    {
+        $user = auth()->user();
+        
+        // Verificar se tem permissão de administrador
+        if (!$user->can('view users')) {
+            abort(403);
+        }
+
+        // Buscar AVs com prestação de contas realizada para análise
+        $avs = Av::where('isPrestacaoContasRealizada', true)
+                 ->with(['user', 'rotas'])
+                 ->orderBy('id', 'desc')
+                 ->limit(100)
+                 ->get();
+
+        $irregularidades = [];
+
+        foreach ($avs as $av) {
+            $resultado = $this->analisarCoerenciaDiarias($av);
+            if ($resultado['temIrregularidade']) {
+                $irregularidades[] = $resultado;
+            }
+        }
+
+        return view('admin.monitoramento-diarias', [
+            'irregularidades' => $irregularidades,
+            'totalAnalisadas' => count($avs),
+            'totalIrregularidades' => count($irregularidades)
+        ]);
+    }
+
+    /**
+     * Análise detalhada de uma AV específica
+     */
+    public function analisarAv($id)
+    {
+        $user = auth()->user();
+        
+        if (!$user->can('view users')) {
+            abort(403);
+        }
+
+        $av = Av::with(['user', 'rotas'])->findOrFail($id);
+        $analise = $this->analisarCoerenciaDiarias($av);
+
+        return response()->json($analise);
+    }
+
+    /**
+     * Analisa a coerência entre valores calculados e informados
+     */
+    private function analisarCoerenciaDiarias($av)
+    {
+        if (count($av->rotas) == 0) {
+            return [
+                'av_id' => $av->id,
+                'usuario' => $av->user->name,
+                'temIrregularidade' => false,
+                'motivo' => 'AV sem rotas cadastradas'
+            ];
+        }
+
+        // Buscar o valor originalmente calculado e pago (A)
+        $valorOriginalCalculado = \App\Models\HistoricoPc::where('av_id', $av->id)
+                                    ->where('comentario', 'Documento AV')
+                                    ->first();
+
+        if (!$valorOriginalCalculado) {
+            // Se não encontrar no histórico, usar os valores da própria AV como referência
+            $valorOriginalCalculado = (object) [
+                'valorReais' => $av->valorReais,
+                'valorExtraReais' => $av->valorExtraReais ?? 0
+            ];
+        }
+
+        // Calcular o valor que deveria ser baseado nas rotas atuais
+        $controladorAv = new \App\Http\Controllers\ControladorAv();
+        $arrayDiasValores = $controladorAv->geraArrayDiasValoresCerto($av);
+        
+        $valorCalculadoAtual = 0;
+        foreach ($arrayDiasValores as $dia) {
+            $valorCalculadoAtual += $dia['valor'];
+        }
+
+        // Valor informado pelo usuário na prestação de contas (B)
+        $valorInformadoPc = $av->valorReais;
+
+        // Cálculos de diferenças
+        $diferencaOriginalVsCalculado = abs($valorOriginalCalculado->valorReais - $valorCalculadoAtual);
+        $diferencaInformadoVsCalculado = abs($valorInformadoPc - $valorCalculadoAtual);
+        $diferencaOriginalVsInformado = abs($valorOriginalCalculado->valorReais - $valorInformadoPc);
+
+        // Tolerância para diferenças (R$ 5,00)
+        $tolerancia = 5.00;
+
+        $irregularidades = [];
+        $temIrregularidade = false;
+
+        // Verificação 1: Valor original vs valor calculado atual
+        if ($diferencaOriginalVsCalculado > $tolerancia) {
+            $irregularidades[] = [
+                'tipo' => 'Divergência no cálculo original',
+                'descricao' => 'O valor originalmente calculado difere significativamente do cálculo atual baseado nas rotas',
+                'valor_esperado' => $valorCalculadoAtual,
+                'valor_encontrado' => $valorOriginalCalculado->valorReais,
+                'diferenca' => $diferencaOriginalVsCalculado
+            ];
+            $temIrregularidade = true;
+        }
+
+        // Verificação 2: Valor informado na PC vs valor calculado
+        if ($diferencaInformadoVsCalculado > $tolerancia) {
+            $irregularidades[] = [
+                'tipo' => 'Divergência na prestação de contas',
+                'descricao' => 'O valor informado na prestação de contas difere do cálculo baseado nas rotas',
+                'valor_esperado' => $valorCalculadoAtual,
+                'valor_encontrado' => $valorInformadoPc,
+                'diferenca' => $diferencaInformadoVsCalculado
+            ];
+            $temIrregularidade = true;
+        }
+
+        // Verificação 3: Valor original vs valor informado (mudança não justificada)
+        if ($diferencaOriginalVsInformado > $tolerancia) {
+            $irregularidades[] = [
+                'tipo' => 'Alteração de valor não justificada',
+                'descricao' => 'O usuário alterou o valor da diária sem justificativa aparente',
+                'valor_esperado' => $valorOriginalCalculado->valorReais,
+                'valor_encontrado' => $valorInformadoPc,
+                'diferenca' => $diferencaOriginalVsInformado
+            ];
+            $temIrregularidade = true;
+        }
+
+        return [
+            'av_id' => $av->id,
+            'usuario' => $av->user->name,
+            'data_criacao' => $av->dataCriacao->format('d/m/Y'),
+            'status' => $av->status,
+            'temIrregularidade' => $temIrregularidade,
+            'irregularidades' => $irregularidades,
+            'valores' => [
+                'original_calculado' => $valorOriginalCalculado->valorReais,
+                'atual_calculado' => $valorCalculadoAtual,
+                'informado_pc' => $valorInformadoPc,
+                'extra_original' => $valorOriginalCalculado->valorExtraReais ?? 0,
+                'extra_informado' => $av->valorExtraReais ?? 0
+            ],
+            'detalhes_dias' => $arrayDiasValores,
+            'total_dias' => count($arrayDiasValores),
+            'total_rotas' => count($av->rotas)
+        ];
+    }
 }

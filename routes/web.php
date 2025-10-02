@@ -298,4 +298,12 @@ Route::middleware(['assinatura.termo'])->group(function () {
         Route::post('/reservasVeiculo', [ControladorRota::class, 'registrarReservaVeiculo'])->middleware('auth')->name('reservasVeiculo.store');
         Route::get('/reservasVeiculo/{id}/{av}', [ControladorRota::class, 'removerReservaVeiculo'])->middleware('auth')->name('reservasVeiculo.destroy');
 
+        // ROTAS PARA ADMINISTRAÇÃO
+        Route::get('/admin', [ControladorRota::class, 'admin'])->middleware('auth');
+        Route::get('/admin/substituir-arquivo', [ControladorRota::class, 'substituirArquivo'])->middleware('auth');
+        Route::post('/admin/processar-substituicao-arquivo', [ControladorRota::class, 'processarSubstituicaoArquivo'])->middleware('auth');
+        Route::get('/admin/navegar-arquivos', [ControladorRota::class, 'navegarArquivos'])->middleware('auth');
+        Route::get('/admin/monitoramento-diarias', [ControladorRota::class, 'monitoramentoDiarias'])->middleware('auth');
+        Route::get('/admin/analisar-av/{id}', [ControladorRota::class, 'analisarAv'])->middleware('auth');
+
 });
