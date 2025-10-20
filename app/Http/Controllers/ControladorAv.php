@@ -5014,9 +5014,8 @@ class ControladorAv extends Controller
 
         //filtre as reservas para pegar somente as reservas em que dataInicio maior ou igual a data atual
         $reservas3 = $reservas3->filter(function ($reserva) {
-            $dataInicio = new DateTime($reserva->dataInicio);
-            $dataInicio->setTimezone(new DateTimeZone('America/Sao_Paulo'));
-            $dataAtual = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+            $dataInicio = (new DateTime($reserva->dataInicio))->setTimezone(new DateTimeZone('America/Sao_Paulo'))->format('Y-m-d');
+            $dataAtual = (new DateTime('now', new DateTimeZone('America/Sao_Paulo')))->format('Y-m-d');
             return $dataInicio >= $dataAtual;
         });
 
@@ -5033,15 +5032,15 @@ class ControladorAv extends Controller
             $isCuritiba = true;
         }
 
-        $reservas3 = $reservas3->filter(function ($reserva) use ($departmentUser, $isCuritiba) {
-            if ($isCuritiba && $reserva->veiculo->codigoRegional == "CWB") {
-                return true;
-            } else if ($reserva->usuario->department == $departmentUser) {
-                return true;
-            } else {
-                return false;
-            }
-        });
+        // $reservas3 = $reservas3->filter(function ($reserva) use ($departmentUser, $isCuritiba) {
+        //     if ($isCuritiba && $reserva->veiculo->codigoRegional == "CWB") {
+        //         return true;
+        //     } else if ($reserva->usuario->department == $departmentUser) {
+        //         return true;
+        //     } else {
+        //         return false;
+        //     }
+        // });
 
         //---------------------------------------------------------------------------------------------------------------------
 
