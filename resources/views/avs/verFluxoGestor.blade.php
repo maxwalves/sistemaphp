@@ -220,11 +220,13 @@
                                                 <tbody>
                                                     @foreach($reservas2 as $r)
                                                         <tr>
-                                                            <td>{{$r->id}}</td>
-                                                            <td>{{date('d/m/Y H:i', strtotime($r->dataInicio))}}</td>
-                                                            <td>{{date('d/m/Y H:i', strtotime($r->dataFim))}}</td>
-                                                            <td>{{$r->observacoes}}</td>
-                                                            <td>{{$r->veiculo->marca}} - {{$r->veiculo->modelo}} - {{$r->veiculo->placa}}</td>
+                                                            <td>{{ $r->id ?? 'N/A' }}</td>
+                                                            <td>{{ isset($r->dataInicio) ? date('d/m/Y H:i', strtotime($r->dataInicio)) : 'N/A' }}</td>
+                                                            <td>{{ isset($r->dataFim) ? date('d/m/Y H:i', strtotime($r->dataFim)) : 'N/A' }}</td>
+                                                            <td>{{ $r->observacoes ?? 'N/A' }}</td>
+                                                            <td>
+                                                                {{ isset($r->veiculo) ? ($r->veiculo->marca ?? 'N/A') . ' - ' . ($r->veiculo->modelo ?? 'N/A') . ' - ' . ($r->veiculo->placa ?? 'N/A') : 'N/A' }}
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
