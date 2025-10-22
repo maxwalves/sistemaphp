@@ -371,6 +371,7 @@ class ControladorAv extends Controller
         }
         //------------------------------------------------------------------------------------------------------------------------
 
+        //dd("AV: ", $av, "Objetivos", $objetivos, "Veículos Próprios", $veiculosProprios, "Usuário", $user, "Históricos", $historicos, "Usuários", $users, "Usuário da AV", $userAv, "Veículos Paranacidade", $veiculosParanacidade, "É Internacional?", $isInternacional, "Medições Filtradas", $medicoesFiltradas, "Array Dias Valores", $arrayDiasValores, "Eventos", $eventos, "Reservas2", $reservas2, "Veículos", $veiculos);
         if ($possoEditar == true) {
             return view('avs.verFluxoGestor', [
                 'av' => $av,
@@ -4857,7 +4858,6 @@ class ControladorAv extends Controller
         }
 
         $arrayDiasValores = $this->geraArrayDiasValoresCerto($av);
-
 
         //SOMA AS DIÁRIAS E RETORNO OS ATRIBUTOS NECESSÁRIOS PARA A TELA ----------------------------------------------------------------------
         foreach ($arrayDiasValores as $diaValor) {

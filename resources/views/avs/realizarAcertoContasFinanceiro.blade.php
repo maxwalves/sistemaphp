@@ -114,7 +114,7 @@
 
                         @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                             <p class="av-owner" style="font-size: 20px"><ion-icon name="chevron-forward-circle-outline">
-                                <p class="av-owner" style="font-size: 20px"><strong>Valor calculado de reembolso de combustível: </strong> R${{$av->qtdKmVeiculoProprio * 0.49}} ([Qtd de Km] * 0,49)</p>
+                                <p class="av-owner" style="font-size: 20px"><strong>Valor calculado de reembolso de combustível: </strong> R${{$av->qtdKmVeiculoProprio * 1.68}} ([Qtd de Km] * 1,68)</p>
                         @endif
                     </div>
 

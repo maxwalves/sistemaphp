@@ -263,6 +263,7 @@ class ControladorRota extends Controller
                 $ultimaRotaSetada = $rotas[$i];
             }
         }
+
         $veiculosProprios = $user->veiculosProprios;
 
         $rotas = $av->rotas;

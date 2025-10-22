@@ -108,9 +108,9 @@
                                                     {{ $rotaExibicao->isOnibusConvencional == 1 ? 'Onibus convencional' : '' }}
                                                     @if ($rotaExibicao->isVeiculoProprio == 1)
                                                         {{ 'Veículo próprio: ' }} <br>
-                                                        @foreach ($veiculosProprios as $v)
-                                                            @if ($v->id == $rota->veiculoProprio_id)
-                                                                {{ $v->modelo . '-' . $v->placa }}
+                                                        @foreach ($veiculosProprios as $veiculoProprio)
+                                                            @if ($veiculoProprio->id == $rotaExibicao->veiculoProprio_id)
+                                                                {{ $veiculoProprio->modelo . '-' . $veiculoProprio->placa }}
                                                             @endif
                                                         @endforeach
 

@@ -84,9 +84,9 @@
                         <p><strong>Valor extra:</strong> R$ {{ number_format($av->valorExtraReais, 2, ',', '.') }}</p>
                         <p><strong>Dedução:</strong> R$ {{ number_format($av->valorDeducaoReais, 2, ',', '.') }}</p>
 
-                        @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                            <p><strong>Valor referente a {{$av->qtdKmVeiculoProprio}} Km: </strong> R$ {{ number_format($av->qtdKmVeiculoProprio * 0.49, 2, ',', '.') }}</p>
-                            <p><strong>Valor TOTAL reais:</strong> R$ {{ number_format($av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais + ($av->qtdKmVeiculoProprio * 0.49), 2, ',', '.') }}</p>
+                        @if ($av->isAprovadoCarroDiretoriaExecutiva == true)
+                            <p><strong>Valor referente a {{$av->qtdKmVeiculoProprio}} Km: </strong> R$ {{ number_format($av->qtdKmVeiculoProprio * 1.68, 2, ',', '.') }}</p>
+                            <p><strong>Valor TOTAL reais:</strong> R$ {{ number_format($av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais + ($av->qtdKmVeiculoProprio * 1.68), 2, ',', '.') }}</p>
                         @else
                             <p><strong>Valor TOTAL reais:</strong> R$ {{ number_format($av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais, 2, ',', '.') }}</p>
                         @endif
@@ -110,13 +110,13 @@
                     <div class="stat">
                         <div class="stat-title">
                             <p>
-                                @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                                    <p>Cálculo do valor do veículo: ({{$av->qtdKmVeiculoProprio}}km x R$0,49 = R$ {{number_format($av->qtdKmVeiculoProprio * 0.49, 2, ',', '.')}})</p>
-                                    @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )<0)
+                                @if ($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                    <p>Cálculo do valor do veículo: ({{$av->qtdKmVeiculoProprio}}km x R$1,68 = R$ {{number_format($av->qtdKmVeiculoProprio * 1.68, 2, ',', '.')}})</p>
+                                    @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 1.68)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )<0)
                                         Valor que o usuário deve receber em reais
                                     @endif
-                                    @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 0.49)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )>0)
-                                        <p>Cálculo do valor do veículo: ({{$av->qtdKmVeiculoProprio}}km x R$0,49 = R$ {{number_format($av->qtdKmVeiculoProprio * 0.49, 2, ',', '.')}})</p>
+                                    @if(( ($valorRecebido->valorReais-$av->valorReais - ($av->qtdKmVeiculoProprio * 1.68)) +($valorRecebido->valorExtraReais-$valorAcertoContasReal) )>0)
+                                        <p>Cálculo do valor do veículo: ({{$av->qtdKmVeiculoProprio}}km x R$1,68 = R$ {{number_format($av->qtdKmVeiculoProprio * 1.68, 2, ',', '.')}})</p>
                                         Valor que o usuário deve pagar em reais
                                     @endif
                                 @else
@@ -134,14 +134,14 @@
                         </div>
 
                         @if($av->isAprovadoCarroDiretoriaExecutiva == true)
-                            @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) <0))
+                            @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 1.68) <0))
                                 <div class="stat-value text-green-500">
-                                        R$ {{number_format((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1), 2, ',', '.') }}
+                                        R$ {{number_format((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 1.68))) * (-1), 2, ',', '.') }}
                                 </div>
                             @endif
-                            @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 0.49) >0))
+                            @if( ( ($valorRecebido->valorReais-$av->valorReais)+ ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - ($av->qtdKmVeiculoProprio * 1.68) >0))
                                 <div class="stat-value text-error">
-                                        R$ {{number_format((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 0.49))) * (-1), 2, ',', '.') }}
+                                        R$ {{number_format((($valorRecebido->valorReais-$av->valorReais) + ($valorRecebido->valorExtraReais-$valorAcertoContasReal) - (($av->qtdKmVeiculoProprio * 1.68))) * (-1), 2, ',', '.') }}
                                 </div>
                             @endif
                         @else
