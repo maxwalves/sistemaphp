@@ -108,7 +108,7 @@
                             
                             @if($av->isAprovadoCarroDiretoriaExecutiva == true)
                                 <p class="av-owner" style="font-size: 20px"><strong>Qtd Km gasta com veículo próprio: </strong> {{$av->qtdKmVeiculoProprio}}</p>
-                                <p class="av-owner" style="font-size: 20px"><strong>Valor calculado de reembolso de combustível: </strong> R${{$av->qtdKmVeiculoProprio * 0.49}} ([Qtd de Km] * 0,49)</p>
+                                <p class="av-owner" style="font-size: 20px"><strong>Valor calculado de reembolso de combustível: </strong> R${{$av->qtdKmVeiculoProprio * 1.68}} ([Qtd de Km] * 1,68)</p>
                             @endif
                         </div>
 
@@ -180,7 +180,7 @@
                                                 <div class="stat">
                                                     <div class="stat-title">Valor em Reais</div>
                                                     <div class="stat-value text-primary">R$ {{ $av->valorReais }}
-                                                        {{ $av->isAprovadoCarroDiretoriaExecutiva == true ? '+ R$ ' . $av->qtdKmVeiculoProprio * 0.49 : '' }}
+                                                        {{ $av->isAprovadoCarroDiretoriaExecutiva == true ? '+ R$ ' . $av->qtdKmVeiculoProprio * 1.68 : '' }}
                                                     </div>
                                                 </div>
                                                 <div class="stat">
@@ -215,8 +215,13 @@
                                             <div class="callout callout-success">
                                                 <div class="stat">
                                                     <div class="stat-title">Resultado em Reais</div>
-                                                    <div class="stat-value text-primary">R$
-                                                        {{ $av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais }}</div>
+                                                    @if($av->isAprovadoCarroDiretoriaExecutiva == true)
+                                                        <div class="stat-value text-primary">R$
+                                                            {{ $av->valorReais + $av->qtdKmVeiculoProprio * 1.68 + $av->valorExtraReais - $av->valorDeducaoReais }}</div>
+                                                    @else
+                                                        <div class="stat-value text-primary">R$
+                                                            {{ $av->valorReais + $av->valorExtraReais - $av->valorDeducaoReais }}</div>
+                                                    @endif
                                                 </div>
                                                 @if ($av->valorDolar + $av->valorExtraDolar - $av->valorDeducaoDolar > 0)
                                                     <div class="stat">
@@ -234,7 +239,7 @@
                                                     <div class="stat">
                                                         <div class="stat-title" style="color: black">Valor em Reais</div>
                                                         <div class="stat-value text-gray-950">R$
-                                                            {{ $valorRecebido->valorReais - $av->valorReais - $av->qtdKmVeiculoProprio * 0.49 }}
+                                                            {{ $valorRecebido->valorReais - $av->valorReais - $av->qtdKmVeiculoProprio * 1.68 }}
                                                         </div>
                                                     </div>
                                                 @else
@@ -320,7 +325,7 @@
                                                                 @if (
                                                                     $valorRecebido->valorReais -
                                                                         $av->valorReais -
-                                                                        $av->qtdKmVeiculoProprio * 0.49 +
+                                                                        $av->qtdKmVeiculoProprio * 1.68 +
                                                                         ($valorRecebido->valorExtraReais - $valorAcertoContasReal) <
                                                                         0)
                                                                     Valor que o usuário deve receber em reais
@@ -328,7 +333,7 @@
                                                                 @if (
                                                                     $valorRecebido->valorReais -
                                                                         $av->valorReais -
-                                                                        $av->qtdKmVeiculoProprio * 0.49 +
+                                                                        $av->qtdKmVeiculoProprio * 1.68 +
                                                                         ($valorRecebido->valorExtraReais - $valorAcertoContasReal) >
                                                                         0)
                                                                     Valor que o usuário deve pagar em reais
@@ -349,22 +354,22 @@
                                                             $valorRecebido->valorReais -
                                                                 $av->valorReais +
                                                                 ($valorRecebido->valorExtraReais - $valorAcertoContasReal) -
-                                                                $av->qtdKmVeiculoProprio * 0.49 <
+                                                                $av->qtdKmVeiculoProprio * 1.68 <
                                                                 0)
                                                             <div class="stat-value text-green-500">
                                                                 R$
-                                                                {{ ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) - $av->qtdKmVeiculoProprio * 0.49) * -1 }}
+                                                                {{ ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) - $av->qtdKmVeiculoProprio * 1.68) * -1 }}
                                                             </div>
                                                         @endif
                                                         @if (
                                                             $valorRecebido->valorReais -
                                                                 $av->valorReais +
                                                                 ($valorRecebido->valorExtraReais - $valorAcertoContasReal) -
-                                                                $av->qtdKmVeiculoProprio * 0.49 >
+                                                                $av->qtdKmVeiculoProprio * 1.68 >
                                                                 0)
                                                             <div class="stat-value text-error">
                                                                 R$
-                                                                {{ ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) - $av->qtdKmVeiculoProprio * 0.49) * -1 }}
+                                                                {{ ($valorRecebido->valorReais - $av->valorReais + ($valorRecebido->valorExtraReais - $valorAcertoContasReal) - $av->qtdKmVeiculoProprio * 1.68) * -1 }}
                                                             </div>
                                                         @endif
                                                     @else
