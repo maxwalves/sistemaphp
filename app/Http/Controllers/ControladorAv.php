@@ -7048,9 +7048,11 @@ class ControladorAv extends Controller
                     else if ($temDiariaManha == false && $temDiariaTarde == false)
                         $valor = 0;
                 } else if ($dia == $dataUltimaRota && $dataSaidaFormatado->format('Y-m-d') != $dia) {
-                    if ($dataChegadaFormatado->format('H:i:s') >= "13:01:00" && $dataChegadaFormatado->format('H:i:s') < "19:00:00") {
+                    
+                    if ($dataChegadaFormatado->format('H:i:s') >= "13:01:00") {
                         $valorManha = $valor / 2;
-                    } else if ($dataChegadaFormatado->format('H:i:s') >= "19:01:00") {
+                    }
+                    if ($dataChegadaFormatado->format('H:i:s') >= "19:01:00") {
                         $valorTarde = $valor / 2;
                     }
                     $valor = $valorManha + $valorTarde;
@@ -7328,7 +7330,7 @@ class ControladorAv extends Controller
                     else if ($temDiariaManha == false && $temDiariaTarde == false)
                         $valor = 0;
                 } else if ($dia == $dataUltimaRota && $dataSaidaFormatado->format('Y-m-d') != $dia) {
-                    if ($dataChegadaFormatado->format('H:i:s') >= "13:01:00" && $dataChegadaFormatado->format('H:i:s') < "19:00:00") {
+                    if ($dataChegadaFormatado->format('H:i:s') >= "13:01:00") {
                         $valorManha = $valor / 2;
                     } else if ($dataChegadaFormatado->format('H:i:s') >= "19:01:00") {
                         $valorTarde = $valor / 2;
