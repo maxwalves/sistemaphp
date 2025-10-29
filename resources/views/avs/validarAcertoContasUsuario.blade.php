@@ -185,8 +185,8 @@
                     
                                             <div class="stat">
                                                 <div class="stat-title">Valor em Reais</div>
-                                                <div class="stat-value text-primary">R$ {{ $av->valorReais }}
-                                                    {{ $av->isAprovadoCarroDiretoriaExecutiva == true ? '+ R$ ' . $av->qtdKmVeiculoProprio * 0.49 : '' }}
+                                                <div class="stat-value text-primary">R$ {{ number_format($av->valorReais, 2, ',', '.') }}
+                                                    {{ $av->isAprovadoCarroDiretoriaExecutiva == true ? '+ R$ ' . number_format($av->qtdKmVeiculoProprio * 1.68, 2, ',', '.') : '' }}
                                                 </div>
                                             </div>
                                             <div class="stat">
